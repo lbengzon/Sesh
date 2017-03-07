@@ -1,10 +1,10 @@
 # cs0320 Term Project
 
 **Team Members:** 
-Ali Mir
-Hannah He
-Leandro Bengzon
-Matthew Alexander Sicat
+* Ali Mir
+* Hannah He
+* Leandro Bengzon
+* Matthew Alexander Sicat
 
 **Project Idea:** 
 Sesh provides users with the opportunity to create collaborative playlists in real-time. The application addresses the problem of disagreement over music choice in a group environment.  
@@ -31,7 +31,7 @@ We plan to use Youtube's API to enable searching for songs, adding songs to a pl
 * Request songs for the DJ to play
 * Upvote/downvote requested songs
 
-Storyboard of Sesh Usage:
+#### Storyboard of Sesh Usage:
 * DJ creates a party and determines if it is public or private
 * Guests join party (see thinking point 2 below)
 * DJ determines a request and/or upvote/downvote window (if needed)
