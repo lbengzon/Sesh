@@ -9,7 +9,7 @@
 **Project Idea:** 
 Sesh provides users with the opportunity to create collaborative playlists in real-time. The application addresses the problem of disagreement over music choice in a group environment.  
 
-**Mentor TA:** Rick Miyagi || rick_miyagi@brown.edu
+**Mentor TA:** Rick Miyagi rick_miyagi@brown.edu
 
 ## Project Requirements
 
