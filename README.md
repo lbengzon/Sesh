@@ -9,7 +9,7 @@
 **Project Idea:** 
 Sesh provides users with the opportunity to create collaborative playlists in real-time. The application addresses the problem of disagreement over music choice in a group environment.  
 
-**Mentor TA:** _Put your mentor TA's name and email here once you're assigned one!_
+**Mentor TA:** Rick Miyagi || rick_miyagi@brown.edu
 
 ## Project Requirements
 
@@ -21,16 +21,20 @@ We plan to use Youtube's API to enable searching for songs, adding songs to a pl
 * Select and migrate requested songs to playlist
 * Reorder playlist
 * Invite others to become co-DJs
-* Set request window (time frame to request songs)
+* Set request window (time frame to request songs) ★
 * Set upvote/downvote window 
 * Close the party
+* Save playlist and allow it to be viewable in the future ★
 
 #### Guest Privileges
 * Join a party
 * Search for songs
 * Request songs for the DJ to play
 * Upvote/downvote requested songs
+* View saved playlists from prior parties attended ★
 
+★ Indicates functionality added from user suggestion.
+ 
 #### Storyboard of Sesh Usage:
 * DJ creates a party and determines if it is public or private
 * Guests join party (see thinking point 2 below)
