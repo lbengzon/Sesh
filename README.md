@@ -56,7 +56,11 @@ We plan to use Youtube's API to enable searching for songs, adding songs to a pl
 YouTube Videos often play ads. If we are curating a playlist of videos and the user (specifically the DJ) does not have an ad blocker, the playlist may get interrupted by ads. Using an adblocker like UBlock can work around this problem externally.
 
 ## Project Specs and Mockup
-_A link to your specifications document and your mockup will go here!_
+
+Mockup link on myBalsamiq:
+
+https://alimir.mybalsamiq.com/projects/sesh/prototype/Sesh%20Home?key=08c8839db9d3a3dd70066b7e29282a2c002fca9a
+
 
 ## Project Design Presentation
 _A link to your design presentation/document will go here!_
