@@ -16,18 +16,17 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Main class.
- *
  * @author HE23
- *
  */
 public final class Main {
 
   /**
    * Main method.
-   *
    * @param args
    *          - program arguments.
    */
+  SpotifyCommunicator comm = new SpotifyCommunicator();
+
   public static void main(String[] args) {
     new Main(args).run();
   }
@@ -44,6 +43,8 @@ public final class Main {
         .defaultsTo(Constants.DEFAULT_PORT);
     OptionSet options = parser.parse(args);
     runSparkServer((int) options.valueOf("port"));
+    comm.createAuthorizeURL();
+
   }
 
   private static FreeMarkerEngine createEngine() {
@@ -68,7 +69,6 @@ public final class Main {
 
   /**
    * Display an error page when an exception occurs in the server.
-   *
    * @author jj
    */
   private static class ExceptionPrinter implements ExceptionHandler {
