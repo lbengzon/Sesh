@@ -3,8 +3,12 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.jetty.server.Authentication.User;
-
+/**
+ * Models a party.
+ *
+ * @author Matt
+ *
+ */
 public class Party {
   private String id;
   private Playlist playlist;
@@ -21,28 +25,47 @@ public class Party {
     this.requestedSongs = new HashSet<Request>();
     this.playlistSet = new HashSet<Request>();
   }
-  /*
-   * TODO: Fill methods in
-   */
 
   public boolean upvoteSong(User user, Request req) {
-
+    req.upvote(user);
+    return true;
   }
 
   public boolean downvoteSong(User user, Request req) {
+    req.downvote(user);
+    return true;
 
   }
 
   public boolean approveSong(Request req) {
+    if (!requestedSongs.contains(req)) {
+      System.out.println("ERROR: Cannot approve song not in requested list");
+      return false;
+    }
+    requestedSongs.remove(req);
+    playlistSet.add(req);
+    return true;
 
   }
 
   public boolean removeFromPlaylist(Request req) {
+    if (!playlistSet.contains(req)) {
+      System.out.println("ERROR: Cannot remove song not in playlist");
+      return false;
+    }
+    playlistSet.remove(req);
+    requestedSongs.add(req);
+    return true;
 
   }
 
-  public boolean requestSong(Request req) {
-
+  public boolean requestSong(Request req) { // maybe this method should be in
+                                            // User?
+    if (requestedSongs.contains(req)) {
+      return false;
+    }
+    requestedSongs.add(req);
+    return true;
   }
 
 }

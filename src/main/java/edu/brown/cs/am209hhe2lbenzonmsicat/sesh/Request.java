@@ -3,6 +3,12 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Models a song request.
+ *
+ * @author Matt
+ *
+ */
 public class Request implements Comparable<Request> {
   private String id;
   private Song song;
@@ -34,6 +40,10 @@ public class Request implements Comparable<Request> {
     return requestTime;
   }
 
+  public Song getSong() {
+    return song;
+  }
+
   @Override
   public int compareTo(Request req) {
     if (this.voteCount() > req.voteCount()) {
@@ -50,6 +60,16 @@ public class Request implements Comparable<Request> {
     }
 
     return 0;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    try {
+      Request otherRequest = (Request) o;
+      return getSong().equals(otherRequest.getSong());
+    } catch (ClassCastException cce) {
+      return false;
+    }
   }
 
 }
