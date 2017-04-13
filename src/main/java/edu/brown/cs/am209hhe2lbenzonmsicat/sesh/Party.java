@@ -26,23 +26,23 @@ public class Party {
    */
 
   public boolean upvoteSong(User user, Request req) {
-
+	  return true;
   }
 
   public boolean downvoteSong(User user, Request req) {
-
+	  return true;
   }
 
   public boolean approveSong(Request req) {
-
+	  return true;
   }
 
   public boolean removeFromPlaylist(Request req) {
-
+	  return true;
   }
 
   public boolean requestSong(Request req) {
-
+	  return true;
   }
 
 }
