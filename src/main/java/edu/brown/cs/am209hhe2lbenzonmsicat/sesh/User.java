@@ -1,5 +1,11 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+/**
+ * Models an arbitrary Sesh user.
+ *
+ * @author Matt
+ *
+ */
 public class User {
   private String id; // spotify username?
   private String email;

@@ -1,5 +1,11 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+/**
+ * Wrapper for a Spotify playlist.
+ *
+ * @author Matt
+ *
+ */
 public class Playlist {
   private String id; // youtube/spotify id
   private String url;
