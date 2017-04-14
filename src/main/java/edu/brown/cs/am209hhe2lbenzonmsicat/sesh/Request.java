@@ -68,6 +68,11 @@ public class Request implements Comparable<Request> {
     return upvotes.size() - downvotes.size();
   }
 
+  /**
+   * Gets request time.
+   *
+   * @return - request time
+   */
   public double getTime() {
     return requestTime;
   }
@@ -84,7 +89,8 @@ public class Request implements Comparable<Request> {
   @Override
   public int compareTo(Request req) { // may want to modify to a better model so
                                       // we can order
-                                      // requests better
+                                      // requests better (divide votecount by
+                                      // time elapsed?)
     if (this.voteCount() > req.voteCount()) {
       return 1;
     }
