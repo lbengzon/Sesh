@@ -16,7 +16,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Main class.
- * @author HE23
  */
 public final class Main {
 
