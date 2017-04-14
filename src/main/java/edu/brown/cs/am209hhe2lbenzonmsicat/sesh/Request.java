@@ -24,14 +24,46 @@ public class Request implements Comparable<Request> {
     downvotes = new HashSet<User>();
   }
 
+  /**
+   * Upvotes the request.
+   *
+   * @param user
+   *          - user voting
+   */
   public void upvote(User user) {
-    upvotes.add(user);
+    if (upvotes.contains(user)) {
+      upvotes.remove(user);
+    } else {
+      upvotes.add(user);
+      if (downvotes.contains(user)) {
+        downvotes.remove(user);
+      }
+    }
   }
 
+  /**
+   * Downvotes the request.
+   *
+   * @param user
+   *          - user voting
+   */
   public void downvote(User user) {
-    downvotes.add(user);
+    if (downvotes.contains(user)) {
+      downvotes.remove(user);
+    } else {
+      downvotes.add(user);
+      if (upvotes.contains(user)) {
+        upvotes.remove(user);
+      }
+    }
+
   }
 
+  /**
+   * Gets the Request's vote count.
+   *
+   * @return - vote count
+   */
   public int voteCount() {
     return upvotes.size() - downvotes.size();
   }
@@ -40,12 +72,19 @@ public class Request implements Comparable<Request> {
     return requestTime;
   }
 
+  /**
+   * Gets song object.
+   *
+   * @return - song
+   */
   public Song getSong() {
     return song;
   }
 
   @Override
-  public int compareTo(Request req) {
+  public int compareTo(Request req) { // may want to modify to a better model so
+                                      // we can order
+                                      // requests better
     if (this.voteCount() > req.voteCount()) {
       return 1;
     }
