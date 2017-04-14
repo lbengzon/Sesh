@@ -71,4 +71,4 @@ local.properties
 ########
 
 .DS_Store
-src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Constants.java
+Constants.java
