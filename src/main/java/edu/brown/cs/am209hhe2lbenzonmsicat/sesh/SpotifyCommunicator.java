@@ -13,12 +13,10 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
 
 public class SpotifyCommunicator {
 
-  final String clientId = "57296909fb524335ae81daaa97e065d0";
-  final String clientSecret = "03657b192813485a94b2864b61a77559";
-  final String redirectURI = "http://localhost:4567/spotifycallback";
 
-  final Api api = Api.builder().clientId(clientId).clientSecret(clientSecret)
-      .redirectURI(redirectURI).build();
+
+  final Api api = Api.builder().clientId(Constants.clientId).clientSecret(Constants.clientSecret)
+      .redirectURI(Constants.redirectURI).build();
 
   public void createAuthorizeURL() {
 
