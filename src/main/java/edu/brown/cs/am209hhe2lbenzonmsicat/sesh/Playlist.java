@@ -1,18 +1,18 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.util.List;
+
 /**
  * Wrapper for a Spotify playlist.
- *
  * @author Matt
- *
  */
 public class Playlist {
   private String id; // youtube/spotify id
   private String url;
 
-  public Playlist(String id, String url) {
+  public Playlist(String id) {
     this.setId(id);
-    this.setUrl(url);
+    this.setUrl("find out the actual structure " + id);
   }
 
   public String getId() {
@@ -29,6 +29,19 @@ public class Playlist {
 
   public void setUrl(String url) {
     this.url = url;
+  }
+
+  public List<Song> getSongs() {
+    // TODO:MAKE API CALL
+    return null;
+  }
+
+  public boolean removeSong(Song song) {
+    return false;
+  }
+
+  public boolean addSong(Song song) {
+    return false;
   }
 
 }

@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.ConcurrentHashMap;
@@ -93,52 +94,121 @@ public class DbHandler {
     return connections;
   }
 
-  /**
-   * Gets the intersection node between two streets.
-   * @param streetName1
-   *          The first street name
-   * @param streetName2
-   *          The second street name
-   * @return The node at the intersection. Returns Null if there is no
-   *         intersection;
-   * @throws SQLException
-   *           If there is a problem accessing the database.
-   */
-  // public static MapNode getIntersection(String streetName1, String
-  // streetName2)
-  // throws SQLException {
-  // String query = "SELECT a.start, a.end, b.start, b.end FROM "
-  // + "(way AS a JOIN way AS b ON "
-  // + "(a.start=b.start OR a.start=b.end OR "
-  // + "a.end=b.start OR a.end = b.end)) WHERE a.name = ? "
-  // + "AND b.name = ? LIMIT 1";
-  //
-  // PreparedStatement prep = statementMap.get(query);
-  // if (getConnection() == null) {
-  // throw new SQLException("ERROR: No database has been set.");
-  // }
-  // Connection conn = getConnection();
-  // if (prep == null) {
-  // prep = conn.prepareStatement(query);
-  // statementMap.put(query, prep);
-  // }
-  // prep.setString(1, streetName1);
-  // prep.setString(2, streetName2);
-  // ResultSet rs = prep.executeQuery();
-  // if (rs.next()) {
-  // String start1 = rs.getString(1);
-  // String end1 = rs.getString(2);
-  // String start2 = rs.getString(3);
-  // String end2 = rs.getString(4);
-  // if (start1.equals(start2) || start1.equals(end2)) {
-  // return MapNode.ofId(start1);
-  // } else {
-  // assert end1.equals(start2) || end1.equals(end2);
-  // return MapNode.ofId(end1);
-  // }
-  // }
-  // // there is no intersection between the two.
-  // return null;
-  // }
+  public static User addUser(String userId, String email, String name)
+      throws SQLException {
+    String query = SqlStatements.ADD_NEW_USER;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setString(1, userId);
+    prep.setString(2, email);
+    prep.setString(3, name);
+
+    int success = prep.executeUpdate();
+    if (success >= 1) {
+      return new User(userId, email, name, name);
+    } else {
+      throw new SQLException(
+          "ERROR: Could not insert the user with the query " + query);
+    }
+  }
+
+  public static Request requestSong(String spotifySongId, String partyId,
+      String userId, String time) throws SQLException {
+    String query = SqlStatements.ADD_SONG_REQUEST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setString(1, spotifySongId);
+    prep.setString(2, partyId);
+    prep.setString(3, userId);
+    prep.setString(4, time);
+
+    int success = prep.executeUpdate();
+    if (success >= 1) {
+      try (ResultSet generatedKeys = prep.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
+          int requestId = generatedKeys.getInt(1);
+          return new Request(requestId, time, Song.ofId(spotifySongId),
+              User.ofId(userId));
+        } else {
+          throw new SQLException("Creating user failed, no ID obtained.");
+        }
+      }
+    } else {
+      throw new SQLException(
+          "ERROR: Could not insert the song with the query " + query);
+    }
+  }
+
+  public static Party addParty(String spotifyPlaylistId, String name,
+      Coordinate coordinate, String time, User host) throws SQLException {
+    String query = SqlStatements.ADD_NEW_PARTY;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setString(1, spotifyPlaylistId);
+    prep.setString(2, name);
+    prep.setDouble(3, coordinate.getLat());
+    prep.setDouble(4, coordinate.getLon());
+    prep.setString(4, time);
+
+    int success = prep.executeUpdate();
+    if (success >= 1) {
+      try (ResultSet generatedKeys = prep.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
+          int partyId = generatedKeys.getInt(1);
+
+          AddHost(partyId, host);
+
+          return new Party(partyId, host, new Playlist(spotifyPlaylistId));
+        } else {
+          throw new SQLException("Add Party failed, no ID obtained.");
+        }
+      }
+    } else {
+      throw new SQLException(
+          "ERROR: Could not insert the party with the query " + query);
+    }
+  }
+
+  public static void AddHost(int partyId, User host) throws SQLException {
+    String query = SqlStatements.ADD_PARTY_HOST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, partyId);
+    prep.setString(2, host.getId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Could not add the host with the query " + query);
+    }
+  }
 
 }

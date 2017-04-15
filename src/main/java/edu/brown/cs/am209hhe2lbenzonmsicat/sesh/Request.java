@@ -5,28 +5,27 @@ import java.util.Set;
 
 /**
  * Models a song request.
- *
  * @author Matt
- *
  */
 public class Request implements Comparable<Request> {
-  private String id;
+  private int id;
   private Song song;
-  private double requestTime;
+  private String requestTime;
   private Set<User> upvotes;
   private Set<User> downvotes;
+  private User user;
 
-  public Request(String id, double requestTime, Song song) {
+  public Request(int id, String requestTime, Song song, User user) {
     this.id = id;
     this.requestTime = requestTime;
     this.song = song;
+    this.user = user;
     upvotes = new HashSet<User>();
     downvotes = new HashSet<User>();
   }
 
   /**
    * Upvotes the request.
-   *
    * @param user
    *          - user voting
    */
@@ -43,7 +42,6 @@ public class Request implements Comparable<Request> {
 
   /**
    * Downvotes the request.
-   *
    * @param user
    *          - user voting
    */
@@ -61,7 +59,6 @@ public class Request implements Comparable<Request> {
 
   /**
    * Gets the Request's vote count.
-   *
    * @return - vote count
    */
   public int voteCount() {
@@ -70,16 +67,14 @@ public class Request implements Comparable<Request> {
 
   /**
    * Gets request time.
-   *
    * @return - request time
    */
-  public double getTime() {
+  public String getTime() {
     return requestTime;
   }
 
   /**
    * Gets song object.
-   *
    * @return - song
    */
   public Song getSong() {
@@ -97,12 +92,12 @@ public class Request implements Comparable<Request> {
     if (this.voteCount() < req.voteCount()) {
       return -1;
     }
-    if (this.getTime() < req.getTime()) {
-      return 1;
-    }
-    if (this.getTime() > req.getTime()) {
-      return -1;
-    }
+    // if (this.getTime() < req.getTime()) {
+    // return 1;
+    // }
+    // if (this.getTime() > req.getTime()) {
+    // return -1;
+    // }
 
     return 0;
   }

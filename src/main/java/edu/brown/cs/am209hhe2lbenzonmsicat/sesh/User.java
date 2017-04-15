@@ -2,9 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 /**
  * Models an arbitrary Sesh user.
- *
  * @author Matt
- *
  */
 public class User {
   private String id; // spotify username?
@@ -13,10 +11,14 @@ public class User {
 
   /**
    * This is the constructor for the User class.
-   * @param id user id
-   * @param email user email
-   * @param firstName user's first name
-   * @param lastName user's last name
+   * @param id
+   *          user id
+   * @param email
+   *          user email
+   * @param firstName
+   *          user's first name
+   * @param lastName
+   *          user's last name
    */
   public User(String id, String email, String firstName, String lastName) {
     this.id = id;
@@ -63,6 +65,10 @@ public class User {
    */
   public String getFullName() {
     return name[0] + " " + name[1];
+  }
+
+  public static User ofId(String id) {
+    return null;
   }
 
 }
