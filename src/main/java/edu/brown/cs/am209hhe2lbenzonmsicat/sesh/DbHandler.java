@@ -10,7 +10,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.AttendeeType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.Status;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request.VoteType;
 
 public class DbHandler {
 
@@ -112,7 +120,7 @@ public class DbHandler {
 
     int success = prep.executeUpdate();
     if (success >= 1) {
-      return new User(userId, email, name, name);
+      return new UserBean(userId, email, name, name);
     } else {
       throw new SQLException(
           "ERROR: Could not insert the user with the query " + query);
@@ -120,7 +128,7 @@ public class DbHandler {
   }
 
   public static Request requestSong(String spotifySongId, String partyId,
-      String userId, String time) throws SQLException {
+      User user, String time) throws SQLException {
     String query = SqlStatements.ADD_SONG_REQUEST;
     PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
@@ -133,7 +141,7 @@ public class DbHandler {
     }
     prep.setString(1, spotifySongId);
     prep.setString(2, partyId);
-    prep.setString(3, userId);
+    prep.setString(3, user.getSpotifyId());
     prep.setString(4, time);
 
     int success = prep.executeUpdate();
@@ -141,8 +149,9 @@ public class DbHandler {
       try (ResultSet generatedKeys = prep.getGeneratedKeys()) {
         if (generatedKeys.next()) {
           int requestId = generatedKeys.getInt(1);
-          return new Request(requestId, time, Song.ofId(spotifySongId),
-              User.ofId(userId));
+
+          return new RequestBean(requestId, time, Song.of(spotifySongId), user,
+              new HashSet<>(), new HashSet<>());
         } else {
           throw new SQLException("Creating user failed, no ID obtained.");
         }
@@ -169,7 +178,7 @@ public class DbHandler {
     prep.setString(2, name);
     prep.setDouble(3, coordinate.getLat());
     prep.setDouble(4, coordinate.getLon());
-    prep.setString(4, time);
+    prep.setString(5, time);
 
     int success = prep.executeUpdate();
     if (success >= 1) {
@@ -179,9 +188,10 @@ public class DbHandler {
 
           AddHost(partyId, host);
 
-          return new Party(partyId, host, new Playlist(spotifyPlaylistId));
+          return Party.of(partyId, name, host, new Playlist(spotifyPlaylistId),
+              coordinate, time, Status.ongoing);
         } else {
-          throw new SQLException("Add Party failed, no ID obtained.");
+          throw new SQLException("Add PartyBean failed, no ID obtained.");
         }
       }
     } else {
@@ -202,13 +212,280 @@ public class DbHandler {
       statementMap.put(query, prep);
     }
     prep.setInt(1, partyId);
-    prep.setString(2, host.getId());
+    prep.setString(2, host.getSpotifyId());
 
     int success = prep.executeUpdate();
     if (success < 1) {
       throw new SQLException(
           "ERROR: Could not add the host with the query " + query);
     }
+  }
+
+  public static void RemoveSongRequest(Request request) throws SQLException {
+    String query = SqlStatements.REMOVE_SONG_REQUEST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, request.getId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Remove song request with the query " + query);
+    }
+  }
+
+  public static void RemoveParty(Party party) throws SQLException {
+    String query = SqlStatements.REMOVE_PARTY;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, party.getPartyId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Could not remove the party with the query " + query);
+    }
+  }
+
+  public static void UpvoteRequest(Request request, User user)
+      throws SQLException {
+    String query = SqlStatements.UPVOTE_SONG_REQUEST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, request.getId());
+    prep.setString(2, user.getSpotifyId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Could not upvote request with the query " + query);
+    }
+  }
+
+  public static void DownvoteRequest(Request request, User user)
+      throws SQLException {
+    String query = SqlStatements.DOWNVOTE_SONG_REQUEST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, request.getId());
+    prep.setString(2, user.getSpotifyId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Could not downvote the request with the query " + query);
+    }
+  }
+
+  public static void RemoveVote(Request request, User user)
+      throws SQLException {
+    String query = SqlStatements.REMOVE_VOTE_SONG_REQUEST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, request.getId());
+    prep.setString(2, user.getSpotifyId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Could not remove request vote with the query " + query);
+    }
+  }
+
+  public static void AddPartyGuest(int partyId, User guest)
+      throws SQLException {
+    String query = SqlStatements.ADD_PARTY_GUEST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, partyId);
+    prep.setString(2, guest.getSpotifyId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Could not add the guest with the query " + query);
+    }
+  }
+
+  public static void RemovePartyGuest(int partyId, User guest)
+      throws SQLException {
+    String query = SqlStatements.REMOVE_PARTY_GUEST;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, partyId);
+    prep.setString(2, guest.getSpotifyId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Could not remove the guest with the query " + query);
+    }
+  }
+
+  public static List<Request> getPartySongRequests(int partyId)
+      throws SQLException {
+    String query = SqlStatements.GET_PARTY_SONG_REQUESTS;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, partyId);
+
+    ResultSet rs = prep.executeQuery();
+    List<Request> requests = new ArrayList<>();
+    while (rs.next()) {
+      int requestId = rs.getInt(1);
+      String spotifySongId = rs.getString(2);
+      String userId = rs.getString(4);
+      String time = rs.getString(5);
+      Request r = Request.of(requestId, Song.of(spotifySongId), User.of(userId),
+          time);
+      requests.add(r);
+    }
+    return requests;
+  }
+
+  public static List<List<User>> getPartyHostsAndGuests(int partyId)
+      throws SQLException {
+    String query = SqlStatements.GET_ALL_PARTY_ATTENDEES;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, partyId);
+
+    ResultSet rs = prep.executeQuery();
+    List<User> hosts = new ArrayList<>();
+    List<User> guests = new ArrayList<>();
+    while (rs.next()) {
+      String userId = rs.getString(2);
+      String type = rs.getString(3);
+      AttendeeType atype = AttendeeType.valueOf(type);
+      if (atype.equals(AttendeeType.host)) {
+        hosts.add(User.of(userId));
+      } else if (atype.equals(AttendeeType.guest)) {
+        guests.add(User.of(userId));
+      } else {
+        // should never reach here
+        assert (false);
+      }
+    }
+    return Arrays.asList(hosts, guests);
+  }
+
+  public static PartyBean getFullParty(int partyId, Playlist playlist,
+      String name, Coordinate location, String time, Status status)
+      throws SQLException {
+    List<Request> requests = getPartySongRequests(partyId);
+    List<List<User>> attendees = getPartyHostsAndGuests(partyId);
+    assert attendees.size() == 2;
+    return new PartyBean(partyId, name, attendees.get(0).get(0), playlist,
+        location, time, new HashSet<>(requests),
+        new HashSet<>(attendees.get(1)), status);
+
+  }
+
+  public static RequestBean getFullRequest(int id, Song song, User user,
+      String requestTime) throws SQLException {
+    String query = SqlStatements.GET_VOTES_FOR_SONG;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setInt(1, id);
+
+    ResultSet rs = prep.executeQuery();
+    List<User> upvotes = new ArrayList<>();
+    List<User> downvotes = new ArrayList<>();
+    while (rs.next()) {
+      String userId = rs.getString(2);
+      String type = rs.getString(3);
+      AttendeeType voteType = AttendeeType.valueOf(type);
+      if (voteType.equals(VoteType.upvote)) {
+        upvotes.add(User.of(userId));
+      } else if (voteType.equals(VoteType.downvote)) {
+        downvotes.add(User.of(userId));
+      } else {
+        // should never reach here
+        assert (false);
+      }
+    }
+
+    return new RequestBean(id, requestTime, song, user, new HashSet<>(upvotes),
+        new HashSet<>(downvotes));
+  }
+
+  public static UserBean getUserWithId(String spotifyId) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public static List<Party> getUsersParties(User user) {
+    return null;
   }
 
 }

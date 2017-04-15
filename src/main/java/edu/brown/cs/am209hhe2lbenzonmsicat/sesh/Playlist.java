@@ -31,7 +31,7 @@ public class Playlist {
     this.url = url;
   }
 
-  public List<Song> getSongs() {
+  public List<SongBean> getSongs() {
     // TODO:MAKE API CALL
     return null;
   }
