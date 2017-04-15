@@ -2,9 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 /**
  * Models a song.
- *
  * @author Matt
- *
  */
 public class Song {
   private String id; // id to song (spotify id? or youtube lmk)
@@ -29,6 +27,10 @@ public class Song {
     } catch (ClassCastException cce) {
       return false;
     }
+  }
+
+  public static Song ofId(String id) {
+    return null;
   }
 
 }

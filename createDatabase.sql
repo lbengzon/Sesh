@@ -6,10 +6,11 @@ CREATE TABLE "User"(
 );
 
 CREATE TABLE "Party"(
-  "partyId" TEXT,
+  "partyId" INTEGER,
   "spotifyPlaylistId" TEXT,
   "name" TEXT,
-  "location" TEXT,
+  "lat" REAL,
+  "lon" REAL,
   "time" TEXT,
   "status" TEXT,
   PRIMARY KEY ("partyId")
@@ -29,7 +30,7 @@ CREATE TABLE "SongRequest"(
 );
 
 CREATE TABLE "RequestVotes"(
-  "requestId" TEXT,
+  "requestId" INTEGER,
   "userId" TEXT,
   "type" TEXT,
   PRIMARY KEY ("requestId", "userId"),
@@ -40,7 +41,7 @@ CREATE TABLE "RequestVotes"(
 );
 
 CREATE TABLE "PartyAttendee"(
-  "partyId" TEXT,
+  "partyId" INTEGER,
   "userId" TEXT,
   "type" TEXT,
   PRIMARY KEY ("partyId", "userId"),

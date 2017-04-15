@@ -25,7 +25,7 @@ final class SqlStatements {
    * Adds a new party to the party table with the status of "ongoing".
    */
   public static final String ADD_NEW_PARTY = "INSERT INTO Party "
-      + "(spotifyPlaylistId, name, location, time, status) VALUES (?, ?, ?, ?, 'ongoing');";
+      + "(spotifyPlaylistId, name, lat, lon, time, status) VALUES (?, ?, ?, ?, ?, 'ongoing');";
 
   /**
    * Removes a song from the Song Request table.
@@ -106,7 +106,7 @@ final class SqlStatements {
   /**
    * Gets all the parties that the user has attended or is hosting/attending.
    */
-  public static final String GET_USER_PARTY = "SELECT Party.PartyId, spotifyPlaylistId, name, location, time, status FROM PartyAttendee, Party"
+  public static final String GET_USER_PARTY = "SELECT Party.PartyId, spotifyPlaylistId, name, lat, lon, time, status FROM PartyAttendee, Party"
       + " WHERE PartyAntendee.partyId=Party.partyId AND userId=?;";
 
 }
