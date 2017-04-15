@@ -1,36 +1,47 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
-/**
- * Models a song.
- * @author Matt
- */
-public class Song {
-  private String id; // id to song (spotify id? or youtube lmk)
-  private String songName;
-  private double length;
+import java.util.Objects;
 
-  public Song(String id, String songName, double length) {
-    this.id = id;
-    this.songName = songName;
-    this.length = length;
-  }
+public abstract class Song {
 
-  public String getId() {
-    return id;
+  public abstract String getSpotifyId();
+
+  public abstract String getTitle();
+
+  public abstract String getAlbum();
+
+  public abstract String getArtist();
+
+  public abstract double getLength();
+
+  public static Song of(String spotifyId) {
+    if (spotifyId == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return new SongProxy(spotifyId);
   }
 
   @Override
   public boolean equals(Object o) {
     try {
-      Song otherSong = (Song) o;
-      return getId().equals(otherSong.getId());
-    } catch (ClassCastException cce) {
+      Song a = (Song) o;
+      if (getSpotifyId() == a.getSpotifyId()) {
+        return true;
+      }
+    } catch (Exception e) {
       return false;
     }
+    return false;
   }
 
-  public static Song ofId(String id) {
-    return null;
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getSpotifyId());
   }
 
+  @Override
+  public String toString() {
+    return getSpotifyId() + "";
+  }
 }

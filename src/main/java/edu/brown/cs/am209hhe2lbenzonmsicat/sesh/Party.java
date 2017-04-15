@@ -1,66 +1,90 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
-import java.util.HashSet;
+import java.sql.SQLException;
+import java.util.Objects;
 import java.util.Set;
 
-/**
- * Models a party.
- * @author Matt
- */
-public class Party {
-  private int id;
-  private Playlist playlist;
-  private User host;
-  private Set<User> guests;
-  private Set<Request> requestedSongs;
-  // private Location location; Google api stuff?
-
-  public Party(int id, User host, Playlist playlist) {
-    this.id = id;
-    this.host = host;
-    this.guests = new HashSet<User>();
-    this.requestedSongs = new HashSet<Request>();
-    this.playlist = playlist;
+public abstract class Party {
+  public static enum Status {
+    ongoing, stopped
   }
 
-  public boolean upvoteSong(User user, Request req) {
-    req.upvote(user);
-    return true;
+  public static enum AttendeeType {
+    host, guest
   }
 
-  public boolean downvoteSong(User user, Request req) {
-    req.downvote(user);
-    return true;
+  public abstract int getPartyId();
+
+  public abstract Set<Request> getRequestedSongs();
+
+  public abstract Playlist getPlaylist();
+
+  public abstract Set<User> getGuests();
+
+  public abstract User getHost();
+
+  public abstract String getName();
+
+  public abstract String getTime();
+
+  public abstract Coordinate getLocation();
+
+  public abstract Status getStatus();
+
+  public abstract boolean upvoteSong(User user, Request req);
+
+  public abstract boolean downvoteSong(User user, Request req);
+
+  public abstract boolean approveSong(Request req);
+
+  public abstract boolean removeFromPlaylist(Request req);
+
+  public abstract boolean requestSong(Request req);
+
+  public abstract boolean addGuest(User guest);
+
+  public static Party of(int partyId, String name, User host, Playlist playlist,
+      Coordinate location, String time, Status status) {
+    if (name == null || host == null || playlist == null || location == null
+        || time == null || status == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return new PartyProxy(partyId, name, host, playlist, location, time,
+        status);
   }
 
-  public boolean approveSong(Request req) {
-    if (!requestedSongs.contains(req)) {
-      System.out.println("ERROR: Cannot approve song not in requested list");
+  public static Party create(String name, User host, Playlist playlist,
+      Coordinate location, String time) throws SQLException {
+    if (name == null || host == null || playlist == null || location == null
+        || time == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return DbHandler.addParty(playlist.getId(), name, location, time, host);
+
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    try {
+      Party a = (Party) o;
+      if (getPartyId() == a.getPartyId()) {
+        return true;
+      }
+    } catch (Exception e) {
       return false;
     }
-    requestedSongs.remove(req);
-    return true;
-
+    return false;
   }
 
-  public boolean removeFromPlaylist(Request req) {
-    if (!playlist.getSongs().contains(req)) {
-      System.out.println("ERROR: Cannot remove song not in playlist");
-      return false;
-    }
-    playlist.removeSong(req.getSong());
-    requestedSongs.add(req);
-    return true;
-
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getPartyId());
   }
 
-  public boolean requestSong(Request req) { // maybe this method should be in
-                                            // User?
-    if (requestedSongs.contains(req)) {
-      return false;
-    }
-    requestedSongs.add(req);
-    return true;
+  @Override
+  public String toString() {
+    return getPartyId() + "";
   }
-
 }

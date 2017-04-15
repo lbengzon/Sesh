@@ -1,74 +1,65 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
-/**
- * Models an arbitrary Sesh user.
- * @author Matt
- */
-public class User {
-  private String id; // spotify username?
-  private String email;
-  private String[] name;
+import java.sql.SQLException;
+import java.util.Objects;
 
-  /**
-   * This is the constructor for the User class.
-   * @param id
-   *          user id
-   * @param email
-   *          user email
-   * @param firstName
-   *          user's first name
-   * @param lastName
-   *          user's last name
-   */
-  public User(String id, String email, String firstName, String lastName) {
-    this.id = id;
-    this.email = email;
-    this.name[0] = firstName;
-    this.name[1] = lastName;
-  }
+public abstract class User {
 
-  /**
-   * This method gets the email of the user.
-   * @return the user's email
-   */
-  public String getEmail() {
-    return email;
-  }
+  public abstract String getSpotifyId();
 
-  /**
-   * This method gets the id of the user.
-   * @return the user's id
-   */
-  public String getId() {
-    return id;
-  }
+  public abstract String getEmail();
 
-  /**
-   * This method gets the user's first name.
-   * @return user's first name.
-   */
-  public String getFirstName() {
-    return name[0];
-  }
+  public abstract String getFirstName();
 
   /**
    * This method gets the user's last name.
    * @return user's last name.
    */
-  public String getLastName() {
-    return name[1];
-  }
+  public abstract String getLastName();
 
   /**
    * This method gets the user's full name.
    * @return the user's full name.
    */
-  public String getFullName() {
-    return name[0] + " " + name[1];
+  public abstract String getFullName();
+
+  public static User of(String spotifyId) {
+    if (spotifyId == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return new UserProxy(spotifyId);
   }
 
-  public static User ofId(String id) {
-    return null;
+  public static User create(String userId, String email, String name)
+      throws SQLException {
+    if (userId == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return DbHandler.addUser(userId, email, name);
   }
 
+  @Override
+  public boolean equals(Object o) {
+    try {
+      User a = (User) o;
+      if (getSpotifyId() == a.getSpotifyId()) {
+        return true;
+      }
+    } catch (Exception e) {
+      return false;
+    }
+    return false;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getSpotifyId());
+  }
+
+  @Override
+  public String toString() {
+    return getSpotifyId() + "";
+  }
 }

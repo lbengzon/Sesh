@@ -19,7 +19,7 @@ CREATE TABLE "Party"(
 CREATE TABLE "SongRequest"(
   "requestId" INTEGER,
   "spotifySongId" TEXT,
-  "partyId" TEXT,
+  "partyId" INTEGER,
   "userId" TEXT,
   "time" TEXT,
   PRIMARY KEY ("requestId"),

@@ -1,91 +1,33 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.sql.SQLException;
+import java.util.Objects;
 
-/**
- * Models a song request.
- * @author Matt
- */
-public class Request implements Comparable<Request> {
-  private int id;
-  private Song song;
-  private String requestTime;
-  private Set<User> upvotes;
-  private Set<User> downvotes;
-  private User user;
-
-  public Request(int id, String requestTime, Song song, User user) {
-    this.id = id;
-    this.requestTime = requestTime;
-    this.song = song;
-    this.user = user;
-    upvotes = new HashSet<User>();
-    downvotes = new HashSet<User>();
+public abstract class Request implements Comparable<Request> {
+  public enum VoteType {
+    upvote, downvote
   }
 
-  /**
-   * Upvotes the request.
-   * @param user
-   *          - user voting
-   */
-  public void upvote(User user) {
-    if (upvotes.contains(user)) {
-      upvotes.remove(user);
-    } else {
-      upvotes.add(user);
-      if (downvotes.contains(user)) {
-        downvotes.remove(user);
-      }
-    }
-  }
+  public abstract int getId();
 
-  /**
-   * Downvotes the request.
-   * @param user
-   *          - user voting
-   */
-  public void downvote(User user) {
-    if (downvotes.contains(user)) {
-      downvotes.remove(user);
-    } else {
-      downvotes.add(user);
-      if (upvotes.contains(user)) {
-        upvotes.remove(user);
-      }
-    }
+  public abstract void upvote(User user);
 
-  }
+  public abstract void downvote(User user);
 
-  /**
-   * Gets the Request's vote count.
-   * @return - vote count
-   */
-  public int voteCount() {
-    return upvotes.size() - downvotes.size();
-  }
+  public abstract int voteCount();
 
-  /**
-   * Gets request time.
-   * @return - request time
-   */
-  public String getTime() {
-    return requestTime;
-  }
+  public abstract String getRequestTime();
 
-  /**
-   * Gets song object.
-   * @return - song
-   */
-  public Song getSong() {
-    return song;
-  }
+  public abstract User getUserRequestedBy();
+
+  public abstract Song getSong();
 
   @Override
-  public int compareTo(Request req) { // may want to modify to a better model so
-                                      // we can order
-                                      // requests better (divide votecount by
-                                      // time elapsed?)
+  public int compareTo(Request req) { // may want to modify to a better
+                                      // model so
+    // we can order
+    // requests better (divide votecount by
+    // time elapsed?)
     if (this.voteCount() > req.voteCount()) {
       return 1;
     }
@@ -102,14 +44,44 @@ public class Request implements Comparable<Request> {
     return 0;
   }
 
+  public static Request of(int id, Song song, User user, String requestTime) {
+    if (song == null || user == null || requestTime == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return new RequestProxy(id, song, user, requestTime);
+  }
+
+  public static Request create(Song song, User user, String partyId,
+      String requestTime) throws SQLException {
+    if (song == null || user == null || requestTime == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return DbHandler.requestSong(song.getSpotifyId(), partyId, user,
+        requestTime);
+  }
+
   @Override
   public boolean equals(Object o) {
     try {
-      Request otherRequest = (Request) o;
-      return getSong().equals(otherRequest.getSong());
-    } catch (ClassCastException cce) {
+      Request a = (Request) o;
+      if (getId() == a.getId()) {
+        return true;
+      }
+    } catch (Exception e) {
       return false;
     }
+    return false;
   }
 
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getId());
+  }
+
+  @Override
+  public String toString() {
+    return getId() + "";
+  }
 }
