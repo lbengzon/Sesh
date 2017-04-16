@@ -120,7 +120,7 @@ public class DbHandler {
 
     int success = prep.executeUpdate();
     if (success >= 1) {
-      return new UserBean(userId, email, name, name);
+      return new UserBean(userId, email, name);
     } else {
       throw new SQLException(
           "ERROR: Could not insert the user with the query " + query);
@@ -479,13 +479,61 @@ public class DbHandler {
         new HashSet<>(downvotes));
   }
 
-  public static UserBean getUserWithId(String spotifyId) {
-    // TODO Auto-generated method stub
-    return null;
+  public static UserBean getUserWithId(String spotifyId) throws SQLException {
+    String query = SqlStatements.GET_USER_FROM_ID;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setString(1, spotifyId);
+
+    ResultSet rs = prep.executeQuery();
+    List<User> upvotes = new ArrayList<>();
+    List<User> downvotes = new ArrayList<>();
+    if (rs.next()) {
+      String email = rs.getString(2);
+      String name = rs.getString(3);
+      return new UserBean(spotifyId, email, name);
+    }
+
+    throw new SQLException("ERROR: No User With id of  " + spotifyId);
   }
 
-  public static List<Party> getUsersParties(User user) {
-    return null;
+  public static List<Party> getUsersParties(User user) throws SQLException {
+    String query = SqlStatements.GET_USER_PARTY;
+    PreparedStatement prep = statementMap.get(query);
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    if (prep == null) {
+      prep = conn.prepareStatement(query);
+      statementMap.put(query, prep);
+    }
+    prep.setString(1, user.getSpotifyId());
+
+    ResultSet rs = prep.executeQuery();
+    List<Party> parties = new ArrayList<>();
+
+    while (rs.next()) {
+      int partyId = rs.getInt(1);
+      String spotifyPlaylistId = rs.getString(2);
+      String name = rs.getString(3);
+      double lat = rs.getDouble(4);
+      double lon = rs.getDouble(5);
+      String time = rs.getString(6);
+      String status = rs.getString(7);
+      Party p = Party.of(partyId, name, user, new Playlist(spotifyPlaylistId),
+          new Coordinate(lat, lon), time, Status.valueOf(status));
+      parties.add(p);
+    }
+    return parties;
+
   }
 
 }

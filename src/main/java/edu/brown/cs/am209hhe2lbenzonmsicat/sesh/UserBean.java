@@ -20,12 +20,11 @@ public class UserBean extends User {
    * @param lastName
    *          user's last name
    */
-  public UserBean(String spotifyId, String email, String firstName,
-      String lastName) {
+  public UserBean(String spotifyId, String email, String name) {
     this.spotifyId = spotifyId;
     this.email = email;
-    this.name[0] = firstName;
-    this.name[1] = lastName;
+    this.name[0] = name;
+    this.name[1] = name;
   }
 
   /**
