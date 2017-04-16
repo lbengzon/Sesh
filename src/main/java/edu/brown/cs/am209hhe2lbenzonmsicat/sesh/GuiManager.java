@@ -5,6 +5,7 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import spark.ModelAndView;
+import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
 import spark.Spark;
@@ -18,6 +19,7 @@ import spark.template.freemarker.FreeMarkerEngine;
  *
  */
 public class GuiManager {
+  private SpotifyCommunicator comm = new SpotifyCommunicator();
 
   /**
    * Default constructor.
@@ -27,12 +29,32 @@ public class GuiManager {
    */
   public GuiManager(FreeMarkerEngine freeMarkerEngine) {
     installRoutes(freeMarkerEngine);
+    comm.createAuthorizeURL();
   }
 
   private void installRoutes(FreeMarkerEngine fme) {
+    Spark.get("/spotifycallback", new MapsHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
     Spark.get("/create", new CreateHandler(), fme);
     Spark.get("/join", new JoinHandler(), fme);
+  }
+
+  /**
+   * Spotify end point.
+   *
+   */
+  private class MapsHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+
+      String code = qm.value("code");
+      System.out.println(code);
+      comm.getAccessToken(code);
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Maps");
+      return new ModelAndView(variables, "home.ftl");
+    }
   }
 
   /**
