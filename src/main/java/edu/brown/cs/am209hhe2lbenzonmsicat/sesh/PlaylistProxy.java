@@ -51,10 +51,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   @Override
   public List<Request> getSongs() {
-    // TODO: make a request to the spotify api to get the list of songs, then
-    // sort that requsts the same way that the songs in the spotify playlists
-    // are
-    // sorted than return that.
+
     if (playlistBean != null) {
       return new ArrayList<>(playlistBean.getQueuedRequests().values());
     } else {
@@ -64,33 +61,48 @@ public class PlaylistProxy extends Playlist implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
+    // TODO: ADD API REQUEST HERE
+    // TODO: make a request to the spotify api to get the list of songs, then
+    // sort that requsts the same way that the songs in the spotify playlists
+    // are
+    // sorted than return that.
     return new ArrayList<>(playlistBean.getQueuedRequests().values());
   }
 
   @Override
   public boolean removeSong(Request request) {
-    if (playlistBean != null) {
-      return playlistBean.removeSong(request);
-    } else {
+    if (playlistBean == null) {
       try {
         fill();
       } catch (SQLException e) {
         throw new RuntimeException(e.getMessage());
       }
     }
+    try {
+      // TODO: ADD API REQUEST HERE
+
+      DbHandler.MoveSongRequestOutOfQueue(request);
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      throw new RuntimeException(e.getMessage());
+    }
     return playlistBean.removeSong(request);
   }
 
   @Override
   public boolean addSong(Request request) {
-    if (playlistBean != null) {
-      return playlistBean.addSong(request);
-    } else {
+    if (playlistBean == null) {
       try {
         fill();
       } catch (SQLException e) {
         throw new RuntimeException(e.getMessage());
       }
+    }
+    try {
+      // TODO: ADD API REQUEST HERE
+      DbHandler.MoveSongRequestToQueue(request);
+    } catch (SQLException e) {
+      throw new RuntimeException(e.getMessage());
     }
     return playlistBean.addSong(request);
   }
@@ -106,7 +118,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
       // songBean = some api call here
-      playlist = DbHandler.getQueuedSongsForParty(spotifyId, partyId);
+      playlistBean = DbHandler.getQueuedSongsForParty(spotifyId, partyId);
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
     }

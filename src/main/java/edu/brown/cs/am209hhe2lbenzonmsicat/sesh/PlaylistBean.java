@@ -50,12 +50,13 @@ public class PlaylistBean extends Playlist {
 
   @Override
   public boolean removeSong(Request request) {
-    return false;
+    return queuedRequests.remove(request.getSong()) != null;
   }
 
   @Override
   public boolean addSong(Request request) {
-    return false;
+    queuedRequests.put(request.getSong(), request);
+    return true;
   }
 
   @Override

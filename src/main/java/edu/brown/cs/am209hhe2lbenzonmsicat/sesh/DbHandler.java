@@ -568,8 +568,9 @@ public class DbHandler {
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
       String status = rs.getString(7);
-      Party p = Party.of(partyId, name, user, Playlist.of(spotifyPlaylistId),
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+      Party p = Party.of(partyId, name, user,
+          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
+          time, Status.valueOf(status));
       parties.add(p);
     }
     return parties;
@@ -595,8 +596,9 @@ public class DbHandler {
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
       String status = rs.getString(7);
-      Party p = Party.of(partyId, name, user, Playlist.of(spotifyPlaylistId),
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+      Party p = Party.of(partyId, name, user,
+          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
+          time, Status.valueOf(status));
       return p;
     }
     return null;
