@@ -111,4 +111,14 @@ public class RequestBean extends Request {
     return downvotes;
   }
 
+  @Override
+  public void removeVote(User user) {
+    if (upvotes.contains(user)) {
+      upvotes.remove(user);
+    } else if (downvotes.contains(user)) {
+      downvotes.remove(user);
+    }
+
+  }
+
 }

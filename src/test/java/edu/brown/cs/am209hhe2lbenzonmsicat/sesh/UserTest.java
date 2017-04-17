@@ -16,8 +16,8 @@ public class UserTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     UserProxy.clearCache();
-
-    assert l.getSpotifyId().equals("lbengzon");
+    User l1 = User.of("lbengzon");
+    assert l1.getSpotifyId().equals("lbengzon");
   }
 
   @Test
@@ -42,7 +42,9 @@ public class UserTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     UserProxy.clearCache();
-    assert l.getFirstName().equals("Leandro");
+    User l1 = User.of("lbengzon");
+
+    assert l1.getFirstName().equals("Leandro");
   }
 
   @Test
@@ -54,8 +56,8 @@ public class UserTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     UserProxy.clearCache();
-
-    assert l.getLastName().equals("Bengzon");
+    User l1 = User.of("lbengzon");
+    assert l1.getLastName().equals("Bengzon");
   }
 
   @Test
@@ -67,8 +69,9 @@ public class UserTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     UserProxy.clearCache();
+    User l1 = User.of("lbengzon");
 
-    assert l.getFullName().equals("Leandro Bengzon");
+    assert l1.getFullName().equals("Leandro Bengzon");
   }
 
   @Test

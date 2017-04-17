@@ -16,6 +16,8 @@ public abstract class Request implements Comparable<Request> {
 
   public abstract void downvote(User user);
 
+  public abstract void removeVote(User user);
+
   public abstract int voteCount();
 
   public abstract String getRequestTime();
