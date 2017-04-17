@@ -17,6 +17,16 @@ public abstract class Playlist {
 
   public abstract void setPartyId(int partyId);
 
+  /**
+   * This should only be used for testing!!!!!!!!!
+   * @param spotifyId
+   * @param partyId
+   * @return
+   */
+  public static Playlist of(String spotifyId, int partyId) {
+    return new PlaylistProxy(spotifyId, partyId);
+  }
+
   public static Playlist of(String spotifyId) {
     return new PlaylistProxy(spotifyId);
   }
