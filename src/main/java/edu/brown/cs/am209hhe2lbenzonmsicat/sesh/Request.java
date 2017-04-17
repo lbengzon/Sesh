@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.Set;
 
 public abstract class Request implements Comparable<Request> {
   public enum VoteType {
@@ -21,6 +22,10 @@ public abstract class Request implements Comparable<Request> {
   public abstract User getUserRequestedBy();
 
   public abstract Song getSong();
+
+  public abstract Set<User> getUpvotes();
+
+  public abstract Set<User> getDownvotes();
 
   @Override
   public int compareTo(Request req) { // may want to modify to a better
@@ -52,7 +57,7 @@ public abstract class Request implements Comparable<Request> {
     return new RequestProxy(id, song, user, requestTime);
   }
 
-  public static Request create(Song song, User user, String partyId,
+  public static Request create(Song song, User user, int partyId,
       String requestTime) throws SQLException {
     if (song == null || user == null || requestTime == null) {
       throw new NullPointerException(

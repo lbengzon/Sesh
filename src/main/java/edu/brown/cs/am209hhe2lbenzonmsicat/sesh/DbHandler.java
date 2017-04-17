@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.AttendeeType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.Status;
@@ -25,7 +24,8 @@ public class DbHandler {
   private static Connection guiConnection = null;
   private static String startOfPath = "jdbc:sqlite:";
   private static ThreadLocal<Connection> connections = new ThreadLocal<>();
-  private static ConcurrentHashMap<String, PreparedStatement> statementMap = new ConcurrentHashMap<String, PreparedStatement>();
+  // private static ConcurrentHashMap<String, PreparedStatement> statementMap =
+  // new ConcurrentHashMap<String, PreparedStatement>();
 
   /**
    * Hiding constructor
@@ -60,9 +60,9 @@ public class DbHandler {
       if (DbHandler.getConnection() != null) {
         assertNotNull(DbHandler.getConnection());
         // close all previous connections
-        for (String key : statementMap.keySet()) {
-          statementMap.get(key).close();
-        }
+        // for (String key : statementMap.keySet()) {
+        // statementMap.get(key).close();
+        // }
         DbHandler.getConnection().close();
         DbHandler.getAllConnections().set(null);
         guiConnection.close();
@@ -98,6 +98,69 @@ public class DbHandler {
     guiConnection = conn;
   }
 
+  public static void ClearAllTables() throws SQLException {
+    ClearUserTable();
+    ClearPartyTable();
+    ClearPartyAttendeeTable();
+    ClearRequestVotesTable();
+    ClearSongRequestTable();
+  }
+
+  public static void ClearUserTable() throws SQLException {
+    String query = SqlStatements.CLEAR_USER_TABLE;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    int success = prep.executeUpdate();
+  }
+
+  public static void ClearPartyTable() throws SQLException {
+    String query = SqlStatements.CLEAR_PARTY_TABLE;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    int success = prep.executeUpdate();
+  }
+
+  public static void ClearSongRequestTable() throws SQLException {
+    String query = SqlStatements.CLEAR_SONG_REQUEST_TABLE;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    int success = prep.executeUpdate();
+  }
+
+  public static void ClearRequestVotesTable() throws SQLException {
+    String query = SqlStatements.CLEAR_REQUEST_VOTES_TABLE;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    int success = prep.executeUpdate();
+  }
+
+  public static void ClearPartyAttendeeTable() throws SQLException {
+    String query = SqlStatements.CLEAR_PARTY_ATTENDEE_TABLE;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    int success = prep.executeUpdate();
+  }
+
   public static ThreadLocal<Connection> getAllConnections() {
     return connections;
   }
@@ -105,15 +168,12 @@ public class DbHandler {
   public static User addUser(String userId, String email, String name)
       throws SQLException {
     String query = SqlStatements.ADD_NEW_USER;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setString(1, userId);
     prep.setString(2, email);
     prep.setString(3, name);
@@ -127,20 +187,17 @@ public class DbHandler {
     }
   }
 
-  public static Request requestSong(String spotifySongId, String partyId,
+  public static Request requestSong(String spotifySongId, int partyId,
       User user, String time) throws SQLException {
     String query = SqlStatements.ADD_SONG_REQUEST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setString(1, spotifySongId);
-    prep.setString(2, partyId);
+    prep.setInt(2, partyId);
     prep.setString(3, user.getSpotifyId());
     prep.setString(4, time);
 
@@ -164,16 +221,17 @@ public class DbHandler {
 
   public static Party addParty(String spotifyPlaylistId, String name,
       Coordinate coordinate, String time, User host) throws SQLException {
+    if (getPartyHostedByUser(host) != null) {
+      throw new IllegalArgumentException(
+          "ERROR: Host is already a host of another active party");
+    }
     String query = SqlStatements.ADD_NEW_PARTY;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setString(1, spotifyPlaylistId);
     prep.setString(2, name);
     prep.setDouble(3, coordinate.getLat());
@@ -201,16 +259,15 @@ public class DbHandler {
   }
 
   public static void AddHost(int partyId, User host) throws SQLException {
+    // TODO: if your gonna have multiple hosts, add the check that he's not
+    // hosting another ongoing party here.
     String query = SqlStatements.ADD_PARTY_HOST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, partyId);
     prep.setString(2, host.getSpotifyId());
 
@@ -223,15 +280,12 @@ public class DbHandler {
 
   public static void RemoveSongRequest(Request request) throws SQLException {
     String query = SqlStatements.REMOVE_SONG_REQUEST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, request.getId());
 
     int success = prep.executeUpdate();
@@ -243,15 +297,12 @@ public class DbHandler {
 
   public static void RemoveParty(Party party) throws SQLException {
     String query = SqlStatements.REMOVE_PARTY;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, party.getPartyId());
 
     int success = prep.executeUpdate();
@@ -264,15 +315,12 @@ public class DbHandler {
   public static void UpvoteRequest(Request request, User user)
       throws SQLException {
     String query = SqlStatements.UPVOTE_SONG_REQUEST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, request.getId());
     prep.setString(2, user.getSpotifyId());
 
@@ -286,15 +334,12 @@ public class DbHandler {
   public static void DownvoteRequest(Request request, User user)
       throws SQLException {
     String query = SqlStatements.DOWNVOTE_SONG_REQUEST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, request.getId());
     prep.setString(2, user.getSpotifyId());
 
@@ -308,15 +353,12 @@ public class DbHandler {
   public static void RemoveVote(Request request, User user)
       throws SQLException {
     String query = SqlStatements.REMOVE_VOTE_SONG_REQUEST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, request.getId());
     prep.setString(2, user.getSpotifyId());
 
@@ -330,15 +372,12 @@ public class DbHandler {
   public static void AddPartyGuest(int partyId, User guest)
       throws SQLException {
     String query = SqlStatements.ADD_PARTY_GUEST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, partyId);
     prep.setString(2, guest.getSpotifyId());
 
@@ -352,15 +391,12 @@ public class DbHandler {
   public static void RemovePartyGuest(int partyId, User guest)
       throws SQLException {
     String query = SqlStatements.REMOVE_PARTY_GUEST;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, partyId);
     prep.setString(2, guest.getSpotifyId());
 
@@ -374,15 +410,12 @@ public class DbHandler {
   public static List<Request> getPartySongRequests(int partyId)
       throws SQLException {
     String query = SqlStatements.GET_PARTY_SONG_REQUESTS;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, partyId);
 
     ResultSet rs = prep.executeQuery();
@@ -402,15 +435,12 @@ public class DbHandler {
   public static List<List<User>> getPartyHostsAndGuests(int partyId)
       throws SQLException {
     String query = SqlStatements.GET_ALL_PARTY_ATTENDEES;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, partyId);
 
     ResultSet rs = prep.executeQuery();
@@ -447,15 +477,12 @@ public class DbHandler {
   public static RequestBean getFullRequest(int id, Song song, User user,
       String requestTime) throws SQLException {
     String query = SqlStatements.GET_VOTES_FOR_SONG;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setInt(1, id);
 
     ResultSet rs = prep.executeQuery();
@@ -464,7 +491,7 @@ public class DbHandler {
     while (rs.next()) {
       String userId = rs.getString(2);
       String type = rs.getString(3);
-      AttendeeType voteType = AttendeeType.valueOf(type);
+      VoteType voteType = VoteType.valueOf(type);
       if (voteType.equals(VoteType.upvote)) {
         upvotes.add(User.of(userId));
       } else if (voteType.equals(VoteType.downvote)) {
@@ -481,15 +508,12 @@ public class DbHandler {
 
   public static UserBean getUserWithId(String spotifyId) throws SQLException {
     String query = SqlStatements.GET_USER_FROM_ID;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setString(1, spotifyId);
 
     ResultSet rs = prep.executeQuery();
@@ -506,15 +530,12 @@ public class DbHandler {
 
   public static List<Party> getUsersParties(User user) throws SQLException {
     String query = SqlStatements.GET_USER_PARTY;
-    PreparedStatement prep = statementMap.get(query);
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
     }
-    if (prep == null) {
-      prep = conn.prepareStatement(query);
-      statementMap.put(query, prep);
-    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
     prep.setString(1, user.getSpotifyId());
 
     ResultSet rs = prep.executeQuery();
@@ -533,7 +554,33 @@ public class DbHandler {
       parties.add(p);
     }
     return parties;
+  }
 
+  public static Party getPartyHostedByUser(User user) throws SQLException {
+    String query = SqlStatements.GET_PARTY_HOSTED_BY_USER;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    prep.setString(1, user.getSpotifyId());
+
+    ResultSet rs = prep.executeQuery();
+
+    if (rs.next()) {
+      int partyId = rs.getInt(1);
+      String spotifyPlaylistId = rs.getString(2);
+      String name = rs.getString(3);
+      double lat = rs.getDouble(4);
+      double lon = rs.getDouble(5);
+      String time = rs.getString(6);
+      String status = rs.getString(7);
+      Party p = Party.of(partyId, name, user, new Playlist(spotifyPlaylistId),
+          new Coordinate(lat, lon), time, Status.valueOf(status));
+      return p;
+    }
+    return null;
   }
 
 }

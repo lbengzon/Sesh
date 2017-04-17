@@ -44,7 +44,7 @@ public abstract class User {
   public boolean equals(Object o) {
     try {
       User a = (User) o;
-      if (getSpotifyId() == a.getSpotifyId()) {
+      if (getSpotifyId().equals(a.getSpotifyId())) {
         return true;
       }
     } catch (Exception e) {
