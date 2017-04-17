@@ -48,8 +48,7 @@ public class GuiManager {
       System.out.println(code);
       comm.getAccessToken(code);
       String userId;
-      Map<String, Object> variables = ImmutableMap.of("title", "Maps", "userId",
-          userId);
+      Map<String, Object> variables = ImmutableMap.of("title", "Maps");
       return new ModelAndView(variables, "home.ftl");
     }
   }
