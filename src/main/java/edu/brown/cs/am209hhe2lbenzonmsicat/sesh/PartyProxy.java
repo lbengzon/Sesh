@@ -34,6 +34,10 @@ public class PartyProxy extends Party implements Proxy {
     this.status = status;
   }
 
+  public static void clearCache() {
+    idToPartyCache.clear();
+  }
+
   @Override
   public void fillBean() {
     assert partyBean == null;
