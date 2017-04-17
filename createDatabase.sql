@@ -22,6 +22,7 @@ CREATE TABLE "SongRequest"(
   "partyId" INTEGER,
   "userId" TEXT,
   "time" TEXT,
+  "isQueued" BOOLEAN,
   PRIMARY KEY ("requestId"),
   FOREIGN KEY ("partyId") REFERENCES Party(partyId)
     ON DELETE CASCADE ON UPDATE CASCADE,

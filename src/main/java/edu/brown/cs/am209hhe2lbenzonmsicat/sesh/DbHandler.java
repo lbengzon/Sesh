@@ -180,7 +180,7 @@ public class DbHandler {
 
     int success = prep.executeUpdate();
     if (success >= 1) {
-      return new UserBean(userId, email, name);
+      return User.of(userId, email, name);
     } else {
       throw new SQLException(
           "ERROR: Could not insert the user with the query " + query);
@@ -207,7 +207,7 @@ public class DbHandler {
         if (generatedKeys.next()) {
           int requestId = generatedKeys.getInt(1);
 
-          return new RequestBean(requestId, time, Song.of(spotifySongId), user,
+          return Request.of(requestId, time, Song.of(spotifySongId), user,
               new HashSet<>(), new HashSet<>());
         } else {
           throw new SQLException("Creating user failed, no ID obtained.");
@@ -246,8 +246,9 @@ public class DbHandler {
 
           AddHost(partyId, host);
 
-          return Party.of(partyId, name, host, new Playlist(spotifyPlaylistId),
-              coordinate, time, Status.ongoing);
+          return Party.of(partyId, name, host,
+              Playlist.of(spotifyPlaylistId, partyId), coordinate, time,
+              Status.ongoing);
         } else {
           throw new SQLException("Add PartyBean failed, no ID obtained.");
         }
@@ -278,8 +279,27 @@ public class DbHandler {
     }
   }
 
-  public static void RemoveSongRequest(Request request) throws SQLException {
-    String query = SqlStatements.REMOVE_SONG_REQUEST;
+  public static void MoveSongRequestToQueue(Request request)
+      throws SQLException {
+    String query = SqlStatements.MOVE_SONG_REQUEST_TO_QUEUE;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    prep.setInt(1, request.getId());
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException(
+          "ERROR: Remove song request with the query " + query);
+    }
+  }
+
+  public static void MoveSongRequestOutOfQueue(Request request)
+      throws SQLException {
+    String query = SqlStatements.MOVE_SONG_REQUEST_OUT_OF_QUEUE;
     Connection conn = getConnection();
     if (conn == null) {
       throw new SQLException("ERROR: No database has been set.");
@@ -549,8 +569,9 @@ public class DbHandler {
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
       String status = rs.getString(7);
-      Party p = Party.of(partyId, name, user, new Playlist(spotifyPlaylistId),
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+      Party p = Party.of(partyId, name, user,
+          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
+          time, Status.valueOf(status));
       parties.add(p);
     }
     return parties;
@@ -576,11 +597,37 @@ public class DbHandler {
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
       String status = rs.getString(7);
-      Party p = Party.of(partyId, name, user, new Playlist(spotifyPlaylistId),
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+      Party p = Party.of(partyId, name, user,
+          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
+          time, Status.valueOf(status));
       return p;
     }
     return null;
+  }
+
+  public static PlaylistBean getQueuedSongsForParty(String playlistId,
+      int partyId) throws SQLException {
+    String query = SqlStatements.GET_PARTY_QUEUED_SONG_REQUESTS;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    prep.setInt(1, partyId);
+
+    ResultSet rs = prep.executeQuery();
+    List<Request> queue = new ArrayList<>();
+    while (rs.next()) {
+      int requestId = rs.getInt(1);
+      String spotifySongId = rs.getString(2);
+      String userId = rs.getString(4);
+      String time = rs.getString(5);
+      Request r = Request.of(requestId, Song.of(spotifySongId), User.of(userId),
+          time);
+      queue.add(r);
+    }
+    return new PlaylistBean(playlistId, partyId, queue);
   }
 
 }

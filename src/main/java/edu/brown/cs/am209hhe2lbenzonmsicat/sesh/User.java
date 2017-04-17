@@ -31,6 +31,14 @@ public abstract class User {
     return new UserProxy(spotifyId);
   }
 
+  public static User of(String spotifyId, String email, String name) {
+    if (spotifyId == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create an mapnode from a null id");
+    }
+    return new UserProxy(spotifyId, email, name);
+  }
+
   public static User create(String userId, String email, String name)
       throws SQLException {
     if (userId == null) {
@@ -62,4 +70,5 @@ public abstract class User {
   public String toString() {
     return getSpotifyId() + "";
   }
+
 }

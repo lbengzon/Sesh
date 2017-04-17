@@ -1,47 +1,45 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.util.List;
+import java.util.Objects;
 
-/**
- * Wrapper for a Spotify playlist.
- * @author Matt
- */
-public class Playlist {
-  private String id; // youtube/spotify id
-  private String url;
+public abstract class Playlist {
 
-  public Playlist(String id) {
-    this.setId(id);
-    this.setUrl("find out the actual structure " + id);
+  public abstract String getId();
+
+  public abstract String getUrl();
+
+  public abstract List<Request> getSongs();
+
+  public abstract boolean removeSong(Request request);
+
+  public abstract boolean addSong(Request request);
+
+  public static Playlist of(String spotifyId, int partyId) {
+    return new PlaylistProxy(spotifyId, partyId);
   }
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public String getUrl() {
-    return url;
-  }
-
-  public void setUrl(String url) {
-    this.url = url;
-  }
-
-  public List<SongBean> getSongs() {
-    // TODO:MAKE API CALL
-    return null;
-  }
-
-  public boolean removeSong(Song song) {
+  @Override
+  public boolean equals(Object o) {
+    try {
+      Playlist a = (Playlist) o;
+      if (getId() == a.getId()) {
+        return true;
+      }
+    } catch (Exception e) {
+      return false;
+    }
     return false;
   }
 
-  public boolean addSong(Song song) {
-    return false;
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(getId());
+  }
+
+  @Override
+  public String toString() {
+    return getId() + "";
   }
 
 }
