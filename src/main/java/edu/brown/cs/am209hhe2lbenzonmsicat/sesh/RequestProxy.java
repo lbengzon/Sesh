@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -125,6 +126,34 @@ public class RequestProxy extends Request implements Proxy {
   public User getUserRequestedBy() {
     // TODO Auto-generated method stub
     return userRequestedBy;
+  }
+
+  @Override
+  public Set<User> getUpvotes() {
+    if (requestBean != null) {
+      return requestBean.getUpvotes();
+    } else {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return requestBean.getUpvotes();
+  }
+
+  @Override
+  public Set<User> getDownvotes() {
+    if (requestBean != null) {
+      return requestBean.getDownvotes();
+    } else {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return requestBean.getDownvotes();
   }
 
 }

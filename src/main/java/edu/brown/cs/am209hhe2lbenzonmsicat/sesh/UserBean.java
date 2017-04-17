@@ -7,7 +7,8 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 public class UserBean extends User {
   private String spotifyId; // spotify username?
   private String email;
-  private String[] name;
+  private String firstName;
+  private String lastName;
 
   /**
    * This is the constructor for the User class.
@@ -23,8 +24,10 @@ public class UserBean extends User {
   public UserBean(String spotifyId, String email, String name) {
     this.spotifyId = spotifyId;
     this.email = email;
-    this.name[0] = name;
-    this.name[1] = name;
+    String[] names = name.split(" ");
+    this.firstName = names[0];
+    this.lastName = names[1];
+
   }
 
   /**
@@ -51,7 +54,7 @@ public class UserBean extends User {
    */
   @Override
   public String getFirstName() {
-    return name[0];
+    return firstName;
   }
 
   /**
@@ -60,7 +63,7 @@ public class UserBean extends User {
    */
   @Override
   public String getLastName() {
-    return name[1];
+    return lastName;
   }
 
   /**
@@ -69,7 +72,7 @@ public class UserBean extends User {
    */
   @Override
   public String getFullName() {
-    return name[0] + " " + name[1];
+    return firstName + " " + lastName;
   }
 
   public static User ofId(String id) {

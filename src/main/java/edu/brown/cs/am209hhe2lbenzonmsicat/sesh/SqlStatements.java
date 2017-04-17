@@ -9,6 +9,16 @@ final class SqlStatements {
 
   }
 
+  public static final String CLEAR_USER_TABLE = "DELETE FROM User;";
+
+  public static final String CLEAR_PARTY_TABLE = "DELETE FROM Party;";
+
+  public static final String CLEAR_SONG_REQUEST_TABLE = "DELETE FROM SongRequest;";
+
+  public static final String CLEAR_REQUEST_VOTES_TABLE = "DELETE FROM RequestVotes;";
+
+  public static final String CLEAR_PARTY_ATTENDEE_TABLE = "DELETE FROM PartyAttendee;";
+
   /**
    * Adds a new user into the user table.
    */
@@ -107,6 +117,9 @@ final class SqlStatements {
    * Gets all the parties that the user has attended or is hosting/attending.
    */
   public static final String GET_USER_PARTY = "SELECT Party.PartyId, spotifyPlaylistId, name, lat, lon, time, status FROM PartyAttendee, Party"
-      + " WHERE PartyAntendee.partyId=Party.partyId AND userId=?;";
+      + " WHERE PartyAttendee.partyId=Party.partyId AND userId=?;";
+
+  public static final String GET_PARTY_HOSTED_BY_USER = "SELECT Party.PartyId, spotifyPlaylistId, name, lat, lon, time, status FROM PartyAttendee, Party"
+      + " WHERE PartyAttendee.partyId=Party.partyId AND userId=? AND PartyAttendee.type='host' AND Party.status='ongoing';";
 
 }

@@ -99,4 +99,16 @@ public class RequestBean extends Request {
     return requestTime;
   }
 
+  @Override
+  public Set<User> getUpvotes() {
+    // TODO Auto-generated method stub
+    return upvotes;
+  }
+
+  @Override
+  public Set<User> getDownvotes() {
+    // TODO Auto-generated method stub
+    return downvotes;
+  }
+
 }

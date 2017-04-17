@@ -17,8 +17,6 @@ public class PartyBean extends Party {
   private String time;
   private Status status;
 
-  // private Location location; Google api stuff?
-
   public PartyBean(int partyId, String name, User host, Playlist playlist,
       Coordinate location, String time, Set<Request> requestedSongs,
       Set<User> guests, Status status) {
@@ -28,6 +26,7 @@ public class PartyBean extends Party {
     this.requestedSongs = requestedSongs;
     this.playlist = playlist;
     this.location = location;
+    this.name = name;
     this.time = time;
     this.status = status;
   }
@@ -84,50 +83,48 @@ public class PartyBean extends Party {
 
   @Override
   public Set<Request> getRequestedSongs() {
-    // TODO Auto-generated method stub
-    return null;
+    return requestedSongs;
   }
 
   @Override
   public Playlist getPlaylist() {
-    // TODO Auto-generated method stub
-    return null;
+    return playlist;
   }
 
   @Override
   public Set<User> getGuests() {
     // TODO Auto-generated method stub
-    return null;
+    return guests;
   }
 
   @Override
   public User getHost() {
     // TODO Auto-generated method stub
-    return null;
+    return host;
   }
 
   @Override
   public String getName() {
     // TODO Auto-generated method stub
-    return null;
+    return name;
   }
 
   @Override
   public String getTime() {
     // TODO Auto-generated method stub
-    return null;
+    return time;
   }
 
   @Override
   public Coordinate getLocation() {
     // TODO Auto-generated method stub
-    return null;
+    return location;
   }
 
   @Override
   public Status getStatus() {
     // TODO Auto-generated method stub
-    return null;
+    return status;
   }
 
   @Override
