@@ -177,7 +177,7 @@ public abstract class Party {
       throw new NullPointerException(
           "ERROR: Trying to create an mapnode from a null id");
     }
-    Playlist newPlaylist = Playlist.Create(host);
+    Playlist newPlaylist = Playlist.create(host);
     return DbHandler.addParty(newPlaylist, name, location, time, host);
   }
 

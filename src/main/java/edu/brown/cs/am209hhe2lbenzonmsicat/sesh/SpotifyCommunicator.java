@@ -19,8 +19,8 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
  */
 public class SpotifyCommunicator {
 
-  private final Api api = Api.builder().clientId(Constants.clientId)
-      .clientSecret(Constants.clientSecret).redirectURI(Constants.redirectURI)
+  private final Api api = Api.builder().clientId(Constants.CLIENT_ID)
+      .clientSecret(Constants.CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
       .build();
 
   /**

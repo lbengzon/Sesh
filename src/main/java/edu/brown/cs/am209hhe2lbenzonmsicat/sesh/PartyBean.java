@@ -4,6 +4,7 @@ import java.util.Set;
 
 /**
  * Models a party.
+ *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -17,6 +18,28 @@ public class PartyBean extends Party {
   private String time;
   private Status status;
 
+  /**
+   * Constructor.
+   *
+   * @param partyId
+   *          - id
+   * @param name
+   *          - name
+   * @param host
+   *          - host
+   * @param playlist
+   *          - playlist
+   * @param location
+   *          - location
+   * @param time
+   *          - time
+   * @param requestedSongs
+   *          - requested songs
+   * @param guests
+   *          - guests
+   * @param status
+   *          -status
+   */
   public PartyBean(int partyId, String name, User host, Playlist playlist,
       Coordinate location, String time, Set<Request> requestedSongs,
       Set<User> guests, Status status) {
@@ -92,43 +115,36 @@ public class PartyBean extends Party {
 
   @Override
   public Set<User> getGuests() {
-    // TODO Auto-generated method stub
     return guests;
   }
 
   @Override
   public User getHost() {
-    // TODO Auto-generated method stub
     return host;
   }
 
   @Override
   public String getName() {
-    // TODO Auto-generated method stub
     return name;
   }
 
   @Override
   public String getTime() {
-    // TODO Auto-generated method stub
     return time;
   }
 
   @Override
   public Coordinate getLocation() {
-    // TODO Auto-generated method stub
     return location;
   }
 
   @Override
   public Status getStatus() {
-    // TODO Auto-generated method stub
     return status;
   }
 
   @Override
   public boolean addGuest(User guest) {
-    // TODO Auto-generated method stub
     return false;
   }
 
