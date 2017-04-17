@@ -54,6 +54,7 @@ public class PartyBean extends Party {
       System.out.println("ERROR: Cannot approve song not in requested list");
       return false;
     }
+    playlist.addSong(req);
     requestedSongs.remove(req);
     return true;
 
@@ -71,8 +72,7 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean requestSong(Request req) { // maybe this method should be in
-                                            // User?
+  public boolean requestSong(Request req) {
     if (requestedSongs.contains(req)) {
       return false;
     }

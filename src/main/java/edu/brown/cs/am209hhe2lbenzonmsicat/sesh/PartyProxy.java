@@ -82,9 +82,7 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public Set<Request> getRequestedSongs() {
-    if (partyBean != null) {
-      return partyBean.getRequestedSongs();
-    } else {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -102,9 +100,7 @@ public class PartyProxy extends Party implements Proxy {
   @Override
   public Set<User> getGuests() {
     // TODO Auto-generated method stub
-    if (partyBean != null) {
-      return partyBean.getGuests();
-    } else {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -112,6 +108,7 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     return partyBean.getGuests();
+
   }
 
   @Override
@@ -146,14 +143,7 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean upvoteSong(User user, Request req) {
-    try {
-      DbHandler.UpvoteRequest(req, user);
-    } catch (SQLException e1) {
-      throw new RuntimeException(e1.getMessage());
-    }
-    if (partyBean != null) {
-      return partyBean.upvoteSong(user, req);
-    } else {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -165,14 +155,7 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean downvoteSong(User user, Request req) {
-    try {
-      DbHandler.DownvoteRequest(req, user);
-    } catch (SQLException e1) {
-      throw new RuntimeException(e1.getMessage());
-    }
     if (partyBean != null) {
-      return partyBean.downvoteSong(user, req);
-    } else {
       try {
         fill();
       } catch (SQLException e) {
@@ -184,11 +167,6 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean approveSong(Request req) {
-    try {
-      DbHandler.MoveSongRequestToQueue(req);
-    } catch (SQLException e1) {
-      throw new RuntimeException(e1.getMessage());
-    }
     if (partyBean != null) {
       return partyBean.approveSong(req);
     } else {
