@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ *
  * @author leandro
  */
 public class SongProxy extends Song implements Proxy {
@@ -14,6 +15,12 @@ public class SongProxy extends Song implements Proxy {
   private SongBean songBean;
   private String spotifyId;
 
+  /**
+   * Constructor.
+   *
+   * @param spotifyId
+   *          - spotify id
+   */
   public SongProxy(String spotifyId) {
     this.spotifyId = spotifyId;
   }

@@ -4,6 +4,7 @@ import java.util.Set;
 
 /**
  * Models a song request.
+ *
  * @author Matt
  */
 public class RequestBean extends Request {
@@ -14,6 +15,22 @@ public class RequestBean extends Request {
   private Set<User> downvotes;
   private User userRequestedBy;
 
+  /**
+   * Constructor.
+   *
+   * @param id
+   *          - id
+   * @param requestTime
+   *          - time of request
+   * @param song
+   *          - song associated with request
+   * @param userRequestedBy
+   *          - which user made the request
+   * @param upvotes
+   *          - set of users who upvoted this request
+   * @param downvotes
+   *          - set of users who downvoted this request
+   */
   public RequestBean(int id, String requestTime, Song song,
       User userRequestedBy, Set<User> upvotes, Set<User> downvotes) {
     this.id = id;
@@ -31,6 +48,7 @@ public class RequestBean extends Request {
 
   /**
    * Upvotes the request.
+   *
    * @param user
    *          - user voting
    */
@@ -48,6 +66,7 @@ public class RequestBean extends Request {
 
   /**
    * Downvotes the request.
+   *
    * @param user
    *          - user voting
    */
@@ -66,6 +85,7 @@ public class RequestBean extends Request {
 
   /**
    * Gets the RequestBean's vote count.
+   *
    * @return - vote count
    */
   @Override
@@ -75,11 +95,13 @@ public class RequestBean extends Request {
 
   /**
    * Gets request time.
+   *
    * @return - request time
    */
 
   /**
    * Gets song object.
+   *
    * @return - song
    */
   @Override

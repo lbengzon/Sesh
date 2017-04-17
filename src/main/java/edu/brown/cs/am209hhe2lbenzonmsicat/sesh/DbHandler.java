@@ -19,7 +19,11 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.AttendeeType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.Status;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request.VoteType;
 
-public class DbHandler {
+/**
+ * Database handler class.
+ *
+ */
+public final class DbHandler {
 
   private static Connection guiConnection = null;
   private static String startOfPath = "jdbc:sqlite:";
@@ -28,7 +32,7 @@ public class DbHandler {
   // new ConcurrentHashMap<String, PreparedStatement>();
 
   /**
-   * Hiding constructor
+   * Hiding constructor.
    */
   private DbHandler() {
 
@@ -36,6 +40,7 @@ public class DbHandler {
 
   /**
    * Gets the connection a particular thread has.
+   *
    * @return the connection to the database.
    */
   public static Connection getConnection() {
@@ -45,6 +50,16 @@ public class DbHandler {
     return connections.get();
   }
 
+  /**
+   * Set from URL.
+   *
+   * @param pathToDb
+   *          - path
+   * @throws SQLException
+   *           - exception
+   * @throws FileNotFoundException
+   *           - exception
+   */
   public static void setFromUrl(String pathToDb)
       throws SQLException, FileNotFoundException {
     // System.out.println("1");
@@ -90,6 +105,7 @@ public class DbHandler {
 
   /**
    * Sets the connection to a particular database for the thread.
+   *
    * @param conn
    *          the connection we want to use.
    */
@@ -161,10 +177,26 @@ public class DbHandler {
     int success = prep.executeUpdate();
   }
 
+  /**
+   * @return - all connections
+   */
   public static ThreadLocal<Connection> getAllConnections() {
     return connections;
   }
 
+  /**
+   * Adds user to database.
+   *
+   * @param userId
+   *          - id
+   * @param email
+   *          - email
+   * @param name
+   *          - name
+   * @return User created
+   * @throws SQLException
+   *           - exception
+   */
   public static User addUser(String userId, String email, String name)
       throws SQLException {
     String query = SqlStatements.ADD_NEW_USER;
@@ -187,6 +219,21 @@ public class DbHandler {
     }
   }
 
+  /**
+   * Add song request to database.
+   *
+   * @param spotifySongId
+   *          - song id
+   * @param partyId
+   *          - party id
+   * @param user
+   *          - user that made request
+   * @param time
+   *          - time of request
+   * @return Request made
+   * @throws SQLException
+   *           - exception
+   */
   public static Request requestSong(String spotifySongId, int partyId,
       User user, String time) throws SQLException {
     String query = SqlStatements.ADD_SONG_REQUEST;
@@ -219,6 +266,23 @@ public class DbHandler {
     }
   }
 
+  /**
+   * Add party to database.
+   *
+   * @param spotifyPlaylistId
+   *          - playlist id
+   * @param name
+   *          - name of party
+   * @param coordinate
+   *          - geocoordaintes of party
+   * @param time
+   *          - time of party
+   * @param host
+   *          - user host
+   * @return Party created
+   * @throws SQLException
+   *           - exception
+   */
   public static Party addParty(Playlist playlist, String name,
       Coordinate coordinate, String time, User host) throws SQLException {
     if (getPartyHostedByUser(host) != null) {
@@ -244,7 +308,7 @@ public class DbHandler {
         if (generatedKeys.next()) {
           int partyId = generatedKeys.getInt(1);
 
-          AddHost(partyId, host);
+          addHost(partyId, host);
 
           return Party.of(partyId, name, host, playlist, coordinate, time,
               Status.ongoing);
@@ -258,7 +322,17 @@ public class DbHandler {
     }
   }
 
-  public static void AddHost(int partyId, User host) throws SQLException {
+  /**
+   * Add host to database.
+   *
+   * @param partyId
+   *          - party id
+   * @param host
+   *          - user host
+   * @throws SQLException
+   *           - exception
+   */
+  public static void addHost(int partyId, User host) throws SQLException {
     // TODO: if your gonna have multiple hosts, add the check that he's not
     // hosting another ongoing party here.
     String query = SqlStatements.ADD_PARTY_HOST;
@@ -278,6 +352,14 @@ public class DbHandler {
     }
   }
 
+  /**
+   * Remove song request from database.
+   *
+   * @param request
+   *          - request
+   * @throws SQLException
+   *           - exception
+   */
   public static void MoveSongRequestToQueue(Request request)
       throws SQLException {
     String query = SqlStatements.MOVE_SONG_REQUEST_TO_QUEUE;
@@ -314,7 +396,15 @@ public class DbHandler {
     }
   }
 
-  public static void RemoveParty(Party party) throws SQLException {
+  /**
+   * Remove party from database.
+   *
+   * @param party
+   *          - party
+   * @throws SQLException
+   *           - exception
+   */
+  public static void removeParty(Party party) throws SQLException {
     String query = SqlStatements.REMOVE_PARTY;
     Connection conn = getConnection();
     if (conn == null) {
@@ -331,7 +421,17 @@ public class DbHandler {
     }
   }
 
-  public static void UpvoteRequest(Request request, User user)
+  /**
+   * Upvote request in database.
+   *
+   * @param request
+   *          - request that has been upvoted
+   * @param user
+   *          - user that upvoted request
+   * @throws SQLException
+   *           - exception
+   */
+  public static void upvoteRequest(Request request, User user)
       throws SQLException {
     String query = SqlStatements.UPVOTE_SONG_REQUEST;
     Connection conn = getConnection();
@@ -350,7 +450,17 @@ public class DbHandler {
     }
   }
 
-  public static void DownvoteRequest(Request request, User user)
+  /**
+   * Downvote request in the database.
+   *
+   * @param request
+   *          - request that has been downvoted
+   * @param user
+   *          - user that downvoted
+   * @throws SQLException
+   *           - exception
+   */
+  public static void downvoteRequest(Request request, User user)
       throws SQLException {
     String query = SqlStatements.DOWNVOTE_SONG_REQUEST;
     Connection conn = getConnection();
@@ -369,7 +479,17 @@ public class DbHandler {
     }
   }
 
-  public static void RemoveVote(Request request, User user)
+  /**
+   * Remove vote from database.
+   *
+   * @param request
+   *          - request to remove vote from
+   * @param user
+   *          - user whose vote we want to remove
+   * @throws SQLException
+   *           - exception
+   */
+  public static void removeVote(Request request, User user)
       throws SQLException {
     String query = SqlStatements.REMOVE_VOTE_SONG_REQUEST;
     Connection conn = getConnection();
@@ -388,7 +508,17 @@ public class DbHandler {
     }
   }
 
-  public static void AddPartyGuest(int partyId, User guest)
+  /**
+   * Add guest to party in database.
+   *
+   * @param partyId
+   *          - party id
+   * @param guest
+   *          - user guest
+   * @throws SQLException
+   *           - exception
+   */
+  public static void addPartyGuest(int partyId, User guest)
       throws SQLException {
     String query = SqlStatements.ADD_PARTY_GUEST;
     Connection conn = getConnection();
@@ -407,7 +537,17 @@ public class DbHandler {
     }
   }
 
-  public static void RemovePartyGuest(int partyId, User guest)
+  /**
+   * Remove guest from party in database.
+   *
+   * @param partyId
+   *          - party id
+   * @param guest
+   *          - user guest
+   * @throws SQLException
+   *           - exception
+   */
+  public static void removePartyGuest(int partyId, User guest)
       throws SQLException {
     String query = SqlStatements.REMOVE_PARTY_GUEST;
     Connection conn = getConnection();
@@ -426,6 +566,15 @@ public class DbHandler {
     }
   }
 
+  /**
+   * Retrieve all requests in party.
+   *
+   * @param partyId
+   *          - id
+   * @return list of requests in given party
+   * @throws SQLException
+   *           - exception
+   */
   public static List<Request> getPartySongRequests(int partyId)
       throws SQLException {
     String query = SqlStatements.GET_PARTY_SONG_REQUESTS;
@@ -451,6 +600,15 @@ public class DbHandler {
     return requests;
   }
 
+  /**
+   * Retrieve all party attendees.
+   *
+   * @param partyId
+   *          - party id
+   * @return list of hosts and list of guests
+   * @throws SQLException
+   *           - exception
+   */
   public static List<List<User>> getPartyHostsAndGuests(int partyId)
       throws SQLException {
     String query = SqlStatements.GET_ALL_PARTY_ATTENDEES;
@@ -481,6 +639,25 @@ public class DbHandler {
     return Arrays.asList(hosts, guests);
   }
 
+  /**
+   * Retrieve party from database.
+   *
+   * @param partyId
+   *          - id
+   * @param playlist
+   *          - playlist associated with party
+   * @param name
+   *          - name of party
+   * @param location
+   *          - location of party
+   * @param time
+   *          - time of party
+   * @param status
+   *          - status of party
+   * @return party bean
+   * @throws SQLException
+   *           - exception
+   */
   public static PartyBean getFullParty(int partyId, Playlist playlist,
       String name, Coordinate location, String time, Status status)
       throws SQLException {
@@ -493,6 +670,21 @@ public class DbHandler {
 
   }
 
+  /**
+   * Retrieve request from database.
+   *
+   * @param id
+   *          - request id
+   * @param song
+   *          - song associated with request
+   * @param user
+   *          - user of request
+   * @param requestTime
+   *          - request time
+   * @return Request Bean
+   * @throws SQLException
+   *           - exception
+   */
   public static RequestBean getFullRequest(int id, Song song, User user,
       String requestTime) throws SQLException {
     String query = SqlStatements.GET_VOTES_FOR_SONG;

@@ -11,13 +11,21 @@ import com.wrapper.spotify.methods.RemoveTrackFromPlaylistRequest;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
 
+/**
+ * Class that integrates Spotify API for Sesh.
+ *
+ * @author HE23
+ *
+ */
 public class SpotifyCommunicator {
 
+  private final Api api = Api.builder().clientId(Constants.clientId)
+      .clientSecret(Constants.clientSecret).redirectURI(Constants.redirectURI)
+      .build();
 
-
-  final Api api = Api.builder().clientId(Constants.clientId).clientSecret(Constants.clientSecret)
-      .redirectURI(Constants.redirectURI).build();
-
+  /**
+   * Create authorize URL.
+   */
   public void createAuthorizeURL() {
 
     /* Set the necessary scopes that the application will need from the user */
@@ -40,6 +48,12 @@ public class SpotifyCommunicator {
     System.out.println(authorizeURL);
   }
 
+  /**
+   * Get access token.
+   *
+   * @param code
+   *          - code
+   */
   public void getAccessToken(String code) {
     /*
      * Make a token request. Asynchronous requests are made with the .getAsync
@@ -87,6 +101,9 @@ public class SpotifyCommunicator {
 
   }
 
+  /**
+   * Add songs.
+   */
   public void addSongs() {
     final List<String> tracksToAdd = Arrays
         .asList("spotify:track:4BYGxv4rxSNcTgT3DsFB9o");

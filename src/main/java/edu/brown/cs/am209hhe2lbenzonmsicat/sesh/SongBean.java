@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 /**
  * Models a song.
+ *
  * @author Matt
  */
 public class SongBean extends Song {
@@ -11,6 +12,20 @@ public class SongBean extends Song {
   private String artist;
   private double length;
 
+  /**
+   * Constructor.
+   *
+   * @param spotifyId
+   *          - spotify id
+   * @param title
+   *          - title
+   * @param album
+   *          - album
+   * @param artist
+   *          - artist
+   * @param length
+   *          - length
+   */
   public SongBean(String spotifyId, String title, String album, String artist,
       double length) {
     this.spotifyId = spotifyId;
@@ -27,25 +42,21 @@ public class SongBean extends Song {
 
   @Override
   public String getTitle() {
-    // TODO Auto-generated method stub
     return title;
   }
 
   @Override
   public String getAlbum() {
-    // TODO Auto-generated method stub
     return album;
   }
 
   @Override
   public String getArtist() {
-    // TODO Auto-generated method stub
     return artist;
   }
 
   @Override
   public double getLength() {
-    // TODO Auto-generated method stub
     return length;
   }
 
