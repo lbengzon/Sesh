@@ -23,7 +23,7 @@ public class PlaylistTest {
   @Test
   public void testRemoveSong() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -47,7 +47,7 @@ public class PlaylistTest {
   @Test
   public void testAddSong() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",

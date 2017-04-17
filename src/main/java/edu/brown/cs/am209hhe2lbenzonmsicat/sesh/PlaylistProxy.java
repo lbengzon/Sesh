@@ -6,17 +6,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Playlist proxy class.
+ */
 public class PlaylistProxy extends Playlist implements Proxy {
   private static Map<String, PlaylistBean> idToPlaylistCache = new ConcurrentHashMap<>();
   private PlaylistBean playlistBean;
   private String spotifyId;
   private int partyId;
 
+  /**
+   * Constructor.
+   *
+   * @param spotifyId
+   *          - playlist id
+   * @param partyId
+   *          - party id
+   */
   public PlaylistProxy(String spotifyId, int partyId) {
     this.spotifyId = spotifyId;
     this.partyId = partyId;
   }
 
+  /**
+   * Constructor.
+   *
+   * @param spotifyId
+   *          - id
+   */
   public PlaylistProxy(String spotifyId) {
     this.spotifyId = spotifyId;
   }
@@ -26,6 +43,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
     this.partyId = partyId;
   }
 
+  /**
+   * Clears the cache.
+   */
   public static void clearCache() {
     idToPlaylistCache.clear();
   }
@@ -61,8 +81,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    // TODO: ADD API REQUEST HERE
-    // TODO: make a request to the spotify api to get the list of songs, then
+    // TODO ADD API REQUEST HERE
+    // TODO make a request to the spotify api to get the list of songs, then
     // sort that requsts the same way that the songs in the spotify playlists
     // are
     // sorted than return that.
@@ -79,9 +99,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
       }
     }
     try {
-      // TODO: ADD API REQUEST HERE
+      // TODO ADD API REQUEST HERE
 
-      DbHandler.MoveSongRequestOutOfQueue(request);
+      DbHandler.moveSongRequestOutOfQueue(request);
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       throw new RuntimeException(e.getMessage());
@@ -99,8 +119,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
       }
     }
     try {
-      // TODO: ADD API REQUEST HERE
-      DbHandler.MoveSongRequestToQueue(request);
+      // TODO ADD API REQUEST HERE
+      DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
     }
@@ -129,7 +149,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
    * adds the bean to the cache.
    */
   private void addBeanToCache() {
-    if (idToPlaylistCache.size() > MAX_CACHE_SIZE) {
+    if (idToPlaylistCache.size() > Constants.MAX_CACHE_SIZE) {
       idToPlaylistCache.clear();
     }
     assert !idToPlaylistCache.containsKey(spotifyId);

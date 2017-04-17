@@ -13,7 +13,7 @@ public class DbHandlerTest {
   @Test
   public void testAddGetUser() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User user = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -25,10 +25,11 @@ public class DbHandlerTest {
     assert user.getFullName().equals(same.getFullName());
   }
 
-  @Test(expected = SQLiteException.class)
+  @Test(
+      expected = SQLiteException.class)
   public void testAddSameUser() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User user = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -39,7 +40,7 @@ public class DbHandlerTest {
   @Test
   public void testAddParty() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -64,9 +65,9 @@ public class DbHandlerTest {
   }
 
   @Test
-  public void testRemoveParty() throws FileNotFoundException, SQLException {
+  public void testremoveParty() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -75,17 +76,18 @@ public class DbHandlerTest {
         new Coordinate(71.6, 41.8), time.toString(), host);
     List<Party> parties = DbHandler.getUsersParties(host);
     assert parties.contains(party);
-    DbHandler.RemoveParty(party);
+    DbHandler.removeParty(party);
 
     List<Party> parties2 = DbHandler.getUsersParties(host);
     assert parties2.isEmpty();
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(
+      expected = IllegalArgumentException.class)
   public void testAddHostOfTwoParties()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -100,7 +102,7 @@ public class DbHandlerTest {
   @Test
   public void testAddGuests() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -114,9 +116,9 @@ public class DbHandlerTest {
     Party party = DbHandler.addParty(Playlist.of("testPlaylistId"), "My Party",
         new Coordinate(71.6, 41.8), time.toString(), host);
 
-    DbHandler.AddPartyGuest(party.getPartyId(), hannah);
-    DbHandler.AddPartyGuest(party.getPartyId(), matt);
-    DbHandler.AddPartyGuest(party.getPartyId(), ali);
+    DbHandler.addPartyGuest(party.getPartyId(), hannah);
+    DbHandler.addPartyGuest(party.getPartyId(), matt);
+    DbHandler.addPartyGuest(party.getPartyId(), ali);
 
     Party partyFull = DbHandler.getFullParty(party.getPartyId(),
         party.getPlaylist(), party.getName(), party.getLocation(),
@@ -135,7 +137,7 @@ public class DbHandlerTest {
   @Test
   public void testRemoveGuests() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -149,9 +151,9 @@ public class DbHandlerTest {
     Party party = DbHandler.addParty(Playlist.of("testPlaylistId"), "My Party",
         new Coordinate(71.6, 41.8), time.toString(), host);
 
-    DbHandler.AddPartyGuest(party.getPartyId(), hannah);
-    DbHandler.AddPartyGuest(party.getPartyId(), matt);
-    DbHandler.AddPartyGuest(party.getPartyId(), ali);
+    DbHandler.addPartyGuest(party.getPartyId(), hannah);
+    DbHandler.addPartyGuest(party.getPartyId(), matt);
+    DbHandler.addPartyGuest(party.getPartyId(), ali);
 
     Party partyFull = DbHandler.getFullParty(party.getPartyId(),
         party.getPlaylist(), party.getName(), party.getLocation(),
@@ -162,8 +164,8 @@ public class DbHandlerTest {
     assert partyFull.getGuests().contains(ali);
     assert partyFull.getGuests().contains(matt);
 
-    DbHandler.RemovePartyGuest(party.getPartyId(), ali);
-    DbHandler.RemovePartyGuest(party.getPartyId(), matt);
+    DbHandler.removePartyGuest(party.getPartyId(), ali);
+    DbHandler.removePartyGuest(party.getPartyId(), matt);
 
     partyFull = DbHandler.getFullParty(party.getPartyId(), party.getPlaylist(),
         party.getName(), party.getLocation(), party.getTime(),
@@ -174,10 +176,11 @@ public class DbHandlerTest {
 
   }
 
-  @Test(expected = SQLiteException.class)
+  @Test(
+      expected = SQLiteException.class)
   public void testAddSameGuest() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -185,14 +188,14 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty(Playlist.of("testPlaylistId"), "My Party",
         new Coordinate(71.6, 41.8), time.toString(), host);
-    DbHandler.AddPartyGuest(party.getPartyId(), ali);
-    DbHandler.AddPartyGuest(party.getPartyId(), ali);
+    DbHandler.addPartyGuest(party.getPartyId(), ali);
+    DbHandler.addPartyGuest(party.getPartyId(), ali);
   }
 
   @Test
   public void testAddSongRequests() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -227,7 +230,7 @@ public class DbHandlerTest {
   public void testMoveSongRequestsToQueue()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -257,7 +260,7 @@ public class DbHandlerTest {
     assert partyFull.getName().equals("My Party");
     assert partyFull.getPlaylist().getId().equals("testPlaylistId");
 
-    DbHandler.MoveSongRequestToQueue(song1);
+    DbHandler.moveSongRequestToQueue(song1);
     partyFull = DbHandler.getFullParty(party.getPartyId(), party.getPlaylist(),
         party.getName(), party.getLocation(), party.getTime(),
         party.getStatus());
@@ -279,7 +282,7 @@ public class DbHandlerTest {
   public void testMoveSongRequestsOutOfQueue()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -309,7 +312,7 @@ public class DbHandlerTest {
     assert partyFull.getName().equals("My Party");
     assert partyFull.getPlaylist().getId().equals("testPlaylistId");
 
-    DbHandler.MoveSongRequestToQueue(song1);
+    DbHandler.moveSongRequestToQueue(song1);
     partyFull = DbHandler.getFullParty(party.getPartyId(), party.getPlaylist(),
         party.getName(), party.getLocation(), party.getTime(),
         party.getStatus());
@@ -322,7 +325,7 @@ public class DbHandlerTest {
     assert partyFull.getName().equals("My Party");
     assert partyFull.getPlaylist().getId().equals("testPlaylistId");
 
-    DbHandler.MoveSongRequestOutOfQueue(song1);
+    DbHandler.moveSongRequestOutOfQueue(song1);
 
     partyFull = DbHandler.getFullParty(party.getPartyId(), party.getPlaylist(),
         party.getName(), party.getLocation(), party.getTime(),
@@ -345,7 +348,7 @@ public class DbHandlerTest {
   @Test
   public void testVoteRequest() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -372,12 +375,12 @@ public class DbHandlerTest {
     assert request1.getSong().equals(Song.of("songId1"));
     assert request1.getUserRequestedBy().equals(ali);
 
-    DbHandler.UpvoteRequest(request1, ali);
-    DbHandler.UpvoteRequest(request1, kobe);
-    DbHandler.UpvoteRequest(request1, frank);
-    DbHandler.DownvoteRequest(request1, kanye);
-    DbHandler.DownvoteRequest(request1, hannah);
-    DbHandler.DownvoteRequest(request1, matt);
+    DbHandler.upvoteRequest(request1, ali);
+    DbHandler.upvoteRequest(request1, kobe);
+    DbHandler.upvoteRequest(request1, frank);
+    DbHandler.downvoteRequest(request1, kanye);
+    DbHandler.downvoteRequest(request1, hannah);
+    DbHandler.downvoteRequest(request1, matt);
 
     RequestBean fullRequest = DbHandler.getFullRequest(request1.getId(),
         request1.getSong(), request1.getUserRequestedBy(),
@@ -397,7 +400,7 @@ public class DbHandlerTest {
   public void testRemoveVoteRequest()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -424,12 +427,12 @@ public class DbHandlerTest {
     assert request1.getSong().equals(Song.of("songId1"));
     assert request1.getUserRequestedBy().equals(ali);
 
-    DbHandler.UpvoteRequest(request1, ali);
-    DbHandler.UpvoteRequest(request1, kobe);
-    DbHandler.UpvoteRequest(request1, frank);
-    DbHandler.DownvoteRequest(request1, kanye);
-    DbHandler.DownvoteRequest(request1, hannah);
-    DbHandler.DownvoteRequest(request1, matt);
+    DbHandler.upvoteRequest(request1, ali);
+    DbHandler.upvoteRequest(request1, kobe);
+    DbHandler.upvoteRequest(request1, frank);
+    DbHandler.downvoteRequest(request1, kanye);
+    DbHandler.downvoteRequest(request1, hannah);
+    DbHandler.downvoteRequest(request1, matt);
 
     RequestBean fullRequest = DbHandler.getFullRequest(request1.getId(),
         request1.getSong(), request1.getUserRequestedBy(),
@@ -444,14 +447,14 @@ public class DbHandlerTest {
     assert fullRequest.getUpvotes().contains(kobe);
     assert fullRequest.getUpvotes().contains(frank);
 
-    DbHandler.RemoveVote(request1, kobe);
-    DbHandler.DownvoteRequest(request1, kobe);
+    DbHandler.removeVote(request1, kobe);
+    DbHandler.downvoteRequest(request1, kobe);
 
-    DbHandler.RemoveVote(request1, frank);
-    DbHandler.DownvoteRequest(request1, frank);
+    DbHandler.removeVote(request1, frank);
+    DbHandler.downvoteRequest(request1, frank);
 
-    DbHandler.RemoveVote(request1, matt);
-    DbHandler.UpvoteRequest(request1, matt);
+    DbHandler.removeVote(request1, matt);
+    DbHandler.upvoteRequest(request1, matt);
 
     fullRequest = DbHandler.getFullRequest(request1.getId(), request1.getSong(),
         request1.getUserRequestedBy(), request1.getRequestTime());
@@ -466,11 +469,12 @@ public class DbHandlerTest {
     assert fullRequest.getUpvotes().contains(ali);
   }
 
-  @Test(expected = SQLiteException.class)
+  @Test(
+      expected = SQLiteException.class)
   public void testDoubleVoteRequest()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon");
@@ -486,8 +490,8 @@ public class DbHandlerTest {
     assert request1.getSong().equals(Song.of("songId1"));
     assert request1.getUserRequestedBy().equals(ali);
 
-    DbHandler.UpvoteRequest(request1, ali);
-    DbHandler.DownvoteRequest(request1, ali);
+    DbHandler.upvoteRequest(request1, ali);
+    DbHandler.downvoteRequest(request1, ali);
   }
 
 }

@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author leandro
  */
 public class SongProxy extends Song implements Proxy {
-  private static Map<String, SongBean> idToSongCache = new ConcurrentHashMap<>();
+  private static Map<String, SongBean> idSongCache = new ConcurrentHashMap<>();
   private SongBean songBean;
   private String spotifyId;
 
@@ -29,13 +29,14 @@ public class SongProxy extends Song implements Proxy {
   public void fillBean() {
     assert songBean == null;
     // if the actor exists in the cache just use that
-    SongBean song = idToSongCache.get(spotifyId);
+    SongBean song = idSongCache.get(spotifyId);
     if (song != null) {
       songBean = song;
       return;
     }
     try {
-      // TODO: songBean = some api call here
+      System.out.println("TODO here");
+      // TODO songBean = some api call here
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
     }
@@ -46,11 +47,11 @@ public class SongProxy extends Song implements Proxy {
    * adds the bean to the cache.
    */
   private void addBeanToCache() {
-    if (idToSongCache.size() > MAX_CACHE_SIZE) {
-      idToSongCache.clear();
+    if (idSongCache.size() > Constants.MAX_CACHE_SIZE) {
+      idSongCache.clear();
     }
-    assert !idToSongCache.containsKey(spotifyId);
-    idToSongCache.put(spotifyId, songBean);
+    assert !idSongCache.containsKey(spotifyId);
+    idSongCache.put(spotifyId, songBean);
   }
 
   @Override

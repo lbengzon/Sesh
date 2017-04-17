@@ -12,7 +12,7 @@ public class RequestTest {
   @Test
   public void testGetId() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -32,7 +32,7 @@ public class RequestTest {
   @Test
   public void testUpvote() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -51,7 +51,7 @@ public class RequestTest {
   public void testUpvoteBySameUser()
       throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -73,7 +73,7 @@ public class RequestTest {
   @Test
   public void testDownvote() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -91,7 +91,7 @@ public class RequestTest {
   public void testDownvoteBySameUser()
       throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -115,7 +115,7 @@ public class RequestTest {
   public void testUpDownvoteBySameUser()
       throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -138,7 +138,7 @@ public class RequestTest {
   @Test
   public void testRemoveVote() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -161,7 +161,7 @@ public class RequestTest {
   @Test
   public void testVoteCount() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -178,7 +178,7 @@ public class RequestTest {
   @Test
   public void testGetRequestTime() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -195,7 +195,7 @@ public class RequestTest {
   public void testGetUserRequestedBy()
       throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -211,7 +211,7 @@ public class RequestTest {
   @Test
   public void testGetSong() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -228,7 +228,7 @@ public class RequestTest {
   public void testOfIntStringSongUserHashSetOfUserHashSetOfUser()
       throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",

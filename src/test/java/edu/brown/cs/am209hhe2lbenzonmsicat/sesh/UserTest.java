@@ -10,7 +10,7 @@ public class UserTest {
   @Test
   public void testGetSpotifyId() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -23,7 +23,7 @@ public class UserTest {
   @Test
   public void testGetEmail() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -36,7 +36,7 @@ public class UserTest {
   @Test
   public void testGetFirstName() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -50,7 +50,7 @@ public class UserTest {
   @Test
   public void testGetLastName() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -63,7 +63,7 @@ public class UserTest {
   @Test
   public void testGetFullName() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
@@ -77,7 +77,7 @@ public class UserTest {
   @Test
   public void testOfString() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
     User.create("lbengzon", "leandro.bengzon@gmail.com", "Leandro Bengzon");
     UserProxy.clearCache();
@@ -89,10 +89,11 @@ public class UserTest {
     assert l.getLastName().equals("Bengzon");
   }
 
-  @Test(expected = RuntimeException.class)
+  @Test(
+      expected = RuntimeException.class)
   public void testOfWithNoCreate() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
     User l = User.of("lbengzon");
     assert l.getSpotifyId().equals("lbengzon");
@@ -106,7 +107,7 @@ public class UserTest {
   public void testOfStringStringString()
       throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
-    DbHandler.ClearAllTables();
+    DbHandler.clearAllTables();
     UserProxy.clearCache();
     User l = User.of("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");

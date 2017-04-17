@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ *
  * @author leandro
  */
 public class PartyProxy extends Party implements Proxy {
@@ -23,6 +24,24 @@ public class PartyProxy extends Party implements Proxy {
 
   // private Location location; Google api stuff?
 
+  /**
+   * Constructor.
+   *
+   * @param partyId
+   *          - id
+   * @param name
+   *          - name
+   * @param host
+   *          - host
+   * @param playlist
+   *          - playlist
+   * @param location
+   *          - location
+   * @param time
+   *          - time
+   * @param status
+   *          - status
+   */
   public PartyProxy(int partyId, String name, User host, Playlist playlist,
       Coordinate location, String time, Status status) {
     this.partyId = partyId;
@@ -35,6 +54,9 @@ public class PartyProxy extends Party implements Proxy {
     this.status = status;
   }
 
+  /**
+   * Clears cache.
+   */
   public static void clearCache() {
     idToPartyCache.clear();
   }
@@ -63,7 +85,7 @@ public class PartyProxy extends Party implements Proxy {
    * adds the bean to the cache.
    */
   private void addBeanToCache() {
-    if (idToPartyCache.size() > MAX_CACHE_SIZE) {
+    if (idToPartyCache.size() > Constants.MAX_CACHE_SIZE) {
       idToPartyCache.clear();
     }
     assert !idToPartyCache.containsKey(partyId);
