@@ -3,37 +3,82 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Abstract playlist class.
+ *
+ * @author HE23
+ *
+ */
 public abstract class Playlist {
 
+  /**
+   * @return id
+   */
   public abstract String getId();
 
+  /**
+   * @return url
+   */
   public abstract String getUrl();
 
+  /**
+   * @return requested songs
+   */
   public abstract List<Request> getSongs();
 
+  /**
+   * @param request
+   *          - to remove
+   * @return boolean if successful
+   */
   public abstract boolean removeSong(Request request);
 
+  /**
+   * @param request
+   *          - to add
+   * @return boolean if successful
+   */
   public abstract boolean addSong(Request request);
 
+  /**
+   * @param partyId
+   *          - to set
+   */
   public abstract void setPartyId(int partyId);
 
   /**
-   * This should only be used for testing!!!!!!!!!
+   * This should only be used for testing!
+   *
    * @param spotifyId
+   *          - spotify id
    * @param partyId
-   * @return
+   *          - party id
+   * @return Playlist
    */
   public static Playlist of(String spotifyId, int partyId) {
     return new PlaylistProxy(spotifyId, partyId);
   }
 
+  /**
+   * @param spotifyId
+   *          - id
+   * @return playlist of that id
+   */
   public static Playlist of(String spotifyId) {
     return new PlaylistProxy(spotifyId);
   }
 
-  public static Playlist Create(User user) {
-    String spotifyId = "test";// TODO: MAKE API CALL TO CREATE NEW PLAYLIST and
-                              // get the spotify id
+  /**
+   * Add playlist to database.
+   *
+   * @param user
+   *          - user
+   * @return playlist
+   */
+  public static Playlist create(User user) {
+    String spotifyId = "test";
+    // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
+    // get the spotify id
 
     return new PlaylistProxy(spotifyId);
   }

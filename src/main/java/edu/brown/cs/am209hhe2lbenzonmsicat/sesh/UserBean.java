@@ -18,10 +18,8 @@ public class UserBean extends User {
    *          - user id
    * @param email
    *          - user email
-   * @param firstName
+   * @param name
    *          - user's first name
-   * @param lastName
-   *          - user's last name
    */
   public UserBean(String spotifyId, String email, String name) {
     this.spotifyId = spotifyId;
