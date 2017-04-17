@@ -29,6 +29,7 @@ public class PartyProxy extends Party implements Proxy {
     this.name = name;
     this.host = host;
     this.playlist = playlist;
+    this.playlist.setPartyId(partyId);
     this.location = location;
     this.time = time;
     this.status = status;

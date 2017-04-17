@@ -54,14 +54,14 @@ public abstract class Party {
         status);
   }
 
-  public static Party create(String name, User host, String playlistId,
-      Coordinate location, String time) throws SQLException {
-    if (name == null || host == null || playlistId == null || location == null
-        || time == null) {
+  public static Party create(String name, User host, Coordinate location,
+      String time) throws SQLException {
+    if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an mapnode from a null id");
     }
-    return DbHandler.addParty(playlistId, name, location, time, host);
+    Playlist newPlaylist = Playlist.Create(host);
+    return DbHandler.addParty(newPlaylist, name, location, time, host);
 
   }
 

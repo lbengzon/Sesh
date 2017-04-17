@@ -57,4 +57,10 @@ public class PlaylistBean extends Playlist {
   public boolean addSong(Request request) {
     return false;
   }
+
+  @Override
+  public void setPartyId(int partyId) {
+    this.partyId = partyId;
+
+  }
 }
