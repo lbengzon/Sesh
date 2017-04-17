@@ -15,8 +15,17 @@ public abstract class Playlist {
 
   public abstract boolean addSong(Request request);
 
-  public static Playlist of(String spotifyId, int partyId) {
-    return new PlaylistProxy(spotifyId, partyId);
+  public abstract void setPartyId(int partyId);
+
+  public static Playlist of(String spotifyId) {
+    return new PlaylistProxy(spotifyId);
+  }
+
+  public static Playlist Create(User user) {
+    String spotifyId = "test";// TODO: MAKE API CALL TO CREATE NEW PLAYLIST and
+                              // get the spotify id
+
+    return new PlaylistProxy(spotifyId);
   }
 
   @Override

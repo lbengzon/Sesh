@@ -68,7 +68,6 @@ public class PartyBean extends Party {
     playlist.removeSong(req);
     requestedSongs.add(req);
     return true;
-
   }
 
   @Override

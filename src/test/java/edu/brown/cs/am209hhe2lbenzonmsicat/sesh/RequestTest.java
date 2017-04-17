@@ -17,8 +17,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     assert r.getSong().equals(Song.of("song1"));
     assert r.getRequestTime().equals("testTime");
@@ -38,8 +37,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     r.upvote(l);
     assert r.getUpvotes().contains(l);
@@ -58,8 +56,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     try {
       r.upvote(l);
@@ -81,8 +78,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     r.downvote(l);
     assert r.getDownvotes().contains(l);
@@ -100,8 +96,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     try {
       r.downvote(l);
@@ -125,8 +120,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     try {
       r.downvote(l);
@@ -149,8 +143,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     r.downvote(l);
     r.removeVote(l);
@@ -173,8 +166,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     r.downvote(l);
     RequestProxy.clearCache();
@@ -191,8 +183,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     r.downvote(l);
     RequestProxy.clearCache();
@@ -209,8 +200,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     r.downvote(l);
     RequestProxy.clearCache();
@@ -226,8 +216,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
     r.downvote(l);
     RequestProxy.clearCache();
@@ -244,8 +233,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, "playlistId", new Coordinate(1, 1),
-        "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r1 = Request.of(1, "testTime", Song.of("song1"), l,
         new HashSet<User>(Arrays.asList(l)), new HashSet<User>());
     r1.getUpvotes().contains(l);

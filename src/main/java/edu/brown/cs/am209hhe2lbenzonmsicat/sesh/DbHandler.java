@@ -219,7 +219,7 @@ public class DbHandler {
     }
   }
 
-  public static Party addParty(String spotifyPlaylistId, String name,
+  public static Party addParty(Playlist playlist, String name,
       Coordinate coordinate, String time, User host) throws SQLException {
     if (getPartyHostedByUser(host) != null) {
       throw new IllegalArgumentException(
@@ -232,7 +232,7 @@ public class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    prep.setString(1, spotifyPlaylistId);
+    prep.setString(1, playlist.getId());
     prep.setString(2, name);
     prep.setDouble(3, coordinate.getLat());
     prep.setDouble(4, coordinate.getLon());
@@ -246,8 +246,7 @@ public class DbHandler {
 
           AddHost(partyId, host);
 
-          return Party.of(partyId, name, host,
-              Playlist.of(spotifyPlaylistId, partyId), coordinate, time,
+          return Party.of(partyId, name, host, playlist, coordinate, time,
               Status.ongoing);
         } else {
           throw new SQLException("Add PartyBean failed, no ID obtained.");
@@ -569,9 +568,8 @@ public class DbHandler {
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
       String status = rs.getString(7);
-      Party p = Party.of(partyId, name, user,
-          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
-          time, Status.valueOf(status));
+      Party p = Party.of(partyId, name, user, Playlist.of(spotifyPlaylistId),
+          new Coordinate(lat, lon), time, Status.valueOf(status));
       parties.add(p);
     }
     return parties;
@@ -597,9 +595,8 @@ public class DbHandler {
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
       String status = rs.getString(7);
-      Party p = Party.of(partyId, name, user,
-          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
-          time, Status.valueOf(status));
+      Party p = Party.of(partyId, name, user, Playlist.of(spotifyPlaylistId),
+          new Coordinate(lat, lon), time, Status.valueOf(status));
       return p;
     }
     return null;
