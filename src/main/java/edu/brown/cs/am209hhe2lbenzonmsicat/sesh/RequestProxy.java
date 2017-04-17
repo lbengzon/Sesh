@@ -81,30 +81,56 @@ public class RequestProxy extends Request implements Proxy {
 
   @Override
   public void upvote(User user) {
-    if (requestBean != null) {
-      requestBean.upvote(user);
-    } else {
+    if (requestBean == null) {
       try {
         fill();
       } catch (SQLException e) {
         throw new RuntimeException(e.getMessage());
       }
+    }
+    try {
+      DbHandler.UpvoteRequest(this, user);
+    } catch (SQLException e1) {
+      // TODO Auto-generated catch block
+      throw new RuntimeException(e1.getMessage());
     }
     requestBean.upvote(user);
   }
 
   @Override
   public void downvote(User user) {
-    if (requestBean != null) {
-      requestBean.downvote(user);
-    } else {
+    if (requestBean == null) {
       try {
         fill();
       } catch (SQLException e) {
         throw new RuntimeException(e.getMessage());
       }
     }
+    try {
+      DbHandler.DownvoteRequest(this, user);
+    } catch (SQLException e1) {
+      // TODO Auto-generated catch block
+      throw new RuntimeException(e1.getMessage());
+    }
     requestBean.downvote(user);
+  }
+
+  @Override
+  public void removeVote(User user) {
+    if (requestBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    try {
+      DbHandler.RemoveVote(this, user);
+    } catch (SQLException e1) {
+      // TODO Auto-generated catch block
+      throw new RuntimeException(e1.getMessage());
+    }
+    requestBean.removeVote(user);
   }
 
   @Override
