@@ -17,6 +17,10 @@ public class PlaylistProxy extends Playlist implements Proxy {
     this.partyId = partyId;
   }
 
+  public static void clearCache() {
+    idToPlaylistCache.clear();
+  }
+
   @Override
   public String getId() {
     return spotifyId;

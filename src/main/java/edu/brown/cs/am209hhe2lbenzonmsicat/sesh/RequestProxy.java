@@ -167,4 +167,8 @@ public class RequestProxy extends Request implements Proxy {
     return requestBean.getDownvotes();
   }
 
+  public static void clearCache() {
+    idToRequestCache.clear();
+  }
+
 }
