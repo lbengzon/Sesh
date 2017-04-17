@@ -28,9 +28,8 @@ public class SongProxy extends Song implements Proxy {
       return;
     }
     try {
-      // songBean = some api call here
+      // TODO: songBean = some api call here
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       throw new RuntimeException(e.getMessage());
     }
     addBeanToCache();

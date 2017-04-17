@@ -23,6 +23,10 @@ public class UserProxy extends User implements Proxy {
     userBean = new UserBean(spotifyId, email, name);
   }
 
+  public static void clearCache() {
+    idToUserCache.clear();
+  }
+
   @Override
   public void fillBean() {
     assert userBean == null;
