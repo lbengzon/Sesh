@@ -65,7 +65,7 @@ public class PartyBean extends Party {
       System.out.println("ERROR: Cannot remove song not in playlist");
       return false;
     }
-    playlist.removeSong(req.getSong());
+    playlist.removeSong(req);
     requestedSongs.add(req);
     return true;
 

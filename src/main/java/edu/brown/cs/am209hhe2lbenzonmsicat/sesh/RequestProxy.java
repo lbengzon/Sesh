@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,6 +27,16 @@ public class RequestProxy extends Request implements Proxy {
     this.song = song;
     this.userRequestedBy = userRequestedBy;
     this.requestTime = requestTime;
+  }
+
+  public RequestProxy(int id, String requestTime, Song song,
+      User userRequestedBy, HashSet<User> upvotes, HashSet<User> downvotes) {
+    this.id = id;
+    this.song = song;
+    this.userRequestedBy = userRequestedBy;
+    this.requestTime = requestTime;
+    requestBean = new RequestBean(id, requestTime, song, userRequestedBy,
+        upvotes, downvotes);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -57,6 +58,12 @@ public abstract class Request implements Comparable<Request> {
     return new RequestProxy(id, song, user, requestTime);
   }
 
+  public static Request of(int requestId, String time, Song song, User user,
+      HashSet<User> upvotes, HashSet<User> downvotes) {
+    // TODO Auto-generated method stub
+    return new RequestProxy(requestId, time, song, user, upvotes, downvotes);
+  }
+
   public static Request create(Song song, User user, int partyId,
       String requestTime) throws SQLException {
     if (song == null || user == null || requestTime == null) {
@@ -89,4 +96,5 @@ public abstract class Request implements Comparable<Request> {
   public String toString() {
     return getId() + "";
   }
+
 }

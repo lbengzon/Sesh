@@ -18,6 +18,11 @@ public class UserProxy extends User implements Proxy {
     this.spotifyId = spotifyId;
   }
 
+  public UserProxy(String spotifyId, String email, String name) {
+    this.spotifyId = spotifyId;
+    userBean = new UserBean(spotifyId, email, name);
+  }
+
   @Override
   public void fillBean() {
     assert userBean == null;

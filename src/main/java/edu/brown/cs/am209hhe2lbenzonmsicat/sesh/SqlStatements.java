@@ -29,7 +29,7 @@ final class SqlStatements {
    * Adds a new song request into the song request table.
    */
   public static final String ADD_SONG_REQUEST = "INSERT INTO \"SongRequest\""
-      + " (spotifySongId, partyId, userId, time) VALUES (?, ?, ?, ?);";
+      + " (spotifySongId, partyId, userId, time, isQueued) VALUES (?, ?, ?, ?, 0);";
 
   /**
    * Adds a new party to the party table with the status of "ongoing".
@@ -40,7 +40,12 @@ final class SqlStatements {
   /**
    * Removes a song from the Song Request table.
    */
-  public static final String REMOVE_SONG_REQUEST = "DELETE FROM SongRequest WHERE requestId = ?;";
+  public static final String MOVE_SONG_REQUEST_TO_QUEUE = "UPDATE SongRequest SET isQueued=1 WHERE requestId = ?;";
+
+  /**
+   * Removes a song from the Song Request table.
+   */
+  public static final String MOVE_SONG_REQUEST_OUT_OF_QUEUE = "UPDATE SongRequest SET isQueued=0 WHERE requestId = ?;";
 
   /**
    * Removes a party from the party table.
@@ -95,7 +100,10 @@ final class SqlStatements {
    * Gets all the song requests of a party.
    */
   public static final String GET_PARTY_SONG_REQUESTS = "SELECT * FROM SongRequest"
-      + " WHERE partyId=?;";
+      + " WHERE partyId=? AND isQueued=0;";
+
+  public static final String GET_PARTY_QUEUED_SONG_REQUESTS = "SELECT * FROM SongRequest"
+      + " WHERE partyId=? AND isQueued=1;";
 
   /**
    * Gets all the parties.

@@ -224,7 +224,7 @@ public class DbHandlerTest {
   }
 
   @Test
-  public void testRemoveSongRequests()
+  public void testMoveSongRequestsToQueue()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
     DbHandler.ClearAllTables();
@@ -257,13 +257,84 @@ public class DbHandlerTest {
     assert partyFull.getName().equals("My Party");
     assert partyFull.getPlaylist().getId().equals("testPlaylistId");
 
-    DbHandler.RemoveSongRequest(song1);
+    DbHandler.MoveSongRequestToQueue(song1);
+    partyFull = DbHandler.getFullParty(party.getPartyId(), party.getPlaylist(),
+        party.getName(), party.getLocation(), party.getTime(),
+        party.getStatus());
+    PlaylistBean playlist = DbHandler.getQueuedSongsForParty(
+        party.getPlaylist().getId(), party.getPartyId());
+
+    assert playlist.getSongs().contains(song1);
+
+    assert partyFull.getHost().equals(host);
+    assert !partyFull.getRequestedSongs().contains(song1);
+    assert partyFull.getRequestedSongs().contains(song2);
+    assert partyFull.getRequestedSongs().contains(song3);
+    assert partyFull.getGuests().isEmpty();
+    assert partyFull.getName().equals("My Party");
+    assert partyFull.getPlaylist().getId().equals("testPlaylistId");
+  }
+
+  @Test
+  public void testMoveSongRequestsOutOfQueue()
+      throws FileNotFoundException, SQLException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.ClearAllTables();
+
+    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
+        "Leandro Bengzon");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+
+    LocalDateTime time = LocalDateTime.now();
+
+    Party party = DbHandler.addParty("testPlaylistId", "My Party",
+        new Coordinate(71.6, 41.8), time.toString(), host);
+
+    Request song1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
+        time.toString());
+    Request song2 = DbHandler.requestSong("songId2", party.getPartyId(), host,
+        time.toString());
+    Request song3 = DbHandler.requestSong("songId3", party.getPartyId(), ali,
+        time.toString());
+
+    Party partyFull = DbHandler.getFullParty(party.getPartyId(),
+        party.getPlaylist(), party.getName(), party.getLocation(),
+        party.getTime(), party.getStatus());
+
+    assert partyFull.getHost().equals(host);
+    assert partyFull.getRequestedSongs().contains(song1);
+    assert partyFull.getRequestedSongs().contains(song2);
+    assert partyFull.getRequestedSongs().contains(song3);
+    assert partyFull.getGuests().isEmpty();
+    assert partyFull.getName().equals("My Party");
+    assert partyFull.getPlaylist().getId().equals("testPlaylistId");
+
+    DbHandler.MoveSongRequestToQueue(song1);
     partyFull = DbHandler.getFullParty(party.getPartyId(), party.getPlaylist(),
         party.getName(), party.getLocation(), party.getTime(),
         party.getStatus());
 
     assert partyFull.getHost().equals(host);
     assert !partyFull.getRequestedSongs().contains(song1);
+    assert partyFull.getRequestedSongs().contains(song2);
+    assert partyFull.getRequestedSongs().contains(song3);
+    assert partyFull.getGuests().isEmpty();
+    assert partyFull.getName().equals("My Party");
+    assert partyFull.getPlaylist().getId().equals("testPlaylistId");
+
+    DbHandler.MoveSongRequestOutOfQueue(song1);
+
+    partyFull = DbHandler.getFullParty(party.getPartyId(), party.getPlaylist(),
+        party.getName(), party.getLocation(), party.getTime(),
+        party.getStatus());
+
+    PlaylistBean playlist = DbHandler.getQueuedSongsForParty(
+        party.getPlaylist().getId(), party.getPartyId());
+
+    assert playlist.getSongs().size() == 0;
+
+    assert partyFull.getHost().equals(host);
+    assert partyFull.getRequestedSongs().contains(song1);
     assert partyFull.getRequestedSongs().contains(song2);
     assert partyFull.getRequestedSongs().contains(song3);
     assert partyFull.getGuests().isEmpty();
