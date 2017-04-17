@@ -69,7 +69,6 @@ public class PlaylistTest {
     System.out.println(playlist1.getSongs());
     assert playlist1.getSongs().contains(r);
     assert playlist1.getSongs().contains(r1);
-
   }
 
   // @Test

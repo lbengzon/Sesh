@@ -14,16 +14,13 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- *
  * @author HE23
- *
  */
 public class GuiManager {
   private SpotifyCommunicator comm = new SpotifyCommunicator();
 
   /**
    * Default constructor.
-   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -41,7 +38,6 @@ public class GuiManager {
 
   /**
    * Spotify end point.
-   *
    */
   private class MapsHandler implements TemplateViewRoute {
     @Override
@@ -51,17 +47,16 @@ public class GuiManager {
       String code = qm.value("code");
       System.out.println(code);
       comm.getAccessToken(code);
-
-      Map<String, Object> variables = ImmutableMap.of("title", "Maps");
+      String userId;
+      Map<String, Object> variables = ImmutableMap.of("title", "Maps", "userId",
+          userId);
       return new ModelAndView(variables, "home.ftl");
     }
   }
 
   /**
    * Handles request to front page (join or create a sesh).
-   *
    * @author HE23
-   *
    */
   private static class FrontHandler implements TemplateViewRoute {
     @Override
@@ -73,9 +68,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   *
    * @author HE23
-   *
    */
   private static class CreateHandler implements TemplateViewRoute {
     @Override
@@ -87,9 +80,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   *
    * @author HE23
-   *
    */
   private static class JoinHandler implements TemplateViewRoute {
     @Override

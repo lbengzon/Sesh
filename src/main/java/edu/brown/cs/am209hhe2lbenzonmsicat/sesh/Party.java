@@ -62,7 +62,6 @@ public abstract class Party {
     }
     Playlist newPlaylist = Playlist.Create(host);
     return DbHandler.addParty(newPlaylist, name, location, time, host);
-
   }
 
   @Override
