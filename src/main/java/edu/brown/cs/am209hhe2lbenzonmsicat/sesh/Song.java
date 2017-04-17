@@ -2,22 +2,46 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.util.Objects;
 
+/**
+ * Song abstract class.
+ *
+ */
 public abstract class Song {
 
+  /**
+   * @return spotify id
+   */
   public abstract String getSpotifyId();
 
+  /**
+   * @return title
+   */
   public abstract String getTitle();
 
+  /**
+   * @return album
+   */
   public abstract String getAlbum();
 
+  /**
+   * @return artist
+   */
   public abstract String getArtist();
 
+  /**
+   * @return length
+   */
   public abstract double getLength();
 
+  /**
+   * @param spotifyId
+   *          - spotify id
+   * @return song, null if id doesn't exist.
+   */
   public static Song of(String spotifyId) {
     if (spotifyId == null) {
       throw new NullPointerException(
-          "ERROR: Trying to create an mapnode from a null id");
+          "ERROR: Trying to create a song from a null id");
     }
     return new SongProxy(spotifyId);
   }

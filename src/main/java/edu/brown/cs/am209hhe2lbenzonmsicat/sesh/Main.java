@@ -19,13 +19,14 @@ import spark.template.freemarker.FreeMarkerEngine;
  */
 public final class Main {
 
+  private SpotifyCommunicator comm = new SpotifyCommunicator();
+
   /**
    * Main method.
+   *
    * @param args
    *          - program arguments.
    */
-  SpotifyCommunicator comm = new SpotifyCommunicator();
-
   public static void main(String[] args) {
     new Main(args).run();
   }
@@ -68,6 +69,7 @@ public final class Main {
 
   /**
    * Display an error page when an exception occurs in the server.
+   *
    * @author jj
    */
   private static class ExceptionPrinter implements ExceptionHandler {

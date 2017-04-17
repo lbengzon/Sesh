@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ *
  * @author leandro
  */
 public class RequestProxy extends Request implements Proxy {
@@ -21,6 +22,18 @@ public class RequestProxy extends Request implements Proxy {
 
   // private Location location; Google api stuff?
 
+  /**
+   * Constructor.
+   *
+   * @param id
+   *          - request id
+   * @param song
+   *          - song associated with request
+   * @param userRequestedBy
+   *          - user that made request
+   * @param requestTime
+   *          - time of request
+   */
   public RequestProxy(int id, Song song, User userRequestedBy,
       String requestTime) {
     this.id = id;
