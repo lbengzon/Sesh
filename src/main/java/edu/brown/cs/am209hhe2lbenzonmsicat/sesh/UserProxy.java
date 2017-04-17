@@ -56,7 +56,7 @@ public class UserProxy extends User implements Proxy {
    * adds the bean to the cache.
    */
   private void addBeanToCache() {
-    if (idToUserCache.size() > MAX_CACHE_SIZE) {
+    if (idToUserCache.size() > Constants.MAX_CACHE_SIZE) {
       idToUserCache.clear();
     }
     assert !idToUserCache.containsKey(spotifyId);

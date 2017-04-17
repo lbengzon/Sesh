@@ -42,6 +42,22 @@ public class RequestProxy extends Request implements Proxy {
     this.requestTime = requestTime;
   }
 
+  /**
+   * Constructor.
+   *
+   * @param id
+   *          - request id
+   * @param song
+   *          - song associated with request
+   * @param userRequestedBy
+   *          - user that made request
+   * @param requestTime
+   *          - time of request
+   * @param upvotes
+   *          - set of upvotes
+   * @param downvotes
+   *          - set of downvotes
+   */
   public RequestProxy(int id, String requestTime, Song song,
       User userRequestedBy, HashSet<User> upvotes, HashSet<User> downvotes) {
     this.id = id;
@@ -75,7 +91,7 @@ public class RequestProxy extends Request implements Proxy {
    * adds the bean to the cache.
    */
   private void addBeanToCache() {
-    if (idToRequestCache.size() > MAX_CACHE_SIZE) {
+    if (idToRequestCache.size() > Constants.MAX_CACHE_SIZE) {
       idToRequestCache.clear();
     }
     assert !idToRequestCache.containsKey(id);
@@ -102,7 +118,7 @@ public class RequestProxy extends Request implements Proxy {
       }
     }
     try {
-      DbHandler.UpvoteRequest(this, user);
+      DbHandler.upvoteRequest(this, user);
     } catch (SQLException e1) {
       // TODO Auto-generated catch block
       throw new RuntimeException(e1.getMessage());
@@ -120,7 +136,7 @@ public class RequestProxy extends Request implements Proxy {
       }
     }
     try {
-      DbHandler.DownvoteRequest(this, user);
+      DbHandler.downvoteRequest(this, user);
     } catch (SQLException e1) {
       // TODO Auto-generated catch block
       throw new RuntimeException(e1.getMessage());
@@ -138,7 +154,7 @@ public class RequestProxy extends Request implements Proxy {
       }
     }
     try {
-      DbHandler.RemoveVote(this, user);
+      DbHandler.removeVote(this, user);
     } catch (SQLException e1) {
       // TODO Auto-generated catch block
       throw new RuntimeException(e1.getMessage());

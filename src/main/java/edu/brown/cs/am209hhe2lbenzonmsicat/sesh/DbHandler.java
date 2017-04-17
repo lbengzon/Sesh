@@ -114,15 +114,27 @@ public final class DbHandler {
     guiConnection = conn;
   }
 
-  public static void ClearAllTables() throws SQLException {
-    ClearUserTable();
-    ClearPartyTable();
-    ClearPartyAttendeeTable();
-    ClearRequestVotesTable();
-    ClearSongRequestTable();
+  /**
+   * Clear all tables.
+   *
+   * @throws SQLException
+   *           - exception
+   */
+  public static void clearAllTables() throws SQLException {
+    clearUserTable();
+    clearPartyTable();
+    clearPartyAttendeeTable();
+    clearRequestVotesTable();
+    clearSongRequestTable();
   }
 
-  public static void ClearUserTable() throws SQLException {
+  /**
+   * Clear user table.
+   *
+   * @throws SQLException
+   *           - exception
+   */
+  public static void clearUserTable() throws SQLException {
     String query = SqlStatements.CLEAR_USER_TABLE;
     Connection conn = getConnection();
     if (conn == null) {
@@ -133,7 +145,13 @@ public final class DbHandler {
     int success = prep.executeUpdate();
   }
 
-  public static void ClearPartyTable() throws SQLException {
+  /**
+   * Clear party table.
+   *
+   * @throws SQLException
+   *           - exception
+   */
+  public static void clearPartyTable() throws SQLException {
     String query = SqlStatements.CLEAR_PARTY_TABLE;
     Connection conn = getConnection();
     if (conn == null) {
@@ -144,7 +162,13 @@ public final class DbHandler {
     int success = prep.executeUpdate();
   }
 
-  public static void ClearSongRequestTable() throws SQLException {
+  /**
+   * Clear song request table.
+   *
+   * @throws SQLException
+   *           - exception
+   */
+  public static void clearSongRequestTable() throws SQLException {
     String query = SqlStatements.CLEAR_SONG_REQUEST_TABLE;
     Connection conn = getConnection();
     if (conn == null) {
@@ -155,7 +179,13 @@ public final class DbHandler {
     int success = prep.executeUpdate();
   }
 
-  public static void ClearRequestVotesTable() throws SQLException {
+  /**
+   * Clear request votes table.
+   *
+   * @throws SQLException
+   *           - exception
+   */
+  public static void clearRequestVotesTable() throws SQLException {
     String query = SqlStatements.CLEAR_REQUEST_VOTES_TABLE;
     Connection conn = getConnection();
     if (conn == null) {
@@ -166,7 +196,13 @@ public final class DbHandler {
     int success = prep.executeUpdate();
   }
 
-  public static void ClearPartyAttendeeTable() throws SQLException {
+  /**
+   * Clear party attendee table.
+   *
+   * @throws SQLException
+   *           - exception
+   */
+  public static void clearPartyAttendeeTable() throws SQLException {
     String query = SqlStatements.CLEAR_PARTY_ATTENDEE_TABLE;
     Connection conn = getConnection();
     if (conn == null) {
@@ -269,8 +305,8 @@ public final class DbHandler {
   /**
    * Add party to database.
    *
-   * @param spotifyPlaylistId
-   *          - playlist id
+   * @param playlist
+   *          - playlist
    * @param name
    *          - name of party
    * @param coordinate
@@ -333,7 +369,7 @@ public final class DbHandler {
    *           - exception
    */
   public static void addHost(int partyId, User host) throws SQLException {
-    // TODO: if your gonna have multiple hosts, add the check that he's not
+    // TODO if your gonna have multiple hosts, add the check that he's not
     // hosting another ongoing party here.
     String query = SqlStatements.ADD_PARTY_HOST;
     Connection conn = getConnection();
@@ -353,14 +389,14 @@ public final class DbHandler {
   }
 
   /**
-   * Remove song request from database.
+   * Move song request from playlist to queue.
    *
    * @param request
    *          - request
    * @throws SQLException
    *           - exception
    */
-  public static void MoveSongRequestToQueue(Request request)
+  public static void moveSongRequestToQueue(Request request)
       throws SQLException {
     String query = SqlStatements.MOVE_SONG_REQUEST_TO_QUEUE;
     Connection conn = getConnection();
@@ -378,7 +414,15 @@ public final class DbHandler {
     }
   }
 
-  public static void MoveSongRequestOutOfQueue(Request request)
+  /**
+   * Move song request from queue to playlist.
+   *
+   * @param request
+   *          - request
+   * @throws SQLException
+   *           - exception
+   */
+  public static void moveSongRequestOutOfQueue(Request request)
       throws SQLException {
     String query = SqlStatements.MOVE_SONG_REQUEST_OUT_OF_QUEUE;
     Connection conn = getConnection();
@@ -717,6 +761,15 @@ public final class DbHandler {
         new HashSet<>(downvotes));
   }
 
+  /**
+   * Retrieve user from id.
+   *
+   * @param spotifyId
+   *          - id
+   * @return - user of given id
+   * @throws SQLException
+   *           - exception
+   */
   public static UserBean getUserWithId(String spotifyId) throws SQLException {
     String query = SqlStatements.GET_USER_FROM_ID;
     Connection conn = getConnection();
@@ -739,6 +792,15 @@ public final class DbHandler {
     throw new SQLException("ERROR: No User With id of  " + spotifyId);
   }
 
+  /**
+   * Get all parties of a user.
+   *
+   * @param user
+   *          - the user's parties we want
+   * @return list of all parties of the given user
+   * @throws SQLException
+   *           - exception
+   */
   public static List<Party> getUsersParties(User user) throws SQLException {
     String query = SqlStatements.GET_USER_PARTY;
     Connection conn = getConnection();
@@ -759,7 +821,7 @@ public final class DbHandler {
       double lat = rs.getDouble(4);
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
-      String status = rs.getString(7);
+      String status = rs.getString(Constants.SEVEN);
       Party p = Party.of(partyId, name, user,
           Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
           time, Status.valueOf(status));
@@ -768,6 +830,15 @@ public final class DbHandler {
     return parties;
   }
 
+  /**
+   * Get party hosted by the passed in user.
+   *
+   * @param user
+   *          - user's party we are trying to retrieve
+   * @return - party
+   * @throws SQLException
+   *           - exception
+   */
   public static Party getPartyHostedByUser(User user) throws SQLException {
     String query = SqlStatements.GET_PARTY_HOSTED_BY_USER;
     Connection conn = getConnection();
@@ -787,7 +858,7 @@ public final class DbHandler {
       double lat = rs.getDouble(4);
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
-      String status = rs.getString(7);
+      String status = rs.getString(Constants.SEVEN);
       Party p = Party.of(partyId, name, user,
           Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
           time, Status.valueOf(status));
@@ -796,6 +867,17 @@ public final class DbHandler {
     return null;
   }
 
+  /**
+   * Retrieve queued songs.
+   *
+   * @param playlistId
+   *          - playlist id
+   * @param partyId
+   *          - party id
+   * @return - playlist
+   * @throws SQLException
+   *           - exception
+   */
   public static PlaylistBean getQueuedSongsForParty(String playlistId,
       int partyId) throws SQLException {
     String query = SqlStatements.GET_PARTY_QUEUED_SONG_REQUESTS;

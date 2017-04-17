@@ -152,7 +152,7 @@ public abstract class Request implements Comparable<Request> {
    * @throws SQLException
    *           - exception
    */
-  public static Request create(Song song, User user, String partyId,
+  public static Request create(Song song, User user, int partyId,
       String requestTime) throws SQLException {
     if (song == null || user == null || requestTime == null) {
       throw new NullPointerException(

@@ -60,11 +60,11 @@ public class SpotifyCommunicator {
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
-    final SettableFuture<AuthorizationCodeCredentials> authorizationCodeCredentialsFuture = api
+    final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
 
     /* Add callbacks to handle success and failure */
-    Futures.addCallback(authorizationCodeCredentialsFuture,
+    Futures.addCallback(authCodeCredFuture,
         new FutureCallback<AuthorizationCodeCredentials>() {
           @Override
           public void onSuccess(

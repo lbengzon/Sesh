@@ -5,13 +5,14 @@ import java.sql.SQLException;
 /**
  * The proxy interface. You must be able to fill your bean if you implement
  * this.
+ *
  * @author leandro
  */
 public interface Proxy {
-  public final int MAX_CACHE_SIZE = 100000;
 
   /**
    * If the bean is null, fills the bean.
+   *
    * @throws SQLException
    *           Throws an sql exception if there is an issue getting a connection
    *           to the database.
@@ -26,6 +27,7 @@ public interface Proxy {
 
   /**
    * Fill the bean.
+   *
    * @throws SQLException
    *           If there is a problem accessing the database.
    */
@@ -33,6 +35,7 @@ public interface Proxy {
 
   /**
    * Checks if the bean is null.
+   *
    * @return Whether the bean is null or not.
    */
   boolean isBeanNull();
