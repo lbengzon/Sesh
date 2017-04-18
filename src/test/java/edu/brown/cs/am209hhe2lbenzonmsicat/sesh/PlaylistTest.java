@@ -92,15 +92,22 @@ public class PlaylistTest {
 
   @Test
   public void testGetSongs() throws MalformedURLException, IOException {
-    System.out.println("GET SONGS");
-    SpotifyCommunicator comm = new SpotifyCommunicator();
-    comm.createAuthorizeURL();
     // try {
-    User host = User.of("alimiraculous", "ali.ahmed." + "mir@gmail.com",
-        "Ali Mir");
-    Playlist plist = Playlist.of(" ", 1, host);
+    // DbHandler.setFromUrl("test.db");
+    // DbHandler.clearAllTables();
+    // PartyProxy.clearCache();
+    // PlaylistProxy.clearCache();
+    // SpotifyCommunicator comm = new SpotifyCommunicator();
+    // comm.createAuthorizeURL();
+    //
+    // User host = User.of("alimiraculous", "ali.ahmed.mir@gmail.com",
+    // "Ali Mir");
+    // Party p = Party.create("Dope Party", host, new Coordinate(1, 1), "time");
+    // Playlist plist = p.getPlaylist();
+    // List<Request> reqs = plist.getSongs();
+    //
     // } catch (SQLException e) {
-    // // ERROR
+    // System.out.println("ERROR: SQLLLL " + e.getMessage());
     // }
 
   }
