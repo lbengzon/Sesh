@@ -1,5 +1,6 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,9 +20,13 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
  */
 public class SpotifyCommunicator {
 
-  private final Api api = Api.builder().clientId(Constants.CLIENT_ID)
-      .clientSecret(Constants.CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
-      .build();
+  // private final Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+  // .clientSecret(Consta
+  // nts.LEANDRO_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
+  // .build();
+  private final Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+      .clientSecret(Constants.ALI_CLIENT_SECRET)
+      .redirectURI(Constants.REDIRECT_URL).build();
 
   /**
    * Create authorize URL.
@@ -53,13 +58,17 @@ public class SpotifyCommunicator {
    *
    * @param code
    *          - code
+   * @return a list of the user's info
    */
-  public void getAccessToken(String code) {
+  public List<String> getAccessToken(String code) {
     /*
      * Make a token request. Asynchronous requests are made with the .getAsync
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
+    System.out.println("getting access code");
+    List<String> results = new ArrayList<String>();
+    results.add("TEST");
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
 
@@ -69,6 +78,7 @@ public class SpotifyCommunicator {
           @Override
           public void onSuccess(
               AuthorizationCodeCredentials authorizationCodeCredentials) {
+            System.out.println("it's working on success");
             /* The tokens were retrieved successfully! */
             System.out.println("Successfully retrieved an access token! "
                 + authorizationCodeCredentials.getAccessToken());
@@ -97,8 +107,9 @@ public class SpotifyCommunicator {
             System.out.println(throwable.getMessage());
 
           }
-        });
 
+        });
+    return results;
   }
 
   /**

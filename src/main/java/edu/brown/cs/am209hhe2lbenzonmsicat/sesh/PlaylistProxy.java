@@ -112,7 +112,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
           new InputStreamReader(conn.getInputStream()));
       String inputLine;
       StringBuilder response = new StringBuilder();
-
+      System.out.println("responseCode = " + responseCode);
       while ((inputLine = in.readLine()) != null) {
         response.append(inputLine);
       }
@@ -120,9 +120,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
       System.out.println(response);
 
     } catch (MalformedURLException e) {
-      // ERROR
+      System.out.println("ERROR: malformed");
     } catch (IOException e) {
-      // ERROR
+      System.out.println("ERROR: ioooooo");
     }
 
     return new ArrayList<>(playlistBean.getQueuedRequests().values());

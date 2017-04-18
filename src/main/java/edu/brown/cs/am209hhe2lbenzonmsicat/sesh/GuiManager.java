@@ -14,6 +14,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -21,6 +22,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -30,7 +32,7 @@ public class GuiManager {
   }
 
   private void installRoutes(FreeMarkerEngine fme) {
-    Spark.get("/spotifycallback", new MapsHandler(), fme);
+    Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
     Spark.get("/create", new CreateHandler(), fme);
     Spark.get("/join", new JoinHandler(), fme);
@@ -39,22 +41,25 @@ public class GuiManager {
   /**
    * Spotify end point.
    */
-  private class MapsHandler implements TemplateViewRoute {
+  private class CallbackHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
 
       String code = qm.value("code");
-      System.out.println(code);
+      System.out.println("code is " + code);
       comm.getAccessToken(code);
       String userId;
-      Map<String, Object> variables = ImmutableMap.of("title", "Maps");
-      return new ModelAndView(variables, "home.ftl");
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "test",
+          " ");
+      System.out.println("coming to spotify handler");
+      return new ModelAndView(variables, "test.ftl");
     }
   }
 
   /**
    * Handles request to front page (join or create a sesh).
+   *
    * @author HE23
    */
   private static class FrontHandler implements TemplateViewRoute {
@@ -67,6 +72,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
+   *
    * @author HE23
    */
   private static class CreateHandler implements TemplateViewRoute {
@@ -79,6 +85,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
