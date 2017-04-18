@@ -25,11 +25,24 @@ public class UserProxy extends User implements Proxy {
     this.spotifyId = spotifyId;
   }
 
+  /**
+   * this method is a constructor for the full user proxy.
+   *
+   * @param spotifyId
+   *          the user id
+   * @param email
+   *          their email
+   * @param name
+   *          their name
+   */
   public UserProxy(String spotifyId, String email, String name) {
     this.spotifyId = spotifyId;
     userBean = new UserBean(spotifyId, email, name);
   }
 
+  /**
+   * This method clears the cache.
+   */
   public static void clearCache() {
     idToUserCache.clear();
   }

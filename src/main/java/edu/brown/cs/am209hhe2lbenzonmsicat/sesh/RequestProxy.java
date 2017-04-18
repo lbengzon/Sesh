@@ -222,6 +222,9 @@ public class RequestProxy extends Request implements Proxy {
     return requestBean.getDownvotes();
   }
 
+  /**
+   * This method clears the cache.
+   */
   public static void clearCache() {
     idToRequestCache.clear();
   }

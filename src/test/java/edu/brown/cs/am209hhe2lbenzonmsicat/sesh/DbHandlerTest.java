@@ -8,8 +8,22 @@ import java.util.List;
 import org.junit.Test;
 import org.sqlite.SQLiteException;
 
+/**
+ * This class tests the db handler class.
+ *
+ * @author Ali
+ *
+ */
 public class DbHandlerTest {
 
+  /**
+   * This tests the add get user function.
+   *
+   * @throws FileNotFoundException
+   *           if db isn't there
+   * @throws SQLException
+   *           if db messes up
+   */
   @Test
   public void testAddGetUser() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
@@ -25,8 +39,15 @@ public class DbHandlerTest {
     assert user.getFullName().equals(same.getFullName());
   }
 
-  @Test(
-      expected = SQLiteException.class)
+  /**
+   * This method tests the adding of the same user.
+   *
+   * @throws FileNotFoundException
+   *           if the db isn't there
+   * @throws SQLException
+   *           if the db messes up
+   */
+  @Test(expected = SQLiteException.class)
   public void testAddSameUser() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -37,6 +58,14 @@ public class DbHandlerTest {
         "Leandro Bengzon");
   }
 
+  /**
+   * This tests adding the same party.
+   *
+   * @throws FileNotFoundException
+   *           if db isn't there
+   * @throws SQLException
+   *           if the db messes up.
+   */
   @Test
   public void testAddParty() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
@@ -82,8 +111,7 @@ public class DbHandlerTest {
     assert parties2.isEmpty();
   }
 
-  @Test(
-      expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void testAddHostOfTwoParties()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
@@ -176,8 +204,7 @@ public class DbHandlerTest {
 
   }
 
-  @Test(
-      expected = SQLiteException.class)
+  @Test(expected = SQLiteException.class)
   public void testAddSameGuest() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -469,8 +496,7 @@ public class DbHandlerTest {
     assert fullRequest.getUpvotes().contains(ali);
   }
 
-  @Test(
-      expected = SQLiteException.class)
+  @Test(expected = SQLiteException.class)
   public void testDoubleVoteRequest()
       throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
