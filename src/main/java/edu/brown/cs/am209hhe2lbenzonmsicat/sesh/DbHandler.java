@@ -823,8 +823,8 @@ public final class DbHandler {
       String time = rs.getString(6);
       String status = rs.getString(Constants.SEVEN);
       Party p = Party.of(partyId, name, user,
-          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
-          time, Status.valueOf(status));
+          Playlist.of(spotifyPlaylistId, partyId, user),
+          new Coordinate(lat, lon), time, Status.valueOf(status));
       parties.add(p);
     }
     return parties;
@@ -860,8 +860,8 @@ public final class DbHandler {
       String time = rs.getString(6);
       String status = rs.getString(Constants.SEVEN);
       Party p = Party.of(partyId, name, user,
-          Playlist.of(spotifyPlaylistId, partyId), new Coordinate(lat, lon),
-          time, Status.valueOf(status));
+          Playlist.of(spotifyPlaylistId, partyId, user),
+          new Coordinate(lat, lon), time, Status.valueOf(status));
       return p;
     }
     return null;
