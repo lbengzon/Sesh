@@ -1,5 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -13,16 +15,24 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * Gui Manager class.
+ * Gui Manager class. <<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
  *
+ * =======
+ * 
+ * >>>>>>> changes to front page handler changes
+ * 
  * @author HE23
  */
 public class GuiManager {
   private SpotifyCommunicator comm = new SpotifyCommunicator();
 
   /**
-   * Default constructor.
+   * Default constructor. <<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
    *
+   * =======
+   * 
+   * >>>>>>> changes to front page handler changes
+   * 
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -32,6 +42,7 @@ public class GuiManager {
   }
 
   private void installRoutes(FreeMarkerEngine fme) {
+<<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
     Spark.get("/create", new CreateHandler(), fme);
@@ -39,7 +50,7 @@ public class GuiManager {
   }
 
   /**
-   * Spotify end point.
+   * Homepage end point, where user enters in their login credentials.
    */
   private class CallbackHandler implements TemplateViewRoute {
     @Override
@@ -47,9 +58,21 @@ public class GuiManager {
       QueryParamsMap qm = req.queryMap();
 
       String code = qm.value("code");
+
       System.out.println("code is " + code);
-      comm.getAccessToken(code);
-      String userId;
+      User user;
+      List<String> userInfo = comm.getAccessToken(code); // should return list
+                                                         // of strings w user
+                                                         // info
+      String userId = userInfo.get(0);
+      String userEmail = userInfo.get(1);
+      String userName = userInfo.get(2);
+      try {
+        user = User.create(userId, userEmail, userName);
+      } catch (SQLException e) {
+        /* user already exists */
+        user = User.of(userId);
+      }
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "test",
           " ");
       System.out.println("coming to spotify handler");
@@ -58,8 +81,13 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to front page (join or create a sesh).
+   * Handles request to front page (join or create a sesh). <<<<<<<
+   * 0f313668c404bac01ce2a89bc9053e038c93499a
    *
+   * =======
+   * 
+   * >>>>>>> changes to front page handler changes
+   * 
    * @author HE23
    */
   private static class FrontHandler implements TemplateViewRoute {
@@ -71,8 +99,13 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to create a sesh page.
+   * Handles request to create a sesh page. <<<<<<<
+   * 0f313668c404bac01ce2a89bc9053e038c93499a
    *
+   * =======
+   * 
+   * >>>>>>> changes to front page handler changes
+   * 
    * @author HE23
    */
   private static class CreateHandler implements TemplateViewRoute {
@@ -84,8 +117,13 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to join a sesh page.
+   * Handles request to join a sesh page. <<<<<<<
+   * 0f313668c404bac01ce2a89bc9053e038c93499a
    *
+   * =======
+   * 
+   * >>>>>>> changes to front page handler changes
+   * 
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
