@@ -42,7 +42,6 @@ public class GuiManager {
   }
 
   private void installRoutes(FreeMarkerEngine fme) {
-<<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
     Spark.get("/create", new CreateHandler(), fme);
