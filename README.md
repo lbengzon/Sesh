@@ -13,7 +13,7 @@ Sesh provides users with the opportunity to create collaborative playlists in re
 
 ## Project Requirements
 
-We plan to use Youtube's API to enable searching for songs, adding songs to a playlist and stream the audio. 
+We plan to use Spotify's API to enable searching for songs, adding songs to a playlist and stream the audio. 
 
 #### DJ Privileges
 * Create a public/private party
