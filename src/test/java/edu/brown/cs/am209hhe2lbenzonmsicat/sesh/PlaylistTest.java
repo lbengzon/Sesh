@@ -23,17 +23,33 @@ public class PlaylistTest {
    * @throws FileNotFoundException
    *           if the db is not found
    */
-  // @Test
+  @Test
   public void testGetId() throws SQLException, FileNotFoundException {
 
   }
 
-  // @Test
+  /**
+   * This method tests the getUrl function.
+   *
+   * @throws SQLException
+   *           if db malfunctions
+   * @throws FileNotFoundException
+   *           if db doesn't exist
+   */
+  @Test
   public void testGetUrl() throws SQLException, FileNotFoundException {
     // fail("Not yet implemented");
 
   }
 
+  /**
+   * this method tests the remove songs.
+   *
+   * @throws SQLException
+   *           if db doesn't work
+   * @throws FileNotFoundException
+   *           if db doesn't exist
+   */
   @Test
   public void testRemoveSong() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
@@ -58,6 +74,14 @@ public class PlaylistTest {
     assert playlist1.getSongs().contains(r1);
   }
 
+  /**
+   * this tests the add song.
+   *
+   * @throws SQLException
+   *           if db screws up
+   * @throws FileNotFoundException
+   *           if the db doesn't exist.
+   */
   @Test
   public void testAddSong() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
@@ -85,11 +109,27 @@ public class PlaylistTest {
     assert playlist1.getSongs().contains(r1);
   }
 
+  /**
+   * This method tests the Of function.
+   *
+   * @throws SQLException
+   *           from the db
+   * @throws FileNotFoundException
+   *           if the db doesn't exist
+   */
   @Test
   public void testOf() throws SQLException, FileNotFoundException {
     // fail("Not yet implemented");
   }
 
+  /**
+   * This tests the get songs from the spotify API.
+   *
+   * @throws MalformedURLException
+   *           if the url doesn't work
+   * @throws IOException
+   *           if there are issues with IO
+   */
   @Test
   public void testGetSongs() throws MalformedURLException, IOException {
     // try {
