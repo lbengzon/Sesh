@@ -1,5 +1,11 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -60,15 +66,14 @@ public class SpotifyCommunicator {
    *          - code
    * @return a list of the user's info
    */
-  public List<String> getAccessToken(String code) {
+  public void getAccessToken(String code) {
     /*
      * Make a token request. Asynchronous requests are made with the .getAsync
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
     System.out.println("getting access code");
-    List<String> results = new ArrayList<String>();
-    results.add("TEST");
+
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
 
@@ -94,6 +99,8 @@ public class SpotifyCommunicator {
              */
             api.setAccessToken(authorizationCodeCredentials.getAccessToken());
             api.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
+            List<String> results = getUserInfo(
+                authorizationCodeCredentials.getAccessToken());
             addSongs();
           }
 
@@ -109,7 +116,6 @@ public class SpotifyCommunicator {
           }
 
         });
-    return results;
   }
 
   /**
@@ -145,4 +151,44 @@ public class SpotifyCommunicator {
     }
   }
 
+  /**
+   * This finds the user's info.
+   *
+   * @param token
+   *          the access token
+   * @return list of the user info.
+   */
+  public List<String> getUserInfo(String token) {
+    List<String> results = new ArrayList<String>();
+    results.add("TEST");
+    System.out.println("getting user info");
+    StringBuilder sb = new StringBuilder();
+    sb.append("https://api.spotify.com/v1/me");
+    String urlString = sb.toString();
+    URL url;
+    try {
+      url = new URL(urlString);
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      conn.setRequestProperty("Authorization", token);
+      int responseCode = conn.getResponseCode();
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+      String inputLine;
+      StringBuilder response = new StringBuilder();
+      System.out.println("responseCode = " + responseCode);
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
+      System.out.println(response);
+      return results;
+    } catch (MalformedURLException e) {
+      System.out.println("ERROR: malformed");
+    } catch (IOException e) {
+      System.out.println("ERROR: ioooooo " + e.getMessage());
+    }
+    System.out.println("returning results");
+    return results;
+  }
 }
