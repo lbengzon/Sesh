@@ -3,12 +3,28 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import static org.junit.Assert.fail;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 
 import org.junit.Test;
 
+/**
+ * This class tests the playlist class.
+ *
+ * @author Ali
+ *
+ */
 public class PlaylistTest {
 
+  /**
+   * This method tests the getID method.
+   *
+   * @throws SQLException
+   *           throws a SQL exception if the db is bad
+   * @throws FileNotFoundException
+   *           if the db is not found
+   */
   // @Test
   public void testGetId() throws SQLException, FileNotFoundException {
 
@@ -71,9 +87,22 @@ public class PlaylistTest {
     assert playlist1.getSongs().contains(r1);
   }
 
-  // @Test
+  @Test
   public void testOf() throws SQLException, FileNotFoundException {
     fail("Not yet implemented");
+  }
+
+  @Test
+  public void testGetSongs() throws MalformedURLException, IOException {
+    SpotifyCommunicator comm = new SpotifyCommunicator();
+    try {
+      User host = User.of("alimiraculous", "ali.ahmed." + "mir@gmail.com",
+          "Ali Mir");
+      Playlist plist = Playlist.of(" ", "1", host);
+    } catch (SQLException e) {
+      // ERROR
+    }
+
   }
 
 }

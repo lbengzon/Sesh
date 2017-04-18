@@ -53,10 +53,12 @@ public abstract class Playlist {
    *          - spotify id
    * @param partyId
    *          - party id
+   * @param host
+   *          the host user
    * @return Playlist
    */
-  public static Playlist of(String spotifyId, int partyId) {
-    return new PlaylistProxy(spotifyId, partyId);
+  public static Playlist of(String spotifyId, int partyId, User host) {
+    return new PlaylistProxy(spotifyId, partyId, host);
   }
 
   /**

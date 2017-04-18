@@ -1,5 +1,11 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +20,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   private PlaylistBean playlistBean;
   private String spotifyId;
   private int partyId;
+  private User host;
 
   /**
    * Constructor.
@@ -22,10 +29,13 @@ public class PlaylistProxy extends Playlist implements Proxy {
    *          - playlist id
    * @param partyId
    *          - party id
+   * @param host
+   *          the host
    */
-  public PlaylistProxy(String spotifyId, int partyId) {
+  public PlaylistProxy(String spotifyId, int partyId, User host) {
     this.spotifyId = spotifyId;
     this.partyId = partyId;
+    this.host = host;
   }
 
   /**
@@ -86,6 +96,35 @@ public class PlaylistProxy extends Playlist implements Proxy {
     // sort that requsts the same way that the songs in the spotify playlists
     // are
     // sorted than return that.
+    StringBuilder sb = new StringBuilder();
+    sb.append("https://api.spotify.com/v1/users/");
+    sb.append(host.getSpotifyId());
+    sb.append("/playlists/");
+    sb.append(this.spotifyId);
+    String urlString = sb.toString();
+    URL url;
+    try {
+      url = new URL(urlString);
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      int responseCode = conn.getResponseCode();
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+      String inputLine;
+      StringBuilder response = new StringBuilder();
+
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
+      System.out.println(response);
+
+    } catch (MalformedURLException e) {
+      // ERROR
+    } catch (IOException e) {
+      // ERROR
+    }
+
     return new ArrayList<>(playlistBean.getQueuedRequests().values());
   }
 
