@@ -7,8 +7,22 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
+/**
+ * This class tests the request class.
+ *
+ * @author Ali
+ *
+ */
 public class RequestTest {
 
+  /**
+   * This test the getID function.
+   *
+   * @throws SQLException
+   *           if db messes up
+   * @throws FileNotFoundException
+   *           if db not found
+   */
   @Test
   public void testGetId() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
