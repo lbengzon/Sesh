@@ -13,6 +13,7 @@ import java.util.List;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.gson.Gson;
 import com.wrapper.spotify.Api;
 import com.wrapper.spotify.methods.RemoveTrackFromPlaylistRequest;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
@@ -33,6 +34,7 @@ public class SpotifyCommunicator {
   private final Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
       .clientSecret(Constants.ALI_CLIENT_SECRET)
       .redirectURI(Constants.REDIRECT_URL).build();
+  private List<String> results;
 
   /**
    * Create authorize URL.
@@ -66,13 +68,12 @@ public class SpotifyCommunicator {
    *          - code
    * @return a list of the user's info
    */
-  public void getAccessToken(String code) {
+  public List<String> getAccessToken(String code) {
     /*
      * Make a token request. Asynchronous requests are made with the .getAsync
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
-    System.out.println("getting access code");
 
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
@@ -99,9 +100,10 @@ public class SpotifyCommunicator {
              */
             api.setAccessToken(authorizationCodeCredentials.getAccessToken());
             api.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-            List<String> results = getUserInfo(
+            results = getUserInfo(
                 authorizationCodeCredentials.getAccessToken());
             addSongs();
+
           }
 
           @Override
@@ -116,6 +118,7 @@ public class SpotifyCommunicator {
           }
 
         });
+    return results;
   }
 
   /**
@@ -166,29 +169,36 @@ public class SpotifyCommunicator {
     sb.append("https://api.spotify.com/v1/me");
     String urlString = sb.toString();
     URL url;
+    Gson gson = new Gson();
     try {
       url = new URL(urlString);
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("GET");
-      conn.setRequestProperty("Authorization", token);
+      sb = new StringBuilder();
+      sb.append("Bearer ");
+      sb.append(token);
+      conn.setRequestProperty("Authorization", sb.toString());
       int responseCode = conn.getResponseCode();
       BufferedReader in = new BufferedReader(
           new InputStreamReader(conn.getInputStream()));
       String inputLine;
       StringBuilder response = new StringBuilder();
-      System.out.println("responseCode = " + responseCode);
+
       while ((inputLine = in.readLine()) != null) {
         response.append(inputLine);
       }
       in.close();
-      System.out.println(response);
+      String json = gson.toJson(response);
+      results.add();
+      results.add(json.getString("email"));
+      results.add(json.getString("name"));
+      System.out.println(json);
       return results;
     } catch (MalformedURLException e) {
       System.out.println("ERROR: malformed");
     } catch (IOException e) {
       System.out.println("ERROR: ioooooo " + e.getMessage());
     }
-    System.out.println("returning results");
     return results;
   }
 }
