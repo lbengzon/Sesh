@@ -1,6 +1,6 @@
 <#assign content>
 <div id="createJoin">
-<form action="/create">
+<form action="/create" id="createJoinForm">
 <input type="submit" class="createJoin" value="Start a sesh">
 </form>
 <form action="/join">
