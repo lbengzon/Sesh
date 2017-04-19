@@ -81,10 +81,7 @@ public class GuiManager {
       String code = qm.value("code");
 
       User user;
-      List<String> userInfo = comm.getAccessToken(code); // should return
-      // list
-      // of strings w user
-      // info
+      List<String> userInfo = comm.getAccessToken(code);
       String userId = userInfo.get(0);
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
