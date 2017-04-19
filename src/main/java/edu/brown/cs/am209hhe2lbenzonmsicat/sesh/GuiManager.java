@@ -16,7 +16,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- * 
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -24,7 +24,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -72,7 +72,7 @@ public class GuiManager {
 
   /**
    * Handles request to front page (join or create a sesh).
-   * 
+   *
    * @author HE23
    */
   private static class FrontHandler implements TemplateViewRoute {
@@ -98,7 +98,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {

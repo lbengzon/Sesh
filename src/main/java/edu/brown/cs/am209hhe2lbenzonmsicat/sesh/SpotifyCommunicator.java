@@ -14,6 +14,8 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
 import com.wrapper.spotify.methods.RemoveTrackFromPlaylistRequest;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
@@ -162,8 +164,7 @@ public class SpotifyCommunicator {
    * @return list of the user info.
    */
   public List<String> getUserInfo(String token) {
-    List<String> results = new ArrayList<String>();
-    results.add("TEST");
+    results = new ArrayList<String>();
     System.out.println("getting user info");
     StringBuilder sb = new StringBuilder();
     sb.append("https://api.spotify.com/v1/me");
@@ -188,11 +189,11 @@ public class SpotifyCommunicator {
         response.append(inputLine);
       }
       in.close();
-      String json = gson.toJson(response);
-      results.add();
-      results.add(json.getString("email"));
-      results.add(json.getString("name"));
-      System.out.println(json);
+      JsonObject jsonObject = new JsonParser().parse(response.toString())
+          .getAsJsonObject();
+      results.add(jsonObject.get("id").toString());
+      results.add(jsonObject.get("email").toString());
+      results.add(jsonObject.get("display_name").toString());
       return results;
     } catch (MalformedURLException e) {
       System.out.println("ERROR: malformed");
