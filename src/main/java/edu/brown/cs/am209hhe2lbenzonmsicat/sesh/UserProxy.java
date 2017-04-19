@@ -59,7 +59,6 @@ public class UserProxy extends User implements Proxy {
     try {
       userBean = DbHandler.getUserWithId(spotifyId);
     } catch (Exception e) {
-      // TODO Auto-generated catch block
       throw new RuntimeException(e.getMessage());
     }
     addBeanToCache();
