@@ -1,5 +1,6 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.sql.SQLException;
 import java.util.Set;
 
 /**
@@ -93,12 +94,20 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean requestSong(Request req) {
-    if (requestedSongs.contains(req)) {
-      return false;
+  public Request requestSong(Song song, User user) {
+    try {
+      Request newRequest = Request.create(song, user, partyId, "testTime");
+      if (requestedSongs.contains(newRequest)) {// ||
+                                                // getPlaylist().getSongs().contains(newRequest))
+                                                // {
+        throw new IllegalArgumentException(
+            "ERROR: song has already been requsted in party/is in the playlist queue");
+      }
+      requestedSongs.add(newRequest);
+      return newRequest;
+    } catch (SQLException e) {
+      throw new RuntimeException(e.getMessage());
     }
-    requestedSongs.add(req);
-    return true;
   }
 
   @Override

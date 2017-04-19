@@ -164,7 +164,7 @@ public class PartyProxy extends Party implements Proxy {
   @Override
   public boolean upvoteSong(User user, Request req) {
     if (!isActive()) {
-      return false;
+      throw new IllegalStateException("ERROR: Party has stoped");
     }
     if (partyBean == null) {
       try {
@@ -179,7 +179,7 @@ public class PartyProxy extends Party implements Proxy {
   @Override
   public boolean downvoteSong(User user, Request req) {
     if (!isActive()) {
-      return false;
+      throw new IllegalStateException("ERROR: Party has stoped");
     }
     if (partyBean != null) {
       try {
@@ -194,7 +194,7 @@ public class PartyProxy extends Party implements Proxy {
   @Override
   public boolean approveSong(Request req) {
     if (!isActive()) {
-      return false;
+      throw new IllegalStateException("ERROR: Party has stoped");
     }
     if (partyBean != null) {
       return partyBean.approveSong(req);
@@ -216,7 +216,7 @@ public class PartyProxy extends Party implements Proxy {
     // throw new RuntimeException(e1.getMessage());
     // }
     if (!isActive()) {
-      return false;
+      throw new IllegalStateException("ERROR: Party has stoped");
     }
     if (partyBean != null) {
       return partyBean.removeFromPlaylist(req);
@@ -231,12 +231,12 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean requestSong(Request req) {
+  public Request requestSong(Song song, User user) {
     if (!isActive()) {
-      return false;
+      throw new IllegalStateException("ERROR: Party has stoped");
     }
     if (partyBean != null) {
-      return partyBean.requestSong(req);
+      return partyBean.requestSong(song, user);
     } else {
       try {
         fill();
@@ -244,13 +244,13 @@ public class PartyProxy extends Party implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    return partyBean.requestSong(req);
+    return partyBean.requestSong(song, user);
   }
 
   @Override
   public boolean addGuest(User guest) {
     if (!isActive()) {
-      return false;
+      throw new IllegalStateException("ERROR: Party has stoped");
     }
     if (partyBean != null) {
       return partyBean.addGuest(guest);
