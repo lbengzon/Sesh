@@ -106,11 +106,13 @@ public abstract class Party {
 
   /**
    * Request song.
-   * @param req
+   * @param song
    *          - request
-   * @return boolean if successful.
+   * @param user
+   *          TODO
+   * @return The newly created request
    */
-  public abstract boolean requestSong(Request req);
+  public abstract Request requestSong(Song song, User user);
 
   /**
    * Add a guest to party.
