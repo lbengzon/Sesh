@@ -10,15 +10,12 @@ import org.sqlite.SQLiteException;
 
 /**
  * This class tests the db handler class.
- *
  * @author Ali
- *
  */
 public class DbHandlerTest {
 
   /**
    * This tests the add get user function.
-   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -41,7 +38,6 @@ public class DbHandlerTest {
 
   /**
    * This method tests the adding of the same user.
-   *
    * @throws FileNotFoundException
    *           if the db isn't there
    * @throws SQLException
@@ -60,7 +56,6 @@ public class DbHandlerTest {
 
   /**
    * This tests adding the same party.
-   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -91,6 +86,34 @@ public class DbHandlerTest {
     assert partyFull.getRequestedSongs().isEmpty();
     assert partyFull.getName().equals("My Party");
     assert partyFull.getPlaylist().getId().equals("testPlaylistId");
+  }
+
+  @Test
+  public void testEndParty() throws FileNotFoundException, SQLException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+
+    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
+        "Leandro Bengzon");
+    LocalDateTime time = LocalDateTime.now();
+    Party party = DbHandler.addParty(Playlist.of("testPlaylistId"), "My Party",
+        new Coordinate(71.6, 41.8), time.toString(), host);
+    assert party.getHost().equals(host);
+    assert party.getGuests().isEmpty();
+    assert party.getRequestedSongs().isEmpty();
+    assert party.getName().equals("My Party");
+    assert party.getPlaylist().getId().equals("testPlaylistId");
+    assert party.isActive() == true;
+    DbHandler.endParty(party.getPartyId());
+
+    List<Party> listparties = DbHandler.getUsersParties(host);
+    Party partyFull = listparties.get(0);
+    assert partyFull.getHost().equals(host);
+    assert partyFull.getGuests().isEmpty();
+    assert partyFull.getRequestedSongs().isEmpty();
+    assert partyFull.getName().equals("My Party");
+    assert partyFull.getPlaylist().getId().equals("testPlaylistId");
+    assert partyFull.isActive() == false;
   }
 
   @Test
@@ -409,7 +432,7 @@ public class DbHandlerTest {
     DbHandler.downvoteRequest(request1, hannah);
     DbHandler.downvoteRequest(request1, matt);
 
-    RequestBean fullRequest = DbHandler.getFullRequest(request1.getId(),
+    RequestBean fullRequest = DbHandler.getFullRequest(request1.getPartyId(),
         request1.getSong(), request1.getUserRequestedBy(),
         request1.getRequestTime());
 
@@ -461,7 +484,7 @@ public class DbHandlerTest {
     DbHandler.downvoteRequest(request1, hannah);
     DbHandler.downvoteRequest(request1, matt);
 
-    RequestBean fullRequest = DbHandler.getFullRequest(request1.getId(),
+    RequestBean fullRequest = DbHandler.getFullRequest(request1.getPartyId(),
         request1.getSong(), request1.getUserRequestedBy(),
         request1.getRequestTime());
 
@@ -483,8 +506,9 @@ public class DbHandlerTest {
     DbHandler.removeVote(request1, matt);
     DbHandler.upvoteRequest(request1, matt);
 
-    fullRequest = DbHandler.getFullRequest(request1.getId(), request1.getSong(),
-        request1.getUserRequestedBy(), request1.getRequestTime());
+    fullRequest = DbHandler.getFullRequest(request1.getPartyId(),
+        request1.getSong(), request1.getUserRequestedBy(),
+        request1.getRequestTime());
 
     assert fullRequest.getSong().equals(request1.getSong());
     assert fullRequest.getDownvotes().size() == 4;

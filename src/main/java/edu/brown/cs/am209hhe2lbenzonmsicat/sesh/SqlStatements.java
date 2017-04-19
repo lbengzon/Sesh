@@ -2,7 +2,6 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 /**
  * A class that holds useful sql statements.
- *
  * @author leandro
  */
 final class SqlStatements {
@@ -33,8 +32,8 @@ final class SqlStatements {
    * Adds a new song request into the song request table.
    */
   public static final String ADD_SONG_REQUEST = "INSERT INTO \"SongRequest\""
-      + " (spotifySongId, partyId, userId, time,"
-      + " isQueued) VALUES (?, ?, ?, ?, 0);";
+      + " (requestId, spotifySongId, partyId, userId, time,"
+      + " isQueued) VALUES (?, ?, ?, ?, ?, 0);";
 
   /**
    * Adds a new party to the party table with the status of "ongoing".
@@ -42,6 +41,9 @@ final class SqlStatements {
   public static final String ADD_NEW_PARTY = "INSERT INTO Party "
       + "(spotifyPlaylistId, name, lat, lon, time, status) "
       + "VALUES (?, ?, ?, ?, ?, 'ongoing');";
+
+  public static final String END_PARTY = "UPDATE "
+      + "PARTY SET status='stopped' WHERE partyId = ?;";
 
   /**
    * Removes a song from the Song Request table.

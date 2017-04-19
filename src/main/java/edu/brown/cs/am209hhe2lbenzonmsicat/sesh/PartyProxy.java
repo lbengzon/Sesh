@@ -8,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
- *
  * @author leandro
  */
 public class PartyProxy extends Party implements Proxy {
@@ -26,7 +25,6 @@ public class PartyProxy extends Party implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -165,6 +163,9 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean upvoteSong(User user, Request req) {
+    if (!isActive()) {
+      return false;
+    }
     if (partyBean == null) {
       try {
         fill();
@@ -177,6 +178,9 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean downvoteSong(User user, Request req) {
+    if (!isActive()) {
+      return false;
+    }
     if (partyBean != null) {
       try {
         fill();
@@ -189,6 +193,9 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean approveSong(Request req) {
+    if (!isActive()) {
+      return false;
+    }
     if (partyBean != null) {
       return partyBean.approveSong(req);
     } else {
@@ -208,6 +215,9 @@ public class PartyProxy extends Party implements Proxy {
     // } catch (SQLException e1) {
     // throw new RuntimeException(e1.getMessage());
     // }
+    if (!isActive()) {
+      return false;
+    }
     if (partyBean != null) {
       return partyBean.removeFromPlaylist(req);
     } else {
@@ -222,6 +232,9 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean requestSong(Request req) {
+    if (!isActive()) {
+      return false;
+    }
     if (partyBean != null) {
       return partyBean.requestSong(req);
     } else {
@@ -236,6 +249,9 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean addGuest(User guest) {
+    if (!isActive()) {
+      return false;
+    }
     if (partyBean != null) {
       return partyBean.addGuest(guest);
     } else {
@@ -246,6 +262,21 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     return partyBean.addGuest(guest);
+  }
+
+  @Override
+  public void endParty() {
+    // TODO Auto-generated method stub
+    if (partyBean != null) {
+      partyBean.endParty();
+    }
+    try {
+      DbHandler.endParty(partyId);
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      throw new RuntimeException(e.getMessage());
+    }
+    status = Status.stopped;
   }
 
 }

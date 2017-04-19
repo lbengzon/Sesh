@@ -21,7 +21,6 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request.VoteType;
 
 /**
  * Database handler class.
- *
  */
 public final class DbHandler {
 
@@ -40,7 +39,6 @@ public final class DbHandler {
 
   /**
    * Gets the connection a particular thread has.
-   *
    * @return the connection to the database.
    */
   public static Connection getConnection() {
@@ -52,7 +50,6 @@ public final class DbHandler {
 
   /**
    * Set from URL.
-   *
    * @param pathToDb
    *          - path
    * @throws SQLException
@@ -105,7 +102,6 @@ public final class DbHandler {
 
   /**
    * Sets the connection to a particular database for the thread.
-   *
    * @param conn
    *          the connection we want to use.
    */
@@ -116,7 +112,6 @@ public final class DbHandler {
 
   /**
    * Clear all tables.
-   *
    * @throws SQLException
    *           - exception
    */
@@ -130,7 +125,6 @@ public final class DbHandler {
 
   /**
    * Clear user table.
-   *
    * @throws SQLException
    *           - exception
    */
@@ -147,7 +141,6 @@ public final class DbHandler {
 
   /**
    * Clear party table.
-   *
    * @throws SQLException
    *           - exception
    */
@@ -164,7 +157,6 @@ public final class DbHandler {
 
   /**
    * Clear song request table.
-   *
    * @throws SQLException
    *           - exception
    */
@@ -181,7 +173,6 @@ public final class DbHandler {
 
   /**
    * Clear request votes table.
-   *
    * @throws SQLException
    *           - exception
    */
@@ -198,7 +189,6 @@ public final class DbHandler {
 
   /**
    * Clear party attendee table.
-   *
    * @throws SQLException
    *           - exception
    */
@@ -222,7 +212,6 @@ public final class DbHandler {
 
   /**
    * Adds user to database.
-   *
    * @param userId
    *          - id
    * @param email
@@ -257,7 +246,6 @@ public final class DbHandler {
 
   /**
    * Add song request to database.
-   *
    * @param spotifySongId
    *          - song id
    * @param partyId
@@ -278,24 +266,17 @@ public final class DbHandler {
       throw new SQLException("ERROR: No database has been set.");
     }
     PreparedStatement prep = conn.prepareStatement(query);
-
-    prep.setString(1, spotifySongId);
-    prep.setInt(2, partyId);
-    prep.setString(3, user.getSpotifyId());
-    prep.setString(4, time);
+    String requestId = Request.getId(partyId, spotifySongId);
+    prep.setString(1, requestId);
+    prep.setString(2, spotifySongId);
+    prep.setInt(3, partyId);
+    prep.setString(4, user.getSpotifyId());
+    prep.setString(5, time);
 
     int success = prep.executeUpdate();
     if (success >= 1) {
-      try (ResultSet generatedKeys = prep.getGeneratedKeys()) {
-        if (generatedKeys.next()) {
-          int requestId = generatedKeys.getInt(1);
-
-          return Request.of(requestId, time, Song.of(spotifySongId), user,
-              new HashSet<>(), new HashSet<>());
-        } else {
-          throw new SQLException("Creating user failed, no ID obtained.");
-        }
-      }
+      return Request.of(partyId, time, Song.of(spotifySongId), user,
+          new HashSet<>(), new HashSet<>());
     } else {
       throw new SQLException(
           "ERROR: Could not insert the song with the query " + query);
@@ -304,7 +285,6 @@ public final class DbHandler {
 
   /**
    * Add party to database.
-   *
    * @param playlist
    *          - playlist
    * @param name
@@ -360,7 +340,6 @@ public final class DbHandler {
 
   /**
    * Add host to database.
-   *
    * @param partyId
    *          - party id
    * @param host
@@ -389,8 +368,7 @@ public final class DbHandler {
   }
 
   /**
-   * Move song request from playlist to queue.
-   *
+   * Move song request out of request list and to the playlist queue
    * @param request
    *          - request
    * @throws SQLException
@@ -405,7 +383,7 @@ public final class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    prep.setInt(1, request.getId());
+    prep.setString(1, request.getId());
 
     int success = prep.executeUpdate();
     if (success < 1) {
@@ -414,9 +392,24 @@ public final class DbHandler {
     }
   }
 
+  public static void endParty(int partyId) throws SQLException {
+    String query = SqlStatements.END_PARTY;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    prep.setInt(1, partyId);
+
+    int success = prep.executeUpdate();
+    if (success < 1) {
+      throw new SQLException("ERROR: END party with this query " + query);
+    }
+  }
+
   /**
-   * Move song request from queue to playlist.
-   *
+   * Move song playlist to request list
    * @param request
    *          - request
    * @throws SQLException
@@ -431,7 +424,7 @@ public final class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    prep.setInt(1, request.getId());
+    prep.setString(1, request.getId());
 
     int success = prep.executeUpdate();
     if (success < 1) {
@@ -442,7 +435,6 @@ public final class DbHandler {
 
   /**
    * Remove party from database.
-   *
    * @param party
    *          - party
    * @throws SQLException
@@ -467,7 +459,6 @@ public final class DbHandler {
 
   /**
    * Upvote request in database.
-   *
    * @param request
    *          - request that has been upvoted
    * @param user
@@ -484,8 +475,10 @@ public final class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    prep.setInt(1, request.getId());
-    prep.setString(2, user.getSpotifyId());
+    String reqId = request.getId();
+    String userId = user.getSpotifyId();
+    prep.setString(1, reqId);
+    prep.setString(2, userId);
 
     int success = prep.executeUpdate();
     if (success < 1) {
@@ -496,7 +489,6 @@ public final class DbHandler {
 
   /**
    * Downvote request in the database.
-   *
    * @param request
    *          - request that has been downvoted
    * @param user
@@ -513,7 +505,7 @@ public final class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    prep.setInt(1, request.getId());
+    prep.setString(1, request.getId());
     prep.setString(2, user.getSpotifyId());
 
     int success = prep.executeUpdate();
@@ -525,7 +517,6 @@ public final class DbHandler {
 
   /**
    * Remove vote from database.
-   *
    * @param request
    *          - request to remove vote from
    * @param user
@@ -542,7 +533,7 @@ public final class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    prep.setInt(1, request.getId());
+    prep.setString(1, request.getId());
     prep.setString(2, user.getSpotifyId());
 
     int success = prep.executeUpdate();
@@ -554,7 +545,6 @@ public final class DbHandler {
 
   /**
    * Add guest to party in database.
-   *
    * @param partyId
    *          - party id
    * @param guest
@@ -583,7 +573,6 @@ public final class DbHandler {
 
   /**
    * Remove guest from party in database.
-   *
    * @param partyId
    *          - party id
    * @param guest
@@ -612,7 +601,6 @@ public final class DbHandler {
 
   /**
    * Retrieve all requests in party.
-   *
    * @param partyId
    *          - id
    * @return list of requests in given party
@@ -646,7 +634,6 @@ public final class DbHandler {
 
   /**
    * Retrieve all party attendees.
-   *
    * @param partyId
    *          - party id
    * @return list of hosts and list of guests
@@ -685,7 +672,6 @@ public final class DbHandler {
 
   /**
    * Retrieve party from database.
-   *
    * @param partyId
    *          - id
    * @param playlist
@@ -716,7 +702,6 @@ public final class DbHandler {
 
   /**
    * Retrieve request from database.
-   *
    * @param id
    *          - request id
    * @param song
@@ -729,7 +714,7 @@ public final class DbHandler {
    * @throws SQLException
    *           - exception
    */
-  public static RequestBean getFullRequest(int id, Song song, User user,
+  public static RequestBean getFullRequest(int partyId, Song song, User user,
       String requestTime) throws SQLException {
     String query = SqlStatements.GET_VOTES_FOR_SONG;
     Connection conn = getConnection();
@@ -737,8 +722,8 @@ public final class DbHandler {
       throw new SQLException("ERROR: No database has been set.");
     }
     PreparedStatement prep = conn.prepareStatement(query);
-
-    prep.setInt(1, id);
+    String requestId = Request.getId(partyId, song.getSpotifyId());
+    prep.setString(1, requestId);
 
     ResultSet rs = prep.executeQuery();
     List<User> upvotes = new ArrayList<>();
@@ -757,13 +742,12 @@ public final class DbHandler {
       }
     }
 
-    return new RequestBean(id, requestTime, song, user, new HashSet<>(upvotes),
-        new HashSet<>(downvotes));
+    return new RequestBean(partyId, requestTime, song, user,
+        new HashSet<>(upvotes), new HashSet<>(downvotes));
   }
 
   /**
    * Retrieve user from id.
-   *
    * @param spotifyId
    *          - id
    * @return - user of given id
@@ -794,7 +778,6 @@ public final class DbHandler {
 
   /**
    * Get all parties of a user.
-   *
    * @param user
    *          - the user's parties we want
    * @return list of all parties of the given user
@@ -832,7 +815,6 @@ public final class DbHandler {
 
   /**
    * Get party hosted by the passed in user.
-   *
    * @param user
    *          - user's party we are trying to retrieve
    * @return - party
@@ -869,7 +851,6 @@ public final class DbHandler {
 
   /**
    * Retrieve queued songs.
-   *
    * @param playlistId
    *          - playlist id
    * @param partyId

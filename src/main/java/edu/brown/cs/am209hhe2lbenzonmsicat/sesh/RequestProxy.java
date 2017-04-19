@@ -9,13 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
- *
  * @author leandro
  */
 public class RequestProxy extends Request implements Proxy {
-  private static Map<Integer, RequestBean> idToRequestCache = new ConcurrentHashMap<>();
+  private static Map<String, RequestBean> idToRequestCache = new ConcurrentHashMap<>();
   private RequestBean requestBean;
-  private int id;
+  private int partyId;
   private Song song;
   private String requestTime;
   private User userRequestedBy;
@@ -24,7 +23,6 @@ public class RequestProxy extends Request implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param id
    *          - request id
    * @param song
@@ -34,9 +32,9 @@ public class RequestProxy extends Request implements Proxy {
    * @param requestTime
    *          - time of request
    */
-  public RequestProxy(int id, Song song, User userRequestedBy,
+  public RequestProxy(int partyId, Song song, User userRequestedBy,
       String requestTime) {
-    this.id = id;
+    this.partyId = partyId;
     this.song = song;
     this.userRequestedBy = userRequestedBy;
     this.requestTime = requestTime;
@@ -44,7 +42,6 @@ public class RequestProxy extends Request implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param id
    *          - request id
    * @param song
@@ -58,13 +55,13 @@ public class RequestProxy extends Request implements Proxy {
    * @param downvotes
    *          - set of downvotes
    */
-  public RequestProxy(int id, String requestTime, Song song,
+  public RequestProxy(int partyId, String requestTime, Song song,
       User userRequestedBy, HashSet<User> upvotes, HashSet<User> downvotes) {
-    this.id = id;
+    this.partyId = partyId;
     this.song = song;
     this.userRequestedBy = userRequestedBy;
     this.requestTime = requestTime;
-    requestBean = new RequestBean(id, requestTime, song, userRequestedBy,
+    requestBean = new RequestBean(partyId, requestTime, song, userRequestedBy,
         upvotes, downvotes);
   }
 
@@ -72,13 +69,13 @@ public class RequestProxy extends Request implements Proxy {
   public void fillBean() {
     assert requestBean == null;
     // if the actor exists in the cache just use that
-    RequestBean request = RequestProxy.idToRequestCache.get(id);
+    RequestBean request = RequestProxy.idToRequestCache.get(getId());
     if (request != null) {
       requestBean = request;
       return;
     }
     try {
-      requestBean = DbHandler.getFullRequest(id, song, userRequestedBy,
+      requestBean = DbHandler.getFullRequest(partyId, song, userRequestedBy,
           requestTime);
     } catch (SQLException e) {
       // TODO Auto-generated catch block
@@ -94,18 +91,13 @@ public class RequestProxy extends Request implements Proxy {
     if (idToRequestCache.size() > Constants.MAX_CACHE_SIZE) {
       idToRequestCache.clear();
     }
-    assert !idToRequestCache.containsKey(id);
-    idToRequestCache.put(id, requestBean);
+    assert !idToRequestCache.containsKey(getId());
+    idToRequestCache.put(getId(), requestBean);
   }
 
   @Override
   public boolean isBeanNull() {
     return requestBean == null;
-  }
-
-  @Override
-  public int getId() {
-    return id;
   }
 
   @Override
@@ -227,6 +219,11 @@ public class RequestProxy extends Request implements Proxy {
    */
   public static void clearCache() {
     idToRequestCache.clear();
+  }
+
+  @Override
+  public int getPartyId() {
+    return partyId;
   }
 
 }
