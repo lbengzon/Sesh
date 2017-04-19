@@ -1,3 +1,10 @@
+html, body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	overflow: hidden;
+}
+
 body {
 	font-family: 'Source Sans Pro', sans-serif;
 	background: rgba(147,206,222,1);
@@ -9,27 +16,24 @@ body {
 	background: linear-gradient(to right, rgba(147,206,222,1) 0%, rgba(117,189,209,1) 41%, rgba(93,240,186,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93cede', endColorstr='#5df0ba', GradientType=1 );
 	color: white;
-
 }
 
 #header {
 	text-align: center;
-	font-size: 86px;
+	font-size: 70px;
 	letter-spacing: 10px;
-
 }
 
 h1 {
-	margin: 4% 0% 0% 0%;
-
+	margin: 2% 0% 0% 0%;
 }
 
 .createJoin {
 	background-color: #72d8d0;
 	font-family: 'Source Sans Pro', sans-serif;
 	letter-spacing: 2px;
-	font-size: 60px;
-	padding: 50px;
+	font-size: 450%;
+	padding: 10%;
 	color: white;
 	border: solid;
 	border-width: 4px;
@@ -53,9 +57,45 @@ h1 {
 }
 
 #createJoin {
+	width: 100%;
+	height: 100%;
 	margin-top: 10%;
 	display: flex;
 	justify-content: space-around;
+}
+
+#titles {
+	width: 100%;
+	display: inline-flex;
+	justify-content: space-around;
+}
+
+.footerButtons {
+	background-color: #72d8d0;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 2px;
+	/*font-size: 20px;
+	padding: 20px;
+	padding-left: 50px;
+	padding-right: 50px;*/
+	/*width: 15%;*/
+	padding: 1%;
+	width: 22%;
+	font-size: 120%;
+	color: white;
+	border: solid;
+	border-width: 4px;
+	border-color: white;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	margin: auto;
+	transition: background-color 0.4s linear;
+}
+
+.footerButtons:hover {
+	transition: background-color 0.4s linear;
+	background-color: #39aeb2;
 }
 
 #create_sesh {
@@ -63,10 +103,6 @@ h1 {
 	text-align: left;
 	width: 40%;
 	padding: 20px;
-}
-
-#create_sesh input {
-
 }
 
 #create_sesh label {
@@ -77,14 +113,77 @@ h1 {
 	display: inline-flex;
 }
 
-#create_sesh label, #create_sesh input {
-/*	//width: 100%;*/
-/*	display: inline-block;
-	margin: 8px 0;*/
-/*	padding: 16px 20px;*/
+.list-wrapper {
+	width: 100%;
+	height: 50%;
+	display: flex;
+	justify-content: space-around;
 }
 
+.tabContentPlaylist, .tabContentPlaylistGuest, .tabContentRequestGuest {
+	width: 45%;
+	height: 100%;
+	background-color: white;
+	overflow-y: scroll;
+}
 
+.tabContentPlaylist ul, .tabContentPlaylistGuest ul, .tabContentRequestGuest ul {
+	padding: 0 0 0 6%;
+
+}
+
+.tabContentPlaylist li, .tabContentRequestGuest li, .tabContentPlaylistGuest li {
+	margin-left: -4%;
+	color: black;
+	width: 102%;
+	height: 40px;
+	border-top: 3px solid blue;
+	padding-left: 1%;
+	padding-top: 1%;
+}
+
+.sortable-placeholder {
+	border: 1px dashed #CCC;
+	background: none;
+}
+
+.sortable-dragging {
+	background-color: green;
+}
+
+.tabContentSearch, .tabContentSearchGuest {
+	width: 60%;
+	height: 100%;
+	background-color: white;
+}
+
+#footer {
+	width: 100%;
+	height: 15%;
+	display: inline-flex;
+/*	padding: 1.5%;
+	padding-left: 27.5%;*/
+}
+
+#footer button.active {
+	background-color: #39aeb2;
+}
+
+#footer button:focus {
+	outline: none;
+}
+
+#party-list {
+	width: 96%;
+	height: 60%;
+	background-color: white;
+	margin-left: 2%;
+}
+
+#partySubmit {
+	margin-left: 40%;
+	margin-top: 2%;
+}
 
 
 

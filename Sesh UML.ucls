@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.14" icons="true" automaticImage="JPEG" always-add-relationships="false" 
+  generalizations="true" realizations="true" associations="true" dependencies="false" nesting-relationships="true" 
+  router="FAN">  
+  <class id="1" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Coordinate" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Coordinate.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2092" y="1664"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.UserProxy" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/UserProxy.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="281" width="222" x="1568" y="4140"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.DbHandler" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/DbHandler.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="478" y="244"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyCommunicator" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/SpotifyCommunicator.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="155" width="222" x="4078" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.GuiManager.FrontHandler" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/GuiManager.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="263" x="2260" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.PartyProxy" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/PartyProxy.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="479" width="348" x="1872" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Constants.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="191" width="222" x="729" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Request.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="389" width="382" x="1591" y="2622"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Song" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Song.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="245" width="222" x="1851" y="3819"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.RequestBean" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/RequestBean.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="299" width="340" x="1559" y="3480"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Party.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="443" width="330" x="1342" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.PartyBean" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/PartyBean.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1578" y="1277"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="13" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Playlist" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Playlist.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1812" y="1738"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="14" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request.VoteType" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Request.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="119" width="222" x="1348" y="3051"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="15" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.User" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/User.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="281" width="222" x="1559" y="3819"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="16" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.GuiManager.CreateHandler" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/GuiManager.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="263" x="2563" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="17" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.PlaylistProxy" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/PlaylistProxy.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1936" y="2084"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="18" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.GuiManager" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/GuiManager.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="233" x="3169" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="19" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SongBean" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/SongBean.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1960" y="4692"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.GuiManager.CreatePartyHandler" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/GuiManager.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="263" x="2866" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="21" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SongProxy" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/SongProxy.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="245" width="222" x="1851" y="4140"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="22" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.GuiManager.MapsHandler" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/GuiManager.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="263" x="3169" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="23" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.GuiManager.JoinHandler" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/GuiManager.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="263" x="3472" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="24" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Main.ExceptionPrinter" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Main.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="260" x="4340" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="25" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.PlaylistBean" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/PlaylistBean.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="299" width="266" x="1631" y="2283"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <enumeration id="26" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.Status" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Party.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1480" y="1722"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="27" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.GuiManager.JoinPartyHandler" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/GuiManager.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="101" width="263" x="3775" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="28" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Proxy" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Proxy.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="2298" y="4500"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <enumeration id="29" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.AttendeeType" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Party.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="119" width="222" x="1059" y="621"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </enumeration>  
+  <class id="30" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.RequestProxy" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/RequestProxy.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="389" width="400" x="1673" y="3051"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="31" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SqlStatements" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/SqlStatements.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="533" width="311" x="991" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="32" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Main" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/Main.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="173" width="222" x="4209" y="-96"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="33" language="java" name="edu.brown.cs.am209hhe2lbenzonmsicat.sesh.UserBean" 
+    project="term-project-am209-hhe2-lbenzon-msicat" 
+    file="/term-project-am209-hhe2-lbenzon-msicat/src/main/java/edu/brown/cs/am209hhe2lbenzonmsicat/sesh/UserBean.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1653" y="4668"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="34">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="35" name="comm"/>      
+      <multiplicity id="36" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="37">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <generalization id="38">    
+    <bendpoint x="1537" y="4140"/>    
+    <end type="SOURCE" refId="33"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <association id="39">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="40" name="status"/>      
+      <multiplicity id="41" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="42">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="16"/>  
+  </nesting>  
+  <nesting id="43">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="5"/>  
+  </nesting>  
+  <association id="44">    
+    <bendpoint x="1317" y="1587"/>    
+    <bendpoint x="1317" y="1926"/>    
+    <bendpoint x="1317" y="2283"/>    
+    <bendpoint x="1317" y="2622"/>    
+    <bendpoint x="1317" y="3051"/>    
+    <bendpoint x="1317" y="3480"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="45" name="guests"/>      
+      <multiplicity id="46" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="47">    
+    <bendpoint x="1860" y="1140"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="48" name="status"/>      
+      <multiplicity id="49" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="26" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="50">    
+    <bendpoint x="1929" y="3480"/>    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="51" name="userRequestedBy"/>      
+      <multiplicity id="52" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="53">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="54" name="location"/>      
+      <multiplicity id="55" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="56">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="57" name="songBean"/>      
+      <multiplicity id="58" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="59">    
+    <bendpoint x="1338" y="1587"/>    
+    <bendpoint x="1338" y="1926"/>    
+    <bendpoint x="1338" y="2283"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="60" name="requestedSongs"/>      
+      <multiplicity id="61" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="62">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="28"/>  
+  </realization>  
+  <association id="63">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="64" name="userRequestedBy"/>      
+      <multiplicity id="65" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="66">    
+    <bendpoint x="1351" y="621"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <association id="67">    
+    <bendpoint x="1296" y="1587"/>    
+    <bendpoint x="1296" y="1926"/>    
+    <bendpoint x="1296" y="2283"/>    
+    <bendpoint x="1296" y="2622"/>    
+    <bendpoint x="1296" y="3051"/>    
+    <bendpoint x="1296" y="3480"/>    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="68" name="host"/>      
+      <multiplicity id="69" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="70">    
+    <bendpoint x="2145" y="1140"/>    
+    <bendpoint x="2145" y="1587"/>    
+    <bendpoint x="2145" y="1926"/>    
+    <bendpoint x="2145" y="2283"/>    
+    <bendpoint x="2145" y="2622"/>    
+    <bendpoint x="2103" y="3051"/>    
+    <bendpoint x="2061" y="3480"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="71" name="host"/>      
+      <multiplicity id="72" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="73">    
+    <end type="SOURCE" refId="21"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <association id="74">    
+    <end type="SOURCE" refId="25" navigable="false">      
+      <attribute id="75" name="queuedRequests"/>      
+      <multiplicity id="76" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="8" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="77">    
+    <bendpoint x="1820" y="4140"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="9"/>  
+  </generalization>  
+  <nesting id="78">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="14"/>  
+  </nesting>  
+  <nesting id="79">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="23"/>  
+  </nesting>  
+  <association id="80">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="81" name="userBean"/>      
+      <multiplicity id="82" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="83">    
+    <end type="SOURCE" refId="21" navigable="false">      
+      <attribute id="84" name="idSongCache"/>      
+      <multiplicity id="85" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="19" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="86">    
+    <bendpoint x="2166" y="1140"/>    
+    <bendpoint x="2166" y="1587"/>    
+    <bendpoint x="2166" y="1926"/>    
+    <bendpoint x="2166" y="2283"/>    
+    <bendpoint x="2166" y="2622"/>    
+    <bendpoint x="2166" y="3051"/>    
+    <bendpoint x="2166" y="3480"/>    
+    <bendpoint x="2166" y="3819"/>    
+    <bendpoint x="2166" y="4140"/>    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="28"/>  
+  </realization>  
+  <nesting id="87">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="27"/>  
+  </nesting>  
+  <nesting id="88">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="29"/>  
+  </nesting>  
+  <generalization id="89">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="15"/>  
+  </generalization>  
+  <nesting id="90">    
+    <bendpoint x="1311" y="621"/>    
+    <bendpoint x="1311" y="1140"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="26"/>  
+  </nesting>  
+  <association id="91">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="92" name="idToUserCache"/>      
+      <multiplicity id="93" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="33" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="94">    
+    <bendpoint x="1881" y="1140"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="95" name="playlist"/>      
+      <multiplicity id="96" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="97">    
+    <bendpoint x="2103" y="3480"/>    
+    <bendpoint x="2103" y="3819"/>    
+    <bendpoint x="2103" y="4140"/>    
+    <end type="SOURCE" refId="30"/>    
+    <end type="TARGET" refId="28"/>  
+  </realization>  
+  <realization id="98">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="28"/>  
+  </realization>  
+  <association id="99">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="100" name="song"/>      
+      <multiplicity id="101" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="102">    
+    <end type="SOURCE" refId="32" navigable="false">      
+      <attribute id="103" name="comm"/>      
+      <multiplicity id="104" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="105">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="106" name="requestBean"/>      
+      <multiplicity id="107" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="108">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="109" name="idToPartyCache"/>      
+      <multiplicity id="110" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="111">    
+    <end type="SOURCE" refId="30"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <association id="112">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="113" name="idToPlaylistCache"/>      
+      <multiplicity id="114" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="115">    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="116" name="idToRequestCache"/>      
+      <multiplicity id="117" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="10" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="118">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="11"/>  
+  </generalization>  
+  <generalization id="119">    
+    <bendpoint x="1600" y="3051"/>    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="8"/>  
+  </generalization>  
+  <association id="120">    
+    <bendpoint x="2082" y="3480"/>    
+    <end type="SOURCE" refId="30" navigable="false">      
+      <attribute id="121" name="song"/>      
+      <multiplicity id="122" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="9" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="123">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="124" name="upvotes"/>      
+      <multiplicity id="125" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="126">    
+    <end type="SOURCE" refId="17" navigable="false">      
+      <attribute id="127" name="playlistBean"/>      
+      <multiplicity id="128" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="25" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="129">    
+    <bendpoint x="2124" y="2283"/>    
+    <bendpoint x="2124" y="2622"/>    
+    <bendpoint x="2124" y="3051"/>    
+    <bendpoint x="2124" y="3480"/>    
+    <bendpoint x="2124" y="3819"/>    
+    <bendpoint x="2124" y="4140"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="28"/>  
+  </realization>  
+  <nesting id="130">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="20"/>  
+  </nesting>  
+  <association id="131">    
+    <bendpoint x="1902" y="1140"/>    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="132" name="location"/>      
+      <multiplicity id="133" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="134">    
+    <end type="SOURCE" refId="32"/>    
+    <end type="TARGET" refId="24"/>  
+  </nesting>  
+  <association id="135">    
+    <end type="SOURCE" refId="12" navigable="false">      
+      <attribute id="136" name="playlist"/>      
+      <multiplicity id="137" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="13" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <nesting id="138">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="22"/>  
+  </nesting>  
+  <association id="139">    
+    <end type="SOURCE" refId="10" navigable="false">      
+      <attribute id="140" name="downvotes"/>      
+      <multiplicity id="141" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="142">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="143" name="partyBean"/>      
+      <multiplicity id="144" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="12" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="145">    
+    <bendpoint x="1640" y="1926"/>    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="13"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
