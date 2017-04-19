@@ -15,24 +15,16 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * Gui Manager class. <<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
- *
- * =======
- *
- * >>>>>>> changes to front page handler changes
- *
+ * Gui Manager class.
+ * 
  * @author HE23
  */
 public class GuiManager {
   private SpotifyCommunicator comm = new SpotifyCommunicator();
 
   /**
-   * Default constructor. <<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
-   *
-   * =======
-   *
-   * >>>>>>> changes to front page handler changes
-   *
+   * Default constructor.
+   * 
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -79,13 +71,8 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to front page (join or create a sesh). <<<<<<<
-   * 0f313668c404bac01ce2a89bc9053e038c93499a
-   *
-   * =======
-   *
-   * >>>>>>> changes to front page handler changes
-   *
+   * Handles request to front page (join or create a sesh).
+   * 
    * @author HE23
    */
   private static class FrontHandler implements TemplateViewRoute {
@@ -97,12 +84,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to create a sesh page. <<<<<<<
-   * 0f313668c404bac01ce2a89bc9053e038c93499a
-   *
-   * =======
-   *
-   * >>>>>>> changes to front page handler changes
+   * Handles request to create a sesh page.
    *
    * @author HE23
    */
@@ -115,13 +97,8 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to join a sesh page. <<<<<<<
-   * 0f313668c404bac01ce2a89bc9053e038c93499a
-   *
-   * =======
-   *
-   * >>>>>>> changes to front page handler changes
-   *
+   * Handles request to join a sesh page.
+   * 
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
