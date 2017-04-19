@@ -4,7 +4,6 @@ import java.util.Set;
 
 /**
  * Models a party.
- *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -20,7 +19,6 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -146,6 +144,12 @@ public class PartyBean extends Party {
   @Override
   public boolean addGuest(User guest) {
     return false;
+  }
+
+  @Override
+  public void endParty() {
+    // TODO Auto-generated method stub
+    status = Status.stopped;
   }
 
 }

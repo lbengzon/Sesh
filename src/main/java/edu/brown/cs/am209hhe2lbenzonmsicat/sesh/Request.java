@@ -18,9 +18,21 @@ public abstract class Request implements Comparable<Request> {
   }
 
   /**
-   * @return request id
+   * @return a combination of the song id and the party id which creates a
+   *         unique id
    */
-  public abstract int getId();
+  public String getId() {
+    return getId(getPartyId(), getSong().getSpotifyId());
+  }
+
+  public static String getId(int partyId, String spotifySongId) {
+    return partyId + "-" + spotifySongId;
+  }
+
+  /**
+   * @return the party id
+   */
+  public abstract int getPartyId();
 
   /**
    * @param user
@@ -95,7 +107,6 @@ public abstract class Request implements Comparable<Request> {
 
   /**
    * Get partial request data.
-   *
    * @param id
    *          - id
    * @param song
@@ -106,17 +117,17 @@ public abstract class Request implements Comparable<Request> {
    *          - request time
    * @return requestproxy
    */
-  public static Request of(int id, Song song, User user, String requestTime) {
+  public static Request of(int partyId, Song song, User user,
+      String requestTime) {
     if (song == null || user == null || requestTime == null) {
       throw new NullPointerException(
           "ERROR: Trying to create a request from a null id");
     }
-    return new RequestProxy(id, song, user, requestTime);
+    return new RequestProxy(partyId, song, user, requestTime);
   }
 
   /**
    * Get full request data.
-   *
    * @param requestId
    *          - id
    * @param time
@@ -131,15 +142,14 @@ public abstract class Request implements Comparable<Request> {
    *          - set of downvotes
    * @return - requestproxy
    */
-  public static Request of(int requestId, String time, Song song, User user,
+  public static Request of(int partyId, String time, Song song, User user,
       HashSet<User> upvotes, HashSet<User> downvotes) {
     // TODO Auto-generated method stub
-    return new RequestProxy(requestId, time, song, user, upvotes, downvotes);
+    return new RequestProxy(partyId, time, song, user, upvotes, downvotes);
   }
 
   /**
    * Create a new request and add to database.
-   *
    * @param song
    *          - requested song
    * @param user
@@ -166,7 +176,7 @@ public abstract class Request implements Comparable<Request> {
   public boolean equals(Object o) {
     try {
       Request a = (Request) o;
-      if (getId() == a.getId()) {
+      if (getId().equals(a.getId())) {
         return true;
       }
     } catch (Exception e) {
@@ -182,7 +192,7 @@ public abstract class Request implements Comparable<Request> {
 
   @Override
   public String toString() {
-    return getId() + "";
+    return getId();
   }
 
 }

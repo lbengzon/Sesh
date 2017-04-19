@@ -4,11 +4,10 @@ import java.util.Set;
 
 /**
  * Models a song request.
- *
  * @author Matt
  */
 public class RequestBean extends Request {
-  private int id;
+  private int partyId;
   private Song song;
   private String requestTime;
   private Set<User> upvotes;
@@ -17,7 +16,6 @@ public class RequestBean extends Request {
 
   /**
    * Constructor.
-   *
    * @param id
    *          - id
    * @param requestTime
@@ -31,9 +29,9 @@ public class RequestBean extends Request {
    * @param downvotes
    *          - set of users who downvoted this request
    */
-  public RequestBean(int id, String requestTime, Song song,
+  public RequestBean(int partyId, String requestTime, Song song,
       User userRequestedBy, Set<User> upvotes, Set<User> downvotes) {
-    this.id = id;
+    this.partyId = partyId;
     this.requestTime = requestTime;
     this.song = song;
     this.userRequestedBy = userRequestedBy;
@@ -41,14 +39,8 @@ public class RequestBean extends Request {
     this.downvotes = downvotes;
   }
 
-  @Override
-  public int getId() {
-    return id;
-  }
-
   /**
    * Upvotes the request.
-   *
    * @param user
    *          - user voting
    */
@@ -66,7 +58,6 @@ public class RequestBean extends Request {
 
   /**
    * Downvotes the request.
-   *
    * @param user
    *          - user voting
    */
@@ -85,7 +76,6 @@ public class RequestBean extends Request {
 
   /**
    * Gets the RequestBean's vote count.
-   *
    * @return - vote count
    */
   @Override
@@ -95,13 +85,11 @@ public class RequestBean extends Request {
 
   /**
    * Gets request time.
-   *
    * @return - request time
    */
 
   /**
    * Gets song object.
-   *
    * @return - song
    */
   @Override
@@ -141,6 +129,11 @@ public class RequestBean extends Request {
       downvotes.remove(user);
     }
 
+  }
+
+  @Override
+  public int getPartyId() {
+    return partyId;
   }
 
 }

@@ -70,7 +70,6 @@ public abstract class Party {
 
   /**
    * Upvote song.
-   *
    * @param user
    *          - to upvote
    * @param req
@@ -81,7 +80,6 @@ public abstract class Party {
 
   /**
    * Downvote song.
-   *
    * @param user
    *          - to downvote
    * @param req
@@ -92,7 +90,6 @@ public abstract class Party {
 
   /**
    * Approve song.
-   *
    * @param req
    *          - request
    * @return boolean if successful
@@ -101,7 +98,6 @@ public abstract class Party {
 
   /**
    * Remove from playlist.
-   *
    * @param req
    *          - request
    * @return boolean if successful.
@@ -110,7 +106,6 @@ public abstract class Party {
 
   /**
    * Request song.
-   *
    * @param req
    *          - request
    * @return boolean if successful.
@@ -119,7 +114,6 @@ public abstract class Party {
 
   /**
    * Add a guest to party.
-   *
    * @param guest
    *          - guest to add
    * @return boolean if successful.
@@ -127,8 +121,16 @@ public abstract class Party {
   public abstract boolean addGuest(User guest);
 
   /**
+   * Ends the party
+   */
+  public abstract void endParty();
+
+  public boolean isActive() {
+    return getStatus().equals(Status.ongoing);
+  }
+
+  /**
    * Retrieve party data.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -158,7 +160,6 @@ public abstract class Party {
 
   /**
    * Create a party and add to db.
-   *
    * @param name
    *          - name
    * @param host

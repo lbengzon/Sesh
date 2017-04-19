@@ -24,9 +24,7 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
 
 /**
  * Class that integrates Spotify API for Sesh.
- *
  * @author HE23
- *
  */
 public class SpotifyCommunicator {
 
@@ -36,13 +34,12 @@ public class SpotifyCommunicator {
   // .build();
   private Api api;
   private List<String> results;
-  private static ConcurrentHashMap<String, Api> userToApi;
+  private static ConcurrentHashMap<String, Api> userToApi = new ConcurrentHashMap<String, Api>();
 
   /**
    * This is the constructor which creates our map.
    */
   public SpotifyCommunicator() {
-    this.userToApi = new ConcurrentHashMap<String, Api>();
   }
 
   /**
@@ -74,7 +71,6 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
-   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -170,7 +166,6 @@ public class SpotifyCommunicator {
 
   /**
    * This finds the user's info.
-   *
    * @param token
    *          the access token
    * @return list of the user info.
@@ -216,7 +211,6 @@ public class SpotifyCommunicator {
 
   /**
    * This method returns the map.
-   *
    * @return the map of user to api
    */
   public static Map<String, Api> getUserToApi() {
