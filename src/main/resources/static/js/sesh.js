@@ -11,7 +11,6 @@ $(document).ready(() => {
 
 	$sortable.sortable({
 		connectWith: '.sortable'
-
 	});
 
 	$listview.addClass("active");

@@ -2,8 +2,7 @@
 
 <fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="false">
   <local-check-config name="checkstyle" location="internal_config_1487201459303.xml" type="internal" description=""/>
-  <local-check-config name="checkstyle2" location="internal_config_1492461000887.xml" type="internal" description=""/>
-  <fileset name="all" enabled="true" check-config-name="checkstyle2" local="true">
+  <fileset name="all" enabled="true" check-config-name="checkstyle" local="true">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
 </fileset-config>
