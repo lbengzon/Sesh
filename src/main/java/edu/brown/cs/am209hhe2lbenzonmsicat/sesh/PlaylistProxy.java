@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.google.gson.JsonObject;
-
 /**
  * Playlist proxy class.
  */
@@ -166,7 +164,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
         // NEED ACCESS TO ACCESS TOKEN
 
         // create JSON object of song to delete
-        JsonObject songToDelete = new JsonObject();
+        conn.setRequestProperty("Content-Type", "");
         int responseCode = conn.getResponseCode();
         BufferedReader in = new BufferedReader(
             new InputStreamReader(conn.getInputStream()));
@@ -205,6 +203,42 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
       // TODO ADD API REQUEST HERE
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/users/");
+      // sb.append(host.getSpotifyId());
+      sb.append("/playlists/");
+      sb.append(this.spotifyId);
+      sb.append("/tracks");
+      String urlString = sb.toString();
+      URL url;
+      try {
+        url = new URL(urlString);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId());
+        // conn.setRequestProperty("Authorization",
+        // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId()).);
+        // NEED ACCESS TO ACCESS TOKEN
+
+        // create JSON object of song to add
+        conn.setRequestProperty("Content-Type", "");
+        int responseCode = conn.getResponseCode();
+        BufferedReader in = new BufferedReader(
+            new InputStreamReader(conn.getInputStream()));
+        String inputLine;
+        StringBuilder response = new StringBuilder();
+        while ((inputLine = in.readLine()) != null) {
+          response.append(inputLine);
+        }
+        in.close();
+        // https://open.spotify.com/user/al
+        // imiraculous/playlist/4VIEdAotucOaZCBEK3tM1Q
+
+      } catch (MalformedURLException e) {
+        System.out.println("ERROR: malformed");
+      } catch (IOException e) {
+        System.out.println("ERROR: ioooooo");
+      }
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
@@ -222,7 +256,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
       return;
     }
     try {
-      // songBean = some api call here
       playlistBean = DbHandler.getQueuedSongsForParty(spotifyId, partyId);
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
