@@ -9,11 +9,12 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
@@ -33,10 +34,16 @@ public class SpotifyCommunicator {
   // .clientSecret(Consta
   // nts.LEANDRO_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
   // .build();
-  private final Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-      .clientSecret(Constants.ALI_CLIENT_SECRET)
-      .redirectURI(Constants.REDIRECT_URL).build();
+  private Api api;
   private List<String> results;
+  private static ConcurrentHashMap<String, Api> userToApi;
+
+  /**
+   * This is the constructor which creates our map.
+   */
+  public SpotifyCommunicator() {
+    this.userToApi = new ConcurrentHashMap<String, Api>();
+  }
 
   /**
    * Create authorize URL.
@@ -50,7 +57,9 @@ public class SpotifyCommunicator {
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
-
+    api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     String authorizeURL = api.createAuthorizeURL(scopes, state);
 
     /*
@@ -76,7 +85,9 @@ public class SpotifyCommunicator {
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
-
+    api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
 
@@ -104,6 +115,7 @@ public class SpotifyCommunicator {
             api.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
             results = getUserInfo(
                 authorizationCodeCredentials.getAccessToken());
+            userToApi.put(results.get(0), api);
             addSongs();
 
           }
@@ -170,7 +182,6 @@ public class SpotifyCommunicator {
     sb.append("https://api.spotify.com/v1/me");
     String urlString = sb.toString();
     URL url;
-    Gson gson = new Gson();
     try {
       url = new URL(urlString);
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -201,5 +212,14 @@ public class SpotifyCommunicator {
       System.out.println("ERROR: ioooooo " + e.getMessage());
     }
     return results;
+  }
+
+  /**
+   * This method returns the map.
+   *
+   * @return the map of user to api
+   */
+  public static Map<String, Api> getUserToApi() {
+    return userToApi;
   }
 }
