@@ -18,9 +18,9 @@ import spark.template.freemarker.FreeMarkerEngine;
  * Gui Manager class. <<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
  *
  * =======
- * 
+ *
  * >>>>>>> changes to front page handler changes
- * 
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -30,9 +30,9 @@ public class GuiManager {
    * Default constructor. <<<<<<< 0f313668c404bac01ce2a89bc9053e038c93499a
    *
    * =======
-   * 
+   *
    * >>>>>>> changes to front page handler changes
-   * 
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -58,11 +58,11 @@ public class GuiManager {
 
       String code = qm.value("code");
 
-      System.out.println("code is " + code);
       User user;
-      List<String> userInfo = comm.getAccessToken(code); // should return list
-                                                         // of strings w user
-                                                         // info
+      List<String> userInfo = comm.getAccessToken(code); // should return
+      // list
+      // of strings w user
+      // info
       String userId = userInfo.get(0);
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
@@ -74,7 +74,6 @@ public class GuiManager {
       }
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "test",
           " ");
-      System.out.println("coming to spotify handler");
       return new ModelAndView(variables, "test.ftl");
     }
   }
@@ -84,9 +83,9 @@ public class GuiManager {
    * 0f313668c404bac01ce2a89bc9053e038c93499a
    *
    * =======
-   * 
+   *
    * >>>>>>> changes to front page handler changes
-   * 
+   *
    * @author HE23
    */
   private static class FrontHandler implements TemplateViewRoute {
@@ -102,9 +101,9 @@ public class GuiManager {
    * 0f313668c404bac01ce2a89bc9053e038c93499a
    *
    * =======
-   * 
+   *
    * >>>>>>> changes to front page handler changes
-   * 
+   *
    * @author HE23
    */
   private static class CreateHandler implements TemplateViewRoute {
@@ -120,9 +119,9 @@ public class GuiManager {
    * 0f313668c404bac01ce2a89bc9053e038c93499a
    *
    * =======
-   * 
+   *
    * >>>>>>> changes to front page handler changes
-   * 
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
