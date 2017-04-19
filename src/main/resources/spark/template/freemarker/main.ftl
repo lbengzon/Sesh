@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../css/sesh.css">
 
     <script src="../js/jquery-2.1.1.js"></script>
+    <script src="../js/jquery-ui.js"></script>
+    <script src="../js/jquery.sortable.js"></script>
     <script src="../js/sesh.js"></script>
 
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300" rel="stylesheet">

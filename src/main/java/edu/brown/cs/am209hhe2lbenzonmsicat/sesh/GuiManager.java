@@ -38,6 +38,36 @@ public class GuiManager {
     Spark.get("/sesh", new FrontHandler(), fme);
     Spark.get("/create", new CreateHandler(), fme);
     Spark.get("/join", new JoinHandler(), fme);
+    Spark.post("/create/party", new CreatePartyHandler(), fme);
+    Spark.post("/join/party", new JoinPartyHandler(), fme);
+  }
+
+  /**
+   * Handles displaying existing parties.
+   */
+  private class JoinPartyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+
+      // TODO display all existing parties (within set georange)
+      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
+      return new ModelAndView(variables, "joinParty.ftl");
+    }
+  }
+
+  /**
+   * Handles displaying newly created party.
+   */
+  private class CreatePartyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+
+      // TODO create party given front end data
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings");
+      return new ModelAndView(variables, "createParty.ftl");
+    }
   }
 
   /**
@@ -92,7 +122,7 @@ public class GuiManager {
     @Override
     public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh");
-      return new ModelAndView(variables, "create.ftl");
+      return new ModelAndView(variables, "partySettings.ftl");
     }
   }
 

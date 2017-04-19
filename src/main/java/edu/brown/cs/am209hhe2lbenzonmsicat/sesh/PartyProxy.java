@@ -75,7 +75,6 @@ public class PartyProxy extends Party implements Proxy {
       partyBean = DbHandler.getFullParty(partyId, playlist, name, location,
           time, status);
     } catch (SQLException e) {
-      // TODO Auto-generated catch block
       throw new RuntimeException(e.getMessage());
     }
     addBeanToCache();
@@ -121,7 +120,6 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public Set<User> getGuests() {
-    // TODO Auto-generated method stub
     if (partyBean == null) {
       try {
         fill();
@@ -135,31 +133,26 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public User getHost() {
-    // TODO Auto-generated method stub
     return host;
   }
 
   @Override
   public String getName() {
-    // TODO Auto-generated method stub
     return name;
   }
 
   @Override
   public String getTime() {
-    // TODO Auto-generated method stub
     return time;
   }
 
   @Override
   public Coordinate getLocation() {
-    // TODO Auto-generated method stub
     return location;
   }
 
   @Override
   public Status getStatus() {
-    // TODO Auto-generated method stub
     return status;
   }
 
