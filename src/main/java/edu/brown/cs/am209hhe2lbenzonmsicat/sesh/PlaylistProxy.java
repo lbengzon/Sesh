@@ -109,8 +109,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
       url = new URL(urlString);
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("GET");
-      SpotifyCommunicator.getUserToApi().get(host.getSpotifyId())
-          .refreshAccessToken();
+      // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId())
+      // .refreshAccessToken();
       // conn.setRequestProperty("Authorization",
       // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId()).);
       // NEED ACCESS TO ACCESS TOKEN
@@ -150,7 +150,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
       // TODO ADD API REQUEST HERE
       StringBuilder sb = new StringBuilder();
       sb.append("https://api.spotify.com/v1/users/");
-      sb.append(host.getSpotifyId());
+      // sb.append(host.getSpotifyId());
       sb.append("/playlists/");
       sb.append(this.spotifyId);
       sb.append("/tracks");
@@ -160,7 +160,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
         url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("DELETE");
-        SpotifyCommunicator.getUserToApi().get(host.getSpotifyId());
+        // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId());
         // conn.setRequestProperty("Authorization",
         // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId()).);
         // NEED ACCESS TO ACCESS TOKEN
