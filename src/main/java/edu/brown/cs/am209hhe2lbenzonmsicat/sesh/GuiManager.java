@@ -40,7 +40,7 @@ public class GuiManager {
     Spark.get("/join", new JoinHandler(), fme);
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
-    Spark.post("/search", new SearchHandler());
+    // Spark.post("/search", new SearchHandler());
   }
 
   /**
@@ -157,19 +157,19 @@ public class GuiManager {
    * @author Matt
    *
    */
-  private static class SearchHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String songName = qm.value("searchResult"); // or id?
-      // with id, give to spotify api to retrieve song info
-      // post song info
-
-      // Map<String, Object> variables = ImmutableMap.of("songId", songId,
-      // "songName", songName, "length", length, "artist", artist);
-      return new ModelAndView(variables, "search.ftl"); // incomplete
-    }
-
-  }
+  // private static class SearchHandler implements TemplateViewRoute {
+  // @Override
+  //// public ModelAndView handle(Request req, Response res) {
+  //// QueryParamsMap qm = req.queryMap();
+  //// String songName = qm.value("searchResult"); // or id?
+  //// // with id, give to spotify api to retrieve song info
+  //// // post song info
+  ////
+  //// // Map<String, Object> variables = ImmutableMap.of("songId", songId,
+  //// // "songName", songName, "length", length, "artist", artist);
+  //// return new ModelAndView(variables, "search.ftl"); // incomplete
+  //// }
+  //
+  // }
 
 }
