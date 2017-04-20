@@ -102,6 +102,7 @@ public class PartyTest {
     DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
+    PlaylistProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
@@ -109,8 +110,8 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r1 = p.requestSong(Song.of("song1"), h);
-    Party p1 = Party.create("Dope Part1", m, new Coordinate(1, 1), "time");
-
+    Party p1 = Party.create("Dope Party1", m, new Coordinate(1, 1), "time");
+    assert p1.getRequestedSongs().size() == 0;
     assert p1.removeFromPlaylist(r1) == false;
     assert p.getRequestedSongs().contains(r1);
     assert !p.getPlaylist().getSongs().contains(r1);
