@@ -97,12 +97,6 @@ public class PartyBean extends Party {
   public Request requestSong(Song song, User user) {
     try {
       Request newRequest = Request.create(song, user, partyId, "testTime");
-      if (requestedSongs.contains(newRequest)) {// ||
-                                                // getPlaylist().getSongs().contains(newRequest))
-                                                // {
-        throw new IllegalArgumentException(
-            "ERROR: song has already been requsted in party/is in the playlist queue");
-      }
       requestedSongs.add(newRequest);
       return newRequest;
     } catch (SQLException e) {
@@ -152,13 +146,22 @@ public class PartyBean extends Party {
 
   @Override
   public boolean addGuest(User guest) {
-    return false;
+    if (host.equals(guest)) {
+      return false;
+    }
+    return guests.add(guest);
   }
 
   @Override
   public void endParty() {
     // TODO Auto-generated method stub
     status = Status.stopped;
+  }
+
+  @Override
+  public boolean removeGuest(User guest) {
+    // TODO Auto-generated method stub
+    return guests.remove(guest);
   }
 
 }

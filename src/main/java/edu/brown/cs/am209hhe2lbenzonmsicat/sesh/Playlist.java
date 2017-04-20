@@ -5,9 +5,7 @@ import java.util.Objects;
 
 /**
  * Abstract playlist class.
- *
  * @author HE23
- *
  */
 public abstract class Playlist {
 
@@ -48,7 +46,6 @@ public abstract class Playlist {
 
   /**
    * This should only be used for testing!
-   *
    * @param spotifyId
    *          - spotify id
    * @param partyId
@@ -66,13 +63,12 @@ public abstract class Playlist {
    *          - id
    * @return playlist of that id
    */
-  public static Playlist of(String spotifyId) {
-    return new PlaylistProxy(spotifyId);
+  public static Playlist of(String spotifyId, User host) {
+    return new PlaylistProxy(spotifyId, host);
   }
 
   /**
    * Add playlist to database.
-   *
    * @param user
    *          - user
    * @return playlist
@@ -82,7 +78,7 @@ public abstract class Playlist {
     // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
     // get the spotify id
 
-    return new PlaylistProxy(spotifyId);
+    return new PlaylistProxy(spotifyId, user);
   }
 
   @Override

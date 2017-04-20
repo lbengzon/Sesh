@@ -123,6 +123,14 @@ public abstract class Party {
   public abstract boolean addGuest(User guest);
 
   /**
+   * Removes a guest from the party
+   * @param guest
+   *          -Guest to remove
+   * @return boolean if successful
+   */
+  public abstract boolean removeGuest(User guest);
+
+  /**
    * Ends the party
    */
   public abstract void endParty();

@@ -189,9 +189,7 @@ public class PartyProxy extends Party implements Proxy {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
-    if (partyBean != null) {
-      return partyBean.approveSong(req);
-    } else {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -228,9 +226,7 @@ public class PartyProxy extends Party implements Proxy {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
-    if (partyBean != null) {
-      return partyBean.requestSong(song, user);
-    } else {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -245,16 +241,20 @@ public class PartyProxy extends Party implements Proxy {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
-    if (partyBean != null) {
-      return partyBean.addGuest(guest);
-    } else {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
         throw new RuntimeException(e.getMessage());
       }
     }
-    return partyBean.addGuest(guest);
+    try {
+      DbHandler.addPartyGuest(partyId, guest);
+      return partyBean.addGuest(guest);
+
+    } catch (SQLException e) {
+      return false;
+    }
   }
 
   @Override
@@ -270,6 +270,25 @@ public class PartyProxy extends Party implements Proxy {
       throw new RuntimeException(e.getMessage());
     }
     status = Status.stopped;
+  }
+
+  @Override
+  public boolean removeGuest(User guest) {
+    // TODO Auto-generated method stub
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    try {
+      DbHandler.removePartyGuest(partyId, guest);
+      return partyBean.removeGuest(guest);
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      return false;
+    }
   }
 
 }
