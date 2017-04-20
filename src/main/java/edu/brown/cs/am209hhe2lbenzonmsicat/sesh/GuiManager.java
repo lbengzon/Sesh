@@ -146,24 +146,22 @@ public class GuiManager {
     }
   }
 
-  // /**
-  // * Handles requests to the search page.
-  // *
-  // * @author Matt
-  // *
-  // */
+  /**
+   * Handles requests to the search page.
+   * @author Matt
+   */
   // private static class SearchHandler implements TemplateViewRoute {
   // @Override
-  // public ModelAndView handle(Request req, Response res) {
-  // QueryParamsMap qm = req.queryMap();
-  // String songName = qm.value("searchResult"); // or id?
-  // // with id, give to spotify api to retrieve song info
-  // // post song info
-  //
-  // // Map<String, Object> variables = ImmutableMap.of("songId", songId,
-  // // "songName", songName, "length", length, "artist", artist);
-  // return new ModelAndView(variables, "search.ftl"); // incomplete
-  // }
+  //// public ModelAndView handle(Request req, Response res) {
+  //// QueryParamsMap qm = req.queryMap();
+  //// String songName = qm.value("searchResult"); // or id?
+  //// // with id, give to spotify api to retrieve song info
+  //// // post song info
+  ////
+  //// // Map<String, Object> variables = ImmutableMap.of("songId", songId,
+  //// // "songName", songName, "length", length, "artist", artist);
+  //// return new ModelAndView(variables, "search.ftl"); // incomplete
+  //// }
   //
   // }
 
