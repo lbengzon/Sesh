@@ -9,7 +9,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.util.concurrent.FutureCallback;
@@ -24,6 +23,7 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
 
 /**
  * Class that integrates Spotify API for Sesh.
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -71,6 +71,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -112,7 +113,7 @@ public class SpotifyCommunicator {
             results = getUserInfo(
                 authorizationCodeCredentials.getAccessToken());
             userToApi.put(results.get(0), api);
-            addSongs();
+            // addSongs();
 
           }
 
@@ -166,6 +167,7 @@ public class SpotifyCommunicator {
 
   /**
    * This finds the user's info.
+   *
    * @param token
    *          the access token
    * @return list of the user info.
@@ -209,11 +211,4 @@ public class SpotifyCommunicator {
     return results;
   }
 
-  /**
-   * This method returns the map.
-   * @return the map of user to api
-   */
-  public static Map<String, Api> getUserToApi() {
-    return userToApi;
-  }
 }
