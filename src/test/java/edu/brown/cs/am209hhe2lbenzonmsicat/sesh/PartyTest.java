@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -1024,6 +1025,150 @@ public class PartyTest {
     assert p.addGuest(h) == true;
     p.endParty();
     Party.create("Dope Party", h, new Coordinate(1, 1), "time");
+  }
+
+  @Test
+  public void testGetActiveParty() throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    p.endParty();
+    Party p1 = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    p1.addGuest(h);
+    Party active = Party.getActivePartyOfUser(h);
+    assert active.equals(p1);
+    assert active.getHost().equals(l);
+    assert active.getGuests().contains(h);
+    active = Party.getActivePartyOfUser(l);
+    assert active.equals(p1);
+    assert active.getHost().equals(l);
+  }
+
+  @Test
+  public void testGetActivePartyNone()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    p.endParty();
+    Party active = Party.getActivePartyOfUser(h);
+    assert active == null;
+  }
+
+  @Test
+  public void testGetAllParties() throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    p.endParty();
+    List<Party> parties = Party.getAllPartiesOfUser(h);
+    assert parties.size() == 1;
+    assert parties.contains(p);
+    assert parties.get(0).getHost().equals(l);
+  }
+
+  @Test
+  public void testGetAllPartiesMultipleParties()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    p.endParty();
+    Party p1 = Party.create("Dope Party1", l, new Coordinate(1, 1), "time");
+    p1.addGuest(h);
+    p1.endParty();
+
+    Party p2 = Party.create("Dope Party1", l, new Coordinate(1, 1), "time");
+    p2.addGuest(h);
+    p2.endParty();
+
+    Party p3 = Party.create("Dope Party1", l, new Coordinate(1, 1), "time");
+    p3.addGuest(h);
+    List<Party> parties = Party.getAllPartiesOfUser(h);
+    assert parties.size() == 4;
+    assert parties.contains(p);
+    assert parties.contains(p1);
+    assert parties.contains(p2);
+    assert parties.contains(p3);
+  }
+
+  @Test
+  public void testGetAllPartiesNoParties()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+
+    List<Party> parties = Party.getAllPartiesOfUser(h);
+    assert parties.size() == 0;
+  }
+
+  @Test
+  public void testGetPartyOfId() throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    p.addGuest(h);
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    Party p1 = Party.of(p.getPartyId());
+    assert p1.getName().equals("Dope Party");
+    assert p1.getStatus().equals(Status.ongoing);
+    assert p1.getHost().equals(l);
+    assert p1.getGuests().size() == 1;
+    assert p1.getGuests().contains(h);
+  }
+
+  @Test
+  public void testGetPartyOfInvalidId()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    p.addGuest(h);
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    Party p1 = Party.of(2);
+    assert p1 == null;
   }
 
 }

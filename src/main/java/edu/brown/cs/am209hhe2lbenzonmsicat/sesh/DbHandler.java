@@ -821,6 +821,39 @@ public final class DbHandler {
     return parties;
   }
 
+  /**
+   * Get all parties of a user.
+   * @param user
+   *          - the user's parties we want
+   * @return list of all parties of the given user
+   * @throws SQLException
+   *           - exception
+   */
+  public static Party getPartyFromId(int partyId) throws SQLException {
+    String query = SqlStatements.GET_PARTY_FROM_ID;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    prep.setInt(1, partyId);
+
+    ResultSet rs = prep.executeQuery();
+    if (rs.next()) {
+      String spotifyPlaylistId = rs.getString(2);
+      String name = rs.getString(3);
+      double lat = rs.getDouble(4);
+      double lon = rs.getDouble(5);
+      String time = rs.getString(6);
+      String status = rs.getString(7);
+      Party p = Party.of(partyId, name, spotifyPlaylistId,
+          new Coordinate(lat, lon), time, Status.valueOf(status));
+      return p;
+    }
+    return null;
+  }
+
   public static Party getActivePartyOfUser(User user) throws SQLException {
     String query = SqlStatements.GET_ACTIVE_PARTY_OF_USER;
     Connection conn = getConnection();

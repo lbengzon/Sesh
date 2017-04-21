@@ -137,6 +137,11 @@ final class SqlStatements {
       + "* FROM User WHERE userId=?;";
 
   /**
+   * Gets the party given the party id
+   */
+  public static final String GET_PARTY_FROM_ID = "SELECT * FROM Party WHERE PartyId=?";
+
+  /**
    * Gets all the parties that the user has attended or is hosting/attending.
    */
   public static final String GET_USER_PARTY = "SELECT Party.PartyId, "
