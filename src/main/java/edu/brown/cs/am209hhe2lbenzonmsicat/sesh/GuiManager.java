@@ -65,21 +65,20 @@ public class GuiManager {
   private class JoinPartyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      // QueryParamsMap qm = req.queryMap();
-      //
-      // /*
-      // * Get party id from front end (from the one that user clicks on) Add
-      // user
-      // * to party id that user clicks on. Add them to party, update java and
-      // db
-      // * Send back party info (id, name, host, etc.) to display party.
-      // *
-      // */
+      QueryParamsMap qm = req.queryMap();
+
+      /*
+       * Get party id from front end (from the one that user clicks on) Add user
+       * to party id that user clicks on. Add them to party, update java and db
+       * Send back party info (id, name, host, etc.) to display party.
+       * 
+       */
       // String partyId = qm.value("party_id"); // from frontend
       // String userId = qm.value("user_id"); // from frontend
       //
       // User user = User.of(userId);
       // Party party = Party.of(partyId); // modify method later
+      //// Party party = Party.of(partyId); // modify method later
       // party.addGuest(user);
       //
       // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
@@ -114,7 +113,7 @@ public class GuiManager {
         User host = User.of(hostId);
         party = Party.create(partyName, host, coord, time);
       } catch (SQLException e) {
-
+        // party = Party.of();
       }
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
