@@ -1,16 +1,11 @@
-const $div = $("#createJoin");
-const $buttons = $(".createJoin");
-const $form = $("#createJoinForm");
-
-
-$(window).resize(function() {
-	var responsive_viewport = $(window).width();
+$(document).ready(() => {
 	const $div = $("#createJoin");
 	const $buttons = $(".createJoin");
 	const $form = $("#createJoinForm");
 
-	if (responsive_viewport < 420) {
+	if ($(window).width() < 420) {
 		$div.css("display", "block");
+		console.log($div.css("display"));
 		$div.css("text-align", "center");
 		$buttons.css("font-size", "300%");
 		$buttons.css("width", "80%");
@@ -20,16 +15,6 @@ $(window).resize(function() {
 		$buttons.css("font-size", "450%");
 		$buttons.css("width", "");
 		$form.css("margin-bottom", "");
-	}
-});
-
-
-$(document).ready(() => {
-
-	if ($(window).width() < 420) {
-
-	} else {
-
 	}
 
 	//dj tab content

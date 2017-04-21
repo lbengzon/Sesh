@@ -98,19 +98,72 @@ h1 {
 	background-color: #39aeb2;
 }
 
-#create_sesh {
-	font-size: 24px;
-	text-align: left;
-	width: 40%;
-	padding: 20px;
+#form-wrapper {
+	width: 100%;
+	margin-top: 5%;
 }
 
-#create_sesh label {
+#create_sesh {
+	background: rgba(255, 255, 255, 0.4);
+	font-size: 200%;
+	width: 50%;
+	padding: 2%;
+	margin: 0 auto;
+	box-shadow: 0 0px 80px 1px #298279, 0 0px 20px 1px #298279
+}
+
+#create_sesh form {
+	width: 50%;
+	margin-left: 25%;
+}
+
+#create_sesh label, #create_sesh input {
 	display: block;
+	margin-bottom: 5%;
+}
+
+#create_sesh input[type="text"] {
+	color: #3f7a84;
+}
+
+input#private_sesh, input#public_sesh {
+	margin-top: 7%;
+	transform: scale(2);
 }
 
 #privacy_settings {
 	display: inline-flex;
+	width: 85%;
+	justify-content: space-between;
+	margin-bottom: 5%;
+}
+
+#formSubmit {
+	background-color: #72d8d0;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 2px;
+	/*font-size: 20px;
+	padding: 20px;
+	padding-left: 50px;
+	padding-right: 50px;*/
+	/*width: 15%;*/
+	padding: 1%;
+	width: 60%;
+	font-size: 120%;
+	color: white;
+	border: solid;
+	border-width: 4px;
+	border-color: white;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	margin: auto;
+	transition: background-color 0.4s linear;
+}
+
+#formSubmit:hover {
+	transition: background-color 0.4s linear;
+	background-color: #39aeb2;
 }
 
 .list-wrapper {
@@ -143,12 +196,12 @@ h1 {
 }
 
 .sortable-placeholder {
-	border: 1px dashed #CCC;
-	background: none;
+	border: 1px dashed #969696;
+	background: #dbdbdb;
 }
 
 .sortable-dragging {
-	background-color: green;
+	background-color: #8fd4e8;
 }
 
 .tabContentSearch, .tabContentSearchGuest {
