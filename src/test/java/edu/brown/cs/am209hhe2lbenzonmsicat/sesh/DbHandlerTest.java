@@ -755,4 +755,35 @@ public class DbHandlerTest {
     assert party2 == null;
   }
 
+  @Test
+  public void testGetPartyFromId() throws FileNotFoundException, SQLException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+
+    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
+        "Leandro Bengzon");
+    LocalDateTime time = LocalDateTime.now();
+    Party party = DbHandler.addParty("testPlaylistId", "My Party",
+        new Coordinate(71.6, 41.8), time.toString(), host);
+
+    Party partyFull = DbHandler.getPartyFromId(party.getPartyId());
+
+    assert partyFull.getName().equals("My Party");
+    assert partyFull.getPlaylist().getId().equals("testPlaylistId");
+  }
+
+  @Test
+  public void testGetPartyFromInvalidId()
+      throws FileNotFoundException, SQLException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+
+    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
+        "Leandro Bengzon");
+    LocalDateTime time = LocalDateTime.now();
+
+    Party partyFull = DbHandler.getPartyFromId(1);
+
+    assert partyFull == null;
+  }
 }

@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -173,6 +174,20 @@ public abstract class Party {
   }
 
   /**
+   * Gets the party object with the party id passed in.
+   * @param partyId
+   *          The id of the party
+   * @return The party object representing the party.
+   */
+  public static Party of(int partyId) {
+    try {
+      return DbHandler.getPartyFromId(partyId);
+    } catch (SQLException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  /**
    * Create a party and add to db.
    * @param name
    *          - name
@@ -194,6 +209,34 @@ public abstract class Party {
     }
     String newPlaylistId = Playlist.getNewPlaylistId(host);
     return DbHandler.addParty(newPlaylistId, name, location, time, host);
+  }
+
+  /**
+   * Returns the active party of the user if he has any.
+   * @param user
+   *          The user you want to get the active party of
+   * @return The active party of the user or null if there is no active party.
+   */
+  public static Party getActivePartyOfUser(User user) {
+    try {
+      return DbHandler.getActivePartyOfUser(user);
+    } catch (SQLException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  /**
+   * Gets all (active and stopped) parties of a user.
+   * @param user
+   *          The user you want to get the parties of.
+   * @return The parties of a user.
+   */
+  public static List<Party> getAllPartiesOfUser(User user) {
+    try {
+      return DbHandler.getUsersParties(user);
+    } catch (SQLException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   @Override
