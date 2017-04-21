@@ -14,8 +14,7 @@ public class PartyProxy extends Party implements Proxy {
   private static Map<Integer, PartyBean> idToPartyCache = new ConcurrentHashMap<>();
   private PartyBean partyBean;
   private int partyId;
-  private Playlist playlist;
-  private User host;
+  private String playlistId;
   private Coordinate location;
   private String name;
   private String time;
@@ -40,13 +39,12 @@ public class PartyProxy extends Party implements Proxy {
    * @param status
    *          - status
    */
-  public PartyProxy(int partyId, String name, User host, Playlist playlist,
+  public PartyProxy(int partyId, String name, String playlistId,
       Coordinate location, String time, Status status) {
     this.partyId = partyId;
     this.name = name;
-    this.host = host;
-    this.playlist = playlist;
-    this.playlist.setPartyId(partyId);
+    this.playlistId = playlistId;
+    // this.playlist.setPartyId(partyId);
     this.location = location;
     this.time = time;
     this.status = status;
@@ -70,7 +68,7 @@ public class PartyProxy extends Party implements Proxy {
     }
 
     try {
-      partyBean = DbHandler.getFullParty(partyId, playlist, name, location,
+      partyBean = DbHandler.getFullParty(partyId, playlistId, name, location,
           time, status);
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
@@ -113,7 +111,14 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public Playlist getPlaylist() {
-    return playlist;
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.getPlaylist();
   }
 
   @Override
@@ -126,12 +131,18 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     return partyBean.getGuests();
-
   }
 
   @Override
   public User getHost() {
-    return host;
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.getHost();
   }
 
   @Override

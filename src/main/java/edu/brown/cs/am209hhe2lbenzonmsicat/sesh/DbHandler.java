@@ -299,9 +299,9 @@ public final class DbHandler {
    * @throws SQLException
    *           - exception
    */
-  public static Party addParty(Playlist playlist, String name,
+  public static Party addParty(String playlistId, String name,
       Coordinate coordinate, String time, User host) throws SQLException {
-    if (getPartyHostedByUser(host) != null) {
+    if (getActivePartyOfUser(host) != null) {
       throw new IllegalArgumentException(
           "ERROR: Host is already a host of another active party");
     }
@@ -312,7 +312,7 @@ public final class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    prep.setString(1, playlist.getId());
+    prep.setString(1, playlistId);
     prep.setString(2, name);
     prep.setDouble(3, coordinate.getLat());
     prep.setDouble(4, coordinate.getLon());
@@ -326,7 +326,7 @@ public final class DbHandler {
 
           addHost(partyId, host);
 
-          return Party.of(partyId, name, host, playlist, coordinate, time,
+          return Party.of(partyId, name, playlistId, coordinate, time,
               Status.ongoing);
         } else {
           throw new SQLException("Add PartyBean failed, no ID obtained.");
@@ -350,6 +350,10 @@ public final class DbHandler {
   public static void addHost(int partyId, User host) throws SQLException {
     // TODO if your gonna have multiple hosts, add the check that he's not
     // hosting another ongoing party here.
+    if (getActivePartyOfUser(host) != null) {
+      throw new IllegalArgumentException(
+          "ERROR: Host is already a host of another active party");
+    }
     String query = SqlStatements.ADD_PARTY_HOST;
     Connection conn = getConnection();
     if (conn == null) {
@@ -554,6 +558,10 @@ public final class DbHandler {
    */
   public static void addPartyGuest(int partyId, User guest)
       throws SQLException {
+    if (getActivePartyOfUser(guest) != null) {
+      throw new IllegalArgumentException(
+          "ERROR: Host is already a host of another active party");
+    }
     String query = SqlStatements.ADD_PARTY_GUEST;
     Connection conn = getConnection();
     if (conn == null) {
@@ -688,15 +696,16 @@ public final class DbHandler {
    * @throws SQLException
    *           - exception
    */
-  public static PartyBean getFullParty(int partyId, Playlist playlist,
+  public static PartyBean getFullParty(int partyId, String playlistId,
       String name, Coordinate location, String time, Status status)
       throws SQLException {
     List<Request> requests = getPartySongRequests(partyId);
     List<List<User>> attendees = getPartyHostsAndGuests(partyId);
     assert attendees.size() == 2;
-    return new PartyBean(partyId, name, attendees.get(0).get(0), playlist,
-        location, time, new HashSet<>(requests),
-        new HashSet<>(attendees.get(1)), status);
+    User host = attendees.get(0).get(0);
+    return new PartyBean(partyId, name, host,
+        Playlist.of(playlistId, partyId, host), location, time,
+        new HashSet<>(requests), new HashSet<>(attendees.get(1)), status);
 
   }
 
@@ -804,13 +813,40 @@ public final class DbHandler {
       double lat = rs.getDouble(4);
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
-      String status = rs.getString(Constants.SEVEN);
-      Party p = Party.of(partyId, name, user,
-          Playlist.of(spotifyPlaylistId, partyId, user),
+      String status = rs.getString(7);
+      Party p = Party.of(partyId, name, spotifyPlaylistId,
           new Coordinate(lat, lon), time, Status.valueOf(status));
       parties.add(p);
     }
     return parties;
+  }
+
+  public static Party getActivePartyOfUser(User user) throws SQLException {
+    String query = SqlStatements.GET_ACTIVE_PARTY_OF_USER;
+    Connection conn = getConnection();
+    if (conn == null) {
+      throw new SQLException("ERROR: No database has been set.");
+    }
+    PreparedStatement prep = conn.prepareStatement(query);
+
+    prep.setString(1, user.getSpotifyId());
+
+    ResultSet rs = prep.executeQuery();
+
+    if (rs.next()) {
+      int partyId = rs.getInt(1);
+      String spotifyPlaylistId = rs.getString(2);
+      String name = rs.getString(3);
+      double lat = rs.getDouble(4);
+      double lon = rs.getDouble(5);
+      String time = rs.getString(6);
+      String status = rs.getString(7);
+      Party p = Party.of(partyId, name, spotifyPlaylistId,
+          new Coordinate(lat, lon), time, Status.valueOf(status));
+      assert rs.next() == false;
+      return p;
+    }
+    return null;
   }
 
   /**
@@ -841,9 +877,9 @@ public final class DbHandler {
       double lon = rs.getDouble(5);
       String time = rs.getString(6);
       String status = rs.getString(Constants.SEVEN);
-      Party p = Party.of(partyId, name, user,
-          Playlist.of(spotifyPlaylistId, partyId, user),
+      Party p = Party.of(partyId, name, spotifyPlaylistId,
           new Coordinate(lat, lon), time, Status.valueOf(status));
+      assert rs.next() == false;
       return p;
     }
     return null;

@@ -37,20 +37,20 @@ public class PlaylistProxy extends Playlist implements Proxy {
     this.host = host;
   }
 
-  /**
-   * Constructor.
-   * @param spotifyId
-   *          - id
-   */
-  public PlaylistProxy(String spotifyId, User host) {
-    this.spotifyId = spotifyId;
-    this.host = host;
-  }
-
-  @Override
-  public void setPartyId(int partyId) {
-    this.partyId = partyId;
-  }
+  // /**
+  // * Constructor.
+  // * @param spotifyId
+  // * - id
+  // */
+  // public PlaylistProxy(String spotifyId, User host) {
+  // this.spotifyId = spotifyId;
+  // this.host = host;
+  // }
+  //
+  // @Override
+  // public void setPartyId(int partyId) {
+  // this.partyId = partyId;
+  // }
 
   /**
    * Clears the cache.

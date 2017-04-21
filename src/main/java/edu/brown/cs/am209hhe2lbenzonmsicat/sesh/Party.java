@@ -162,15 +162,14 @@ public abstract class Party {
    *          - status
    * @return party
    */
-  public static Party of(int partyId, String name, User host, Playlist playlist,
+  public static Party of(int partyId, String name, String playlistId,
       Coordinate location, String time, Status status) {
-    if (name == null || host == null || playlist == null || location == null
-        || time == null || status == null) {
+    if (name == null || playlistId == null || location == null || time == null
+        || status == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an mapnode from a null id");
     }
-    return new PartyProxy(partyId, name, host, playlist, location, time,
-        status);
+    return new PartyProxy(partyId, name, playlistId, location, time, status);
   }
 
   /**
@@ -193,8 +192,8 @@ public abstract class Party {
       throw new NullPointerException(
           "ERROR: Trying to create an mapnode from a null id");
     }
-    Playlist newPlaylist = Playlist.create(host);
-    return DbHandler.addParty(newPlaylist, name, location, time, host);
+    String newPlaylistId = Playlist.getNewPlaylistId(host);
+    return DbHandler.addParty(newPlaylistId, name, location, time, host);
   }
 
   @Override

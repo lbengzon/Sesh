@@ -7,7 +7,6 @@ import java.util.Map;
 
 /**
  * Playlist bean class.
- *
  */
 public class PlaylistBean extends Playlist {
   private String id; // youtube/spotify id
@@ -17,7 +16,6 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Constructor.
-   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -42,7 +40,6 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
-   *
    * @param id
    *          - id to set
    */
@@ -86,9 +83,4 @@ public class PlaylistBean extends Playlist {
     return true;
   }
 
-  @Override
-  public void setPartyId(int partyId) {
-    this.partyId = partyId;
-
-  }
 }
