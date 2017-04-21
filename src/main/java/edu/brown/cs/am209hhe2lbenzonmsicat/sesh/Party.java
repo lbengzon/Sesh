@@ -44,6 +44,11 @@ public abstract class Party {
   public abstract Set<User> getGuests();
 
   /**
+   * @return The guests and the hosts
+   */
+  public abstract Set<User> getAttendees();
+
+  /**
    * @return host
    */
   public abstract User getHost();

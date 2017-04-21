@@ -174,7 +174,7 @@ public class PartyProxy extends Party implements Proxy {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
-    if (partyBean != null) {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -201,17 +201,10 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean removeFromPlaylist(Request req) {
-    // try {
-    // // DbHandler.requestSong(req);
-    // } catch (SQLException e1) {
-    // throw new RuntimeException(e1.getMessage());
-    // }
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
-    if (partyBean != null) {
-      return partyBean.removeFromPlaylist(req);
-    } else {
+    if (partyBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -274,6 +267,9 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public boolean removeGuest(User guest) {
+    if (!isActive()) {
+      throw new IllegalStateException("ERROR: Party has stoped");
+    }
     // TODO Auto-generated method stub
     if (partyBean == null) {
       try {
@@ -289,6 +285,18 @@ public class PartyProxy extends Party implements Proxy {
       // TODO Auto-generated catch block
       return false;
     }
+  }
+
+  @Override
+  public Set<User> getAttendees() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.getAttendees();
   }
 
 }

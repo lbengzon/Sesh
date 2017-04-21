@@ -95,7 +95,7 @@ public class PlaylistTest {
     PlaylistProxy.clearCache();
     int id = p.getPartyId();
     Playlist playlist1 = Playlist.of(playlist.getId(), id, l);
-    System.out.println(playlist1.getSongs());
+    // System.out.println(playlist1.getSongs());
     assert playlist1.getSongs().contains(r);
     assert playlist1.getSongs().contains(r1);
   }

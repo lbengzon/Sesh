@@ -104,16 +104,16 @@ public class RequestTest {
         "Leandro Bengzon");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
-    try {
-      r.upvote(l);
-      r.upvote(l);
-      assert (false);
-    } catch (Exception e) {
-      RequestProxy.clearCache();
-      Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
-      assert r1.getUpvotes().contains(l);
-      assert r1.getUpvotes().size() == 1;
-    }
+    r.upvote(l);
+    r.upvote(l);
+    assert r.getUpvotes().size() == 0;
+    assert r.getDownvotes().size() == 0;
+
+    RequestProxy.clearCache();
+    Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
+    assert r1.getUpvotes().size() == 0;
+    assert r1.getDownvotes().size() == 0;
+
   }
 
   @Test
@@ -144,17 +144,14 @@ public class RequestTest {
         "Leandro Bengzon");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
-    try {
-      r.downvote(l);
-      r.downvote(l);
-      assert (false);
+    r.downvote(l);
+    r.downvote(l);
+    assert r.getDownvotes().size() == 0;
 
-    } catch (Exception e) {
-      RequestProxy.clearCache();
-      Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
-      assert r1.getDownvotes().contains(l);
-      assert r1.getDownvotes().size() == 1;
-    }
+    RequestProxy.clearCache();
+    Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
+    assert r1.getDownvotes().size() == 0;
+
   }
 
   @Test
@@ -168,17 +165,17 @@ public class RequestTest {
         "Leandro Bengzon");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("song1"), l, p.getPartyId(), "testTime");
-    try {
-      r.downvote(l);
-      r.upvote(l);
-      assert (false);
-    } catch (Exception e) {
-      RequestProxy.clearCache();
-      Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
-      assert r1.getDownvotes().contains(l);
-      assert r1.getDownvotes().size() == 1;
-      assert r1.getUpvotes().size() == 0;
-    }
+    r.downvote(l);
+    r.upvote(l);
+    assert r.getDownvotes().size() == 0;
+    assert r.getUpvotes().size() == 1;
+    assert r.getUpvotes().contains(l);
+    RequestProxy.clearCache();
+    Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
+    assert r1.getDownvotes().size() == 0;
+    assert r1.getUpvotes().size() == 1;
+    assert r1.getUpvotes().contains(l);
+
   }
 
   @Test
@@ -217,7 +214,6 @@ public class RequestTest {
     r.downvote(l);
     RequestProxy.clearCache();
     Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
-    System.out.println(r1.voteCount());
     assert r1.voteCount() == -1;
   }
 
