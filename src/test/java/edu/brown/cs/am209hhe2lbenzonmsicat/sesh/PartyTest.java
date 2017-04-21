@@ -924,11 +924,34 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     assert p.addGuest(h) == true;
     Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
-    p.addGuest(h);
+    p1.addGuest(h);
+  }
+
+  @Test
+  public void testAddGuestOfAlreadyActivePartyEndParty()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    p.endParty();
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    p1.addGuest(h);
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getPlaylist().getId(),
+        p1.getLocation(), p1.getTime(), p1.getStatus());
+    assert p2.getGuests().size() == 1;
+    assert p2.getGuests().contains(h);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -942,11 +965,34 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     assert p.addGuest(h) == true;
     Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
-    p.addGuest(l);
+    p1.addGuest(l);
+  }
+
+  @Test
+  public void testAddGuestOfButAlreadyHostOfActivePartyEndParty()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    p.endParty();
+    p1.addGuest(l);
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getPlaylist().getId(),
+        p1.getLocation(), p1.getTime(), p1.getStatus());
+    assert p2.getGuests().size() == 1;
+    assert p2.getGuests().contains(l);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -959,11 +1005,25 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     assert p.addGuest(h) == true;
-    Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1), "time");
+    Party.create("Dope Party", h, new Coordinate(1, 1), "time");
+  }
+
+  @Test
+  public void testAddHostButAlreadyActiveGuestEndParty()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    p.endParty();
+    Party.create("Dope Party", h, new Coordinate(1, 1), "time");
   }
 
 }
