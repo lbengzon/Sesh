@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -60,32 +61,50 @@ public class PartyBean extends Party {
 
   @Override
   public boolean upvoteSong(User user, Request req) {
-    req.upvote(user);
-    return true;
+    assert isActive() == true;
+    try {
+      if (getRequestedSongs().contains(req) && getAttendees().contains(user)) {
+        req.upvote(user);
+        return true;
+      }
+    } catch (Exception e) {
+      return false;
+    }
+    return false;
   }
 
   @Override
   public boolean downvoteSong(User user, Request req) {
-    req.downvote(user);
-    return true;
+    assert isActive() == true;
+    try {
+      if (getRequestedSongs().contains(req) && getAttendees().contains(user)) {
+        req.downvote(user);
+        return true;
+      }
+    } catch (Exception e) {
+      return false;
+    }
+    return false;
+
   }
 
   @Override
   public boolean approveSong(Request req) {
+    assert isActive() == true;
+
     if (!requestedSongs.contains(req)) {
-      System.out.println("ERROR: Cannot approve song not in requested list");
       return false;
     }
     playlist.addSong(req);
     requestedSongs.remove(req);
     return true;
-
   }
 
   @Override
   public boolean removeFromPlaylist(Request req) {
+    assert isActive() == true;
+
     if (!playlist.getSongs().contains(req)) {
-      System.out.println("ERROR: Cannot remove song not in playlist");
       return false;
     }
     playlist.removeSong(req);
@@ -95,18 +114,24 @@ public class PartyBean extends Party {
 
   @Override
   public Request requestSong(Song song, User user) {
+    assert isActive() == true;
+
     try {
-      Request newRequest = Request.create(song, user, partyId, "testTime");
-      requestedSongs.add(newRequest);
-      return newRequest;
+      if (getAttendees().contains(user)) {
+        Request newRequest = Request.create(song, user, partyId, "testTime");
+        requestedSongs.add(newRequest);
+        return newRequest;
+      }
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
     }
+    throw new IllegalArgumentException(
+        "Error: User who requested song is not a guest");
   }
 
   @Override
   public Set<Request> getRequestedSongs() {
-    return requestedSongs;
+    return new HashSet<>(requestedSongs);
   }
 
   @Override
@@ -116,7 +141,7 @@ public class PartyBean extends Party {
 
   @Override
   public Set<User> getGuests() {
-    return guests;
+    return new HashSet<>(guests);
   }
 
   @Override
@@ -146,6 +171,8 @@ public class PartyBean extends Party {
 
   @Override
   public boolean addGuest(User guest) {
+    assert isActive() == true;
+
     if (host.equals(guest)) {
       return false;
     }
@@ -160,8 +187,15 @@ public class PartyBean extends Party {
 
   @Override
   public boolean removeGuest(User guest) {
-    // TODO Auto-generated method stub
+    assert isActive() == true;
     return guests.remove(guest);
+  }
+
+  @Override
+  public Set<User> getAttendees() {
+    Set<User> attendees = getGuests();
+    attendees.add(getHost());
+    return attendees;
   }
 
 }

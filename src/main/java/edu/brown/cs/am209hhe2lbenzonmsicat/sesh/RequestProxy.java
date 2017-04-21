@@ -109,13 +109,21 @@ public class RequestProxy extends Request implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    try {
-      DbHandler.upvoteRequest(this, user);
-    } catch (SQLException e1) {
-      // TODO Auto-generated catch block
-      throw new RuntimeException(e1.getMessage());
+
+    if (!getDownvotes().contains(user) && !getUpvotes().contains(user)) {
+      try {
+        DbHandler.upvoteRequest(this, user);
+      } catch (SQLException e1) {
+        // TODO Auto-generated catch block
+        throw new RuntimeException(e1.getMessage());
+      }
+      requestBean.upvote(user);
+    } else if (getDownvotes().contains(user)) {
+      removeVote(user);
+      upvote(user);
+    } else if (getUpvotes().contains(user)) {
+      removeVote(user);
     }
-    requestBean.upvote(user);
   }
 
   @Override
@@ -127,13 +135,21 @@ public class RequestProxy extends Request implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    try {
-      DbHandler.downvoteRequest(this, user);
-    } catch (SQLException e1) {
-      // TODO Auto-generated catch block
-      throw new RuntimeException(e1.getMessage());
+    if (!getDownvotes().contains(user) && !getUpvotes().contains(user)) {
+      try {
+        DbHandler.downvoteRequest(this, user);
+      } catch (SQLException e1) {
+        // TODO Auto-generated catch block
+        throw new RuntimeException(e1.getMessage());
+      }
+      requestBean.downvote(user);
+    } else if (getDownvotes().contains(user)) {
+      removeVote(user);
+    } else if (getUpvotes().contains(user)) {
+      removeVote(user);
+      downvote(user);
     }
-    requestBean.downvote(user);
+
   }
 
   @Override
