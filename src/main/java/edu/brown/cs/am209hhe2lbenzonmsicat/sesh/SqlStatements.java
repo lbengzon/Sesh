@@ -141,13 +141,19 @@ final class SqlStatements {
    */
   public static final String GET_USER_PARTY = "SELECT Party.PartyId, "
       + "spotifyPlaylistId, "
-      + "name, lat, lon, time, status FROM PartyAttendee, Party"
-      + " WHERE PartyAttendee.partyId=Party.partyId AND userId=?;";
+      + "name, lat, lon, time, status FROM PartyAttendee JOIN Party"
+      + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=?;";
 
   public static final String GET_PARTY_HOSTED_BY_USER = "SELECT "
       + "Party.PartyId, spotifyPlaylistId, name, lat, lon, time, "
-      + "status FROM PartyAttendee, Party"
-      + " WHERE PartyAttendee.partyId=Party.partyId AND userId=? "
+      + "status FROM PartyAttendee JOIN Party"
+      + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=? "
       + "AND PartyAttendee.type='host' AND Party.status='ongoing';";
+
+  public static final String GET_ACTIVE_PARTY_OF_USER = "SELECT "
+      + "Party.PartyId, spotifyPlaylistId, name, lat, lon, time, "
+      + "status FROM PartyAttendee JOIN Party"
+      + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=? "
+      + "AND Party.status='ongoing';";
 
 }

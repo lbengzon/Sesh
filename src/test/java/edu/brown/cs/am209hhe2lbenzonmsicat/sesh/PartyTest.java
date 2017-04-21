@@ -22,8 +22,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getHost().equals(l);
   }
 
@@ -40,8 +40,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getName().equals("Dope Party");
   }
 
@@ -58,8 +58,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getTime().equals("time");
   }
 
@@ -77,8 +77,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getLocation().getLat() == 1;
     assert p1.getLocation().getLon() == 2;
   }
@@ -96,8 +96,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getStatus() == Status.ongoing;
   }
 
@@ -115,8 +115,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getStatus() == Status.stopped;
   }
 
@@ -135,8 +135,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getStatus() == Status.stopped;
   }
 
@@ -169,8 +169,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 0;
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
@@ -206,8 +206,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 2;
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
@@ -239,8 +239,8 @@ public class PartyTest {
         .size() == 0;
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 0;
   }
@@ -264,8 +264,8 @@ public class PartyTest {
         .size() == 0;
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 0;
   }
@@ -290,8 +290,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getPlaylist().getSongs().get(0).getUpvotes().isEmpty();
   }
 
@@ -318,8 +318,8 @@ public class PartyTest {
           .isEmpty();
       RequestProxy.clearCache();
       PartyProxy.clearCache();
-      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-          p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+          p.getLocation(), p.getTime(), p.getStatus());
       assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
           .isEmpty();
     }
@@ -352,8 +352,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
         .size() == 2;
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
@@ -385,8 +385,8 @@ public class PartyTest {
         .size() == 0;
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
         .size() == 0;
   }
@@ -410,8 +410,8 @@ public class PartyTest {
         .size() == 0;
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
         .size() == 0;
   }
@@ -436,8 +436,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getPlaylist().getSongs().get(0).getDownvotes().isEmpty();
   }
 
@@ -464,8 +464,8 @@ public class PartyTest {
           .isEmpty();
       RequestProxy.clearCache();
       PartyProxy.clearCache();
-      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-          p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+          p.getLocation(), p.getTime(), p.getStatus());
       assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
           .isEmpty();
     }
@@ -491,8 +491,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getRequestedSongs().contains(r1);
     assert !p1.getPlaylist().getSongs().contains(r1);
   }
@@ -521,8 +521,8 @@ public class PartyTest {
       assert p.getPlaylist().getSongs().contains(r1);
       RequestProxy.clearCache();
       PartyProxy.clearCache();
-      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-          p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+          p.getLocation(), p.getTime(), p.getStatus());
       assert p1.getRequestedSongs().isEmpty();
       assert p1.getPlaylist().getSongs().size() == 1;
       assert p1.getPlaylist().getSongs().contains(r1);
@@ -547,8 +547,8 @@ public class PartyTest {
     assert !p.getPlaylist().getSongs().contains(r1);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getRequestedSongs().contains(r1);
     assert !p1.getPlaylist().getSongs().contains(r1);
   }
@@ -578,8 +578,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getHost(),
-        p1.getPlaylist(), p1.getLocation(), p1.getTime(), p1.getStatus());
+    Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getPlaylist().getId(),
+        p1.getLocation(), p1.getTime(), p1.getStatus());
     assert p2.getRequestedSongs().size() == 0;
     assert p2.getPlaylist().getSongs().size() == 0;
   }
@@ -608,8 +608,8 @@ public class PartyTest {
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getRequestedSongs().contains(r1);
     assert p1.getRequestedSongs().contains(r2);
     assert p1.getRequestedSongs().contains(r3);
@@ -635,8 +635,8 @@ public class PartyTest {
       assert p.getRequestedSongs().isEmpty();
       RequestProxy.clearCache();
       PartyProxy.clearCache();
-      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-          p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+          p.getLocation(), p.getTime(), p.getStatus());
       assert p1.getRequestedSongs().isEmpty();
     }
   }
@@ -686,8 +686,8 @@ public class PartyTest {
     assert !p.getRequestedSongs().contains(r1);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert !p1.getRequestedSongs().contains(r1);
     assert p1.getPlaylist().getSongs().contains(r1);
   }
@@ -717,8 +717,8 @@ public class PartyTest {
       assert p.getPlaylist().getSongs().isEmpty();
       RequestProxy.clearCache();
       PartyProxy.clearCache();
-      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-          p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+          p.getLocation(), p.getTime(), p.getStatus());
       assert p1.getRequestedSongs().size() == 1;
       assert p1.getRequestedSongs().contains(r1);
       assert p1.getPlaylist().getSongs().isEmpty();
@@ -742,7 +742,7 @@ public class PartyTest {
     p.requestSong(Song.of("song1"), m);
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testAddHostAsGuest() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -775,8 +775,8 @@ public class PartyTest {
     assert p.getGuests().contains(a);
     assert p.getGuests().contains(m);
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getGuests().contains(h);
     assert p1.getGuests().contains(a);
     assert p1.getGuests().contains(m);
@@ -801,8 +801,8 @@ public class PartyTest {
       assert p.getGuests().isEmpty();
       RequestProxy.clearCache();
       PartyProxy.clearCache();
-      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-          p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+          p.getLocation(), p.getTime(), p.getStatus());
       assert p1.getGuests().isEmpty();
     }
   }
@@ -828,8 +828,8 @@ public class PartyTest {
     assert p.getGuests().contains(a);
     assert !p.getGuests().contains(m);
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getGuests().contains(h);
     assert p1.getGuests().contains(a);
     assert !p1.getGuests().contains(m);
@@ -856,8 +856,8 @@ public class PartyTest {
       assert p.getGuests().contains(h);
       RequestProxy.clearCache();
       PartyProxy.clearCache();
-      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-          p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+      Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+          p.getLocation(), p.getTime(), p.getStatus());
       assert p1.getGuests().size() == 1;
       assert p1.getGuests().contains(h);
     }
@@ -884,15 +884,15 @@ public class PartyTest {
     assert p.getGuests().contains(a);
     assert !p.getGuests().contains(m);
     PartyProxy.clearCache();
-    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getHost(),
-        p.getPlaylist(), p.getLocation(), p.getTime(), p.getStatus());
+    Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
+        p.getLocation(), p.getTime(), p.getStatus());
     assert p1.getGuests().contains(h);
     assert p1.getGuests().contains(a);
     assert !p1.getGuests().contains(m);
     assert p1.getGuests().size() == 2;
   }
 
-  @Test
+  @Test(expected = IllegalArgumentException.class)
   public void testAddSameGuest() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -904,7 +904,6 @@ public class PartyTest {
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
-
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
     assert p.addGuest(m) == true;
@@ -912,6 +911,59 @@ public class PartyTest {
     assert p.getGuests().contains(h);
     assert p.getGuests().contains(a);
     assert p.getGuests().contains(m);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddGuestOfAlreadyActiveParty()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir");
+    User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    p.addGuest(h);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddGuestOfButAlreadyHostOfActiveParty()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir");
+    User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    p.addGuest(l);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testAddHostButAlreadyActiveGuest()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir");
+    User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    assert p.addGuest(h) == true;
+    Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1), "time");
   }
 
 }

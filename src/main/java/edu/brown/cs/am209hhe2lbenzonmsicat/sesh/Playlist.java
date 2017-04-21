@@ -39,12 +39,6 @@ public abstract class Playlist {
   public abstract boolean addSong(Request request);
 
   /**
-   * @param partyId
-   *          - to set
-   */
-  public abstract void setPartyId(int partyId);
-
-  /**
    * This should only be used for testing!
    * @param spotifyId
    *          - spotify id
@@ -59,26 +53,23 @@ public abstract class Playlist {
   }
 
   /**
-   * @param spotifyId
-   *          - id
-   * @return playlist of that id
-   */
-  public static Playlist of(String spotifyId, User host) {
-    return new PlaylistProxy(spotifyId, host);
-  }
-
-  /**
    * Add playlist to database.
    * @param user
    *          - user
    * @return playlist
    */
-  public static Playlist create(User user) {
+  public static Playlist create(int partyId, User user) {
     String spotifyId = "test";
     // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
     // get the spotify id
 
-    return new PlaylistProxy(spotifyId, user);
+    return new PlaylistProxy(spotifyId, partyId, user);
+  }
+
+  public static String getNewPlaylistId(User user) {
+    // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
+    // get the spotify id
+    return "testNewSpotifyPlaylistId";
   }
 
   @Override
