@@ -24,6 +24,33 @@ body {
 	letter-spacing: 10px;
 }
 
+#login {
+	display: flex;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-top: 10%;
+}
+
+#loginButton {
+	-webkit-appearance: button;
+	background-color: #72d8d0;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 2px;
+	font-size: 350%;
+	padding: 4%;
+	color: white;
+	border: solid;
+	border-width: 4px;
+	border-color: white;
+	border-radius: 20px;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	margin: auto;
+	transition: background-color 0.4s linear;
+	box-shadow: 8px 8px 5px 5px #298279;
+}
+
 h1 {
 	margin: 2% 0% 0% 0%;
 }
@@ -173,8 +200,15 @@ input#private_sesh, input#public_sesh {
 	justify-content: space-around;
 }
 
-.tabContentPlaylist, .tabContentPlaylistGuest, .tabContentRequestGuest {
-	width: 45%;
+.tabContentPlaylist {
+	width: 47%;
+	height: 100%;
+	background-color: white;
+	overflow-y: scroll;
+}
+
+.tabContentPlaylistGuest, .tabContentRequestGuest {
+	width: 75%;
 	height: 100%;
 	background-color: white;
 	overflow-y: scroll;
@@ -190,7 +224,7 @@ input#private_sesh, input#public_sesh {
 	color: black;
 	width: 102%;
 	height: 40px;
-	border-top: 3px solid blue;
+	border-top: 3px solid #81c1db;
 	padding-left: 1%;
 	padding-top: 1%;
 }
@@ -205,7 +239,7 @@ input#private_sesh, input#public_sesh {
 }
 
 .tabContentSearch, .tabContentSearchGuest {
-	width: 60%;
+	width: 75%;
 	height: 100%;
 	background-color: white;
 }
@@ -236,6 +270,25 @@ input#private_sesh, input#public_sesh {
 #partySubmit {
 	margin-left: 40%;
 	margin-top: 2%;
+}
+
+#songdiv {
+	display: inline-flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.voteButton {
+	background: none;
+	border: none;
+}
+
+.voteButton:focus{
+	outline: none;
+}
+
+.material-icons {
+	color: #b5b5b5;
 }
 
 

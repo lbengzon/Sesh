@@ -15,6 +15,7 @@
     <script src="../js/sesh.js"></script>
 
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- inline CSS to make scrollbars prettier -->
     <style media="screen" type="text/css">

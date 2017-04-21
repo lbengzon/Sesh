@@ -34,13 +34,29 @@ public class GuiManager {
   }
 
   private void installRoutes(FreeMarkerEngine fme) {
+    Spark.get("/login", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
     Spark.get("/create", new CreateHandler(), fme);
     Spark.get("/join", new JoinHandler(), fme);
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
-    Spark.post("/search", new SearchHandler(), fme);
+    // Spark.post("/search", new SearchHandler(), fme);
+  }
+
+  /**
+   * Displays login page. Backend sends authorization URL to frontend and
+   * displays that link as button. After logging in, redirects to
+   * /spotifycallback.
+   *
+   */
+  private class LoginHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "Login",
+          "authURL", comm.createAuthorizeURL());
+      return new ModelAndView(variables, "login.ftl");
+    }
   }
 
   /**
@@ -49,24 +65,27 @@ public class GuiManager {
   private class JoinPartyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-
-      /*
-       * Get party id from front end (from the one that user clicks on) Add user
-       * to party id that user clicks on. Add them to party, update java and db
-       * Send back party info (id, name, host, etc.) to display party.
-       * 
-       */
-      String partyId = qm.value("party_id"); // from frontend
-      String userId = qm.value("user_id"); // from frontend
-
-      User user = User.of(userId);
-      Party party = Party.of(partyId); // modify method later
-      party.addGuest(user);
-
-      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
-          "userId", userId, "partyId", partyId, "partyName", party.getName(),
-          "hostId", party.getHost().getSpotifyId());
+      // QueryParamsMap qm = req.queryMap();
+      //
+      // /*
+      // * Get party id from front end (from the one that user clicks on) Add
+      // user
+      // * to party id that user clicks on. Add them to party, update java and
+      // db
+      // * Send back party info (id, name, host, etc.) to display party.
+      // *
+      // */
+      // String partyId = qm.value("party_id"); // from frontend
+      // String userId = qm.value("user_id"); // from frontend
+      //
+      // User user = User.of(userId);
+      // Party party = Party.of(partyId); // modify method later
+      // party.addGuest(user);
+      //
+      // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
+      // "userId", userId, "partyId", partyId, "partyName", party.getName(),
+      // "hostId", party.getHost().getSpotifyId());
+      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
       return new ModelAndView(variables, "joinParty.ftl");
     }
   }
@@ -90,7 +109,7 @@ public class GuiManager {
 
       Coordinate coord = new Coordinate(lat, lon);
       /* TODO: Get host given name, Create a new party, add to db */
-      Party party;
+      Party party = null;
       try {
         User host = User.of(hostId);
         party = Party.create(partyName, host, coord, time);
@@ -112,9 +131,8 @@ public class GuiManager {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
-
+      String ftlPage = null;
       String code = qm.value("code");
-
       User user;
       List<String> userInfo = comm.getAccessToken(code);
       String userId = userInfo.get(0);
@@ -122,13 +140,17 @@ public class GuiManager {
       String userName = userInfo.get(2);
       try {
         user = User.create(userId, userEmail, userName);
+        ftlPage = "createJoin.ftl";
       } catch (SQLException e) {
         /* user already exists */
         user = User.of(userId);
+        // TODO check if user is currently attending a party, and if so must
+        // redirect to that party's view
+        ftlPage = "createJoin.ftl";
       }
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "test",
-          " ");
-      return new ModelAndView(variables, "test.ftl");
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
+      return new ModelAndView(variables, ftlPage);
     }
   }
 
@@ -160,6 +182,7 @@ public class GuiManager {
       String userId = qm.value("user_id");
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
           "userId", userId);
+
       return new ModelAndView(variables, "partySettings.ftl");
     }
   }
