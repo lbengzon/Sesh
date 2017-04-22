@@ -1,9 +1,9 @@
 <#assign content>
 <div id="createJoin">
-<form action="/create" id="createJoinForm">
+<form action="/create" method="post" id="createJoinForm">
 <input type="submit" class="createJoin" value="Start a sesh">
 </form>
-<form action="/join">
+<form action="/join" method="post">
 <input type="submit" class="createJoin" value="Join a sesh">
 </form>
 </#assign>

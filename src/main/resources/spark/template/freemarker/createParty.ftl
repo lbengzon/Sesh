@@ -1,7 +1,7 @@
 <#assign content>
 <div id="titles">
-<h2 class="titles">Playlist</h2>
-<h2 class="titles">Requests</h2>
+<h2 class="titles">Playlist | ${partyName} </h2>
+<h2 class="titles">Requests | ${partyName} </h2>
 </div>
 <div class="list-wrapper">
 <div class="tabContentPlaylist">

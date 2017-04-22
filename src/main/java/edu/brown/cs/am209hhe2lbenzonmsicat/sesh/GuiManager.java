@@ -16,6 +16,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -23,6 +24,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -32,13 +34,29 @@ public class GuiManager {
   }
 
   private void installRoutes(FreeMarkerEngine fme) {
+    Spark.get("/login", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
-    Spark.get("/create", new CreateHandler(), fme);
-    Spark.get("/join", new JoinHandler(), fme);
+    Spark.post("/create", new CreateHandler(), fme);
+    Spark.post("/join", new JoinHandler(), fme);
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
-    // Spark.post("/search", new SearchHandler());
+    // Spark.post("/search", new SearchHandler(), fme);
+  }
+
+  /**
+   * Displays login page. Backend sends authorization URL to frontend and
+   * displays that link as button. After logging in, redirects to
+   * /spotifycallback.
+   *
+   */
+  private class LoginHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "Login",
+          "authURL", comm.createAuthorizeURL());
+      return new ModelAndView(variables, "login.ftl");
+    }
   }
 
   /**
@@ -49,7 +67,23 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
 
-      // TODO display all existing parties (within set georange)
+      /*
+       * Get party id from front end (from the one that user clicks on) Add user
+       * to party id that user clicks on. Add them to party, update java and db
+       * Send back party info (id, name, host, etc.) to display party.
+       *
+       */
+      // String partyId = qm.value("party_id"); // from frontend
+      // String userId = qm.value("user_id"); // from frontend
+
+      // User user = User.of(userId);
+      // Party party = Party.of(partyId); // modify method later
+      //// Party party = Party.of(partyId); // modify method later
+      // party.addGuest(user);
+      //
+      // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
+      // "userId", userId, "partyId", partyId, "partyName", party.getName(),
+      // "hostId", party.getHost().getSpotifyId());
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
       return new ModelAndView(variables, "joinParty.ftl");
     }
@@ -62,9 +96,31 @@ public class GuiManager {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
+      // String userId = qm.value("user_id"); // from frontend
+      String partyName = qm.value("sesh_name"); // required
+      String hostName = qm.value("host_name");
+      // String hostId = qm.value("host_id"); // = from front end
+      String privacyStatus = qm.value("privacy_setting");
+      String time = String.valueOf(System.currentTimeMillis() / 1000);
 
-      // TODO create party given front end data
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings");
+      // double lat = Double.valueOf(qm.value("lat"));
+      // double lon = Double.valueOf(qm.value("lon"));
+
+      // Coordinate coord = new Coordinate(lat, lon);
+      // Party party = null;
+      // try {
+      // User host = User.of(hostId);
+      // party = Party.create(partyName, host, coord, time);
+      // } catch (SQLException e) {
+      // System.out.println("Failed to add party to database");
+      // }
+
+      // System.out.println("PARTY NAME: " + partyName);
+      // System.out.println("HOST NAME: " + hostName);
+      // System.out.println("PRIVACY SETTINGS: " + privacyStatus);
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
+          "partyName", partyName);
       return new ModelAndView(variables, "createParty.ftl");
     }
 
@@ -77,9 +133,8 @@ public class GuiManager {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
-
+      String ftlPage = null;
       String code = qm.value("code");
-
       User user;
       List<String> userInfo = comm.getAccessToken(code);
       String userId = userInfo.get(0);
@@ -87,23 +142,30 @@ public class GuiManager {
       String userName = userInfo.get(2);
       try {
         user = User.create(userId, userEmail, userName);
+        ftlPage = "createJoin.ftl";
       } catch (SQLException e) {
         /* user already exists */
         user = User.of(userId);
+        // TODO check if user is currently attending a party, and if so must
+        // redirect to that party's view
+        ftlPage = "createJoin.ftl";
       }
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "test",
-          " ");
-      return new ModelAndView(variables, "test.ftl");
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
+      return new ModelAndView(variables, ftlPage);
     }
   }
 
   /**
    * Handles request to front page (join or create a sesh).
+   *
    * @author HE23
    */
   private static class FrontHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("user_id"); // from frontend
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
       return new ModelAndView(variables, "createJoin.ftl");
     }
@@ -111,58 +173,61 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
+   *
    * @author HE23
    */
   private static class CreateHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
-      String partyName = qm.value("sesh_name"); // required
-      String hostName = qm.value("host_name");
-      String privacyStatus = qm.value("privacyStatus");
-      double lat = Double.valueOf(qm.value("latitute"));
-      double lon = Double.valueOf(qm.value("longitude"));
-      Coordinate coord = new Coordinate(lat, lon);
-      /* TODO: Create a new party, add to db */
+      String userId = qm.value("user_id");
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh");
+
       return new ModelAndView(variables, "partySettings.ftl");
     }
   }
 
   /**
    * Handles request to join a sesh page.
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String lat = qm.value("lat");
+      String lon = qm.value("lon");
+      System.out.println("LAT: " + lat);
+      System.out.println("LON: " + lon);
       /*
-       * TODO: Get list of parties within certain range (GMaps API). Get party
-       * id that user clicks on. Add them to party, update java and db Send back
-       * party info (id, name, host, etc.) to display party.
+       * TODO: Get list of parties within certain range (GMaps API).
        */
+      // get location of user from frontend
+      // get list of parties in location range from backend and send to frontend
+      // to display
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
       return new ModelAndView(variables, "join.ftl");
     }
   }
 
-  /**
-   * Handles requests to the search page.
-   * @author Matt
-   */
+  // /**
+  // * Handles requests to the search page.
+  // *
+  // * @author Matt
+  // */
   // private static class SearchHandler implements TemplateViewRoute {
   // @Override
-  //// public ModelAndView handle(Request req, Response res) {
-  //// QueryParamsMap qm = req.queryMap();
-  //// String songName = qm.value("searchResult"); // or id?
-  //// // with id, give to spotify api to retrieve song info
-  //// // post song info
-  ////
-  //// // Map<String, Object> variables = ImmutableMap.of("songId", songId,
-  //// // "songName", songName, "length", length, "artist", artist);
-  //// return new ModelAndView(variables, "search.ftl"); // incomplete
-  //// }
+  // public ModelAndView handle(Request req, Response res) {
+  // QueryParamsMap qm = req.queryMap();
+  // String songName = qm.value("searchResult"); // or id?
+  // // with id, give to spotify api to retrieve song info
+  // // post song info
   //
+  // Map<String, Object> variables = ImmutableMap.of("songId", songId,
+  // "songName", songName, "length", length, "artist", artist);
+  // return new ModelAndView(variables, "search.ftl"); // incomplete
+  // }
   // }
 
 }

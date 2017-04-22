@@ -6,10 +6,25 @@
 <div class="list-wrapper">
 <div class="tabContentRequestGuest">
 <ul style="list-style-type:none">
-<li>Song 1</li>
-<li>Song 2</li>
-<li>Song 3</li>
-<li>Song 4</li>
+<li>
+	<div id="songdiv">Song 1 
+		<div id="vote">
+			<button type="button" class="voteButton"> <i class="material-icons">thumb_up</i> </button>
+			<button type="button" class="voteButton"> <i class="material-icons">thumb_down</i> </button>
+		</div>
+	</div>
+</li>
+
+<li>
+	<div id="songdiv">Song 1 
+		<div id="vote">
+			<button type="button" class="voteButton"> <i class="material-icons">thumb_up</i> </button>
+			<button type="button" class="voteButton"> <i class="material-icons">thumb_down</i> </button>
+		</div>
+	</div>
+</li>
+
+
 </ul>
 </div>
 
