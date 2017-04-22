@@ -122,7 +122,7 @@ final class SqlStatements {
   /**
    * Gets all the parties.
    */
-  public static final String GET_ALL_PARTIES = "SELECT * FROM Party;";
+  public static final String GET_ALL_ACTIVE_PARTIES = "SELECT * FROM Party WHERE status='ongoing';";
 
   /**
    * Gets all the votes (up and down) for a song.
