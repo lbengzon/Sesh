@@ -45,7 +45,7 @@ public class SpotifyCommunicator {
   /**
    * Create authorize URL.
    */
-  public void createAuthorizeURL() {
+  public String createAuthorizeURL() {
 
     /* Set the necessary scopes that the application will need from the user */
     final List<String> scopes = Arrays.asList("user-read-private",
@@ -66,7 +66,7 @@ public class SpotifyCommunicator {
      * example.com/callback&scope=user-read-private%20user-read-email&state=some
      * -state-of-my-choice
      */
-    System.out.println(authorizeURL);
+    return authorizeURL;
   }
 
   /**
