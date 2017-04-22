@@ -37,8 +37,8 @@ public class GuiManager {
     Spark.get("/login", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
-    Spark.get("/create", new CreateHandler(), fme);
-    Spark.get("/join", new JoinHandler(), fme);
+    Spark.post("/create", new CreateHandler(), fme);
+    Spark.post("/join", new JoinHandler(), fme);
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     // Spark.post("/search", new SearchHandler(), fme);
@@ -71,7 +71,7 @@ public class GuiManager {
        * Get party id from front end (from the one that user clicks on) Add user
        * to party id that user clicks on. Add them to party, update java and db
        * Send back party info (id, name, host, etc.) to display party.
-       * 
+       *
        */
       // String partyId = qm.value("party_id"); // from frontend
       // String userId = qm.value("user_id"); // from frontend
@@ -96,28 +96,32 @@ public class GuiManager {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
-      String userId = qm.value("user_id"); // from frontend
+      // String userId = qm.value("user_id"); // from frontend
       String partyName = qm.value("sesh_name"); // required
       String hostName = qm.value("host_name");
-      String hostId = qm.value("host_id"); // = from front end
+      // String hostId = qm.value("host_id"); // = from front end
       String privacyStatus = qm.value("privacy_setting");
       String time = String.valueOf(System.currentTimeMillis() / 1000);
 
-      double lat = Double.valueOf(qm.value("latitute")); // gmaps!
-      double lon = Double.valueOf(qm.value("longitude"));
+      // double lat = Double.valueOf(qm.value("latitute")); // gmaps!
+      // double lon = Double.valueOf(qm.value("longitude"));
 
-      Coordinate coord = new Coordinate(lat, lon);
+      // Coordinate coord = new Coordinate(lat, lon);
       /* TODO: Get host given name, Create a new party, add to db */
-      Party party = null;
-      try {
-        User host = User.of(hostId);
-        party = Party.create(partyName, host, coord, time);
-      } catch (SQLException e) {
-        // party = Party.of();
-      }
+      // Party party = null;
+      // try {
+      // User host = User.of(hostId);
+      // party = Party.create(partyName, host, coord, time);
+      // } catch (SQLException e) {
+      // System.out.println("Failed to add party to database");
+      // }
+
+      System.out.println("PARTY NAME: " + partyName);
+      System.out.println("HOST NAME: " + hostName);
+      System.out.println("PRIVACY SETTINGS: " + privacyStatus);
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
-          "userId", userId, "hostId", hostId, "partyId", party.getPartyId());
+          "partyName", partyName);
       return new ModelAndView(variables, "createParty.ftl");
     }
 
@@ -163,8 +167,7 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("user_id"); // from frontend
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
-          userId);
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
       return new ModelAndView(variables, "createJoin.ftl");
     }
   }
@@ -179,8 +182,7 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("user_id");
-      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
-          "userId", userId);
+      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh");
 
       return new ModelAndView(variables, "partySettings.ftl");
     }
