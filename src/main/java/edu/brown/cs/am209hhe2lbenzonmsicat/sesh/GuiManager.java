@@ -75,7 +75,7 @@ public class GuiManager {
        */
       // String partyId = qm.value("party_id"); // from frontend
       // String userId = qm.value("user_id"); // from frontend
-      //
+
       // User user = User.of(userId);
       // Party party = Party.of(partyId); // modify method later
       //// Party party = Party.of(partyId); // modify method later
@@ -103,11 +103,10 @@ public class GuiManager {
       String privacyStatus = qm.value("privacy_setting");
       String time = String.valueOf(System.currentTimeMillis() / 1000);
 
-      // double lat = Double.valueOf(qm.value("latitute")); // gmaps!
-      // double lon = Double.valueOf(qm.value("longitude"));
+      // double lat = Double.valueOf(qm.value("lat"));
+      // double lon = Double.valueOf(qm.value("lon"));
 
       // Coordinate coord = new Coordinate(lat, lon);
-      /* TODO: Get host given name, Create a new party, add to db */
       // Party party = null;
       // try {
       // User host = User.of(hostId);
@@ -116,9 +115,9 @@ public class GuiManager {
       // System.out.println("Failed to add party to database");
       // }
 
-      System.out.println("PARTY NAME: " + partyName);
-      System.out.println("HOST NAME: " + hostName);
-      System.out.println("PRIVACY SETTINGS: " + privacyStatus);
+      // System.out.println("PARTY NAME: " + partyName);
+      // System.out.println("HOST NAME: " + hostName);
+      // System.out.println("PRIVACY SETTINGS: " + privacyStatus);
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
           "partyName", partyName);
@@ -196,6 +195,11 @@ public class GuiManager {
   private static class JoinHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String lat = qm.value("lat");
+      String lon = qm.value("lon");
+      System.out.println("LAT: " + lat);
+      System.out.println("LON: " + lon);
       /*
        * TODO: Get list of parties within certain range (GMaps API).
        */
