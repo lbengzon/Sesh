@@ -1171,4 +1171,46 @@ public class PartyTest {
     assert p1 == null;
   }
 
+  @Test
+  public void testGetPartyDistanceFrom()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    Party p = Party.create("Dope Party", l,
+        new Coordinate(35.967962, -112.124322), "time");
+    Coordinate c = new Coordinate(35.968544, -112.122230);
+    assert p.getDistance(c) < 200;
+  }
+
+  @Test
+  public void testGetPartiesWithinDistance()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    RequestProxy.clearCache();
+    PartyProxy.clearCache();
+    User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
+        "Leandro Bengzon");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User m = User.create("mattsicat", "ms@brown.edu", "Matt Sicat");
+
+    Party p = Party.create("Dope Party", l,
+        new Coordinate(35.967962, -112.124322), "time");
+    Party p1 = Party.create("Dope Party", h,
+        new Coordinate(35.968726, -112.121458), "time");
+    Party p2 = Party.create("Dope Party", m,
+        new Coordinate(35.966870, -112.114833), "time");
+
+    Coordinate c = new Coordinate(35.968544, -112.122230);
+    List<Party> parties = Party.getActivePartiesWithinDistance(c, 200);
+    assert parties.size() == 2;
+    assert parties.contains(p);
+    assert parties.contains(p1);
+  }
+
 }

@@ -198,4 +198,9 @@ public class PartyBean extends Party {
     return attendees;
   }
 
+  @Override
+  public double getDistance(Coordinate coordinate) {
+    return location.getDistanceFrom(coordinate);
+  }
+
 }

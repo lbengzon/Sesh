@@ -1,5 +1,6 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -112,13 +113,13 @@ public class RequestBean extends Request {
   @Override
   public Set<User> getUpvotes() {
     // TODO Auto-generated method stub
-    return upvotes;
+    return new HashSet<>(upvotes);
   }
 
   @Override
   public Set<User> getDownvotes() {
     // TODO Auto-generated method stub
-    return downvotes;
+    return new HashSet<>(downvotes);
   }
 
   @Override
