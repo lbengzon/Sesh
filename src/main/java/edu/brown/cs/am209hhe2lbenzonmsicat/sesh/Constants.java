@@ -23,4 +23,6 @@ public final class Constants {
       + "4567/spotifycallback";
 
   public static final int SEVEN = 7;
+
+  public static final double PARTY_JOIN_RADIUS = 1000.0;
 }
