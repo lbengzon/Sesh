@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -137,6 +138,14 @@ public abstract class Party {
   public abstract boolean removeGuest(User guest);
 
   /**
+   * Gets the distance from the party to the coordinate.
+   * @param coordinate
+   *          The coordinate to get the distance from.
+   * @return The distance from the coordinate.
+   */
+  public abstract double getDistance(Coordinate coordinate);
+
+  /**
    * Ends the party
    */
   public abstract void endParty();
@@ -182,6 +191,30 @@ public abstract class Party {
   public static Party of(int partyId) {
     try {
       return DbHandler.getPartyFromId(partyId);
+    } catch (SQLException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  /**
+   * Gets the parties within the distance.
+   * @param location
+   *          The location of the user.
+   * @param distance
+   *          The distance within which all parties should be within.
+   * @return The list of parties within the distance.
+   */
+  public static List<Party> getActivePartiesWithinDistance(Coordinate location,
+      double distance) {
+    try {
+      List<Party> parties = DbHandler.getAllActiveParties();
+      List<Party> partiesWithinDistance = new ArrayList<>();
+      for (Party p : parties) {
+        if (p.getDistance(location) <= distance) {
+          partiesWithinDistance.add(p);
+        }
+      }
+      return partiesWithinDistance;
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
     }

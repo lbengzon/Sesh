@@ -736,6 +736,41 @@ public class DbHandlerTest {
   }
 
   @Test
+  public void testGetAllActiveParties()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+
+    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
+        "Leandro Bengzon");
+
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+    User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
+        "Matt Sicat");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+    LocalDateTime time = LocalDateTime.now();
+
+    Party party = DbHandler.addParty("testPlaylistId", "My Party",
+        new Coordinate(71.6, 41.8), time.toString(), host);
+
+    Party party1 = DbHandler.addParty("testPlaylistId2", "My Party",
+        new Coordinate(71.6, 41.8), time.toString(), hannah);
+
+    Party party2 = DbHandler.addParty("testPlaylistId2", "My Party",
+        new Coordinate(71.6, 41.8), time.toString(), matt);
+
+    Party party3 = DbHandler.addParty("testPlaylistId2", "My Party",
+        new Coordinate(71.6, 41.8), time.toString(), ali);
+    party3.endParty();
+
+    List<Party> parties = DbHandler.getAllActiveParties();
+    assert parties.size() == 3;
+    assert parties.contains(party);
+    assert parties.contains(party1);
+    assert parties.contains(party2);
+  }
+
+  @Test
   public void testGetPartyHostedByUserButNotHost()
       throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");

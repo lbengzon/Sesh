@@ -310,4 +310,9 @@ public class PartyProxy extends Party implements Proxy {
     return partyBean.getAttendees();
   }
 
+  @Override
+  public double getDistance(Coordinate coordinate) {
+    return location.getDistanceFrom(coordinate);
+  }
+
 }
