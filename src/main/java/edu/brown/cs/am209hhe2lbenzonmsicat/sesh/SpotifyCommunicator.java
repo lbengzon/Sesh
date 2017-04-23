@@ -17,8 +17,10 @@ import com.google.common.util.concurrent.SettableFuture;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
+import com.wrapper.spotify.exceptions.WebApiException;
 import com.wrapper.spotify.methods.RemoveTrackFromPlaylistRequest;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
+import com.wrapper.spotify.models.PlaylistTrack;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
 
 /**
@@ -32,7 +34,7 @@ public class SpotifyCommunicator {
   // .clientSecret(Consta
   // nts.LEANDRO_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
   // .build();
-  private Api api;
+  private static Api api;
   private List<String> results;
   private static ConcurrentHashMap<String, Api> userToApi = new ConcurrentHashMap<String, Api>();
 
@@ -220,8 +222,19 @@ public class SpotifyCommunicator {
    *          playlist id
    * @return list of all the playlist songs
    */
-  public List<String> getPlaylistTracks(String userId, String playlistId) {
-    api.getPlaylistTracks(userId, playlistId).build().get();
+  public static List<String> getPlaylistTracks(String userId,
+      String playlistId) {
+    List<String> res = new ArrayList<String>();
+    try {
+      List<PlaylistTrack> plist = api.getPlaylistTracks(userId, playlistId)
+          .build().get().getItems();
+      for (PlaylistTrack pt : plist) {
+        res.add(pt.getTrack().getId());
+      }
+    } catch (IOException | WebApiException e) {
+      // ERROR
+    }
+    return res;
   }
 
 }
