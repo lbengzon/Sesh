@@ -43,7 +43,7 @@ public class GuiManager {
     Spark.get("/login", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.get("/sesh", new FrontHandler(), fme);
-    Spark.post("/create", new CreateHandler(), fme);
+    Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
@@ -114,11 +114,14 @@ public class GuiManager {
       if (lat != null && lon != null) {
         Coordinate coord = new Coordinate(Double.valueOf(lat),
             Double.valueOf(lon));
-        List<Party> parties = Party.getActivePartiesWithinDistance(coord, 0);
+        List<Party> parties = Party.getActivePartiesWithinDistance(coord,
+            Constants.PARTY_JOIN_RADIUS);
+
         variables = ImmutableMap.of("title", "Join a Sesh", "parties", parties);
+      } else {
+        variables = ImmutableMap.of("title", "Join a Sesh");
       }
 
-      variables = ImmutableMap.of("title", "Join a Sesh");
       return new ModelAndView(variables, "join.ftl");
     }
   }
@@ -157,24 +160,15 @@ public class GuiManager {
    *
    * @author HE23
    */
-  private static class CreateHandler implements TemplateViewRoute {
+  private static class PartySettingsHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables;
+
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("user_id");
-      System.out.println("in create handler");
-      String lat = qm.value("lat");
-      String lon = qm.value("lon");
-      System.out.println("lat:" + lat);
-      System.out.println("lon:" + lon);
 
-      if (lat != null && lon != null) {
-        variables = ImmutableMap.of("title", "Create a Sesh", "lat", lat, "lon",
-            lon);
-      } else {
-        variables = ImmutableMap.of("title", "Create a Sesh");
-      }
+      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
+          "user_id", userId);
 
       return new ModelAndView(variables, "partySettings.ftl");
     }
@@ -190,17 +184,18 @@ public class GuiManager {
       // String userId = qm.value("user_id"); // from frontend
       String partyName = qm.value("sesh_name"); // required
       String hostName = qm.value("host_name");
-      // String hostId = qm.value("host_id"); // = from front end
       String privacyStatus = qm.value("privacy_setting");
       String time = String.valueOf(System.currentTimeMillis() / 1000);
 
       String lat = qm.value("lat");
       String lon = qm.value("lon");
 
-      // Coordinate coord = new Coordinate(lat, lon);
-      // Party party = null;
+      Coordinate coord = new Coordinate(Double.valueOf(lat),
+          Double.valueOf(lon));
+      Party party = null;
+
       // try {
-      // User host = User.of(hostId);
+      // User host = User.of(userId);
       // party = Party.create(partyName, host, coord, time);
       // } catch (SQLException e) {
       // System.out.println("Failed to add party to database");
