@@ -117,8 +117,6 @@ public class GuiManager {
         List<Party> parties = Party.getActivePartiesWithinDistance(coord, 0);
         variables = ImmutableMap.of("title", "Join a Sesh", "parties", parties);
       }
-      /*
-       */
 
       variables = ImmutableMap.of("title", "Join a Sesh");
       return new ModelAndView(variables, "join.ftl");
@@ -139,12 +137,12 @@ public class GuiManager {
        * Send back party info (id, name, host, etc.) to display party.
        *
        */
-      int partyId = Integer.valueOf(qm.value("party_id")); // from frontend
-      String userId = qm.value("user_id"); // from frontend
-
-      User user = User.of(userId);
-      Party party = Party.of(partyId); // modify method later
-      party.addGuest(user);
+      // int partyId = Integer.valueOf(qm.value("party_id")); // from frontend
+      // String userId = qm.value("user_id"); // from frontend
+      //
+      // User user = User.of(userId);
+      // Party party = Party.of(partyId); // modify method later
+      // party.addGuest(user);
 
       // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
       // "userId", userId, "partyId", partyId, "partyName", party.getName(),

@@ -6,10 +6,7 @@
 </div>
 <div class="list-wrapper">
 <div class="tabContentRequestGuest">
-<ul style="list-style-type:none">
-
-
-</ul>
+<ul style="list-style-type:none"></ul>
 </div>
 
 <div class="tabContentPlaylistGuest">
@@ -37,8 +34,9 @@
 	<input type="text" class="search" name="search">
 	<div class="results">
 	<ul style="list-style: none;" class="searchResults"></ul>
+	</div>
 </div>
-</div>
+
 <div class="tabContentOptionsGuest"></div>
 </div>
 
