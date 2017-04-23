@@ -1,4 +1,5 @@
 <#assign content>
+<script src="/js/joinParty.js"></script>
 <div id="titles">
 <h2 id="playlist-title">Playlist</h2>
 <h2 id="request-title">Requests</h2>
