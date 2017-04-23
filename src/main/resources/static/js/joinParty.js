@@ -1,30 +1,4 @@
 $(document).ready(() => {
-	const $div = $("#createJoin");
-	const $buttons = $(".createJoin");
-	const $form = $("#createJoinForm");
-
-	//mobile device w smaller screen
-	if ($(window).width() < 1000) {
-		$div.css("display", "block");
-		console.log($div.css("display"));
-		$div.css("text-align", "center");
-		$buttons.css("font-size", "300%");
-		$buttons.css("width", "80%");
-		$form.css("margin-bottom", "4%");
-	//laptop
-	} else {
-		$div.css("display", "flex");
-		$buttons.css("font-size", "450%");
-		$buttons.css("width", "");
-		$form.css("margin-bottom", "");
-	}
-
-	//dj tab content
-	const $tabContentPlaylist = $(".tabContentPlaylist");
-	const $tabContentSearch = $(".tabContentSearch");
-	const $tabContentOptions = $(".tabContentOptions");
-	const $titles = $(".titles");
-	const $listWrapper = $('.list-wrapper');
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");
@@ -33,11 +7,8 @@ $(document).ready(() => {
 	const $tabContentOptionsGuest = $(".tabContentOptionsGuest");
 	const $playlistTitle = $("#playlist-title");
 	const $requestTitle = $("#request-title");
+	const $listWrapper = $('.list-wrapper');
 
-	//dj tabs
-	const $listview = $("#playlist-dj");
-	const $search = $("#search-dj");
-	const $options = $("#options-dj");
 
 	//guest tabs
 	const $requestsGuest = $("#request-guest");
@@ -45,56 +16,12 @@ $(document).ready(() => {
 	const $searchGuest = $("#search-guest");
 	const $optionsGuest = $("#options-guest");
 
-	const $sortable = $(".sortable");
-
-	$sortable.sortable({
-		connectWith: '.sortable'
-	});
-
-	//default initial views
-	$listview.addClass("active");
-	$tabContentSearch.hide();
-	$tabContentOptions.hide();
-
 	$requestsGuest.addClass("active");
 	$tabContentPlaylistGuest.hide();
 	$tabContentSearchGuest.hide();
 	$tabContentOptionsGuest.hide();
 	$playlistTitle.hide();
 
-
-	$search.click(function() {
-		$search.addClass("active");
-		$listview.removeClass("active");
-		$options.removeClass("active");
-		$tabContentSearch.show();
-		$tabContentPlaylist.hide();
-		$tabContentOptions.hide();
-		$titles.hide();
-		$listWrapper.height("56%");
-	});
-
-	$listview.click(function() {
-		$listview.addClass("active");
-		$search.removeClass("active");
-		$options.removeClass("active");
-		$tabContentSearch.hide();
-		$tabContentPlaylist.show();
-		$tabContentOptions.hide();
-		$titles.show();
-		$listWrapper.height("50%");
-	});
-
-	$options.click(function() {
-		$options.addClass("active");
-		$listview.removeClass("active");
-		$search.removeClass("active");
-		$tabContentSearch.hide();
-		$tabContentPlaylist.hide();
-		$tabContentOptions.show();
-		$titles.hide();
-		$listWrapper.height("56%");
-	});
 
 	$playlistGuest.click(function() {
 		$playlistGuest.addClass("active");

@@ -140,6 +140,7 @@ public class GuiManager {
       String userId = userInfo.get(0);
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
+      System.out.println("USER ID: " + userId);
       try {
         user = User.create(userId, userEmail, userName);
         ftlPage = "createJoin.ftl";
