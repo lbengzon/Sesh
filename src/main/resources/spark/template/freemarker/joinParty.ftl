@@ -7,23 +7,6 @@
 <div class="list-wrapper">
 <div class="tabContentRequestGuest">
 <ul style="list-style-type:none">
-<li>
-	<div id="songdiv">Song 1 
-		<div id="vote">
-			<button type="button" class="voteButton"> <i class="material-icons">thumb_up</i> </button>
-			<button type="button" class="voteButton"> <i class="material-icons">thumb_down</i> </button>
-		</div>
-	</div>
-</li>
-
-<li>
-	<div id="songdiv">Song 1 
-		<div id="vote">
-			<button type="button" class="voteButton"> <i class="material-icons">thumb_up</i> </button>
-			<button type="button" class="voteButton"> <i class="material-icons">thumb_down</i> </button>
-		</div>
-	</div>
-</li>
 
 
 </ul>
@@ -51,7 +34,10 @@
 </div>
 
 <div class="tabContentSearchGuest">
-	<input type="text" class="search">
+	<input type="text" class="search" name="search">
+	<div class="results">
+	<ul style="list-style: none;" class="searchResults"></ul>
+</div>
 </div>
 <div class="tabContentOptionsGuest"></div>
 </div>

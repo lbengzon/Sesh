@@ -1,15 +1,20 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.wrapper.spotify.models.SimpleArtist;
+import com.wrapper.spotify.models.Track;
 
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
 import spark.Response;
+import spark.Route;
 import spark.Spark;
 import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
@@ -21,6 +26,7 @@ import spark.template.freemarker.FreeMarkerEngine;
  */
 public class GuiManager {
   private SpotifyCommunicator comm = new SpotifyCommunicator();
+  private static final Gson GSON = new Gson();
 
   /**
    * Default constructor.
@@ -41,6 +47,7 @@ public class GuiManager {
     Spark.post("/join", new JoinHandler(), fme);
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
+    Spark.post("/search", new SearchHandler());
   }
 
   /**
@@ -107,7 +114,7 @@ public class GuiManager {
       if (lat != null && lon != null) {
         Coordinate coord = new Coordinate(Double.valueOf(lat),
             Double.valueOf(lon));
-        List<Party> parties = Party.getActivePartiesWithinRange(coord);
+        List<Party> parties = Party.getActivePartiesWithinDistance(coord, 0);
         variables = ImmutableMap.of("title", "Join a Sesh", "parties", parties);
       }
       /*
@@ -226,6 +233,33 @@ public class GuiManager {
       String userId = qm.value("user_id");
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
       return new ModelAndView(variables, "createJoin.ftl");
+    }
+  }
+
+  /**
+   * Handles displaying search results.
+   *
+   * @author HE23
+   *
+   */
+  private static class SearchHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String input = qm.value("userInput");
+      List<Track> results = SpotifyCommunicator.searchTracks(input);
+      List<String> names = new ArrayList<>();
+      for (Track t : results) {
+        StringBuilder item = new StringBuilder(t.getName());
+        item.append(" - ");
+        for (SimpleArtist artist : t.getArtists()) {
+          item.append(artist.getName() + ", ");
+        }
+        item.delete(item.length() - 2, item.length() - 1);
+        names.add(item.toString());
+      }
+      Map<String, Object> variables = ImmutableMap.of("results", names);
+      return GSON.toJson(variables);
     }
   }
 
