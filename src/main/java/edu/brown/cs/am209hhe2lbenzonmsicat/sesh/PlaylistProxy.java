@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.wrapper.spotify.models.PlaylistTrackPosition;
+
 /**
  * Playlist proxy class.
  */
@@ -110,7 +112,19 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
       // TODO ADD API REQUEST HERE
-
+      int[] positions = new int[10];
+      List<Request> reqs = this.getSongs();
+      int pos = reqs.indexOf(request);
+      positions[0] = pos;
+      StringBuilder sb = new StringBuilder();
+      sb.append("spotify:track:");
+      sb.append(request.getSong().getSpotifyId());
+      PlaylistTrackPosition ptp = new PlaylistTrackPosition(sb.toString(),
+          positions);
+      List<PlaylistTrackPosition> listOfTrackPositions = new ArrayList<PlaylistTrackPosition>();
+      listOfTrackPositions.add(ptp);
+      SpotifyCommunicator.removeTrack(host.getSpotifyId(), this.spotifyId,
+          listOfTrackPositions);
       DbHandler.moveSongRequestOutOfQueue(request);
     } catch (SQLException e) {
       // TODO Auto-generated catch block
@@ -130,7 +144,12 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
       // TODO ADD API REQUEST HERE
-
+      StringBuilder sb = new StringBuilder();
+      sb.append("spotify:track:");
+      sb.append(request.getSong().getSpotifyId());
+      List<String> uris = new ArrayList<String>();
+      uris.add(sb.toString());
+      SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());

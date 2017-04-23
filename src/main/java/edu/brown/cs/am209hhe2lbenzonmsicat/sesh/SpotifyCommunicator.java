@@ -266,4 +266,14 @@ public class SpotifyCommunicator {
     return null;
   }
 
+  public static void removeTrack(String userId, String playlistId,
+      List<PlaylistTrackPosition> trackUris) {
+    api.removeTrackFromPlaylist(userId, playlistId, trackUris).build();
+
+  }
+
+  public static void addTrack(String userId, String playlistId,
+      List<String> uris) {
+    api.addTracksToPlaylist(userId, playlistId, uris);
+  }
 }
