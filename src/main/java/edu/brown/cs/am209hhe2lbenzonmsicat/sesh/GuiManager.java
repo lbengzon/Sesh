@@ -41,7 +41,6 @@ public class GuiManager {
     Spark.post("/join", new JoinHandler(), fme);
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
-    // Spark.post("/search", new SearchHandler(), fme);
   }
 
   /**
@@ -57,73 +56,6 @@ public class GuiManager {
           "authURL", comm.createAuthorizeURL());
       return new ModelAndView(variables, "login.ftl");
     }
-  }
-
-  /**
-   * Handles displaying existing parties.
-   */
-  private class JoinPartyHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-
-      /*
-       * Get party id from front end (from the one that user clicks on) Add user
-       * to party id that user clicks on. Add them to party, update java and db
-       * Send back party info (id, name, host, etc.) to display party.
-       *
-       */
-      // String partyId = qm.value("party_id"); // from frontend
-      // String userId = qm.value("user_id"); // from frontend
-
-      // User user = User.of(userId);
-      // Party party = Party.of(partyId); // modify method later
-      //// Party party = Party.of(partyId); // modify method later
-      // party.addGuest(user);
-      //
-      // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
-      // "userId", userId, "partyId", partyId, "partyName", party.getName(),
-      // "hostId", party.getHost().getSpotifyId());
-      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
-      return new ModelAndView(variables, "joinParty.ftl");
-    }
-  }
-
-  /**
-   * Handles displaying newly created party.
-   */
-  private class CreatePartyHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      // String userId = qm.value("user_id"); // from frontend
-      String partyName = qm.value("sesh_name"); // required
-      String hostName = qm.value("host_name");
-      // String hostId = qm.value("host_id"); // = from front end
-      String privacyStatus = qm.value("privacy_setting");
-      String time = String.valueOf(System.currentTimeMillis() / 1000);
-
-      // double lat = Double.valueOf(qm.value("lat"));
-      // double lon = Double.valueOf(qm.value("lon"));
-
-      // Coordinate coord = new Coordinate(lat, lon);
-      // Party party = null;
-      // try {
-      // User host = User.of(hostId);
-      // party = Party.create(partyName, host, coord, time);
-      // } catch (SQLException e) {
-      // System.out.println("Failed to add party to database");
-      // }
-
-      // System.out.println("PARTY NAME: " + partyName);
-      // System.out.println("HOST NAME: " + hostName);
-      // System.out.println("PRIVACY SETTINGS: " + privacyStatus);
-
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
-          "partyName", partyName);
-      return new ModelAndView(variables, "createParty.ftl");
-    }
-
   }
 
   /**
@@ -158,17 +90,60 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to front page (join or create a sesh).
+   * Handles request to join a sesh page.
    *
    * @author HE23
    */
-  private static class FrontHandler implements TemplateViewRoute {
+  private static class JoinHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables;
+      QueryParamsMap qm = req.queryMap();
+      String lat = qm.value("lat");
+      String lon = qm.value("lon");
+      System.out.println("lat:" + lat);
+      System.out.println("lon:" + lon);
+
+      if (lat != null && lon != null) {
+        Coordinate coord = new Coordinate(Double.valueOf(lat),
+            Double.valueOf(lon));
+        List<Party> parties = Party.getActivePartiesWithinRange(coord);
+        variables = ImmutableMap.of("title", "Join a Sesh", "parties", parties);
+      }
+      /*
+       */
+
+      variables = ImmutableMap.of("title", "Join a Sesh");
+      return new ModelAndView(variables, "join.ftl");
+    }
+  }
+
+  /**
+   * Handles joining a party.
+   */
+  private class JoinPartyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
+
+      /*
+       * Get party id from front end (from the one that user clicks on) Add user
+       * to party id that user clicks on. Add them to party, update java and db
+       * Send back party info (id, name, host, etc.) to display party.
+       *
+       */
+      int partyId = Integer.valueOf(qm.value("party_id")); // from frontend
       String userId = qm.value("user_id"); // from frontend
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
-      return new ModelAndView(variables, "createJoin.ftl");
+
+      User user = User.of(userId);
+      Party party = Party.of(partyId); // modify method later
+      party.addGuest(user);
+
+      // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
+      // "userId", userId, "partyId", partyId, "partyName", party.getName(),
+      // "hostId", party.getHost().getSpotifyId());
+      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
+      return new ModelAndView(variables, "joinParty.ftl");
     }
   }
 
@@ -180,55 +155,78 @@ public class GuiManager {
   private static class CreateHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables;
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("user_id");
-      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh");
+      System.out.println("in create handler");
+      String lat = qm.value("lat");
+      String lon = qm.value("lon");
+      System.out.println("lat:" + lat);
+      System.out.println("lon:" + lon);
+
+      if (lat != null && lon != null) {
+        variables = ImmutableMap.of("title", "Create a Sesh", "lat", lat, "lon",
+            lon);
+      } else {
+        variables = ImmutableMap.of("title", "Create a Sesh");
+      }
 
       return new ModelAndView(variables, "partySettings.ftl");
     }
   }
 
   /**
-   * Handles request to join a sesh page.
-   *
-   * @author HE23
+   * Handles displaying newly created party.
    */
-  private static class JoinHandler implements TemplateViewRoute {
+  private class CreatePartyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
+      // String userId = qm.value("user_id"); // from frontend
+      String partyName = qm.value("sesh_name"); // required
+      String hostName = qm.value("host_name");
+      // String hostId = qm.value("host_id"); // = from front end
+      String privacyStatus = qm.value("privacy_setting");
+      String time = String.valueOf(System.currentTimeMillis() / 1000);
+
       String lat = qm.value("lat");
       String lon = qm.value("lon");
+
+      // Coordinate coord = new Coordinate(lat, lon);
+      // Party party = null;
+      // try {
+      // User host = User.of(hostId);
+      // party = Party.create(partyName, host, coord, time);
+      // } catch (SQLException e) {
+      // System.out.println("Failed to add party to database");
+      // }
+
+      System.out.println("PARTY NAME: " + partyName);
+      System.out.println("HOST NAME: " + hostName);
+      System.out.println("PRIVACY SETTINGS: " + privacyStatus);
       System.out.println("LAT: " + lat);
       System.out.println("LON: " + lon);
-      /*
-       * TODO: Get list of parties within certain range (GMaps API).
-       */
-      // get location of user from frontend
-      // get list of parties in location range from backend and send to frontend
-      // to display
-      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
-      return new ModelAndView(variables, "join.ftl");
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
+          "partyName", partyName);
+      return new ModelAndView(variables, "createParty.ftl");
     }
+
   }
 
-  // /**
-  // * Handles requests to the search page.
-  // *
-  // * @author Matt
-  // */
-  // private static class SearchHandler implements TemplateViewRoute {
-  // @Override
-  // public ModelAndView handle(Request req, Response res) {
-  // QueryParamsMap qm = req.queryMap();
-  // String songName = qm.value("searchResult"); // or id?
-  // // with id, give to spotify api to retrieve song info
-  // // post song info
-  //
-  // Map<String, Object> variables = ImmutableMap.of("songId", songId,
-  // "songName", songName, "length", length, "artist", artist);
-  // return new ModelAndView(variables, "search.ftl"); // incomplete
-  // }
-  // }
+  /**
+   * Handles request to front page (join or create a sesh).
+   *
+   * @author HE23
+   */
+  private static class FrontHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("user_id");
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
+      return new ModelAndView(variables, "createJoin.ftl");
+    }
+  }
 
 }

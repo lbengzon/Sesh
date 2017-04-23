@@ -1,13 +1,11 @@
 <#assign content>
 <div id="party-list"></div>
 
-<body>
 <form method="POST" action="/join/party">
 <input type="submit" class="footerButtons" id="partySubmit" value="Join">
 
 </form>
-<script src="js/geolocation.js"></script>
-</body>
+<script src="/js/geolocation-join.js"></script>
 
 </#assign>
 <#include "main.ftl">

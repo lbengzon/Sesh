@@ -1,4 +1,5 @@
 <#assign content>
+<script src="/js/geolocation-create.js"></script>
 <div id="form-wrapper">
 <div id="create_sesh">
 <form method="POST" action="/create/party">
@@ -13,5 +14,7 @@
 </form>
 </div>
 </div>
+
+
 </#assign>
 <#include "main.ftl">

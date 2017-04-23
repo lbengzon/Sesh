@@ -69,6 +69,5 @@
 <button class="footerButtons" id="options-dj">Options</button>
 </div>
 
-
 </#assign>
 <#include "main.ftl">
