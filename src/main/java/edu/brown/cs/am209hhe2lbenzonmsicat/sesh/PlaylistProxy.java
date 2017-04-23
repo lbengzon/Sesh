@@ -1,11 +1,5 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +18,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
+   *
    * @param spotifyId
    *          - playlist id
    * @param partyId
@@ -94,43 +89,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
     // TODO make a request to the spotify api to get the list of songs, then
     // sort that requsts the same way that the songs in the spotify playlists
     // are
-    // sorted than return that.
-    StringBuilder sb = new StringBuilder();
-    sb.append("https://api.spotify.com/v1/users/");
-    sb.append(host.getSpotifyId());
-    sb.append("/playlists/");
-    sb.append(this.spotifyId);
-    String urlString = sb.toString();
-    URL url;
-    try {
-      url = new URL(urlString);
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-      // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId())
-      // .refreshAccessToken();
-      // conn.setRequestProperty("Authorization",
-      // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId()).);
-      // NEED ACCESS TO ACCESS TOKEN
-      int responseCode = conn.getResponseCode();
-      BufferedReader in = new BufferedReader(
-          new InputStreamReader(conn.getInputStream()));
-      String inputLine;
-      StringBuilder response = new StringBuilder();
-      System.out.println("responseCode = " + responseCode);
-      while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine);
-      }
-      in.close();
-      // https://open.spotify.com/user/al
-      // imiraculous/playlist/4VIEdAotucOaZCBEK3tM1Q
-      System.out.println(response);
-
-    } catch (MalformedURLException e) {
-      System.out.println("ERROR: malformed");
-    } catch (IOException e) {
-      System.out.println("ERROR: ioooooo");
-    }
-
+    List<String> songs = SpotifyCommunicator
+        .getPlaylistTracks(host.getSpotifyId(), this.spotifyId);
+    List<Request> results = new ArrayList<Request>();
     return new ArrayList<>(playlistBean.getQueuedRequests().values());
   }
 
@@ -145,43 +106,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
       // TODO ADD API REQUEST HERE
-      StringBuilder sb = new StringBuilder();
-      sb.append("https://api.spotify.com/v1/users/");
-      // sb.append(host.getSpotifyId());
-      sb.append("/playlists/");
-      sb.append(this.spotifyId);
-      sb.append("/tracks");
-      String urlString = sb.toString();
-      URL url;
-      try {
-        url = new URL(urlString);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("DELETE");
-        // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId());
-        // conn.setRequestProperty("Authorization",
-        // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId()).);
-        // NEED ACCESS TO ACCESS TOKEN
-
-        // create JSON object of song to delete
-        conn.setRequestProperty("Content-Type", "");
-        int responseCode = conn.getResponseCode();
-        BufferedReader in = new BufferedReader(
-            new InputStreamReader(conn.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
-          response.append(inputLine);
-        }
-        in.close();
-        // https://open.spotify.com/user/al
-        // imiraculous/playlist/4VIEdAotucOaZCBEK3tM1Q
-        System.out.println(response);
-
-      } catch (MalformedURLException e) {
-        System.out.println("ERROR: malformed");
-      } catch (IOException e) {
-        System.out.println("ERROR: ioooooo");
-      }
 
       DbHandler.moveSongRequestOutOfQueue(request);
     } catch (SQLException e) {
@@ -202,42 +126,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
       // TODO ADD API REQUEST HERE
-      StringBuilder sb = new StringBuilder();
-      sb.append("https://api.spotify.com/v1/users/");
-      // sb.append(host.getSpotifyId());
-      sb.append("/playlists/");
-      sb.append(this.spotifyId);
-      sb.append("/tracks");
-      String urlString = sb.toString();
-      URL url;
-      try {
-        url = new URL(urlString);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId());
-        // conn.setRequestProperty("Authorization",
-        // SpotifyCommunicator.getUserToApi().get(host.getSpotifyId()).);
-        // NEED ACCESS TO ACCESS TOKEN
 
-        // create JSON object of song to add
-        conn.setRequestProperty("Content-Type", "");
-        int responseCode = conn.getResponseCode();
-        BufferedReader in = new BufferedReader(
-            new InputStreamReader(conn.getInputStream()));
-        String inputLine;
-        StringBuilder response = new StringBuilder();
-        while ((inputLine = in.readLine()) != null) {
-          response.append(inputLine);
-        }
-        in.close();
-        // https://open.spotify.com/user/al
-        // imiraculous/playlist/4VIEdAotucOaZCBEK3tM1Q
-
-      } catch (MalformedURLException e) {
-        System.out.println("ERROR: malformed");
-      } catch (IOException e) {
-        System.out.println("ERROR: ioooooo");
-      }
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
