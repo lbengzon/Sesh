@@ -49,7 +49,9 @@
 </ul>
 </div>
 
-<div class="tabContentSearchGuest"></div>
+<div class="tabContentSearchGuest">
+	<input type="text" class="search">
+</div>
 <div class="tabContentOptionsGuest"></div>
 </div>
 
