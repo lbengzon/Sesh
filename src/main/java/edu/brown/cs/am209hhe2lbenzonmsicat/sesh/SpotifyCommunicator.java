@@ -1,11 +1,6 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,8 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
 import com.wrapper.spotify.exceptions.WebApiException;
 import com.wrapper.spotify.methods.RemoveTrackFromPlaylistRequest;
@@ -113,10 +106,8 @@ public class SpotifyCommunicator {
              */
             api.setAccessToken(authorizationCodeCredentials.getAccessToken());
             api.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-            results = getUserInfo(
-                authorizationCodeCredentials.getAccessToken());
+            results = getUserInfo();
             userToApi.put(results.get(0), api);
-            // addSongs();
 
           }
 
@@ -171,46 +162,19 @@ public class SpotifyCommunicator {
   /**
    * This finds the user's info.
    *
-   * @param token
-   *          the access token
    * @return list of the user info.
    */
-  public List<String> getUserInfo(String token) {
+  public List<String> getUserInfo() {
     results = new ArrayList<String>();
-    System.out.println("getting user info");
-    StringBuilder sb = new StringBuilder();
-    sb.append("https://api.spotify.com/v1/me");
-    String urlString = sb.toString();
-    URL url;
     try {
-      url = new URL(urlString);
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("GET");
-      sb = new StringBuilder();
-      sb.append("Bearer ");
-      sb.append(token);
-      conn.setRequestProperty("Authorization", sb.toString());
-      int responseCode = conn.getResponseCode();
-      BufferedReader in = new BufferedReader(
-          new InputStreamReader(conn.getInputStream()));
-      String inputLine;
-      StringBuilder response = new StringBuilder();
-
-      while ((inputLine = in.readLine()) != null) {
-        response.append(inputLine);
-      }
-      in.close();
-      JsonObject jsonObject = new JsonParser().parse(response.toString())
-          .getAsJsonObject();
-      results.add(jsonObject.get("id").toString());
-      results.add(jsonObject.get("email").toString());
-      results.add(jsonObject.get("display_name").toString());
-      return results;
-    } catch (MalformedURLException e) {
-      System.out.println("ERROR: malformed");
-    } catch (IOException e) {
-      System.out.println("ERROR: ioooooo " + e.getMessage());
+      com.wrapper.spotify.models.User u = api.getMe().build().get();
+      results.add(u.getId());
+      results.add(u.getEmail());
+      results.add(u.getDisplayName());
+    } catch (IOException | WebApiException e) {
+      // ERROR
     }
+
     return results;
   }
 
