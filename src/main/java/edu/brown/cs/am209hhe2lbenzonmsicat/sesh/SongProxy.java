@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.wrapper.spotify.models.Track;
+
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
@@ -25,18 +27,31 @@ public class SongProxy extends Song implements Proxy {
     this.spotifyId = spotifyId;
   }
 
+  public SongProxy(String spotifyId, String name, String album, String artist,
+      double length) {
+    this.spotifyId = spotifyId;
+    this.fillBean();
+  }
+
   @Override
   public void fillBean() {
     assert songBean == null;
-    // if the actor exists in the cache just use that
+    // if the song exists in the cache just use that
     SongBean song = idSongCache.get(spotifyId);
     if (song != null) {
       songBean = song;
       return;
     }
     try {
-      System.out.println("TODO here");
       // TODO songBean = some api call here
+      Track t = SpotifyCommunicator.getTrack(this.spotifyId);
+      String id = t.getId();
+      String title = t.getName();
+      String album = t.getAlbum().getName();
+      String artist = t.getArtists().get(0).getName();
+      double length = t.getDuration();
+      songBean = new SongBean(id, title, album, artist, length);
+
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
     }

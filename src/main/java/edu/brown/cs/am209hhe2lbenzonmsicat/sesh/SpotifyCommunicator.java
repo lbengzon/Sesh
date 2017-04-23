@@ -22,6 +22,7 @@ import com.wrapper.spotify.methods.RemoveTrackFromPlaylistRequest;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
 import com.wrapper.spotify.models.PlaylistTrack;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
+import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
@@ -222,19 +223,47 @@ public class SpotifyCommunicator {
    *          playlist id
    * @return list of all the playlist songs
    */
-  public static List<String> getPlaylistTracks(String userId,
-      String playlistId) {
-    List<String> res = new ArrayList<String>();
+  public static List<Song> getPlaylistTracks(String userId, String playlistId) {
+    List<Song> res = new ArrayList<Song>();
     try {
       List<PlaylistTrack> plist = api.getPlaylistTracks(userId, playlistId)
           .build().get().getItems();
       for (PlaylistTrack pt : plist) {
-        res.add(pt.getTrack().getId());
+        Track t = pt.getTrack();
+        Song s = Song.of(t.getId(), t.getName(), t.getAlbum().getName(),
+            t.getArtists().get(0).getName(), t.getDuration());
+        res.add(s);
       }
     } catch (IOException | WebApiException e) {
       // ERROR
     }
     return res;
+  }
+
+  public static List<Track> searchTracks(String query) {
+    // List<Song> results = new ArrayList<Song>();
+    List<Track> tracks = new ArrayList<Track>();
+    try {
+      tracks = api.searchTracks(query).build().get().getItems();
+      // for (Track t : tracks) {
+      // Song s =
+      // }
+      return tracks;
+    } catch (IOException | WebApiException e) {
+      // ERROR
+    }
+    return tracks;
+
+  }
+
+  public static Track getTrack(String id) {
+    try {
+      Track t = api.getTrack(id).build().get();
+      return t;
+    } catch (IOException | WebApiException e) {
+      // ERROR
+    }
+    return null;
   }
 
 }
