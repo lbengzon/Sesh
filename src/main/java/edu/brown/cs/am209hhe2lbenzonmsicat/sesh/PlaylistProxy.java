@@ -75,7 +75,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   @Override
   public List<Request> getSongs() {
-
+    List<Request> results = new ArrayList<Request>();
     if (playlistBean != null) {
       return new ArrayList<>(playlistBean.getQueuedRequests().values());
     } else {
@@ -89,10 +89,14 @@ public class PlaylistProxy extends Playlist implements Proxy {
     // TODO make a request to the spotify api to get the list of songs, then
     // sort that requsts the same way that the songs in the spotify playlists
     // are
-    List<String> songs = SpotifyCommunicator
+    List<Song> songs = SpotifyCommunicator
         .getPlaylistTracks(host.getSpotifyId(), this.spotifyId);
-    List<Request> results = new ArrayList<Request>();
-    return new ArrayList<>(playlistBean.getQueuedRequests().values());
+    Map<Song, Request> map = playlistBean.getQueuedRequests();
+    for (Song s : songs) {
+      results.add(map.get(s));
+    }
+
+    return results;
   }
 
   @Override
@@ -137,7 +141,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   @Override
   public void fillBean() {
     assert playlistBean == null;
-    // if the actor exists in the cache just use that
+    // if the playlist exists in the cache just use that
     PlaylistBean playlist = idToPlaylistCache.get(spotifyId);
     if (playlist != null) {
       playlistBean = playlist;

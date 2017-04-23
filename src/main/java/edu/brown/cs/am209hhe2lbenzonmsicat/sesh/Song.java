@@ -46,6 +46,15 @@ public abstract class Song {
     return new SongProxy(spotifyId);
   }
 
+  public static Song of(String spotifyId, String name, String album,
+      String artist, double length) {
+    if (spotifyId == null) {
+      throw new NullPointerException(
+          "ERROR: Trying to create a song from a null id");
+    }
+    return new SongProxy(spotifyId, name, album, artist, length);
+  }
+
   @Override
   public boolean equals(Object o) {
     try {
