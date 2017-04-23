@@ -67,12 +67,12 @@ $(document).ready(() => {
 		$.post("/search", postParameters, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);
 			const suggestions = responseObject.results;
+			const songIds = responseObject.songIds;
 
 			$results.empty();
 
 			for (var i = 0; i < suggestions.length; i++) {
-				$results.append("<li onmouseover=\"hoverOn(this)\"" + 
-					"onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
+				$results.append("<li " + "id=\"" + songIds[i] + "\"" + "onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
 			}
 		});
 	});
@@ -82,6 +82,7 @@ $(document).ready(() => {
 		$selected = $listItems.filter('.selected');
 		$playlist.append("<li>" + $selected.text() + "</li>");
 		showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+		//send post request to add song to playlist in db
 	});
 
 	//default initial views

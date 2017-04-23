@@ -74,12 +74,12 @@ $(document).ready(() => {
 		$.post("/search", postParameters, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);
 			const suggestions = responseObject.results;
+			const songIds = responseObject.songIds;
 
 			$results.empty();
 
 			for (var i = 0; i < suggestions.length; i++) {
-				$results.append("<li onmouseover=\"hoverOn(this)\"" + 
-					"onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
+				$results.append("<li " + "id=\"" + songIds[i] + "\"" + "onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
 			}
 		});
 	});
