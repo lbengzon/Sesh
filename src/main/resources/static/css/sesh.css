@@ -242,7 +242,7 @@ input#private_sesh, input#public_sesh {
 	width: 75%;
 	height: 100%;
 	background-color: white;
-	display: flex;
+	display: block;
 	text-align: center;
 }
 
@@ -300,7 +300,30 @@ input#private_sesh, input#public_sesh {
 	font-size: 150%;
 	margin: auto;
 	margin-top: 2%;
+	margin-bottom: 1%;
 	border: 2px solid black;
+}
+
+.searchResults {
+	color: black;
+	text-align: left;
+	font-size: 150%;
+	width: 93%;
+}
+
+.results li {
+	padding-bottom: 1%;
+	padding-top: 1%;
+	border-top: 3px solid #81c1db;
+}
+
+.selected {
+	background-color: #dddddd;
+}
+
+.results {
+	height: 80%;
+	overflow-y: scroll;
 }
 
 
