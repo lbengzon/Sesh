@@ -211,4 +211,17 @@ public class SpotifyCommunicator {
     return results;
   }
 
+  /**
+   * This method gets the playlist tracks.
+   *
+   * @param userId
+   *          user id
+   * @param playlistId
+   *          playlist id
+   * @return list of all the playlist songs
+   */
+  public List<String> getPlaylistTracks(String userId, String playlistId) {
+    api.getPlaylistTracks(userId, playlistId).build().get();
+  }
+
 }
