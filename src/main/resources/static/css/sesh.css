@@ -242,6 +242,8 @@ input#private_sesh, input#public_sesh {
 	width: 75%;
 	height: 100%;
 	background-color: white;
+	display: flex;
+	text-align: center;
 }
 
 #footer {
@@ -289,6 +291,16 @@ input#private_sesh, input#public_sesh {
 
 .material-icons {
 	color: #b5b5b5;
+}
+
+.search {
+	width: 90%;
+	height: 5%;
+	padding: 1%;
+	font-size: 150%;
+	margin: auto;
+	margin-top: 2%;
+	border: 2px solid black;
 }
 
 
