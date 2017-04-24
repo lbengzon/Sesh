@@ -18,6 +18,7 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Constructor.
+   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -30,8 +31,10 @@ public class PlaylistBean extends Playlist {
     this.setUrl("find out the actual structure " + id);
     this.partyId = partyId;
     this.queuedRequests = new HashMap<>();
+    requestIdToRequest = new HashMap<>();
     for (Request req : queuedRequests) {
       this.queuedRequests.put(req.getSong(), req);
+      this.requestIdToRequest.put(req.getId(), req);
     }
   }
 
@@ -42,6 +45,7 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
+   *
    * @param id
    *          - id to set
    */
@@ -88,6 +92,7 @@ public class PlaylistBean extends Playlist {
   @Override
   public boolean addSong(Request request) {
     queuedRequests.put(request.getSong(), request);
+
     requestIdToRequest.put(request.getId(), request);
     return true;
   }
