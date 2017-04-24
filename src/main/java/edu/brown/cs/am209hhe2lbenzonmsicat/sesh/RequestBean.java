@@ -1,6 +1,8 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -135,6 +137,26 @@ public class RequestBean extends Request {
   @Override
   public int getPartyId() {
     return partyId;
+  }
+
+  @Override
+  public Map<String, Object> toMap() {
+    Map<String, Object> rMap = new HashMap<>();
+    rMap.put("requestId", getId());
+    Set<String> upvoteIds = new HashSet<>();
+    upvotes.forEach((upvote) -> upvoteIds.add(upvote.getSpotifyId()));
+    Set<String> downvoteIds = new HashSet<>();
+    downvotes.forEach((downvote) -> downvoteIds.add(downvote.getSpotifyId()));
+    rMap.put("upvotes", upvoteIds);
+    rMap.put("downvotes", downvoteIds);
+    rMap.put("score", voteCount());
+    rMap.put("time", requestTime);
+    try {
+      rMap.put("song", song.toMap());
+    } catch (Exception e) {
+      rMap.put("song", "DEMO SONG JSON");
+    }
+    return rMap;
   }
 
 }
