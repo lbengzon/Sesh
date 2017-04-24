@@ -2,7 +2,7 @@
 <script>
 	var userId;
 </script>
-<script src="/js/geolocation-create.js"></script>
+<script src="/js/partySettings.js"></script>
 <script>
 	userId = "${userId}";
 </script>
