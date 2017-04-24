@@ -205,13 +205,9 @@ public class SpotifyCommunicator {
   }
 
   public static List<Track> searchTracks(String query) {
-    // List<Song> results = new ArrayList<Song>();
     List<Track> tracks = new ArrayList<Track>();
     try {
       tracks = api.searchTracks(query).build().get().getItems();
-      // for (Track t : tracks) {
-      // Song s =
-      // }
       return tracks;
     } catch (IOException | WebApiException e) {
       // ERROR
