@@ -76,7 +76,6 @@ $(document).ready(() => {
 			const songIds = responseObject.songIds;
 
 			$results.empty();
-
 			for (var i = 0; i < suggestions.length; i++) {
 				$results.append("<li " + "id=\"" + songIds[i] + "\"" + "onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
 			}
@@ -84,20 +83,31 @@ $(document).ready(() => {
 	});
 
 
+	/* HANDLES ADDING A REQUEST FROM SEARCH */
 	$results.on("click", event => {
 		$listItems = $('li');
 		$selected = $listItems.filter('.selected');
 		//append to request list
-		//$requests.append("<li><div id=\"songdiv\">" + $selected.text() + "<div id=\"vote\"> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_up</i></button> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>")
-		//send post request to create request object and add to db
-		console.log($selected.attr("id"));
-		const postParameters = {songId: $selected.attr('id')};
+		//$requests.append("<li " + "id=\"" + $selected.attr("id") + "\"><div id=\"songdiv\" " + "onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\">" + $selected.text() + "<div id=\"vote\"> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_up</i></button> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+
+
+		//also need to send party id!
+		const postParameters = {songId: $selected.attr('id'), spotifyUserId: userId};
 		$.post("/addRequest", postParameters, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);
-
+			//receive playlist and request list here to display
 		});
-		//showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
+
+	/* HANDLES UPVOTE/DOWNVOTE */
+	$requests.on("click", event => {
+		$listItems = $('li');
+		$selected = $listItems.filter(".selected");
+		console.log($selected.attr("id"));
+		// console.log($this.attr("id"));
+	})
+	
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");
