@@ -12,6 +12,8 @@ public class PlaylistBean extends Playlist {
   private String id; // youtube/spotify id
   private String url;
   private Map<Song, Request> queuedRequests;
+  private Map<String, Request> requestIdToRequest;
+
   private int partyId;
 
   /**
@@ -73,13 +75,20 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
-  public boolean removeSong(Request request) {
-    return queuedRequests.remove(request.getSong()) != null;
+  public Request removeSong(String requestId) {
+    Request toRemove = requestIdToRequest.remove(requestId);
+    return queuedRequests.remove(toRemove.getSong());
+  }
+
+  @Override
+  public Request getRequest(String requestId) {
+    return requestIdToRequest.get(requestId);
   }
 
   @Override
   public boolean addSong(Request request) {
     queuedRequests.put(request.getSong(), request);
+    requestIdToRequest.put(request.getId(), request);
     return true;
   }
 

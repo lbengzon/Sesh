@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.google.gson.Gson;
+
 /**
  * Abstract party class.
  */
@@ -71,6 +73,18 @@ public abstract class Party {
   public abstract Coordinate getLocation();
 
   /**
+   * @return Returns the request list as a stringified JSON object that will be
+   *         sent to the front end to display.
+   */
+  public abstract String getRequestsAsJson();
+
+  /**
+   * @return Returns the request list as a stringified JSON object that will be
+   *         sent to the front end to display.
+   */
+  public abstract String getPlaylistQueueAsJson();
+
+  /**
    * @return party status
    */
   public abstract Status getStatus();
@@ -83,7 +97,7 @@ public abstract class Party {
    *          - request
    * @return boolean if successful
    */
-  public abstract boolean upvoteSong(User user, Request req);
+  public abstract boolean upvoteSong(User user, String requestId);
 
   /**
    * Downvote song.
@@ -93,7 +107,7 @@ public abstract class Party {
    *          - request
    * @return boolean if successful
    */
-  public abstract boolean downvoteSong(User user, Request req);
+  public abstract boolean downvoteSong(User user, String requestId);
 
   /**
    * Approve song.
@@ -101,7 +115,7 @@ public abstract class Party {
    *          - request
    * @return boolean if successful
    */
-  public abstract boolean approveSong(Request req);
+  public abstract boolean approveSong(String requestId);
 
   /**
    * Remove from playlist.
@@ -109,7 +123,7 @@ public abstract class Party {
    *          - request
    * @return boolean if successful.
    */
-  public abstract boolean removeFromPlaylist(Request req);
+  public abstract boolean removeFromPlaylist(String requestId);
 
   /**
    * Request song.
@@ -294,4 +308,7 @@ public abstract class Party {
   public String toString() {
     return getPartyId() + "";
   }
+
+  public static Gson GSON = new Gson();
+
 }

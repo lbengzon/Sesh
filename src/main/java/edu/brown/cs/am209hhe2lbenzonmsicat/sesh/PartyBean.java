@@ -1,7 +1,9 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -13,7 +15,7 @@ public class PartyBean extends Party {
   private Playlist playlist;
   private User host;
   private Set<User> guests;
-  private Set<Request> requestedSongs;
+  private Map<String, Request> requestIdToRequest;
   private Coordinate location;
   private String name;
   private String time;
@@ -46,7 +48,10 @@ public class PartyBean extends Party {
     this.partyId = partyId;
     this.host = host;
     this.guests = guests;
-    this.requestedSongs = requestedSongs;
+    this.requestIdToRequest = new HashMap<>();
+    for (Request request : requestedSongs) {
+      requestIdToRequest.put(request.getId(), request);
+    }
     this.playlist = playlist;
     this.location = location;
     this.name = name;
@@ -60,11 +65,12 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean upvoteSong(User user, Request req) {
+  public boolean upvoteSong(User user, String requestId) {
     assert isActive() == true;
     try {
-      if (getRequestedSongs().contains(req) && getAttendees().contains(user)) {
-        req.upvote(user);
+      Request request = requestIdToRequest.get(requestId);
+      if (request != null) {
+        request.upvote(user);
         return true;
       }
     } catch (Exception e) {
@@ -74,11 +80,12 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean downvoteSong(User user, Request req) {
+  public boolean downvoteSong(User user, String requestId) {
     assert isActive() == true;
     try {
-      if (getRequestedSongs().contains(req) && getAttendees().contains(user)) {
-        req.downvote(user);
+      Request request = requestIdToRequest.get(requestId);
+      if (request != null) {
+        request.downvote(user);
         return true;
       }
     } catch (Exception e) {
@@ -89,26 +96,24 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean approveSong(Request req) {
+  public boolean approveSong(String requestId) {
     assert isActive() == true;
-
-    if (!requestedSongs.contains(req)) {
+    Request request = requestIdToRequest.get(requestId);
+    if (request == null) {
       return false;
     }
-    playlist.addSong(req);
-    requestedSongs.remove(req);
+    playlist.addSong(request);
+    requestIdToRequest.remove(requestId);
     return true;
   }
 
   @Override
-  public boolean removeFromPlaylist(Request req) {
+  public boolean removeFromPlaylist(String requestId) {
     assert isActive() == true;
-
-    if (!playlist.getSongs().contains(req)) {
-      return false;
+    Request req = playlist.removeSong(requestId);
+    if (req != null) {
+      requestIdToRequest.put(req.getId(), req);
     }
-    playlist.removeSong(req);
-    requestedSongs.add(req);
     return true;
   }
 
@@ -119,7 +124,7 @@ public class PartyBean extends Party {
     try {
       if (getAttendees().contains(user)) {
         Request newRequest = Request.create(song, user, partyId, "testTime");
-        requestedSongs.add(newRequest);
+        requestIdToRequest.put(newRequest.getId(), newRequest);
         return newRequest;
       }
     } catch (SQLException e) {
@@ -131,7 +136,7 @@ public class PartyBean extends Party {
 
   @Override
   public Set<Request> getRequestedSongs() {
-    return new HashSet<>(requestedSongs);
+    return new HashSet<>(requestIdToRequest.values());
   }
 
   @Override
@@ -201,6 +206,24 @@ public class PartyBean extends Party {
   @Override
   public double getDistance(Coordinate coordinate) {
     return location.getDistanceFrom(coordinate);
+  }
+
+  @Override
+  public String getRequestsAsJson() {
+    Map<String, Object> requestsMap = new HashMap<>();
+    for (Request r : requestIdToRequest.values()) {
+      requestsMap.put(r.getId(), r.toMap());
+    }
+    return GSON.toJson(requestsMap);
+  }
+
+  @Override
+  public String getPlaylistQueueAsJson() {
+    Map<String, Object> requestsMap = new HashMap<>();
+    for (Request r : playlist.getSongs()) {
+      requestsMap.put(r.getId(), r.toMap());
+    }
+    return GSON.toJson(requestsMap);
   }
 
 }

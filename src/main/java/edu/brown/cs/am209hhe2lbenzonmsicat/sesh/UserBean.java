@@ -1,5 +1,8 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Models an arbitrary Sesh user.
  * @author Matt
@@ -80,6 +83,16 @@ public class UserBean extends User {
    */
   public static User ofId(String id) {
     return null;
+  }
+
+  @Override
+  public Map<String, Object> toMap() {
+    Map<String, Object> userMap = new HashMap<>();
+    userMap.put("spotifyId", spotifyId);
+    userMap.put("email", email);
+    userMap.put("firstName", firstName);
+    userMap.put("lastName", lastName);
+    return userMap;
   }
 
 }

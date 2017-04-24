@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * Request abstract class.
  */
-public abstract class Request implements Comparable<Request> {
+public abstract class Request implements Comparable<Request>, Jsonable {
 
   /**
    * Vote type enum.

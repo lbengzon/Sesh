@@ -29,7 +29,9 @@ public abstract class Playlist {
    *          - to remove
    * @return boolean if successful
    */
-  public abstract boolean removeSong(Request request);
+  public abstract Request removeSong(String requestId);
+
+  public abstract Request getRequest(String requestId);
 
   /**
    * @param request

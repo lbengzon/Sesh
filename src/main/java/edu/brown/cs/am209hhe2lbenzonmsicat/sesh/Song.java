@@ -4,9 +4,8 @@ import java.util.Objects;
 
 /**
  * Song abstract class.
- *
  */
-public abstract class Song {
+public abstract class Song implements Jsonable {
 
   /**
    * @return spotify id
