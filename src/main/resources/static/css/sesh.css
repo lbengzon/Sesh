@@ -328,5 +328,9 @@ input#private_sesh, input#public_sesh {
 	overflow-y: scroll;
 }
 
+.invisible {
+	display: none;
+}
+
 
 

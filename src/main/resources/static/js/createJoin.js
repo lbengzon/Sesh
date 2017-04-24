@@ -2,6 +2,10 @@ $(document).ready(() => {
 	const $div = $("#createJoin");
 	const $buttons = $(".createJoin");
 	const $form = $("#createJoinForm");
+	const $createButton = $("#createSesh");
+	const $joinButton = $("#joinSesh");
+
+	console.log("USER ID: " + userId);
 
 	//mobile device w smaller screen
 	if ($(window).width() < 1000) {
@@ -18,4 +22,22 @@ $(document).ready(() => {
 		$buttons.css("width", "");
 		$form.css("margin-bottom", "");
 	}
+
+	$("#createUserId").val(userId);
+	$("#joinUserId").val(userId);
+
+	// $createButton.on("click", event => {
+	// 	const postParameter = {userId: userId};
+	// 	$.post("/create", postParameter, response => {
+	// 		console.log("id sent to create backend");
+	// 	});
+	// });
+
+	// $joinButton.on("click", event => {
+	// 	const postParameter = {userId: userId};
+	// 	$.post("/join", postParameter, response => {
+	// 		console.log("id sent to join backend");
+	// 	});
+	// });
+
 });

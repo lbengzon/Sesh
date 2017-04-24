@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gson.JsonElement;
+
 /**
  * Models a party.
  * @author Matt
@@ -209,21 +211,21 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public String getRequestsAsJson() {
+  public JsonElement getRequestsAsJson() {
     Map<String, Object> requestsMap = new HashMap<>();
     for (Request r : requestIdToRequest.values()) {
       requestsMap.put(r.getId(), r.toMap());
     }
-    return GSON.toJson(requestsMap);
+    return GSON.toJsonTree(requestsMap);
   }
 
   @Override
-  public String getPlaylistQueueAsJson() {
+  public JsonElement getPlaylistQueueAsJson() {
     Map<String, Object> requestsMap = new HashMap<>();
     for (Request r : playlist.getSongs()) {
       requestsMap.put(r.getId(), r.toMap());
     }
-    return GSON.toJson(requestsMap);
+    return GSON.toJsonTree(requestsMap);
   }
 
 }

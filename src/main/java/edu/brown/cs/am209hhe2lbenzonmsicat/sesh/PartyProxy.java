@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.gson.JsonElement;
+
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
@@ -316,7 +318,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public String getRequestsAsJson() {
+  public JsonElement getRequestsAsJson() {
     if (partyBean == null) {
       try {
         fill();
@@ -328,7 +330,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public String getPlaylistQueueAsJson() {
+  public JsonElement getPlaylistQueueAsJson() {
     if (partyBean == null) {
       try {
         fill();

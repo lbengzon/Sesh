@@ -3,6 +3,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 public interface Jsonable {
   public static Gson GSON = new Gson();
@@ -15,8 +16,8 @@ public interface Jsonable {
   /**
    * @return the object as a JSON string
    */
-  public default String toJson() {
-    return GSON.toJson(toMap());
+  public default JsonElement toJson() {
+    return GSON.toJsonTree(toMap());
   }
 
 }

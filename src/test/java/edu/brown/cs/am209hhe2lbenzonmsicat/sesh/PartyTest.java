@@ -1237,8 +1237,8 @@ public class PartyTest {
     p.addGuest(m);
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
-    assert p.upvoteSong(a, r1) == true;
-    assert p.upvoteSong(m, r1) == true;
+    assert p.upvoteSong(a, r1.getId()) == true;
+    assert p.upvoteSong(m, r1.getId()) == true;
     assert ((Request) (p.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 2;
     assert ((Request) (p.getRequestedSongs().toArray()[0])).getUpvotes()

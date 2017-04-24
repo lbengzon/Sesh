@@ -64,7 +64,6 @@ function showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest
 
 
 $(document).ready(() => {
-
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
 	const $requests = $(".tabContentRequestGuest ul");
@@ -84,13 +83,20 @@ $(document).ready(() => {
 		});
 	});
 
+
 	$results.on("click", event => {
 		$listItems = $('li');
 		$selected = $listItems.filter('.selected');
 		//append to request list
-		$requests.append("<li><div id=\"songdiv\">" + $selected.text() + "<div id=\"vote\"> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_up</i></button> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>")
+		//$requests.append("<li><div id=\"songdiv\">" + $selected.text() + "<div id=\"vote\"> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_up</i></button> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>")
 		//send post request to create request object and add to db
-		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		console.log($selected.attr("id"));
+		const postParameters = {songId: $selected.attr('id')};
+		$.post("/addRequest", postParameters, responseJSON => {
+			const responseObject = JSON.parse(responseJSON);
+
+		});
+		//showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
 	//guest tab content

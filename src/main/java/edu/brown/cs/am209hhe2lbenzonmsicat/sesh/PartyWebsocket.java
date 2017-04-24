@@ -24,6 +24,10 @@ public class PartyWebsocket {
       .create();
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
+  private static enum TRANSFER_TYPE {
+    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
+  }
+
   private static enum MESSAGE_TYPE {
     CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, UPDATE_ADD_REQUEST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER
   }
@@ -79,10 +83,12 @@ public class PartyWebsocket {
             Request.VoteType.downvote);
         break;
       case MOVE_REQUEST_TO_QUEUE:
-        // sendAfterRequestTransferUpdate(partyId);
+        sendAfterRequestTransferUpdate(payload, user, party, session,
+            TRANSFER_TYPE.REQUEST_TO_PLAYLIST);
         break;
       case MOVE_FROM_QUEUE_TO_REQUEST:
-        // sendAfterRequestTransferUpdate(partyId);
+        sendAfterRequestTransferUpdate(payload, user, party, session,
+            TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
         break;
       default:
         assert false : "you should never get here!!!";
@@ -100,7 +106,7 @@ public class PartyWebsocket {
       if (newRequest == null) {
         throw new RuntimeException("ERROR: could not request song");
       }
-      updatePayload.addProperty("newRequest", newRequest.toJson());
+      updatePayload.add("newRequest", newRequest.toJson());
       updateMessage.addProperty("type",
           MESSAGE_TYPE.UPDATE_ADD_REQUEST.ordinal());
       updateMessage.addProperty("success", true);
@@ -128,12 +134,12 @@ public class PartyWebsocket {
         assert voteType.equals(VoteType.downvote);
         success = party.downvoteSong(user, requestId);
       }
-      updatePayload.addProperty("requestList", party.getRequestsAsJson());
-      updateMessage.addProperty("type",
-          MESSAGE_TYPE.UPDATE_VOTE_REQUESTS.ordinal());
       if (success == false) {
         throw new RuntimeException("ERROR: Cannot vote on request");
       }
+      updatePayload.add("requestList", party.getRequestsAsJson());
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_VOTE_REQUESTS.ordinal());
       updateMessage.addProperty("success", true);
       updateMessage.add("payload", updatePayload);
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
@@ -146,7 +152,37 @@ public class PartyWebsocket {
     }
   }
 
-  private void sendAfterRequestTransferUpdate(JsonObject payload) {
+  private void sendAfterRequestTransferUpdate(JsonObject payload, User user,
+      Party party, Session session, TRANSFER_TYPE transferType)
+      throws IOException {
+    String requestId = payload.get("requestId").getAsString();
+    JsonObject updatePayload = new JsonObject();
+    JsonObject updateMessage = new JsonObject();
+    try {
+      boolean success;
+      if (transferType.equals(TRANSFER_TYPE.REQUEST_TO_PLAYLIST)) {
+        success = party.approveSong(requestId);
+      } else {
+        assert transferType.equals(TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
+        success = party.removeFromPlaylist(requestId);
+      }
+      if (success == false) {
+        throw new RuntimeException("ERROR: Cannot vote on request");
+      }
+      updatePayload.add("requestList", party.getRequestsAsJson());
+      updatePayload.add("playlist", party.getPlaylistQueueAsJson());
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER.ordinal());
 
+      updateMessage.addProperty("success", true);
+      updateMessage.add("payload", updatePayload);
+      for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
+    } catch (Exception e) {
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
   }
 }
