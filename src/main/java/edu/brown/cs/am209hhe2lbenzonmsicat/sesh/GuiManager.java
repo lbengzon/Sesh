@@ -193,7 +193,6 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
 
       QueryParamsMap qm = req.queryMap();
-      // success
       String userId = qm.value("createUserId");
 
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
@@ -243,22 +242,6 @@ public class GuiManager {
     }
 
   }
-
-  // /**
-  // * Handles request to front page (join or create a sesh).
-  // *
-  // * @author HE23
-  // */
-  // private static class FrontHandler implements TemplateViewRoute {
-  // @Override
-  // public ModelAndView handle(Request req, Response res) {
-  // QueryParamsMap qm = req.queryMap();
-  // // String userId = qm.value("userId");
-  // // System.out.println(userId);
-  // Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
-  // return new ModelAndView(variables, "createJoin.ftl");
-  // }
-  // }
 
   /**
    * Handles displaying search results.

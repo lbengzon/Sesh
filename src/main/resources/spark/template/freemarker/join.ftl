@@ -9,7 +9,7 @@ ${userId}
 <script>
 	var userId;
 </script>
-<script src="/js/geolocation-join.js"></script>
+<script src="/js/join.js"></script>
 <script>
 <#if userId??>
 	userId = "${userId}";	
