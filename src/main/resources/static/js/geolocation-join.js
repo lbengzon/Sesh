@@ -8,7 +8,6 @@ $(document).ready(() => {
 
 		const postParameters = {lat: lat, lon: lon};
 		$.post("/join", postParameters, responseJSON => {
-			//display list of parties in range here
 		});
 	}
 
