@@ -52,47 +52,52 @@ public class PartyWebsocket {
       // session
       partyIdToSessions.remove(partyId, session);
       sessionToPartyId.remove(session);
+      System.out.println("Closed Connection");
     }
   }
 
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
-    JsonObject received = GSON.fromJson(message, JsonObject.class);
-    int typeInt = received.get("type").getAsInt();
-    MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[typeInt];
-    JsonObject payload = received.get("payload").getAsJsonObject();
-    String userId = payload.get("userId").getAsString();
-    int partyId = payload.get("partyId").getAsInt();
-    Party party = Party.of(partyId);
-    User user = User.of(userId);
-    switch (messageType) {
-      case SET_PARTY_ID:
-        partyIdToSessions.put(partyId, session);
-        sessionToPartyId.put(session, partyId);
-        break;
-      case ADD_REQUEST:
-
-        sendAddRequestUpdate(payload, user, party, session);
-        break;
-      case UPVOTE_REQUEST:
-        sendVoteRequestUpdate(payload, user, party, session,
-            Request.VoteType.upvote);
-        break;
-      case DOWNVOTE_REQUEST:
-        sendVoteRequestUpdate(payload, user, party, session,
-            Request.VoteType.downvote);
-        break;
-      case MOVE_REQUEST_TO_QUEUE:
-        sendAfterRequestTransferUpdate(payload, user, party, session,
-            TRANSFER_TYPE.REQUEST_TO_PLAYLIST);
-        break;
-      case MOVE_FROM_QUEUE_TO_REQUEST:
-        sendAfterRequestTransferUpdate(payload, user, party, session,
-            TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
-        break;
-      default:
-        assert false : "you should never get here!!!";
+    try {
+      JsonObject received = GSON.fromJson(message, JsonObject.class);
+      int typeInt = received.get("type").getAsInt();
+      MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[typeInt];
+      JsonObject payload = received.get("payload").getAsJsonObject();
+      String userId = payload.get("userId").getAsString();
+      int partyId = payload.get("partyId").getAsInt();
+      Party party = Party.of(partyId);
+      User user = User.of(userId);
+      switch (messageType) {
+        case SET_PARTY_ID:
+          partyIdToSessions.put(partyId, session);
+          sessionToPartyId.put(session, partyId);
+          break;
+        case ADD_REQUEST:
+          sendAddRequestUpdate(payload, user, party, session);
+          break;
+        case UPVOTE_REQUEST:
+          sendVoteRequestUpdate(payload, user, party, session,
+              Request.VoteType.upvote);
+          break;
+        case DOWNVOTE_REQUEST:
+          sendVoteRequestUpdate(payload, user, party, session,
+              Request.VoteType.downvote);
+          break;
+        case MOVE_REQUEST_TO_QUEUE:
+          sendAfterRequestTransferUpdate(payload, user, party, session,
+              TRANSFER_TYPE.REQUEST_TO_PLAYLIST);
+          break;
+        case MOVE_FROM_QUEUE_TO_REQUEST:
+          sendAfterRequestTransferUpdate(payload, user, party, session,
+              TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
+          break;
+        default:
+          assert false : "you should never get here!!!";
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+
   }
 
   private void sendAddRequestUpdate(JsonObject payload, User user, Party party,
