@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 
 /**
  * Abstract party class.
@@ -76,13 +77,13 @@ public abstract class Party {
    * @return Returns the request list as a stringified JSON object that will be
    *         sent to the front end to display.
    */
-  public abstract String getRequestsAsJson();
+  public abstract JsonElement getRequestsAsJson();
 
   /**
    * @return Returns the request list as a stringified JSON object that will be
    *         sent to the front end to display.
    */
-  public abstract String getPlaylistQueueAsJson();
+  public abstract JsonElement getPlaylistQueueAsJson();
 
   /**
    * @return party status
@@ -191,7 +192,7 @@ public abstract class Party {
     if (name == null || playlistId == null || location == null || time == null
         || status == null) {
       throw new NullPointerException(
-          "ERROR: Trying to create an mapnode from a null id");
+          "ERROR: Trying to create an part from a null id");
     }
     return new PartyProxy(partyId, name, playlistId, location, time, status);
   }
@@ -252,9 +253,11 @@ public abstract class Party {
       String time) throws SQLException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
-          "ERROR: Trying to create an mapnode from a null id");
+          "ERROR: Trying to create an party from a null id");
     }
-    String newPlaylistId = Playlist.getNewPlaylistId(host);
+    // TODO: REMOVE THIS COMMENT String newPlaylistId =
+    // Playlist.getNewPlaylistId(host);
+    String newPlaylistId = "fdsa";
     return DbHandler.addParty(newPlaylistId, name, location, time, host);
   }
 

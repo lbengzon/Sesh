@@ -5,6 +5,7 @@ import java.util.Objects;
 
 /**
  * Abstract playlist class.
+ *
  * @author HE23
  */
 public abstract class Playlist {
@@ -42,6 +43,7 @@ public abstract class Playlist {
 
   /**
    * This should only be used for testing!
+   *
    * @param spotifyId
    *          - spotify id
    * @param partyId
@@ -56,6 +58,7 @@ public abstract class Playlist {
 
   /**
    * Add playlist to database.
+   *
    * @param user
    *          - user
    * @return playlist
@@ -71,7 +74,9 @@ public abstract class Playlist {
   public static String getNewPlaylistId(User user) {
     // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
     // get the spotify id
-    return "testNewSpotifyPlaylistId";
+    String id = SpotifyCommunicator.createPlaylist(user.getSpotifyId(),
+        "testTitle");
+    return id;
   }
 
   @Override
