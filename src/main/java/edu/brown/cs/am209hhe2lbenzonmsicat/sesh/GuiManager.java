@@ -42,10 +42,8 @@ public class GuiManager {
   private void installRoutes(FreeMarkerEngine fme) {
     Spark.get("/login", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
-    // Spark.get("/sesh", new FrontHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
-    // Spark.post("/join", new PostJoinHandler());
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
@@ -92,7 +90,6 @@ public class GuiManager {
       String userId = userInfo.get(0);
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
-      System.out.println("User Id at Callback Handler: " + userId);
       try {
         user = User.create(userId, userEmail, userName);
         ftlPage = "createJoin.ftl";
@@ -178,7 +175,8 @@ public class GuiManager {
       // "userId", userId, "partyId", partyId, "partyName", party.getName(),
       // "hostId", party.getHost().getSpotifyId());
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
+      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
+          "userId", userId);
       return new ModelAndView(variables, "joinParty.ftl");
     }
   }
@@ -210,7 +208,6 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
-      System.out.println("USER ID AT CREATE PARTY: " + userId);
       String partyName = qm.value("sesh_name"); // required
       String hostName = qm.value("host_name");
       String privacyStatus = qm.value("privacy_setting");
@@ -223,18 +220,12 @@ public class GuiManager {
           Double.valueOf(lon));
       Party party = null;
 
-      // try {
-      // User host = User.of(userId);
-      // party = Party.create(partyName, host, coord, time);
-      // } catch (SQLException e) {
-      // System.out.println("Failed to add party to database");
-      // }
-
-      System.out.println("PARTY NAME: " + partyName);
-      System.out.println("HOST NAME: " + hostName);
-      System.out.println("PRIVACY SETTINGS: " + privacyStatus);
-      System.out.println("LAT: " + lat);
-      System.out.println("LON: " + lon);
+      try {
+        User host = User.of(userId);
+        party = Party.create(partyName, host, coord, time);
+      } catch (SQLException e) {
+        System.out.println("Failed to add party to database");
+      }
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
           "partyName", partyName);
