@@ -116,7 +116,6 @@ public class GuiManager {
             Double.valueOf(lon));
         List<Party> parties = Party.getActivePartiesWithinDistance(coord,
             Constants.PARTY_JOIN_RADIUS);
-
         variables = ImmutableMap.of("title", "Join a Sesh", "parties", parties);
       } else {
         variables = ImmutableMap.of("title", "Join a Sesh");
@@ -150,6 +149,7 @@ public class GuiManager {
       // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
       // "userId", userId, "partyId", partyId, "partyName", party.getName(),
       // "hostId", party.getHost().getSpotifyId());
+
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
       return new ModelAndView(variables, "joinParty.ftl");
     }
@@ -165,10 +165,9 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
 
       QueryParamsMap qm = req.queryMap();
-      String userId = qm.value("user_id");
+      // String userId = qm.value("user_id");
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
-          "user_id", userId);
+      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh");
 
       return new ModelAndView(variables, "partySettings.ftl");
     }
