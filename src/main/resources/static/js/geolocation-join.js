@@ -1,16 +1,17 @@
 $(document).ready(() => {
 
-	var c = function(pos) {
-		var lat = pos.coords.latitude, 
-		lon = pos.coords.longitude;
-		console.log("lat: " + lat);
-		console.log("lon: " + lon);
-
-		const postParameters = {lat: lat, lon: lon};
-		$.post("/join", postParameters, responseJSON => {
+	$("#userId").val(userId);
+	
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			const lat = position.coords.latitude;
+			const lon = position.coords.longitude
+			console.log(lat);
+			console.log(lon);
+			const postParameters = {latitude: lat, longitude: lon};
+			$.post("/join", postParameters, responseJSON => {
+				console.log("parties should be received here");
+			});
 		});
 	}
-
-	navigator.geolocation.getCurrentPosition(c);
-
 });

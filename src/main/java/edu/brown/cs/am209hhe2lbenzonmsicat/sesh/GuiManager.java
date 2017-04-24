@@ -42,12 +42,25 @@ public class GuiManager {
   private void installRoutes(FreeMarkerEngine fme) {
     Spark.get("/login", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
-    Spark.get("/sesh", new FrontHandler(), fme);
+    // Spark.get("/sesh", new FrontHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
+    // Spark.post("/join", new PostJoinHandler());
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
+    Spark.post("/addRequest", new AddRequestHandler());
+  }
+
+  private static class AddRequestHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String songId = qm.value("songId");
+      System.out.println(songId);
+      Map<String, Object> variables = ImmutableMap.of("songId", songId);
+      return GSON.toJson(variables);
+    }
   }
 
   /**
@@ -79,7 +92,7 @@ public class GuiManager {
       String userId = userInfo.get(0);
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
-      System.out.println("USER ID: " + userId);
+      System.out.println("User Id at Callback Handler: " + userId);
       try {
         user = User.create(userId, userEmail, userName);
         ftlPage = "createJoin.ftl";
@@ -91,7 +104,8 @@ public class GuiManager {
         ftlPage = "createJoin.ftl";
       }
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
       return new ModelAndView(variables, ftlPage);
     }
   }
@@ -104,24 +118,36 @@ public class GuiManager {
   private static class JoinHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-      Map<String, Object> variables;
-      QueryParamsMap qm = req.queryMap();
-      String lat = qm.value("lat");
-      String lon = qm.value("lon");
-      System.out.println("lat:" + lat);
-      System.out.println("lon:" + lon);
+      try {
+        QueryParamsMap qm = req.queryMap();
+        String userId = qm.value("joinUserId");
+        String lat = qm.value("latitude");
+        String lon = qm.value("longitude");
+        List<Party> parties = new ArrayList<>();
 
-      if (lat != null && lon != null) {
-        Coordinate coord = new Coordinate(Double.valueOf(lat),
-            Double.valueOf(lon));
-        List<Party> parties = Party.getActivePartiesWithinDistance(coord,
-            Constants.PARTY_JOIN_RADIUS);
-        variables = ImmutableMap.of("title", "Join a Sesh", "parties", parties);
-      } else {
-        variables = ImmutableMap.of("title", "Join a Sesh");
+        if (lat != null && lon != null) {
+          Coordinate coord = new Coordinate(Double.valueOf(lat),
+              Double.valueOf(lon));
+          parties = Party.getActivePartiesWithinDistance(coord,
+              Constants.PARTY_JOIN_RADIUS);
+        }
+
+        Map<String, Object> variables;
+
+        /* parties will be an empty list here */
+        if (userId != null) {
+          variables = ImmutableMap.of("title", "Join a Sesh", "parties",
+              parties, "userId", userId);
+        } else {
+          variables = ImmutableMap.of("title", "Join a Sesh", "parties",
+              parties);
+        }
+
+        return new ModelAndView(variables, "join.ftl");
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
       }
-
-      return new ModelAndView(variables, "join.ftl");
     }
   }
 
@@ -132,6 +158,8 @@ public class GuiManager {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
+      // success
+      String userId = qm.value("userId");
 
       /*
        * Get party id from front end (from the one that user clicks on) Add user
@@ -165,9 +193,11 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
 
       QueryParamsMap qm = req.queryMap();
-      // String userId = qm.value("user_id");
+      // success
+      String userId = qm.value("createUserId");
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh");
+      Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
+          "userId", userId);
 
       return new ModelAndView(variables, "partySettings.ftl");
     }
@@ -180,7 +210,8 @@ public class GuiManager {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
-      // String userId = qm.value("user_id"); // from frontend
+      String userId = qm.value("userId");
+      System.out.println("USER ID AT CREATE PARTY: " + userId);
       String partyName = qm.value("sesh_name"); // required
       String hostName = qm.value("host_name");
       String privacyStatus = qm.value("privacy_setting");
@@ -213,20 +244,21 @@ public class GuiManager {
 
   }
 
-  /**
-   * Handles request to front page (join or create a sesh).
-   *
-   * @author HE23
-   */
-  private static class FrontHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String userId = qm.value("user_id");
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
-      return new ModelAndView(variables, "createJoin.ftl");
-    }
-  }
+  // /**
+  // * Handles request to front page (join or create a sesh).
+  // *
+  // * @author HE23
+  // */
+  // private static class FrontHandler implements TemplateViewRoute {
+  // @Override
+  // public ModelAndView handle(Request req, Response res) {
+  // QueryParamsMap qm = req.queryMap();
+  // // String userId = qm.value("userId");
+  // // System.out.println(userId);
+  // Map<String, Object> variables = ImmutableMap.of("title", "Sesh");
+  // return new ModelAndView(variables, "createJoin.ftl");
+  // }
+  // }
 
   /**
    * Handles displaying search results.
