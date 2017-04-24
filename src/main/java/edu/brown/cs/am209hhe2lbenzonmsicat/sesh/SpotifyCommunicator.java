@@ -42,10 +42,8 @@ public class SpotifyCommunicator {
     api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
         .clientSecret(Constants.ALI_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
-    api.setAccessToken(
-        "BQCmw12JTnmiC0MizSBkavZKgBIqAA9_8PZJIlWu7DDcHrjTZcpqGmQw5WXlrldBKZHvOhW06ecYS0kHhqnAaYJuG7Wg00SuBzXOkQ6H_ZkH0pbgQkFcFJPqlRVYMM6QW9kLxtaij0oqmnSBi-VLjVCr59OTdDoVAgjQjNm_9E_flrxsjXmMV0yKvJF8LyRTq-b1gQBOsbNok6wBLSN3ggzdLO29e9wSVQQ0Nh5189mCMoCvDKq0EDRLAJY3wzKWP0G5s_Di66RutiGjT40");
-    api.setRefreshToken(
-        "AQAql1n0DwqSYpJb8Zap5zoA5ZXqcjjpSITSg2IheR9kVjwjTZMWDInKFy4a44c8qH1PGGTxesmXymBY-nVvULID8fUAusIotN_J0EbS8ar6QQWaS-BjOZyIwMKhi1XiHvA");
+    api.setAccessToken(Constants.ALI_ACCESS);
+    api.setRefreshToken(Constants.ALI_REFRESH);
   }
 
   /**
