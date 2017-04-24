@@ -77,6 +77,7 @@ public abstract class Party {
 
   /**
    * Upvote song.
+   *
    * @param user
    *          - to upvote
    * @param req
@@ -87,6 +88,7 @@ public abstract class Party {
 
   /**
    * Downvote song.
+   *
    * @param user
    *          - to downvote
    * @param req
@@ -97,6 +99,7 @@ public abstract class Party {
 
   /**
    * Approve song.
+   *
    * @param req
    *          - request
    * @return boolean if successful
@@ -105,6 +108,7 @@ public abstract class Party {
 
   /**
    * Remove from playlist.
+   *
    * @param req
    *          - request
    * @return boolean if successful.
@@ -113,6 +117,7 @@ public abstract class Party {
 
   /**
    * Request song.
+   *
    * @param song
    *          - request
    * @param user
@@ -123,6 +128,7 @@ public abstract class Party {
 
   /**
    * Add a guest to party.
+   *
    * @param guest
    *          - guest to add
    * @return boolean if successful.
@@ -131,6 +137,7 @@ public abstract class Party {
 
   /**
    * Removes a guest from the party
+   *
    * @param guest
    *          -Guest to remove
    * @return boolean if successful
@@ -139,6 +146,7 @@ public abstract class Party {
 
   /**
    * Gets the distance from the party to the coordinate.
+   *
    * @param coordinate
    *          The coordinate to get the distance from.
    * @return The distance from the coordinate.
@@ -156,6 +164,7 @@ public abstract class Party {
 
   /**
    * Retrieve party data.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -177,13 +186,14 @@ public abstract class Party {
     if (name == null || playlistId == null || location == null || time == null
         || status == null) {
       throw new NullPointerException(
-          "ERROR: Trying to create an mapnode from a null id");
+          "ERROR: Trying to create an part from a null id");
     }
     return new PartyProxy(partyId, name, playlistId, location, time, status);
   }
 
   /**
    * Gets the party object with the party id passed in.
+   *
    * @param partyId
    *          The id of the party
    * @return The party object representing the party.
@@ -198,6 +208,7 @@ public abstract class Party {
 
   /**
    * Gets the parties within the distance.
+   *
    * @param location
    *          The location of the user.
    * @param distance
@@ -222,6 +233,7 @@ public abstract class Party {
 
   /**
    * Create a party and add to db.
+   *
    * @param name
    *          - name
    * @param host
@@ -238,7 +250,7 @@ public abstract class Party {
       String time) throws SQLException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
-          "ERROR: Trying to create an mapnode from a null id");
+          "ERROR: Trying to create an party from a null id");
     }
     String newPlaylistId = Playlist.getNewPlaylistId(host);
     return DbHandler.addParty(newPlaylistId, name, location, time, host);
@@ -246,6 +258,7 @@ public abstract class Party {
 
   /**
    * Returns the active party of the user if he has any.
+   *
    * @param user
    *          The user you want to get the active party of
    * @return The active party of the user or null if there is no active party.
@@ -260,6 +273,7 @@ public abstract class Party {
 
   /**
    * Gets all (active and stopped) parties of a user.
+   *
    * @param user
    *          The user you want to get the parties of.
    * @return The parties of a user.
