@@ -221,6 +221,11 @@ public class GuiManager {
       Party party = null;
       int partyId = -1;
 
+      if (lat == null || lon == null) {
+        Map<String, Object> variables = ImmutableMap.of("title", "Error");
+        return new ModelAndView(variables, "error.ftl");
+      }
+
       // try {
       // User host = User.of(userId);
       // party = Party.create(partyName, host, coord, time); // modify to take
