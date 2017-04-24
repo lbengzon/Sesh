@@ -1,9 +1,11 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.SQLException;
 
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
@@ -18,7 +20,6 @@ import spark.template.freemarker.FreeMarkerEngine;
  * Main class.
  */
 public final class Main {
-
   private SpotifyCommunicator comm = new SpotifyCommunicator();
 
   /**
@@ -43,6 +44,15 @@ public final class Main {
         .defaultsTo(Constants.DEFAULT_PORT);
     OptionSet options = parser.parse(args);
     runSparkServer((int) options.valueOf("port"));
+    try {
+      DbHandler.setFromUrl("new.db");
+    } catch (FileNotFoundException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (SQLException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     comm.createAuthorizeURL();
 
   }

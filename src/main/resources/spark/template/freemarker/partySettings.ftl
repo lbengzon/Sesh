@@ -1,5 +1,12 @@
 <#assign content>
+<script>
+	var userId;
+</script>
 <script src="/js/geolocation-create.js"></script>
+<script>
+	userId = "${userId}";
+</script>
+
 <div id="form-wrapper">
 <div id="create_sesh">
 <form id="formId" method="POST" action="/create/party">
@@ -14,7 +21,7 @@
 <input type="text" id="lat" name="lat" style="display: none;">
 <input type="text" id="lon" name="lon" style="display: none;">
 
-
+<input type="text" id="userId" name="userId" style="display: none;">
 <input type="submit" value="Submit" id="formSubmit" formmethod="post" formaction="/create/party" >
 </form>
 </div>
