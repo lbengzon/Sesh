@@ -25,10 +25,11 @@ public final class Constants {
       + "FJPqlRVYMM6QW9kLxtaij0oqmnSBi-VLjVCr59OTdDoVAgjQjNm"
       + "_9E_flrxsjXmMV0yKvJF8LyRTq-b1gQBOsbNok6wBLSN3ggzdLO29e9wSVQQ"
       + "0Nh5189mCMoCvDKq0EDRLAJY3wzKWP0G5s_Di66RutiGjT40";
-  public static final String ALI_REFRESH = "AQD555e_NZyD1X5ZyW"
-      + "0TPXyqBWBxqmz8xwRZUcPsyH-UdnKkF-0Z0"
-      + "iZqLnS-gVcQTQ90EbONCln_3pgfqHNg7WVJMoUzOtalbKNcZ"
-      + "Zj2hgyTtkvLYOZTQ5ld37b4PvpiyIg";
+  public static final String SESH_REFRESH = "AQA2oN8P5q5GZhgqfSH"
+      + "zAupXa7IRGELe33EgHTebMPgzPt0cYTSE1be01-j"
+      + "EHl6Zb5V54hc9a_9Wlbi0c1emYP4rJna19AlP_xq48d-Bxk"
+      + "QDuNiU4iK3X0aeawkwGOUcaHU";
+
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;

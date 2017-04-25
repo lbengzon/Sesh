@@ -43,8 +43,7 @@ public class SpotifyCommunicator {
   }
 
   public static void setUpPublicApi() {
-
-    publicApi.setRefreshToken(Constants.ALI_REFRESH);
+    publicApi.setRefreshToken(Constants.SESH_REFRESH);
     String aT;
     try {
       aT = publicApi.refreshAccessToken().build().get().getAccessToken();
@@ -58,7 +57,8 @@ public class SpotifyCommunicator {
     testApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
-    testApi.setRefreshToken(Constants.ALI_REFRESH);
+    testApi.setRefreshToken(Constants.SESH_REFRESH);
+
     String aT;
     try {
       aT = testApi.refreshAccessToken().build().get().getAccessToken();
@@ -121,15 +121,14 @@ public class SpotifyCommunicator {
           @Override
           public void onSuccess(
               AuthorizationCodeCredentials authorizationCodeCredentials) {
-            // System.out.println("it's working on success");
-            // /* The tokens were retrieved successfully! */
-            // System.out.println("Successfully retrieved an access token! "
-            // + authorizationCodeCredentials.getAccessToken());
-            // System.out.println("The access token expires in "
-            // + authorizationCodeCredentials.getExpiresIn() + " seconds");
-            // System.out
-            // .println("Luckily, I can refresh it using this refresh token! "
-            // + authorizationCodeCredentials.getRefreshToken());
+            /* The tokens were retrieved successfully! */
+            System.out.println("Successfully retrieved an access token! "
+                + authorizationCodeCredentials.getAccessToken());
+            System.out.println("The access token expires in "
+                + authorizationCodeCredentials.getExpiresIn() + " seconds");
+            System.out
+                .println("Luckily, I can refresh it using this refresh token! "
+                    + authorizationCodeCredentials.getRefreshToken());
 
             /*
              * Set the access token and refresh token so that they are used
@@ -166,26 +165,6 @@ public class SpotifyCommunicator {
         });
     return results;
   }
-
-  // /**
-  // * This finds the user's info.
-  // *
-  // * @return list of the user info.
-  // */
-  // public List<String> getUserInfo(User user) {
-  // Api api = userToApi.get(user.getSpotifyId());
-  // results = new ArrayList<String>();
-  // try {
-  // com.wrapper.spotify.models.User u = api.getMe().build().get();
-  // results.add(u.getId());
-  // results.add(u.getEmail());
-  // results.add(u.getDisplayName());
-  // } catch (IOException | WebApiException e) {
-  // throw new RuntimeException(e.getMessage());
-  // }
-  //
-  // return results;
-  // }
 
   /**
    * This method gets the playlist tracks.

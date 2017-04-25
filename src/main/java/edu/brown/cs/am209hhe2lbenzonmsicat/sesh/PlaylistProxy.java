@@ -136,6 +136,16 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
   }
 
+  public String getEmbedUrl() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("https://embed.spotify,com/?uri=spotify:user:");
+    sb.append(host.getSpotifyId());
+    sb.append(":playlist:");
+    sb.append(this.spotifyId);
+    return sb.toString();
+
+  }
+
   @Override
   public Request getRequest(String requestId) {
     if (playlistBean == null) {
