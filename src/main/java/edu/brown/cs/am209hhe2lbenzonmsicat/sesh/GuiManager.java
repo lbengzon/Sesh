@@ -22,7 +22,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +30,6 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -119,7 +117,6 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -196,7 +193,6 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -225,14 +221,11 @@ public class GuiManager {
       String privacyStatus = qm.value("privacy_setting"); // add to Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
-      Date date = new Date(System.currentTimeMillis());
       Party party = null;
       int partyId = -1;
-
-      // if (lat.equals("") || lon.equals("")) {
-      // Map<String, Object> variables = ImmutableMap.of("title", "Error");
-      // return new ModelAndView(variables, "error.ftl");
-      // }
+      System.out.println("partyName: " + partyName);
+      System.out.println("userId: " + userId);
+      System.out.println("lat: " + lat + " lon: " + lon);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));
@@ -253,7 +246,6 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
