@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import org.junit.Test;
 
@@ -1232,7 +1233,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);

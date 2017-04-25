@@ -1,5 +1,6 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class RequestBean extends Request {
   private int partyId;
   private Song song;
-  private String requestTime;
+  private LocalDateTime requestTime;
   private Set<User> upvotes;
   private Set<User> downvotes;
   private User userRequestedBy;
@@ -32,7 +33,7 @@ public class RequestBean extends Request {
    * @param downvotes
    *          - set of users who downvoted this request
    */
-  public RequestBean(int partyId, String requestTime, Song song,
+  public RequestBean(int partyId, LocalDateTime requestTime, Song song,
       User userRequestedBy, Set<User> upvotes, Set<User> downvotes) {
     this.partyId = partyId;
     this.requestTime = requestTime;
@@ -107,7 +108,7 @@ public class RequestBean extends Request {
   }
 
   @Override
-  public String getRequestTime() {
+  public LocalDateTime getRequestTime() {
     // TODO Auto-generated method stub
     return requestTime;
   }
