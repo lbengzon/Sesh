@@ -10,7 +10,9 @@
 	console.log("user id: " + userId);
 	console.log("party id: " + partyId);
 </script>
-
+<div id="embedHider">
+    <iframe src="" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+</div>
 <div id="titles">
 <h2 class="titles">Playlist | ${partyName} </h2>
 <h2 class="titles">Requests | ${partyName} </h2>
