@@ -80,7 +80,7 @@ function upvoteRequest (partyId, userId, requestId) {
   conn.send(JSON.stringify(message));
 }
 
-function upvoteRequest (partyId, userId, requestId) {
+function downvoteRequest (partyId, userId, requestId) {
   let message = {
     type: MESSAGE_TYPE.DOWNVOTE_REQUEST, 
     payload:{
