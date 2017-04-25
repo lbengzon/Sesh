@@ -250,6 +250,7 @@ public class SpotifyCommunicator {
     try {
       api.addTracksToPlaylist(userId, playlistId, uris).build().get();
     } catch (IOException | WebApiException e) {
+      System.out.println("message" + e.getMessage());
       throw new RuntimeException(e.getMessage());
     }
   }

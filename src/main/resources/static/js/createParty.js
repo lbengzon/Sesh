@@ -41,8 +41,6 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
 
 $(document).ready(() => {
 	setupWebsockets();
-	//post request to get party lists
-
 
 	//dj tab content
 	const $tabContentPlaylist = $(".tabContentPlaylist");

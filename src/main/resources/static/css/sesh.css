@@ -25,30 +25,30 @@ body {
 }
 
 #login {
-	display: flex;
-	margin-left: 5%;
-	margin-right: 5%;
-	margin-top: 10%;
+	display: flex !important;
+	margin-left: 5% !important;
+	margin-right: 5% !important;
+	margin-top: 10% !important;
 }
 
 #loginButton {
-	-webkit-appearance: button;
-	background-color: #72d8d0;
-	font-family: 'Source Sans Pro', sans-serif;
-	letter-spacing: 2px;
-	font-size: 350%;
-	padding: 4%;
-	color: white;
-	border: solid;
-	border-width: 4px;
-	border-color: white;
-	border-radius: 20px;
-	text-align: center;
-	text-decoration: none;
-	cursor: pointer;
-	margin: auto;
-	transition: background-color 0.4s linear;
-	box-shadow: 8px 8px 5px 5px #298279;
+	-webkit-appearance: button !important;
+	background-color: #72d8d0 !important;
+	font-family: 'Source Sans Pro', sans-serif !important;
+	letter-spacing: 2px !important;
+	font-size: 350% !important;
+	padding: 4% !important;
+	color: white !important;
+	border: solid !important;
+	border-width: 4px !important;
+	border-color: white !important;
+	border-radius: 20px !important;
+	text-align: center !important;
+	text-decoration: none !important;
+	cursor: pointer !important;
+	margin: auto !important;
+	transition: background-color 0.4s linear !important;
+	box-shadow: 8px 8px 5px 5px #298279 !important;
 }
 
 h1 {
