@@ -47,7 +47,6 @@ public class GuiManager {
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
-    Spark.post("/addRequest", new AddRequestHandler());
     Spark.get("/error", new ErrorHandler(), fme);
   }
 
@@ -56,17 +55,6 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
       Map<String, Object> variables = ImmutableMap.of("title", "Error!");
       return new ModelAndView(variables, "error.ftl");
-    }
-  }
-
-  private static class AddRequestHandler implements Route {
-    @Override
-    public String handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String songId = qm.value("songId");
-      System.out.println(songId);
-      Map<String, Object> variables = ImmutableMap.of("songId", songId);
-      return GSON.toJson(variables);
     }
   }
 
@@ -168,6 +156,8 @@ public class GuiManager {
       QueryParamsMap qm = req.queryMap();
       // success
       String userId = qm.value("userId");
+      String partyId = qm.value("partyId");
+      System.out.println("partyid: " + partyId);
 
       /*
        * Get party id from front end (from the one that user clicks on) Add user
@@ -186,7 +176,7 @@ public class GuiManager {
       // "hostId", party.getHost().getSpotifyId());
 
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
-          "userId", userId);
+          "userId", userId, "partyId", partyId);
       return new ModelAndView(variables, "joinParty.ftl");
     }
   }
@@ -233,12 +223,13 @@ public class GuiManager {
       try {
         User host = User.of(userId);
         party = Party.create(partyName, host, coord, LocalDateTime.now());
+        partyId = party.getPartyId();
       } catch (SQLException e) {
         System.out.println("Failed to add party to database");
       }
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
-          "partyId", partyId, "partyName", partyName);
+          "partyId", partyId, "partyName", partyName, "userId", userId);
       return new ModelAndView(variables, "createParty.ftl");
     }
 
