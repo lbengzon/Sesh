@@ -87,6 +87,11 @@ $(document).ready(() => {
 	$results.on("click", event => {
 		$listItems = $('li');
 		$selected = $listItems.filter('.selected');
+
+
+
+
+
 		//append to request list
 		//$requests.append("<li " + "id=\"" + $selected.attr("id") + "\"><div id=\"songdiv\" " + "onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\">" + $selected.text() + "<div id=\"vote\"> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_up</i></button> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
 
