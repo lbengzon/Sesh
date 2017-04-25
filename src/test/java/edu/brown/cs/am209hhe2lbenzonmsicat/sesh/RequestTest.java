@@ -26,6 +26,7 @@ public class RequestTest {
    */
   @Test
   public void testGetId() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -48,6 +49,7 @@ public class RequestTest {
   @Test(expected = SQLiteException.class)
   public void testRequestSameSongToParty()
       throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -65,6 +67,7 @@ public class RequestTest {
   @Test
   public void testRequestSameSongToDifferentParty()
       throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -86,6 +89,7 @@ public class RequestTest {
 
   @Test
   public void testUpvote() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -108,6 +112,7 @@ public class RequestTest {
   @Test
   public void testUpvoteBySameUser()
       throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -133,6 +138,7 @@ public class RequestTest {
 
   @Test
   public void testDownvote() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -154,6 +160,7 @@ public class RequestTest {
   @Test
   public void testDownvoteBySameUser()
       throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -178,6 +185,7 @@ public class RequestTest {
   @Test
   public void testUpDownvoteBySameUser()
       throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -204,6 +212,7 @@ public class RequestTest {
 
   @Test
   public void testRemoveVote() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -230,6 +239,7 @@ public class RequestTest {
 
   @Test
   public void testVoteCount() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -250,6 +260,7 @@ public class RequestTest {
 
   @Test
   public void testGetRequestTime() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -272,6 +283,7 @@ public class RequestTest {
   @Test
   public void testGetUserRequestedBy()
       throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -292,6 +304,7 @@ public class RequestTest {
 
   @Test
   public void testGetSong() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -314,6 +327,7 @@ public class RequestTest {
   @Test
   public void testOfIntStringSongUserHashSetOfUserHashSetOfUser()
       throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();

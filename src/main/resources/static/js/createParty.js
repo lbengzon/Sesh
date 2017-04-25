@@ -41,6 +41,8 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
 
 $(document).ready(() => {
 	setupWebsockets();
+	//post request to get party lists
+
 
 	//dj tab content
 	const $tabContentPlaylist = $(".tabContentPlaylist");
@@ -56,11 +58,15 @@ $(document).ready(() => {
 
 	const $sortable = $(".sortable");
 
-	$sortable.sortable({
-		connectWith: '.sortable'
-	}).bind('sortupdate', function(){
-		console.log("BIIIIND");
-	});
+	console.log($sortable);
+
+	// $('#ulPlaylist, #ulRequest').sortable({
+ //    	connectWith: '.sortable'
+	// });
+
+	// $sortable.sortable({
+	// 	connectWith: '.sortable'
+	// });
 
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
