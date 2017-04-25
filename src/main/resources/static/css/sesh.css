@@ -295,12 +295,12 @@ input#private_sesh, input#public_sesh {
 	justify-content: space-between;
 }
 
-.voteButton {
+.upvote, .downvote {
 	background: none;
 	border: none;
 }
 
-.voteButton:focus{
+.upvote:focus, .downvote:focus {
 	outline: none;
 }
 

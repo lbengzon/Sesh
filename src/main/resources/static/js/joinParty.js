@@ -64,8 +64,7 @@ function showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest
 
 
 $(document).ready(() => {
-
-	setPartyId(userId, partyId);
+	setupWebsockets();
 	//make post request to get party lists
 
 
@@ -92,17 +91,21 @@ $(document).ready(() => {
 	$results.on("click", event => {
 		$listItems = $('li');
 		$selected = $listItems.filter('.selected');
+		console.log($selected);
 		addRequest(partyId, userId, $selected.attr("id"));
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
+	
+
+
 	/* HANDLES UPVOTE/DOWNVOTE */
-	$requests.on("click", event => {
-		$listItems = $('li');
-		$selected = $listItems.filter(".selected");
-		console.log($selected.attr("id"));
-		// console.log($this.attr("id"));
-	})
+	// $requests.on("click", event => {
+	// 	$listItems = $('li');
+	// 	$selected = $listItems.filter(".selected");
+	// 	console.log($selected button);
+	// 	//console.log($this.attr("id"));
+	// })
 	
 
 	//guest tab content

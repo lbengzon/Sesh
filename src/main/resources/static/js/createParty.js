@@ -40,8 +40,7 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
 }
 
 $(document).ready(() => {
-
-	setPartyId(userId, partyId);
+	setupWebsockets();
 	//post request to get party lists
 
 
@@ -85,7 +84,7 @@ $(document).ready(() => {
 	$results.on("click", event => {
 		$listItems = $("li");
 		$selected = $listItems.filter('.selected');
-		//websocket add song directly to playlist
+		addToPlaylist(partyId, userId, $selected.attr("id"));
 
 
 		//$playlist.append("<li>" + $selected.text() + "</li>");

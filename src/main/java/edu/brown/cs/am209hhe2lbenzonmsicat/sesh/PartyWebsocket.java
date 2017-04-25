@@ -36,11 +36,11 @@ public class PartyWebsocket {
   public void connected(Session session) throws IOException {
     System.out.println("received");
     JsonObject payload = new JsonObject();
-    payload.addProperty("success", true);
     JsonObject message = new JsonObject();
+    message.addProperty("success", true);
     message.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
     message.add("payload", payload);
-    // session.getRemote().sendString(message.toString());
+    session.getRemote().sendString(message.toString());
   }
 
   @OnWebSocketClose
@@ -62,6 +62,9 @@ public class PartyWebsocket {
       JsonObject received = GSON.fromJson(message, JsonObject.class);
       int typeInt = received.get("type").getAsInt();
       MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[typeInt];
+      System.out.println("=================================");
+      System.out.println(typeInt);
+      System.out.println("Message Recieved" + messageType);
       JsonObject payload = received.get("payload").getAsJsonObject();
       String userId = payload.get("userId").getAsString();
       int partyId = payload.get("partyId").getAsInt();
@@ -139,6 +142,7 @@ public class PartyWebsocket {
           MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST.ordinal());
       updateMessage.addProperty("success", true);
       updateMessage.add("payload", updatePayload);
+      System.out.println(partyIdToSessions.get(party.getPartyId()));
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
         sesh.getRemote().sendString(updateMessage.toString());
       }
