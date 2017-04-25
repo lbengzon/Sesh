@@ -28,6 +28,13 @@ $(document).ready(() => {
 			$.post("/join", postParameters, responseJSON => {
 				console.log("parties should be received here");
 			});
-		});
+		}, errorCallBack);
 	}
 });
+
+function errorCallBack(error) {
+	if (error.code == error.PERMISSION_DENIED) {
+		console.log("FAILURE");
+		window.location.replace("/error");
+	}
+}

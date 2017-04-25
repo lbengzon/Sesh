@@ -131,8 +131,10 @@ public class GuiManager {
         String lat = qm.value("latitude");
         String lon = qm.value("longitude");
         List<Party> parties = new ArrayList<>();
+        System.out.println("lat " + lat + " lon " + lon);
 
         if (lat != null && lon != null) {
+          System.out.println("in if block");
           Coordinate coord = new Coordinate(Double.valueOf(lat),
               Double.valueOf(lon));
           parties = Party.getActivePartiesWithinDistance(coord,
@@ -151,7 +153,9 @@ public class GuiManager {
         }
 
         return new ModelAndView(variables, "join.ftl");
-      } catch (Exception e) {
+      } catch (
+
+      Exception e) {
         e.printStackTrace();
         return null;
       }
@@ -221,16 +225,17 @@ public class GuiManager {
       String privacyStatus = qm.value("privacy_setting"); // add to Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
-
-      Coordinate coord = new Coordinate(Double.valueOf(lat),
-          Double.valueOf(lon));
+      Date date = new Date(System.currentTimeMillis());
       Party party = null;
       int partyId = -1;
 
-      if (lat == null || lon == null) {
-        Map<String, Object> variables = ImmutableMap.of("title", "Error");
-        return new ModelAndView(variables, "error.ftl");
-      }
+      // if (lat.equals("") || lon.equals("")) {
+      // Map<String, Object> variables = ImmutableMap.of("title", "Error");
+      // return new ModelAndView(variables, "error.ftl");
+      // }
+
+      Coordinate coord = new Coordinate(Double.valueOf(lat),
+          Double.valueOf(lon));
 
       try {
         User host = User.of(userId);
