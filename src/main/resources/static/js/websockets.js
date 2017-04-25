@@ -81,6 +81,9 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
           $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + "</div> </li>");
+          // $listItems = $("#playlist-list li");
+          // $last = $listItems.last();
+          // $last.attr("class", "sortable");
           break;
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
 
