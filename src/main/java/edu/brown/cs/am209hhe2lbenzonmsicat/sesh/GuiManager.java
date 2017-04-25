@@ -22,7 +22,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- * 
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +31,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -139,7 +139,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -192,7 +192,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -246,30 +246,37 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
+   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String input = qm.value("userInput");
-      List<Track> results = SpotifyCommunicator.searchTracks(input);
-      List<String> names = new ArrayList<>();
-      List<String> ids = new ArrayList<>();
-      for (Track t : results) {
-        ids.add(t.getId());
-        StringBuilder item = new StringBuilder(t.getName());
-        item.append(" - ");
-        for (SimpleArtist artist : t.getArtists()) {
-          item.append(artist.getName() + ", ");
+      try {
+        QueryParamsMap qm = req.queryMap();
+        String input = qm.value("userInput");
+        List<Track> results = SpotifyCommunicator.searchTracks(input);
+        List<String> names = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
+        for (Track t : results) {
+          ids.add(t.getId());
+          StringBuilder item = new StringBuilder(t.getName());
+          item.append(" - ");
+          for (SimpleArtist artist : t.getArtists()) {
+            item.append(artist.getName() + ", ");
+          }
+          item.delete(item.length() - 2, item.length() - 1);
+          names.add(item.toString());
         }
-        item.delete(item.length() - 2, item.length() - 1);
-        names.add(item.toString());
-      }
 
-      Map<String, Object> variables = ImmutableMap.of("results", names,
-          "songIds", ids);
+        Map<String, Object> variables = ImmutableMap.of("results", names,
+            "songIds", ids);
+        return GSON.toJson(variables);
+      } catch (Exception c) {
+        c.printStackTrace();
+      }
+      Map<String, Object> variables = ImmutableMap.of("results",
+          new ArrayList<String>(), "songIds", new ArrayList<String>());
       return GSON.toJson(variables);
     }
   }

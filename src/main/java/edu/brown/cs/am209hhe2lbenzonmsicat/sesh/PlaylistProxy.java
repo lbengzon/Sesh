@@ -167,6 +167,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
       SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
+
       throw new RuntimeException(e.getMessage());
     }
     return playlistBean.addSong(request);
