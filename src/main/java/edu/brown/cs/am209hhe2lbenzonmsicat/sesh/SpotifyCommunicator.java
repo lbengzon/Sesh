@@ -19,7 +19,6 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
- *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -82,7 +81,6 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
-   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -176,7 +174,6 @@ public class SpotifyCommunicator {
 
   /**
    * This finds the user's info.
-   *
    * @return list of the user info.
    */
   public List<String> getUserInfo() {
@@ -195,7 +192,6 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
-   *
    * @param userId
    *          user id
    * @param playlistId
@@ -227,7 +223,6 @@ public class SpotifyCommunicator {
     } catch (IOException | WebApiException e) {
       throw new RuntimeException(e.getMessage());
     }
-    return tracks;
 
   }
 
@@ -238,7 +233,6 @@ public class SpotifyCommunicator {
     } catch (IOException | WebApiException e) {
       throw new RuntimeException(e.getMessage());
     }
-    return null;
   }
 
   public static void removeTrack(String userId, String playlistId,
