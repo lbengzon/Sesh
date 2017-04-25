@@ -3,19 +3,22 @@ var global_lat = null;
 var global_lon = null;
 
 $(document).ready(() => {
-	navigator.geolocation.getCurrentPosition(c, errorCallBack);
-	wait();
+	$("#lat").val(41);
+	$("#lon").val(-71);
+	//navigator.geolocation.getCurrentPosition(c, errorCallBack);
+	//wait();
 	$("#userId").val(userId);
 });
 
 var c = function(pos) {
 		global_lat = pos.coords.latitude, 
 		global_lon = pos.coords.longitude;
-		$("#lat").val(global_lat);
-		$("#lon").val(global_lon);
+		$("#lat").val(41);
+		$("#lon").val(-71);
 	}
 
 function errorCallBack(error) {
+	console.log(error);
 	if (error.code == error.PERMISSION_DENIED) {
 		window.location.replace("/error");
 	}

@@ -4,29 +4,24 @@
 <#if userId??>
 ${userId}
 </#if>
+
+
 </div>
 
 <script>
 	var userId;
+	var parties;
 </script>
 <script src="/js/join.js"></script>
 <script>
 <#if userId??>
 	userId = "${userId}";	
 </#if>
+
 </script>
 
 <div id="party-list">
-<ul style="list-style-type:none">
-<li id="1" onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 1 hosted by Host 1</li>
-<li id="2" onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 2 hosted by Host 2</li>
-<li id="3" onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 3 hosted by Host 3</li>
-<li id="1" onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 1 hosted by Host 1</li>
-<li id="2" onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 2 hosted by Host 2</li>
-<li id="3"onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 3 hosted by Host 3</li>
-<li id="1" onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 1 hosted by Host 1</li>
-<li id="2" onmouseover="hoverOn(this)" onmouseout="hoverOff(this)">Party 2 hosted by Host 2</li>
-</ul>
+<ul style="list-style-type:none"></ul>
 </div>
 
 <form method="POST" action="/join/party">

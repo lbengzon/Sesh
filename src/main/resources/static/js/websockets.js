@@ -27,7 +27,8 @@ function hoverOff(x) {
 
 // Setup the WebSocket connection for live updating of scores.
 function setupWebsockets() {
-  const $requests = $(".tabContentRequestGuest ul");
+  const $requests = $("#request-list ul");
+  const $playlist = $("#playlist-list ul");
   // TODO Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("ws://localhost:4567/update");
 
@@ -59,7 +60,6 @@ function setupWebsockets() {
           });
           break;
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
-
           $requests.empty();
           //console.log(data.payload.requestList);
           const requestList = data.payload.requestList;
@@ -81,8 +81,11 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           break;
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
+          console.log("add song directly to playlist");
+          $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + "</div> </li>");
           break;
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
+
           break;
       }
     } else{

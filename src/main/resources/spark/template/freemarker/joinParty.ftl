@@ -14,29 +14,12 @@
 <h2 id="request-title">Requests</h2>
 </div>
 <div class="list-wrapper">
-<div class="tabContentRequestGuest">
+<div class="tabContentRequestGuest" id="request-list">
 <ul style="list-style-type:none"></ul>
 </div>
 
-<div class="tabContentPlaylistGuest">
-<ul style="list-style-type:none">
-<li>Song 1</li>
-<li>Song 2</li>
-<li>Song 3</li>
-<li>Song 4</li>
-<li>Song 1</li>
-<li>Song 2</li>
-<li>Song 3</li>
-<li>Song 4</li>
-<li>Song 1</li>
-<li>Song 2</li>
-<li>Song 3</li>
-<li>Song 4</li>
-<li>Song 1</li>
-<li>Song 2</li>
-<li>Song 3</li>
-<li>Song 4</li>
-</ul>
+<div class="tabContentPlaylistGuest" id="playlist-list">
+<ul style="list-style-type:none"></ul>
 </div>
 
 <div class="tabContentSearchGuest">

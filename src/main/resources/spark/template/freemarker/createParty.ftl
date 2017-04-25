@@ -16,18 +16,12 @@
 <h2 class="titles">Requests | ${partyName} </h2>
 </div>
 <div class="list-wrapper">
-<div class="tabContentPlaylist" id="tabContentPlaylist">
-<ul style="list-style-type:none" class="sortable">
-
-</ul>
+<div class="tabContentPlaylist" id="playlist-list">
+<ul style="list-style-type:none" class="sortable"></ul>
 </div>
 
-<div class="tabContentPlaylist" id="tabContentRequest">
-<ul style="list-style-type:none" class="sortable">
-	<li>Song 1</li>
-	<li>Song 2</li>
-	<li>Song 3</li>
-</ul>
+<div class="tabContentPlaylist" id="request-list">
+<ul style="list-style-type:none" class="sortable"></ul>
 </div>
 
 <div class="tabContentSearch">
