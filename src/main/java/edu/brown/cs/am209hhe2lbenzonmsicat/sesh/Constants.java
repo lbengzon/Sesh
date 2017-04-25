@@ -14,8 +14,7 @@ public final class Constants {
   public static final int MAX_CACHE_SIZE = 100000;
   public static final String LEANDRO_CLIENT_ID = "57296909fb524335"
       + "ae81daaa97e065d0";
-  public static final String LEANDRO_CLIENT_SECRET = "03657b192813485a9"
-      + "4b2864b61a77559";
+  public static final String LEANDRO_CLIENT_SECRET = "b8cc972867d84769bdf1d6db72954bf7";
   public static final String ALI_CLIENT_ID = "5db9af9c15264bf49110d13ddcf38336";
   public static final String ALI_CLIENT_SECRET = "8bd23606db1c4508"
       + "884d08d83cdff368";

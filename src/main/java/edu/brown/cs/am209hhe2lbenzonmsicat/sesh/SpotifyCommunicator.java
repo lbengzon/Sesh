@@ -19,6 +19,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
+ * 
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -38,8 +39,8 @@ public class SpotifyCommunicator {
   }
 
   public static void setUpTestApi() {
-    api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
+    api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
     api.setRefreshToken(Constants.ALI_REFRESH);
     String aT;
@@ -64,8 +65,8 @@ public class SpotifyCommunicator {
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
-    api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
+    api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
     String authorizeURL = api.createAuthorizeURL(scopes, state);
 
@@ -81,6 +82,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
+   * 
    * @param code
    *          - code
    * @return a list of the user's info
@@ -91,8 +93,8 @@ public class SpotifyCommunicator {
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
-    api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
+    api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
@@ -174,6 +176,7 @@ public class SpotifyCommunicator {
 
   /**
    * This finds the user's info.
+   * 
    * @return list of the user info.
    */
   public List<String> getUserInfo() {
@@ -192,6 +195,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
+   * 
    * @param userId
    *          user id
    * @param playlistId
