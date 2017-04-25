@@ -38,7 +38,6 @@ function setupWebsockets() {
 
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
-    console.log(data)
     if(data.success){
       switch (data.type) {
         default:
@@ -60,12 +59,11 @@ function setupWebsockets() {
           });
           break;
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
+          console.log("adding song to request list");
           $requests.empty();
-          //console.log(data.payload.requestList);
           const requestList = data.payload.requestList;
           for (var key in requestList) {
             if (requestList.hasOwnProperty(key)) {
-              console.log(requestList[key].song.title);
               $requests.append("<li " + "id=\"" + key + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + requestList[key].song.title + " - " + requestList[key].song.artist + " " + requestList[key].score + "<div id=\"vote\"> <button class=\"upvote\" id=\"" + key + "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
             }
           }
@@ -81,7 +79,7 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           break;
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
-          console.log("add song directly to playlist");
+          console.log("adding song directly to playlist");
           $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + "</div> </li>");
           break;
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
@@ -89,7 +87,7 @@ function setupWebsockets() {
           break;
       }
     } else{
-      console.log(data.message);
+      console.log("SERVER SIDE WEBSOCKET ERROR MESSAGE: " + data.message);
     }
     
   };

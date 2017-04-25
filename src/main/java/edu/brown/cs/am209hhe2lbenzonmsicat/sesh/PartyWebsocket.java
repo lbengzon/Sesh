@@ -142,7 +142,6 @@ public class PartyWebsocket {
           MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST.ordinal());
       updateMessage.addProperty("success", true);
       updateMessage.add("payload", updatePayload);
-      System.out.println(partyIdToSessions.get(party.getPartyId()));
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
         sesh.getRemote().sendString(updateMessage.toString());
       }
