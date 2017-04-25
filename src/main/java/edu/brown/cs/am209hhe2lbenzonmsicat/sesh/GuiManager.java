@@ -22,7 +22,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- * 
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +31,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -46,6 +46,7 @@ public class GuiManager {
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
+    Spark.post("/join2", new JoinHandler2());
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
@@ -105,9 +106,40 @@ public class GuiManager {
     }
   }
 
+  private static class JoinHandler2 implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      System.out.println("Running post request to get list of active parties");
+      QueryParamsMap qm = req.queryMap();
+      String lat = qm.value("latitude");
+      String lon = qm.value("longitude");
+
+      List<String> parties = new ArrayList<>();
+      List<Integer> partyIds = new ArrayList<>();
+
+      System.out.println("lat " + lat + " lon " + lon);
+
+      if (lat != null && lon != null) {
+        Coordinate coord = new Coordinate(Double.valueOf(lat),
+            Double.valueOf(lon));
+        List<Party> p = Party.getActivePartiesWithinDistance(coord,
+            Constants.PARTY_JOIN_RADIUS);
+        for (Party party : p) {
+          parties.add(party.getName());
+          partyIds.add(party.getPartyId());
+        }
+      }
+
+      Map<String, Object> variables = ImmutableMap.of("parties", parties,
+          "partyIds", partyIds);
+
+      return GSON.toJson(variables);
+    }
+  }
+
   /**
    * Handles request to join a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -116,25 +148,36 @@ public class GuiManager {
       try {
         QueryParamsMap qm = req.queryMap();
         String userId = qm.value("joinUserId");
-        String lat = qm.value("latitude");
-        String lon = qm.value("longitude");
-        List<Party> parties = new ArrayList<>();
+        // String lat = qm.value("latitude");
+        // String lon = qm.value("longitude");
+        // List<Party> parties = new ArrayList<>();
+        // JsonElement[] partyAsJson;
+        //
+        // System.out.println("lat " + lat + " lon " + lon);
+        //
+        // if (lat != null && lon != null) {
+        // Coordinate coord = new Coordinate(Double.valueOf(lat),
+        // Double.valueOf(lon));
+        // parties = Party.getActivePartiesWithinDistance(coord,
+        // Constants.PARTY_JOIN_RADIUS);
+        // partyAsJson = new JsonElement[parties.size()];
+        // for (int i = 0; i < parties.size(); i++) {
+        // partyAsJson[i] = parties.get(i).toJson();
+        // }
+        // } else {
+        // partyAsJson = new JsonElement[0];
+        // }
 
-        if (lat != null && lon != null) {
-          Coordinate coord = new Coordinate(Double.valueOf(lat),
-              Double.valueOf(lon));
-          parties = Party.getActivePartiesWithinDistance(coord,
-              Constants.PARTY_JOIN_RADIUS);
-        }
+        Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
 
-        Map<String, Object> variables;
+        /* parties will be an empty list here */
         if (userId != null) {
-          variables = ImmutableMap.of("title", "Join a Sesh", "parties",
-              parties, "userId", userId);
-        } else {
-          variables = ImmutableMap.of("title", "Join a Sesh", "parties",
-              parties);
+          variables = ImmutableMap.of("title", "Join a Sesh", "userId", userId);
         }
+        // else {
+        // variables = ImmutableMap.of("title", "Join a Sesh", "parties",
+        // partyAsJson);
+        // }
 
         return new ModelAndView(variables, "join.ftl");
       } catch (
@@ -158,21 +201,12 @@ public class GuiManager {
       String partyId = qm.value("partyId");
       System.out.println("partyid: " + partyId);
 
-      /*
-       * Get party id from front end (from the one that user clicks on) Add user
-       * to party id that user clicks on. Add them to party, update java and db
-       * Send back party info (id, name, host, etc.) to display party.
-       */
-      // int partyId = Integer.valueOf(qm.value("party_id")); // from frontend
-      // String userId = qm.value("user_id"); // from frontend
-      //
-      // User user = User.of(userId);
-      // Party party = Party.of(partyId); // modify method later
-      // party.addGuest(user);
+      User user = User.of(userId);
+      Party party = Party.of(Integer.valueOf(partyId));
+      party.addGuest(user);
 
-      // Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
-      // "userId", userId, "partyId", partyId, "partyName", party.getName(),
-      // "hostId", party.getHost().getSpotifyId());
+      // should probably get party name from previous page to display on guest's
+      // party view
 
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
           "userId", userId, "partyId", partyId);
@@ -182,7 +216,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -234,7 +268,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
+   *
    * @author HE23
    */
   private static class SearchHandler implements Route {

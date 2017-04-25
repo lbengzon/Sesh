@@ -73,6 +73,7 @@ $(document).ready(() => {
 	const $requests = $(".tabContentRequestGuest ul");
 
 	$userInput.keyup(function() {
+		console.log("userId" + userId);
 		const postParameters = {userInput: $userInput.val()};
 		$.post("/search", postParameters, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);

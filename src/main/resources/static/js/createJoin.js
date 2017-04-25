@@ -26,18 +26,4 @@ $(document).ready(() => {
 	$("#createUserId").val(userId);
 	$("#joinUserId").val(userId);
 
-	// $createButton.on("click", event => {
-	// 	const postParameter = {userId: userId};
-	// 	$.post("/create", postParameter, response => {
-	// 		console.log("id sent to create backend");
-	// 	});
-	// });
-
-	// $joinButton.on("click", event => {
-	// 	const postParameter = {userId: userId};
-	// 	$.post("/join", postParameter, response => {
-	// 		console.log("id sent to join backend");
-	// 	});
-	// });
-
 });
