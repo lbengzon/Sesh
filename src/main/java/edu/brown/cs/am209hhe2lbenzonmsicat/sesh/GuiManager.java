@@ -22,7 +22,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +30,6 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -139,7 +137,6 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -148,25 +145,6 @@ public class GuiManager {
       try {
         QueryParamsMap qm = req.queryMap();
         String userId = qm.value("joinUserId");
-        // String lat = qm.value("latitude");
-        // String lon = qm.value("longitude");
-        // List<Party> parties = new ArrayList<>();
-        // JsonElement[] partyAsJson;
-        //
-        // System.out.println("lat " + lat + " lon " + lon);
-        //
-        // if (lat != null && lon != null) {
-        // Coordinate coord = new Coordinate(Double.valueOf(lat),
-        // Double.valueOf(lon));
-        // parties = Party.getActivePartiesWithinDistance(coord,
-        // Constants.PARTY_JOIN_RADIUS);
-        // partyAsJson = new JsonElement[parties.size()];
-        // for (int i = 0; i < parties.size(); i++) {
-        // partyAsJson[i] = parties.get(i).toJson();
-        // }
-        // } else {
-        // partyAsJson = new JsonElement[0];
-        // }
 
         Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
 
@@ -174,10 +152,6 @@ public class GuiManager {
         if (userId != null) {
           variables = ImmutableMap.of("title", "Join a Sesh", "userId", userId);
         }
-        // else {
-        // variables = ImmutableMap.of("title", "Join a Sesh", "parties",
-        // partyAsJson);
-        // }
 
         return new ModelAndView(variables, "join.ftl");
       } catch (
@@ -216,7 +190,6 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -268,7 +241,6 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
