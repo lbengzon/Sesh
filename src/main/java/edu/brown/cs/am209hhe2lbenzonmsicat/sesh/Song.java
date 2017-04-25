@@ -58,7 +58,7 @@ public abstract class Song implements Jsonable {
   public boolean equals(Object o) {
     try {
       Song a = (Song) o;
-      if (getSpotifyId() == a.getSpotifyId()) {
+      if (getSpotifyId().equals(a.getSpotifyId())) {
         return true;
       }
     } catch (Exception e) {
