@@ -32,6 +32,7 @@ const setup_live_scores = () => {
           console.log('Unknown message type!', data.type);
           break;
         case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
+          //receive new request and append to list
           break;
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
           break;
