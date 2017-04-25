@@ -29,7 +29,7 @@ public class PartyWebsocket {
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, UPDATE_ADD_REQUEST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER
   }
 
   @OnWebSocketConnect
@@ -40,7 +40,7 @@ public class PartyWebsocket {
     JsonObject message = new JsonObject();
     message.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
     message.add("payload", payload);
-    session.getRemote().sendString(message.toString());
+    // session.getRemote().sendString(message.toString());
   }
 
   @OnWebSocketClose
@@ -91,6 +91,10 @@ public class PartyWebsocket {
           sendAfterRequestTransferUpdate(payload, user, party, session,
               TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
           break;
+        case ADD_SONG_DIRECTLY_TO_PLAYLIST:
+          sendAddSongDirectlyToPlaylistUpdate(payload, user, party, session);
+          break;
+
         default:
           assert false : "you should never get here!!!";
       }
@@ -100,10 +104,35 @@ public class PartyWebsocket {
 
   }
 
+  private void sendAddSongDirectlyToPlaylistUpdate(JsonObject payload,
+      User user, Party party, Session session) throws IOException {
+    String songId = payload.get("songId").getAsString();
+    JsonObject updatePayload = new JsonObject();
+    JsonObject updateMessage = new JsonObject();
+    try {
+      Request newRequest = party.requestSong(Song.of(songId), user);
+      boolean success = party.approveSong(newRequest.getId());
+      if (newRequest == null || success == false) {
+        throw new RuntimeException("ERROR: could not add song");
+      }
+      updatePayload.add("newRequest", newRequest.toJson());
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST.ordinal());
+      updateMessage.addProperty("success", true);
+      updateMessage.add("payload", updatePayload);
+      for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
+    } catch (Exception e) {
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
+
   private void sendAddRequestUpdate(JsonObject payload, User user, Party party,
       Session session) throws IOException {
     String songId = payload.get("songId").getAsString();
-    String time = payload.get("time").getAsString();
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
     try {

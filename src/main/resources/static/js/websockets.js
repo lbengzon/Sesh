@@ -25,32 +25,95 @@ const setup_live_scores = () => {
 
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
-    switch (data.type) {
-      default:
-        console.log('Unknown message type!', data.type);
-        break;
-      case MESSAGE_TYPE.CONNECT:
-        break;
-      case MESSAGE_TYPE.SET_PARTY_ID:
-        break;
-      case MESSAGE_TYPE.ADD_REQUEST:
-        break;
-      case MESSAGE_TYPE.UPVOTE_REQUEST:
-        break;
-      case MESSAGE_TYPE.DOWNVOTE_REQUEST:
-        break;
-      case MESSAGE_TYPE.MOVE_REQUEST_TO_QUEUE:
-        break;
-      case MESSAGE_TYPE.MOVE_FROM_QUEUE_TO_REQUEST:
-        break;
-      case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
-        break;
-      case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
-        break;
-      case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
-        break;
+    if(data.success){
+      console.log(data)
+      switch (data.type) {
+        default:
+          console.log('Unknown message type!', data.type);
+          break;
+        case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
+          //receive new request and append to list
+          break;
+        case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
+          break;
+        case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
+          break;
+      }
+    } else{
+      console.log(data.message);
     }
+    
   };
 }
 
+function setPartyId (partyId, userId) {
+  let message = {
+    type: MESSAGE_TYPE.SET_PARTY_ID, 
+    payload:{
+      userId: userId,
+      partyId: partyId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function addRequest (partyId, userId, songId) {
+  let message = {
+    type: MESSAGE_TYPE.ADD_REQUEST, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      songId: songId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function upvoteRequest (partyId, userId, requestId) {
+  let message = {
+    type: MESSAGE_TYPE.UPVOTE_REQUEST, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      requestId: requestId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function downvoteRequest (partyId, userId, requestId) {
+  let message = {
+    type: MESSAGE_TYPE.DOWNVOTE_REQUEST, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      requestId: requestId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function moveRequestToQueue (partyId, userId, requestId) {
+  let message = {
+    type: MESSAGE_TYPE.MOVE_REQUEST_TO_QUEUE, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      requestId: requestId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function moveFromQueueToRequest (partyId, userId, requestId) {
+  let message = {
+    type: MESSAGE_TYPE.MOVE_FROM_QUEUE_TO_REQUEST, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      requestId: requestId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
 

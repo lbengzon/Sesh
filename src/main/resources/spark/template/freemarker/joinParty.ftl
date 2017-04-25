@@ -1,10 +1,12 @@
 <#assign content>
 <script>
 	var userId;
+	var partyId;
 </script>
 <script src="/js/joinParty.js"></script>
 <script>
 	userId = "${userId}";
+	partyId = "${partyId}";
 </script>
 
 <div id="titles">
