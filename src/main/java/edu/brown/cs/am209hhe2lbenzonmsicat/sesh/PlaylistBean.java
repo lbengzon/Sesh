@@ -30,10 +30,11 @@ public class PlaylistBean extends Playlist {
       User host) {
     this.setId(id);
     StringBuilder sb = new StringBuilder();
-    sb.append("https://embed.spotify,com/?uri=spotify:user:");
+    sb.append("https://embed.spotify,com/?uri=spotify%3Auser%3A");
     sb.append(host.getSpotifyId());
-    sb.append(":playlist:");
+    sb.append("%3Aplaylist%3A");
     sb.append(id);
+    // String link = "https://embed.spotify,com/?uri=spotify:user:"
     this.setUrl(sb.toString());
     this.partyId = partyId;
     this.queuedRequests = new HashMap<>();
