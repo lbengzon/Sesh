@@ -119,10 +119,8 @@ public class GuiManager {
         String lat = qm.value("latitude");
         String lon = qm.value("longitude");
         List<Party> parties = new ArrayList<>();
-        System.out.println("lat " + lat + " lon " + lon);
 
         if (lat != null && lon != null) {
-          System.out.println("in if block");
           Coordinate coord = new Coordinate(Double.valueOf(lat),
               Double.valueOf(lon));
           parties = Party.getActivePartiesWithinDistance(coord,
@@ -130,8 +128,6 @@ public class GuiManager {
         }
 
         Map<String, Object> variables;
-
-        /* parties will be an empty list here */
         if (userId != null) {
           variables = ImmutableMap.of("title", "Join a Sesh", "parties",
               parties, "userId", userId);
@@ -217,9 +213,6 @@ public class GuiManager {
       String lon = qm.value("lon");
       Party party = null;
       int partyId = -1;
-      System.out.println("partyName: " + partyName);
-      System.out.println("userId: " + userId);
-      System.out.println("lat: " + lat + " lon: " + lon);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));

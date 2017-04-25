@@ -24,12 +24,14 @@ function errorCallBack(error) {
 function wait() {
 	if (global_lat != null || global_lon != null) {
 		console.log("lat: " + global_lat + " lon: " + global_lon);
+		console.log("values set");
 		document.getElementById("formSubmit").disabled = false;
 		document.getElementById("formSubmit").value = "Submit";
 
 	} else {
 		console.log("lat: " + global_lat + " lon: " + global_lon);
 		setTimeout(wait, 300);
+		console.log("waiting...");
 		document.getElementById("formSubmit").disabled = true;
 		document.getElementById("formSubmit").value = "Loading...";
 
