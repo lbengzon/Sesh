@@ -263,9 +263,10 @@ public class RequestTest {
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
     RequestProxy.clearCache();
+    LocalDateTime now = LocalDateTime.now();
     Request r1 = Request.of(r.getPartyId(), Song.of("7AQAlklmptrrkBSeujkXsD"),
-        l, LocalDateTime.now());
-    assert r1.getRequestTime().equals(LocalDateTime.now());
+        l, now);
+    assert r1.getRequestTime().equals(now);
   }
 
   @Test
