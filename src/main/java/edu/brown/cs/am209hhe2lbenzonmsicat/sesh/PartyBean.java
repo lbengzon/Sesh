@@ -190,7 +190,6 @@ public class PartyBean extends Party {
 
   @Override
   public void endParty() {
-    // TODO Auto-generated method stub
     status = Status.stopped;
   }
 
@@ -228,6 +227,21 @@ public class PartyBean extends Party {
       requestsMap.put(r.getId(), r.toMap());
     }
     return GSON.toJsonTree(requestsMap);
+  }
+
+  @Override
+  public Map<String, Object> toMap() {
+    Map<String, Object> partyMap = new HashMap<>();
+    partyMap.put("partyId", partyId);
+    partyMap.put("playlistQueue", getPlaylistQueueAsJson());
+    partyMap.put("requests", getRequestsAsJson());
+    partyMap.put("playlistUrl", playlist.getUrl());
+    partyMap.put("host", host.toJson());
+    partyMap.put("location", GSON.toJsonTree(location));
+    partyMap.put("name", name);
+    partyMap.put("time", time.toString());
+    partyMap.put("status", status);
+    return partyMap;
   }
 
 }
