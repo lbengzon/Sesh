@@ -11,7 +11,6 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.wrapper.spotify.Api;
 import com.wrapper.spotify.exceptions.WebApiException;
-import com.wrapper.spotify.methods.RemoveTrackFromPlaylistRequest;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
 import com.wrapper.spotify.models.PlaylistTrack;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
@@ -19,7 +18,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
- * 
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -28,9 +27,14 @@ public class SpotifyCommunicator {
   // .clientSecret(Consta
   // nts.LEANDRO_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
   // .build();
-  private static Api api;
+  private static Api testApi;
   private List<String> results;
   private static ConcurrentHashMap<String, Api> userToApi = new ConcurrentHashMap<String, Api>();
+
+  private static Api publicApi = Api.builder()
+      .clientId(Constants.LEANDRO_CLIENT_ID)
+      .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+      .redirectURI(Constants.REDIRECT_URL).build();
 
   /**
    * This is the constructor which creates our map.
@@ -38,15 +42,27 @@ public class SpotifyCommunicator {
   public SpotifyCommunicator() {
   }
 
-  public static void setUpTestApi() {
-    api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
-        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL).build();
-    api.setRefreshToken(Constants.ALI_REFRESH);
+  public static void setUpPublicApi() {
+
+    publicApi.setRefreshToken(Constants.ALI_REFRESH);
     String aT;
     try {
-      aT = api.refreshAccessToken().build().get().getAccessToken();
-      api.setAccessToken(aT);
+      aT = publicApi.refreshAccessToken().build().get().getAccessToken();
+      publicApi.setAccessToken(aT);
+    } catch (IOException | WebApiException e) {
+      // ERROR
+    }
+  }
+
+  public static void setUpTestApi() {
+    testApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
+    testApi.setRefreshToken(Constants.ALI_REFRESH);
+    String aT;
+    try {
+      aT = testApi.refreshAccessToken().build().get().getAccessToken();
+      testApi.setAccessToken(aT);
     } catch (IOException | WebApiException e) {
       // ERROR
     }
@@ -65,10 +81,10 @@ public class SpotifyCommunicator {
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
-    api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+    Api newApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
-    String authorizeURL = api.createAuthorizeURL(scopes, state);
+    String authorizeURL = newApi.createAuthorizeURL(scopes, state);
 
     /*
      * Continue by sending the user to the authorizeURL, which will look
@@ -82,7 +98,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
-   * 
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -93,7 +109,7 @@ public class SpotifyCommunicator {
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
-    api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+    Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
@@ -121,7 +137,17 @@ public class SpotifyCommunicator {
              */
             api.setAccessToken(authorizationCodeCredentials.getAccessToken());
             api.setRefreshToken(authorizationCodeCredentials.getRefreshToken());
-            results = getUserInfo();
+
+            results = new ArrayList<String>();
+            try {
+              com.wrapper.spotify.models.User u = api.getMe().build().get();
+              results.add(u.getId());
+              results.add(u.getEmail());
+              results.add(u.getDisplayName());
+            } catch (IOException | WebApiException e) {
+              throw new RuntimeException(e.getMessage());
+            }
+
             userToApi.put(results.get(0), api);
 
           }
@@ -141,61 +167,29 @@ public class SpotifyCommunicator {
     return results;
   }
 
-  /**
-   * Add songs.
-   */
-  public void addSongs() {
-    final List<String> tracksToAdd = Arrays
-        .asList("spotify:track:4BYGxv4rxSNcTgT3DsFB9o");
-
-    // Index starts at 0
-    final int insertIndex = 1;
-
-    // final AddTrackToPlaylistRequest request = api
-    // .addTracksToPlaylist("22f3kk24xtzmkkuw477v3dntq",
-    // "7JB7rWkoXeO2Ov5DGJkFic", tracksToAdd)
-    // .position(insertIndex).build();
-
-    PlaylistTrackPosition playlistTrackPosition1 = new PlaylistTrackPosition(
-        "spotify:track:4BYGxv4rxSNcTgT3DsFB9o");
-
-    final List<PlaylistTrackPosition> tracksToRemove = Arrays
-        .asList(playlistTrackPosition1);
-
-    final RemoveTrackFromPlaylistRequest request = api
-        .removeTrackFromPlaylist("22f3kk24xtzmkkuw477v3dntq",
-            "7JB7rWkoXeO2Ov5DGJkFic", tracksToRemove)
-        .build();
-
-    try {
-      request.get();
-    } catch (Exception e) {
-      System.out.println("Something went wrong!" + e.getMessage());
-    }
-  }
-
-  /**
-   * This finds the user's info.
-   * 
-   * @return list of the user info.
-   */
-  public List<String> getUserInfo() {
-    results = new ArrayList<String>();
-    try {
-      com.wrapper.spotify.models.User u = api.getMe().build().get();
-      results.add(u.getId());
-      results.add(u.getEmail());
-      results.add(u.getDisplayName());
-    } catch (IOException | WebApiException e) {
-      throw new RuntimeException(e.getMessage());
-    }
-
-    return results;
-  }
+  // /**
+  // * This finds the user's info.
+  // *
+  // * @return list of the user info.
+  // */
+  // public List<String> getUserInfo(User user) {
+  // Api api = userToApi.get(user.getSpotifyId());
+  // results = new ArrayList<String>();
+  // try {
+  // com.wrapper.spotify.models.User u = api.getMe().build().get();
+  // results.add(u.getId());
+  // results.add(u.getEmail());
+  // results.add(u.getDisplayName());
+  // } catch (IOException | WebApiException e) {
+  // throw new RuntimeException(e.getMessage());
+  // }
+  //
+  // return results;
+  // }
 
   /**
    * This method gets the playlist tracks.
-   * 
+   *
    * @param userId
    *          user id
    * @param playlistId
@@ -203,6 +197,7 @@ public class SpotifyCommunicator {
    * @return list of all the playlist songs
    */
   public static List<Song> getPlaylistTracks(String userId, String playlistId) {
+    Api api = userToApi.get(userId);
     List<Song> res = new ArrayList<Song>();
     try {
       List<PlaylistTrack> plist = api.getPlaylistTracks(userId, playlistId)
@@ -220,6 +215,7 @@ public class SpotifyCommunicator {
   }
 
   public static List<Track> searchTracks(String query) {
+    Api api = publicApi;
     List<Track> tracks = new ArrayList<Track>();
     try {
       tracks = api.searchTracks(query).build().get().getItems();
@@ -231,6 +227,7 @@ public class SpotifyCommunicator {
   }
 
   public static Track getTrack(String id) {
+    Api api = publicApi;
     try {
       Track t = api.getTrack(id).build().get();
       return t;
@@ -241,14 +238,20 @@ public class SpotifyCommunicator {
 
   public static void removeTrack(String userId, String playlistId,
       List<PlaylistTrackPosition> trackUris) {
+    Api api = userToApi.get(userId);
     api.removeTrackFromPlaylist(userId, playlistId, trackUris).build();
 
   }
 
   public static void addTrack(String userId, String playlistId,
       List<String> uris) {
+    Api api = userToApi.get(userId);
     try {
+      System.out.println("User:" + userId);
+      System.out.println("Playlist:" + playlistId);
+      System.out.println("URI: " + uris);
       api.addTracksToPlaylist(userId, playlistId, uris).build().get();
+
     } catch (IOException | WebApiException e) {
       System.out.println("message" + e.getMessage());
       throw new RuntimeException(e.getMessage());
@@ -256,6 +259,7 @@ public class SpotifyCommunicator {
   }
 
   public static String createPlaylist(String userId, String title) {
+    Api api = userToApi.get(userId);
     try {
       String id = api.createPlaylist(userId, title).build().get().getId();
       return id;

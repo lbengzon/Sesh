@@ -20,7 +20,7 @@ import spark.template.freemarker.FreeMarkerEngine;
  * Main class.
  */
 public final class Main {
-  private SpotifyCommunicator comm = new SpotifyCommunicator();
+  // private SpotifyCommunicator comm = new SpotifyCommunicator();
 
   /**
    * Main method.
@@ -53,7 +53,9 @@ public final class Main {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    comm.createAuthorizeURL();
+    SpotifyCommunicator.setUpPublicApi();
+
+    // comm.createAuthorizeURL();
 
   }
 
