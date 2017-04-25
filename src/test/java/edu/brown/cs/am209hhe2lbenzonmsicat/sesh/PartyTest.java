@@ -565,7 +565,7 @@ public class PartyTest {
         LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
-    assert p.removeFromPlaylist(r1) == false;
+    assert p.removeFromPlaylist(r1.getId()) == false;
     assert p.getRequestedSongs().contains(r1);
     assert !p.getPlaylist().getSongs().contains(r1);
     RequestProxy.clearCache();
@@ -595,7 +595,7 @@ public class PartyTest {
     Party p1 = Party.create("Dope Party1", m, new Coordinate(1, 1),
         LocalDateTime.now());
     assert p1.getRequestedSongs().size() == 0;
-    assert p1.removeFromPlaylist(r1) == false;
+    assert p1.removeFromPlaylist(r1.getId()) == false;
     assert p.getRequestedSongs().contains(r1);
     assert !p.getPlaylist().getSongs().contains(r1);
     assert p1.getRequestedSongs().size() == 0;
@@ -712,7 +712,7 @@ public class PartyTest {
         LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
-    p.approveSong(r1);
+    p.approveSong(r1.getId());
     assert !p.getRequestedSongs().contains(r1);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
@@ -740,7 +740,7 @@ public class PartyTest {
     p.endParty();
 
     try {
-      p.approveSong(r1);
+      p.approveSong(r1.getId());
       assert false;
     } catch (IllegalStateException e) {
       assert p.getRequestedSongs().size() == 1;
