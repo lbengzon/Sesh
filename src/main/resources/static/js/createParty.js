@@ -40,6 +40,11 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
 }
 
 $(document).ready(() => {
+
+	setPartyId(userId, partyId);
+	//post request to get party lists
+
+
 	//dj tab content
 	const $tabContentPlaylist = $(".tabContentPlaylist");
 	const $tabContentSearch = $(".tabContentSearch");
@@ -80,7 +85,10 @@ $(document).ready(() => {
 	$results.on("click", event => {
 		$listItems = $("li");
 		$selected = $listItems.filter('.selected');
-		$playlist.append("<li>" + $selected.text() + "</li>");
+		//websocket add song directly to playlist
+
+
+		//$playlist.append("<li>" + $selected.text() + "</li>");
 		showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
 		//send post request to add song to playlist in db
 	});

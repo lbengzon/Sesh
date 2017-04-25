@@ -114,7 +114,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
       int[] positions = new int[10];
       List<Request> reqs = this.getSongs();
       Request request = getRequest(requestId);
-      assert request != null;
+      if (request == null) {
+        return null;
+      }
       int pos = reqs.indexOf(request);
       positions[0] = pos;
       StringBuilder sb = new StringBuilder();
