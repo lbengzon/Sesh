@@ -78,9 +78,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   @Override
   public List<Request> getSongs() {
     List<Request> results = new ArrayList<Request>();
-    if (playlistBean != null) {
-      return new ArrayList<>(playlistBean.getQueuedRequests().values());
-    } else {
+    if (playlistBean == null) {
       try {
         fill();
       } catch (SQLException e) {
@@ -95,6 +93,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
         .getPlaylistTracks(host.getSpotifyId(), this.spotifyId);
     Map<Song, Request> map = playlistBean.getQueuedRequests();
     for (Song s : songs) {
+      Request r = map.get(s);
       results.add(map.get(s));
     }
 
@@ -163,9 +162,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
       sb.append(request.getSong().getSpotifyId());
       List<String> uris = new ArrayList<String>();
       uris.add(sb.toString());
-      System.out.println("host : " + host.getSpotifyId());
-      System.out.println("playlist ID " + this.spotifyId);
-      System.out.println("uris " + uris);
       SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {

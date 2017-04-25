@@ -57,8 +57,8 @@ public class RequestTest {
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), "testTime");
-    Request r1 = Request.create(Song.of("song1"), l, p.getPartyId(),
-        "testTime");
+    Request r1 = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
+        p.getPartyId(), "testTime");
   }
 
   @Test
@@ -70,8 +70,7 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("alimiraculous", "ali.ahmed.mir@gmail.com", "Ali Mir");
-    User l1 = User.create("alimiraculous", "ali.ahmed.mir@gmail.com",
-        "Ali Mir");
+    User l1 = User.create("1185743437", "hannahhe97@yahoo.com.au", "Hannah He");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Party p1 = Party.create("Dope Party", l1, new Coordinate(1, 1), "time");
 
@@ -185,7 +184,8 @@ public class RequestTest {
     assert r.getUpvotes().size() == 1;
     assert r.getUpvotes().contains(l);
     RequestProxy.clearCache();
-    Request r1 = Request.of(r.getPartyId(), Song.of("song1"), l, "testTime");
+    Request r1 = Request.of(r.getPartyId(), Song.of("7AQAlklmptrrkBSeujkXsD"),
+        l, "testTime");
     assert r1.getDownvotes().size() == 0;
     assert r1.getUpvotes().size() == 1;
     assert r1.getUpvotes().contains(l);
@@ -291,7 +291,7 @@ public class RequestTest {
     RequestProxy.clearCache();
     Request r1 = Request.of(r.getPartyId(), Song.of("7AQAlklmptrrkBSeujkXsD"),
         l, "testTime");
-    assert r1.getSong().equals(Song.of("song1"));
+    assert r1.getSong().equals(Song.of("7AQAlklmptrrkBSeujkXsD"));
   }
 
   @Test
