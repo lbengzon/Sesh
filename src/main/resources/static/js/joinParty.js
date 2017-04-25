@@ -64,6 +64,11 @@ function showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest
 
 
 $(document).ready(() => {
+
+	setPartyId(userId, partyId);
+	//make post request to get party lists
+
+
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
 	const $requests = $(".tabContentRequestGuest ul");
@@ -87,21 +92,7 @@ $(document).ready(() => {
 	$results.on("click", event => {
 		$listItems = $('li');
 		$selected = $listItems.filter('.selected');
-
-
-
-
-
-		//append to request list
-		//$requests.append("<li " + "id=\"" + $selected.attr("id") + "\"><div id=\"songdiv\" " + "onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\">" + $selected.text() + "<div id=\"vote\"> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_up</i></button> <button type=\"button\" class=\"voteButton\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
-
-
-		//also need to send party id!
-		const postParameters = {songId: $selected.attr('id'), spotifyUserId: userId};
-		$.post("/addRequest", postParameters, responseJSON => {
-			const responseObject = JSON.parse(responseJSON);
-			//receive playlist and request list here to display
-		});
+		addRequest(partyId, userId, $selected.attr("id"));
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 

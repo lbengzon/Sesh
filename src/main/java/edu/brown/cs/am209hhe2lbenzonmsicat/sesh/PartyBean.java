@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 
 /**
  * Models a party.
+ *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -26,6 +27,7 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -72,7 +74,7 @@ public class PartyBean extends Party {
     assert isActive() == true;
     try {
       Request request = requestIdToRequest.get(requestId);
-      if (request != null) {
+      if (request != null && getAttendees().contains(user)) {
         request.upvote(user);
         return true;
       }
@@ -87,7 +89,7 @@ public class PartyBean extends Party {
     assert isActive() == true;
     try {
       Request request = requestIdToRequest.get(requestId);
-      if (request != null) {
+      if (request != null && getAttendees().contains(user)) {
         request.downvote(user);
         return true;
       }
@@ -116,8 +118,10 @@ public class PartyBean extends Party {
     Request req = playlist.removeSong(requestId);
     if (req != null) {
       requestIdToRequest.put(req.getId(), req);
+      return true;
     }
-    return true;
+    return false;
+
   }
 
   @Override
