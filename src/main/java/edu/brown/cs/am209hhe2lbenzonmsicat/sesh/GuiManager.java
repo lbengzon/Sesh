@@ -148,25 +148,6 @@ public class GuiManager {
       try {
         QueryParamsMap qm = req.queryMap();
         String userId = qm.value("joinUserId");
-        // String lat = qm.value("latitude");
-        // String lon = qm.value("longitude");
-        // List<Party> parties = new ArrayList<>();
-        // JsonElement[] partyAsJson;
-        //
-        // System.out.println("lat " + lat + " lon " + lon);
-        //
-        // if (lat != null && lon != null) {
-        // Coordinate coord = new Coordinate(Double.valueOf(lat),
-        // Double.valueOf(lon));
-        // parties = Party.getActivePartiesWithinDistance(coord,
-        // Constants.PARTY_JOIN_RADIUS);
-        // partyAsJson = new JsonElement[parties.size()];
-        // for (int i = 0; i < parties.size(); i++) {
-        // partyAsJson[i] = parties.get(i).toJson();
-        // }
-        // } else {
-        // partyAsJson = new JsonElement[0];
-        // }
 
         Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
 
@@ -247,6 +228,8 @@ public class GuiManager {
       String lon = qm.value("lon");
       Party party = null;
       int partyId = -1;
+      System.out.println("lat " + lat);
+      System.out.println("lon " + lon);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));
