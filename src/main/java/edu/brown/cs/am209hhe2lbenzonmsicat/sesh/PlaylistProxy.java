@@ -20,6 +20,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
+   *
    * @param spotifyId
    *          - playlist id
    * @param partyId
@@ -162,7 +163,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
       sb.append(request.getSong().getSpotifyId());
       List<String> uris = new ArrayList<String>();
       uris.add(sb.toString());
-      System.out.println("adding track and the id is " + this.spotifyId);
+      System.out.println("host : " + host.getSpotifyId());
+      System.out.println("playlist ID " + this.spotifyId);
+      System.out.println("uris " + uris);
       SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
