@@ -187,7 +187,7 @@ public class SpotifyCommunicator {
       results.add(u.getEmail());
       results.add(u.getDisplayName());
     } catch (IOException | WebApiException e) {
-      // ERROR
+      throw new RuntimeException(e.getMessage());
     }
 
     return results;
@@ -214,7 +214,7 @@ public class SpotifyCommunicator {
         res.add(s);
       }
     } catch (IOException | WebApiException e) {
-      // ERROR
+      throw new RuntimeException(e.getMessage());
     }
     return res;
   }
@@ -225,7 +225,7 @@ public class SpotifyCommunicator {
       tracks = api.searchTracks(query).build().get().getItems();
       return tracks;
     } catch (IOException | WebApiException e) {
-      // ERROR
+      throw new RuntimeException(e.getMessage());
     }
     return tracks;
 
@@ -236,7 +236,7 @@ public class SpotifyCommunicator {
       Track t = api.getTrack(id).build().get();
       return t;
     } catch (IOException | WebApiException e) {
-      // ERROR
+      throw new RuntimeException(e.getMessage());
     }
     return null;
   }
@@ -252,7 +252,7 @@ public class SpotifyCommunicator {
     try {
       api.addTracksToPlaylist(userId, playlistId, uris).build().get();
     } catch (IOException | WebApiException e) {
-      // ERROR
+      throw new RuntimeException(e.getMessage());
     }
   }
 
@@ -262,7 +262,7 @@ public class SpotifyCommunicator {
       return id;
     } catch (IOException | WebApiException e) {
       // ERROR
-      return "";
+      throw new RuntimeException(e.getMessage());
     }
   }
 
