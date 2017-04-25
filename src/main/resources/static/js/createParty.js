@@ -56,17 +56,12 @@ $(document).ready(() => {
 	const $search = $("#search-dj");
 	const $options = $("#options-dj");
 
-	const $sortable = $(".sortable");
-
-	console.log($sortable);
-
-	// $('#ulPlaylist, #ulRequest').sortable({
- //    	connectWith: '.sortable'
+	// $(function() {
+	// 	$("#ulPlaylist", "ulRequest").sortable({
+	// 		connectWith: ".sortable"
+	// 	});
 	// });
 
-	// $sortable.sortable({
-	// 	connectWith: '.sortable'
-	// });
 
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
