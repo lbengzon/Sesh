@@ -662,10 +662,10 @@ public final class DbHandler {
    */
   public static void addPartyGuest(int partyId, User guest)
       throws SQLException {
-    if (getActivePartyOfUser(guest) != null) {
-      throw new IllegalArgumentException(
-          "ERROR: Host is already a host of another active party");
-    }
+    // if (getActivePartyOfUser(guest) != null) {
+    // throw new IllegalArgumentException(
+    // "ERROR: Host is already a host of another active party");
+    // }
     String query = SqlStatements.ADD_PARTY_GUEST;
     Connection conn = getConnection();
     if (conn == null) {

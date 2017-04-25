@@ -11,7 +11,7 @@
 	console.log("party id: " + partyId);
 </script>
 <div id="embedHider">
-    <iframe src="" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+    <iframe id="playback" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
 </div>
 <div id="titles">
 <h2 class="titles">Playlist | ${partyName} </h2>
@@ -25,8 +25,6 @@
 
 <div class="tabContentPlaylist" id="request-list">
 <ul style="list-style-type:none" class="sortable" id="ulRequest">
-<li>Song1</li>
-<li>Song2</li>
 </ul>
 </div>
 

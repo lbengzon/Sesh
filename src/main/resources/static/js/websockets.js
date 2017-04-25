@@ -29,6 +29,7 @@ function hoverOff(x) {
 function setupWebsockets() {
   const $requests = $("#request-list ul");
   const $playlist = $("#playlist-list ul");
+  const $player = $("#playback");
   // TODO Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("ws://localhost:4567/update");
 
@@ -38,6 +39,7 @@ function setupWebsockets() {
 
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
+    console.log(data);
     if(data.success){
       switch (data.type) {
         default:
@@ -86,7 +88,23 @@ function setupWebsockets() {
           // $last.attr("class", "sortable");
           break;
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
+        console.log("updating whole party");
+          const playlist = data.payload.party.playlistQueue;
+          const requests = data.payload.party.requests;
 
+          for (var key in playlist) {
+            if (playlist.hasOwnProperty(key)) {
+              $playlist.append("<li " + "id=\"" + key + "\">" + playlist[key].song.title + " - " + playlist[key].song.artist + " " + playlist[key].score + "</li>");
+            }
+          }
+
+          for (var key in requests) {
+            if (requests.hasOwnProperty(key)) {
+              $requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
+            }
+          }
+
+          $player.attr("src", data.payload.party.playlistUrl);
           break;
       }
     } else{
@@ -97,6 +115,7 @@ function setupWebsockets() {
 }
 
 function setPartyId (partyId, userId) {
+  console.log("send party id");
   let message = {
     type: MESSAGE_TYPE.SET_PARTY_ID, 
     payload:{
