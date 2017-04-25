@@ -1,7 +1,14 @@
 const MESSAGE_TYPE = {
   CONNECT: 0,
-  SCORE: 1,
-  UPDATE: 2
+  SET_PARTY_ID: 1,
+  ADD_REQUEST: 2, 
+  UPVOTE_REQUEST: 3, 
+  DOWNVOTE_REQUEST: 4, 
+  MOVE_REQUEST_TO_QUEUE: 5, 
+  MOVE_FROM_QUEUE_TO_REQUEST: 6, 
+  UPDATE_ADD_REQUEST: 7, 
+  UPDATE_VOTE_REQUESTS: 8, 
+  UPDATE_AFTER_REQUEST_TRANSFER: 9
 };
 
 let conn;
@@ -10,7 +17,7 @@ let myId = -1;
 // Setup the WebSocket connection for live updating of scores.
 const setup_live_scores = () => {
   // TODO Create the WebSocket connection and assign it to `conn`
-  conn = new WebSocket("ws://localhost:4567/scores");
+  conn = new WebSocket("ws://localhost:4567/update");
 
   conn.onerror = err => {
     console.log('Connection error:', err);
@@ -23,25 +30,27 @@ const setup_live_scores = () => {
         console.log('Unknown message type!', data.type);
         break;
       case MESSAGE_TYPE.CONNECT:
-        // TODO Assign myId
-        myId = data.payload.id;
         break;
-      case MESSAGE_TYPE.UPDATE:
-      const $userId = $("#userId");
-      const $updatedScore = $("#updatedScore");
-      $userId.html(data.payload.id);
-      $updatedScore.html(data.payload.score);
-        // TODO Update the relevant row or add a new row to the scores table
+      case MESSAGE_TYPE.SET_PARTY_ID:
+        break;
+      case MESSAGE_TYPE.ADD_REQUEST:
+        break;
+      case MESSAGE_TYPE.UPVOTE_REQUEST:
+        break;
+      case MESSAGE_TYPE.DOWNVOTE_REQUEST:
+        break;
+      case MESSAGE_TYPE.MOVE_REQUEST_TO_QUEUE:
+        break;
+      case MESSAGE_TYPE.MOVE_FROM_QUEUE_TO_REQUEST:
+        break;
+      case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
+        break;
+      case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
+        break;
+      case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
         break;
     }
   };
 }
 
-// Should be called when a user makes a new guess.
-// `guesses` should be the array of guesses the user has made so far.
-const new_guess = guesses => {
-  const payload = {id:myId, board: $("#boardString").html().trim(),text:guesses.join(" ")};
-  const message = {type:MESSAGE_TYPE.SCORE, payload:payload};
-  conn.send(JSON.stringify(message));
-  // TODO Send a SCORE message to the server using `conn`
-}
+
