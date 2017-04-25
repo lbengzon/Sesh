@@ -345,5 +345,25 @@ input#private_sesh, input#public_sesh {
 	display: none;
 }
 
+#embedHider {
+  width: 300px;
+  height: 80px;
+  position: relative;
+  top: 50px;
+  left: 50px;
+  background: #eee;
+  overflow-y: hidden;
+}
+
+#embedHider > div {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: -25px;
+  left: 25px;
+  background: #555;
+}
+
+
 
 
