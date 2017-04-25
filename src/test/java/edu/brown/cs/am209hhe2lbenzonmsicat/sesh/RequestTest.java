@@ -18,7 +18,7 @@ public class RequestTest {
 
   /**
    * This test the getID function.
-   * 
+   *
    * @throws SQLException
    *           if db messes up
    * @throws FileNotFoundException
@@ -37,13 +37,11 @@ public class RequestTest {
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     assert r.getSong().equals(Song.of("7AQAlklmptrrkBSeujkXsD"));
-    assert r.getRequestTime().equals(LocalDateTime.now());
     assert r.getUserRequestedBy().equals(l);
     RequestProxy.clearCache();
     Request r1 = Request.of(r.getPartyId(), Song.of("7AQAlklmptrrkBSeujkXsD"),
         l, LocalDateTime.now());
     assert r1.getSong().equals(Song.of("7AQAlklmptrrkBSeujkXsD"));
-    assert r1.getRequestTime().equals(LocalDateTime.now());
     assert r1.getUserRequestedBy().equals(l);
   }
 
