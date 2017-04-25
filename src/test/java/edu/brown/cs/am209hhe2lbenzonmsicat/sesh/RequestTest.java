@@ -18,7 +18,7 @@ public class RequestTest {
 
   /**
    * This test the getID function.
-   *
+   * 
    * @throws SQLException
    *           if db messes up
    * @throws FileNotFoundException
@@ -74,6 +74,7 @@ public class RequestTest {
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
     User l1 = User.create("1185743437", "hannahhe97@yahoo.com.au", "Hannah He");
+
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
     Party p1 = Party.create("Dope Party", l1, new Coordinate(1, 1),
@@ -308,6 +309,7 @@ public class RequestTest {
     Request r1 = Request.of(r.getPartyId(), Song.of("7AQAlklmptrrkBSeujkXsD"),
         l, LocalDateTime.now());
     assert r1.getSong().equals(Song.of("7AQAlklmptrrkBSeujkXsD"));
+
   }
 
   @Test

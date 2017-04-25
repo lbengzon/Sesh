@@ -9,15 +9,19 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 
 /***
- * This class tests the playlist class.*
+ * This class tests the playlist class.* <<<<<<< HEAD
  *
+ * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
+ * 
  * @author Ali
  */
 public class PlaylistTest {
 
   /**
-   * This method tests the getID method.
+   * This method tests the getID method. <<<<<<< HEAD
    *
+   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
+   * 
    * @throws SQLException
    *           throws a SQL exception if the db is bad
    * @throws FileNotFoundException
@@ -29,8 +33,10 @@ public class PlaylistTest {
   }
 
   /**
-   * This method tests the getUrl function.
+   * This method tests the getUrl function. <<<<<<< HEAD
    *
+   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
+   * 
    * @throws SQLException
    *           if db malfunctions
    * @throws FileNotFoundException
@@ -43,8 +49,10 @@ public class PlaylistTest {
   }
 
   /**
-   * this method tests the remove songs.
+   * this method tests the remove songs. <<<<<<< HEAD
    *
+   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
+   * 
    * @throws SQLException
    *           if db doesn't work
    * @throws FileNotFoundException
@@ -76,8 +84,10 @@ public class PlaylistTest {
   }
 
   /**
-   * this tests the add song.
+   * this tests the add song. <<<<<<< HEAD
    *
+   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
+   * 
    * @throws SQLException
    *           if db screws up
    * @throws FileNotFoundException
@@ -110,8 +120,10 @@ public class PlaylistTest {
   }
 
   /**
-   * This method tests the Of function.
+   * This method tests the Of function. <<<<<<< HEAD
    *
+   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
+   * 
    * @throws SQLException
    *           from the db
    * @throws FileNotFoundException
@@ -123,8 +135,10 @@ public class PlaylistTest {
   }
 
   /**
-   * This tests the get songs from the spotify API.
+   * This tests the get songs from the spotify API. <<<<<<< HEAD
    *
+   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
+   * 
    * @throws MalformedURLException
    *           if the url doesn't work
    * @throws IOException

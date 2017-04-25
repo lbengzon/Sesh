@@ -40,6 +40,7 @@ public final class DbHandler {
 
   /**
    * Gets the connection a particular thread has.
+   *
    * @return the connection to the database.
    */
   public static Connection getConnection() {
@@ -51,6 +52,7 @@ public final class DbHandler {
 
   /**
    * Set from URL.
+   *
    * @param pathToDb
    *          - path
    * @throws SQLException
@@ -103,6 +105,7 @@ public final class DbHandler {
 
   /**
    * Sets the connection to a particular database for the thread.
+   *
    * @param conn
    *          the connection we want to use.
    */
@@ -113,6 +116,7 @@ public final class DbHandler {
 
   /**
    * Clear all tables.
+   *
    * @throws SQLException
    *           - exception
    */
@@ -126,6 +130,7 @@ public final class DbHandler {
 
   /**
    * Clear user table.
+   *
    * @throws SQLException
    *           - exception
    */
@@ -142,6 +147,7 @@ public final class DbHandler {
 
   /**
    * Clear party table.
+   *
    * @throws SQLException
    *           - exception
    */
@@ -158,6 +164,7 @@ public final class DbHandler {
 
   /**
    * Clear song request table.
+   *
    * @throws SQLException
    *           - exception
    */
@@ -174,6 +181,7 @@ public final class DbHandler {
 
   /**
    * Clear request votes table.
+   *
    * @throws SQLException
    *           - exception
    */
@@ -190,6 +198,7 @@ public final class DbHandler {
 
   /**
    * Clear party attendee table.
+   *
    * @throws SQLException
    *           - exception
    */
@@ -213,6 +222,7 @@ public final class DbHandler {
 
   /**
    * Adds user to database.
+   *
    * @param userId
    *          - id
    * @param email
@@ -247,6 +257,7 @@ public final class DbHandler {
 
   /**
    * Add song request to database.
+   *
    * @param spotifySongId
    *          - song id
    * @param partyId
@@ -286,6 +297,7 @@ public final class DbHandler {
 
   /**
    * Add party to database.
+   *
    * @param playlist
    *          - playlist
    * @param name
@@ -303,10 +315,10 @@ public final class DbHandler {
   public static Party addParty(String playlistId, String name,
       Coordinate coordinate, LocalDateTime time, User host)
       throws SQLException {
-    if (getActivePartyOfUser(host) != null) {
-      throw new IllegalArgumentException(
-          "ERROR: Host is already a host of another active party");
-    }
+    // if (getActivePartyOfUser(host) != null) {
+    // throw new IllegalArgumentException(
+    // "ERROR: Host is already a host of another active party");
+    // }
     String query = SqlStatements.ADD_NEW_PARTY;
     Connection conn = getConnection();
     if (conn == null) {
@@ -342,6 +354,7 @@ public final class DbHandler {
 
   /**
    * Add host to database.
+   *
    * @param partyId
    *          - party id
    * @param host
@@ -352,10 +365,10 @@ public final class DbHandler {
   public static void addHost(int partyId, User host) throws SQLException {
     // TODO if your gonna have multiple hosts, add the check that he's not
     // hosting another ongoing party here.
-    if (getActivePartyOfUser(host) != null) {
-      throw new IllegalArgumentException(
-          "ERROR: Host is already a host of another active party");
-    }
+    // if (getActivePartyOfUser(host) != null) {
+    // throw new IllegalArgumentException(
+    // "ERROR: Host is already a host of another active party");
+    // }
     String query = SqlStatements.ADD_PARTY_HOST;
     Connection conn = getConnection();
     if (conn == null) {
@@ -375,6 +388,7 @@ public final class DbHandler {
 
   /**
    * Move song request out of request list and to the playlist queue
+   *
    * @param request
    *          - request
    * @throws SQLException
@@ -416,6 +430,7 @@ public final class DbHandler {
 
   /**
    * Move song playlist to request list
+   *
    * @param request
    *          - request
    * @throws SQLException
@@ -441,6 +456,7 @@ public final class DbHandler {
 
   /**
    * Remove party from database.
+   *
    * @param party
    *          - party
    * @throws SQLException
@@ -465,6 +481,7 @@ public final class DbHandler {
 
   /**
    * Upvote request in database.
+   *
    * @param request
    *          - request that has been upvoted
    * @param user
@@ -495,6 +512,7 @@ public final class DbHandler {
 
   /**
    * Downvote request in the database.
+   *
    * @param request
    *          - request that has been downvoted
    * @param user
@@ -523,6 +541,7 @@ public final class DbHandler {
 
   /**
    * Remove vote from database.
+   *
    * @param request
    *          - request to remove vote from
    * @param user
@@ -551,6 +570,7 @@ public final class DbHandler {
 
   /**
    * Add guest to party in database.
+   *
    * @param partyId
    *          - party id
    * @param guest
@@ -583,6 +603,7 @@ public final class DbHandler {
 
   /**
    * Remove guest from party in database.
+   *
    * @param partyId
    *          - party id
    * @param guest
@@ -611,6 +632,7 @@ public final class DbHandler {
 
   /**
    * Retrieve all requests in party.
+   *
    * @param partyId
    *          - id
    * @return list of requests in given party
@@ -644,6 +666,7 @@ public final class DbHandler {
 
   /**
    * Retrieve all party attendees.
+   *
    * @param partyId
    *          - party id
    * @return list of hosts and list of guests
@@ -682,6 +705,7 @@ public final class DbHandler {
 
   /**
    * Retrieve party from database.
+   *
    * @param partyId
    *          - id
    * @param playlist
@@ -713,6 +737,7 @@ public final class DbHandler {
 
   /**
    * Retrieve request from database.
+   *
    * @param id
    *          - request id
    * @param song
@@ -759,6 +784,7 @@ public final class DbHandler {
 
   /**
    * Retrieve user from id.
+   *
    * @param spotifyId
    *          - id
    * @return - user of given id
@@ -789,6 +815,7 @@ public final class DbHandler {
 
   /**
    * Get all parties of a user.
+   *
    * @param user
    *          - the user's parties we want
    * @return list of all parties of the given user
@@ -853,6 +880,7 @@ public final class DbHandler {
 
   /**
    * Gets the party from the id.
+   *
    * @param partyId
    *          The id of the party.
    * @return The party of the partyId
@@ -916,6 +944,7 @@ public final class DbHandler {
 
   /**
    * Get party hosted by the passed in user.
+   *
    * @param user
    *          - user's party we are trying to retrieve
    * @return - party
@@ -953,6 +982,7 @@ public final class DbHandler {
 
   /**
    * Retrieve queued songs.
+   *
    * @param playlistId
    *          - playlist id
    * @param partyId

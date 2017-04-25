@@ -1,5 +1,16 @@
 <#assign content>
+<script>
+	var userId;
+	var partyId;
+</script>
 <script src="/js/createParty.js"></script>
+<script>
+	userId = "${userId}";
+	partyId = "${partyId}";
+	console.log("user id: " + userId);
+	console.log("party id: " + partyId);
+</script>
+
 <div id="titles">
 <h2 class="titles">Playlist | ${partyName} </h2>
 <h2 class="titles">Requests | ${partyName} </h2>
