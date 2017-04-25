@@ -70,7 +70,7 @@ public class DbHandlerTest {
         "Leandro Bengzon");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     assert party.getHost().equals(host);
     assert party.getGuests().isEmpty();
     assert party.getRequestedSongs().isEmpty();
@@ -97,7 +97,7 @@ public class DbHandlerTest {
         "Leandro Bengzon");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     assert party.getHost().equals(host);
     assert party.getGuests().isEmpty();
     assert party.getRequestedSongs().isEmpty();
@@ -125,7 +125,7 @@ public class DbHandlerTest {
         "Leandro Bengzon");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     List<Party> parties = DbHandler.getUsersParties(host);
     assert parties.contains(party);
     DbHandler.removeParty(party);
@@ -144,9 +144,9 @@ public class DbHandlerTest {
         "Leandro Bengzon");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     Party party2 = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
   }
 
@@ -165,7 +165,7 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     DbHandler.addPartyGuest(party.getPartyId(), hannah);
     DbHandler.addPartyGuest(party.getPartyId(), matt);
@@ -200,7 +200,7 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     DbHandler.addPartyGuest(party.getPartyId(), hannah);
     DbHandler.addPartyGuest(party.getPartyId(), matt);
@@ -237,7 +237,7 @@ public class DbHandlerTest {
     User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     DbHandler.addPartyGuest(party.getPartyId(), ali);
     DbHandler.addPartyGuest(party.getPartyId(), ali);
   }
@@ -255,9 +255,9 @@ public class DbHandlerTest {
     User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     Party party1 = DbHandler.addParty("testPlaylistId1", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), matt);
+        new Coordinate(71.6, 41.8), time, matt);
 
     DbHandler.addPartyGuest(party.getPartyId(), ali);
     DbHandler.addPartyGuest(party1.getPartyId(), ali);
@@ -276,11 +276,11 @@ public class DbHandlerTest {
     User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     DbHandler.addPartyGuest(party.getPartyId(), ali);
 
     Party party1 = DbHandler.addParty("testPlaylistId1", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), ali);
+        new Coordinate(71.6, 41.8), time, ali);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -296,10 +296,10 @@ public class DbHandlerTest {
     User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Party party1 = DbHandler.addParty("testPlaylistId1", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), ali);
+        new Coordinate(71.6, 41.8), time, ali);
     DbHandler.addPartyGuest(party1.getPartyId(), host);
   }
 
@@ -316,10 +316,10 @@ public class DbHandlerTest {
     User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     DbHandler.endParty(party.getPartyId());
     Party party1 = DbHandler.addParty("testPlaylistId1", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), ali);
+        new Coordinate(71.6, 41.8), time, ali);
     DbHandler.addPartyGuest(party1.getPartyId(), host);
     assert party1.getGuests().contains(host);
   }
@@ -337,9 +337,9 @@ public class DbHandlerTest {
     User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
     Party party1 = DbHandler.addParty("testPlaylistId1", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), matt);
+        new Coordinate(71.6, 41.8), time, matt);
 
     DbHandler.addPartyGuest(party.getPartyId(), ali);
     DbHandler.endParty(party.getPartyId());
@@ -363,14 +363,14 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Request song1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
-        time.toString());
+        time);
     Request song2 = DbHandler.requestSong("songId2", party.getPartyId(), host,
-        time.toString());
+        time);
     Request song3 = DbHandler.requestSong("songId3", party.getPartyId(), ali,
-        time.toString());
+        time);
 
     Party partyFull = DbHandler.getFullParty(party.getPartyId(),
         party.getPlaylist().getId(), party.getName(), party.getLocation(),
@@ -398,14 +398,14 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Request song1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
-        time.toString());
+        time);
     Request song2 = DbHandler.requestSong("songId2", party.getPartyId(), host,
-        time.toString());
+        time);
     Request song3 = DbHandler.requestSong("songId3", party.getPartyId(), ali,
-        time.toString());
+        time);
 
     Party partyFull = DbHandler.getFullParty(party.getPartyId(),
         party.getPlaylist().getId(), party.getName(), party.getLocation(),
@@ -450,14 +450,14 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Request song1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
-        time.toString());
+        time);
     Request song2 = DbHandler.requestSong("songId2", party.getPartyId(), host,
-        time.toString());
+        time);
     Request song3 = DbHandler.requestSong("songId3", party.getPartyId(), ali,
-        time.toString());
+        time);
 
     Party partyFull = DbHandler.getFullParty(party.getPartyId(),
         party.getPlaylist().getId(), party.getName(), party.getLocation(),
@@ -527,10 +527,10 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Request request1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
-        time.toString());
+        time);
     assert request1.getSong().equals(Song.of("songId1"));
     assert request1.getUserRequestedBy().equals(ali);
 
@@ -579,10 +579,10 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Request request1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
-        time.toString());
+        time);
     assert request1.getSong().equals(Song.of("songId1"));
     assert request1.getUserRequestedBy().equals(ali);
 
@@ -642,10 +642,10 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Request request1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
-        time.toString());
+        time);
     assert request1.getSong().equals(Song.of("songId1"));
     assert request1.getUserRequestedBy().equals(ali);
 
@@ -668,18 +668,18 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     DbHandler.addPartyGuest(party.getPartyId(), hannah);
     DbHandler.endParty(party.getPartyId());
     Party party1 = DbHandler.addParty("testPlaylistId2", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), matt);
+        new Coordinate(71.6, 41.8), time, matt);
 
     DbHandler.addPartyGuest(party1.getPartyId(), hannah);
     DbHandler.endParty(party1.getPartyId());
 
     Party party2 = DbHandler.addParty("testPlaylistId2", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), ali);
+        new Coordinate(71.6, 41.8), time, ali);
 
     DbHandler.addPartyGuest(party2.getPartyId(), hannah);
     DbHandler.endParty(party2.getPartyId());
@@ -722,12 +722,12 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     party.endParty();
 
     Party party1 = DbHandler.addParty("testPlaylistId2", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Party party2 = DbHandler.getPartyHostedByUser(host);
 
@@ -751,16 +751,16 @@ public class DbHandlerTest {
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Party party1 = DbHandler.addParty("testPlaylistId2", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), hannah);
+        new Coordinate(71.6, 41.8), time, hannah);
 
     Party party2 = DbHandler.addParty("testPlaylistId2", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), matt);
+        new Coordinate(71.6, 41.8), time, matt);
 
     Party party3 = DbHandler.addParty("testPlaylistId2", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), ali);
+        new Coordinate(71.6, 41.8), time, ali);
     party3.endParty();
 
     List<Party> parties = DbHandler.getAllActiveParties();
@@ -799,7 +799,7 @@ public class DbHandlerTest {
         "Leandro Bengzon");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
-        new Coordinate(71.6, 41.8), time.toString(), host);
+        new Coordinate(71.6, 41.8), time, host);
 
     Party partyFull = DbHandler.getPartyFromId(party.getPartyId());
 

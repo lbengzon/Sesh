@@ -1,8 +1,8 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +22,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +30,6 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -66,7 +64,6 @@ public class GuiManager {
    * Displays login page. Backend sends authorization URL to frontend and
    * displays that link as button. After logging in, redirects to
    * /spotifycallback.
-   *
    */
   private class LoginHandler implements TemplateViewRoute {
     @Override
@@ -110,7 +107,6 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -163,7 +159,6 @@ public class GuiManager {
        * Get party id from front end (from the one that user clicks on) Add user
        * to party id that user clicks on. Add them to party, update java and db
        * Send back party info (id, name, host, etc.) to display party.
-       *
        */
       // int partyId = Integer.valueOf(qm.value("party_id")); // from frontend
       // String userId = qm.value("user_id"); // from frontend
@@ -184,7 +179,6 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -213,8 +207,6 @@ public class GuiManager {
       String privacyStatus = qm.value("privacy_setting"); // add to Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
-      long time = System.currentTimeMillis();
-      Date date = new Date(time);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));
@@ -228,7 +220,7 @@ public class GuiManager {
 
       try {
         User host = User.of(userId);
-        party = Party.create(partyName, host, coord, time);
+        party = Party.create(partyName, host, coord, LocalDateTime.now());
       } catch (SQLException e) {
         System.out.println("Failed to add party to database");
       }
@@ -242,9 +234,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   *
    * @author HE23
-   *
    */
   private static class SearchHandler implements Route {
     @Override

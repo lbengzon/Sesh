@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import org.junit.Test;
 
@@ -52,13 +53,14 @@ public class PlaylistTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("alimiraculous", "ali.ahmed.mir@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     Playlist playlist = p.getPlaylist();
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
-        p.getPartyId(), "testTime");
+        p.getPartyId(), LocalDateTime.now());
     playlist.addSong(r);
     Request r1 = Request.create(Song.of("57tzAvfPHXHzCHUNp9AUBm"), l,
-        p.getPartyId(), "testTime");
+        p.getPartyId(), LocalDateTime.now());
     playlist.addSong(r1);
     assert playlist.getSongs().contains(r);
     assert playlist.getSongs().contains(r1);
@@ -84,7 +86,8 @@ public class PlaylistTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("alimiraculous", "ali.ahmed.mir@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     Playlist playlist = p.getPlaylist();
     Request r = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), l);
     // Somewhere only we know - keane

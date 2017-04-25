@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,7 +67,7 @@ public abstract class Party {
   /**
    * @return time of party
    */
-  public abstract String getTime();
+  public abstract LocalDateTime getTime();
 
   /**
    * @return party location
@@ -92,7 +93,6 @@ public abstract class Party {
 
   /**
    * Upvote song.
-   * 
    * @param user
    *          - to upvote
    * @param req
@@ -103,7 +103,6 @@ public abstract class Party {
 
   /**
    * Downvote song.
-   * 
    * @param user
    *          - to downvote
    * @param req
@@ -114,7 +113,6 @@ public abstract class Party {
 
   /**
    * Approve song.
-   * 
    * @param req
    *          - request
    * @return boolean if successful
@@ -123,7 +121,6 @@ public abstract class Party {
 
   /**
    * Remove from playlist.
-   * 
    * @param req
    *          - request
    * @return boolean if successful.
@@ -132,7 +129,6 @@ public abstract class Party {
 
   /**
    * Request song.
-   * 
    * @param song
    *          - request
    * @param user
@@ -143,7 +139,6 @@ public abstract class Party {
 
   /**
    * Add a guest to party.
-   * 
    * @param guest
    *          - guest to add
    * @return boolean if successful.
@@ -152,7 +147,6 @@ public abstract class Party {
 
   /**
    * Removes a guest from the party
-   * 
    * @param guest
    *          -Guest to remove
    * @return boolean if successful
@@ -161,7 +155,6 @@ public abstract class Party {
 
   /**
    * Gets the distance from the party to the coordinate.
-   * 
    * @param coordinate
    *          The coordinate to get the distance from.
    * @return The distance from the coordinate.
@@ -179,7 +172,6 @@ public abstract class Party {
 
   /**
    * Retrieve party data.
-   * 
    * @param partyId
    *          - id
    * @param name
@@ -197,7 +189,7 @@ public abstract class Party {
    * @return party
    */
   public static Party of(int partyId, String name, String playlistId,
-      Coordinate location, String time, Status status) {
+      Coordinate location, LocalDateTime time, Status status) {
     if (name == null || playlistId == null || location == null || time == null
         || status == null) {
       throw new NullPointerException(
@@ -208,7 +200,6 @@ public abstract class Party {
 
   /**
    * Gets the party object with the party id passed in.
-   * 
    * @param partyId
    *          The id of the party
    * @return The party object representing the party.
@@ -223,7 +214,6 @@ public abstract class Party {
 
   /**
    * Gets the parties within the distance.
-   * 
    * @param location
    *          The location of the user.
    * @param distance
@@ -248,7 +238,6 @@ public abstract class Party {
 
   /**
    * Create a party and add to db.
-   * 
    * @param name
    *          - name
    * @param host
@@ -263,7 +252,7 @@ public abstract class Party {
    */
   // TODO: Modify parameters to take in Date object for time
   public static Party create(String name, User host, Coordinate location,
-      String time) throws SQLException {
+      LocalDateTime time) throws SQLException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an party from a null id");
@@ -276,7 +265,6 @@ public abstract class Party {
 
   /**
    * Returns the active party of the user if he has any.
-   * 
    * @param user
    *          The user you want to get the active party of
    * @return The active party of the user or null if there is no active party.
@@ -291,7 +279,6 @@ public abstract class Party {
 
   /**
    * Gets all (active and stopped) parties of a user.
-   * 
    * @param user
    *          The user you want to get the parties of.
    * @return The parties of a user.
