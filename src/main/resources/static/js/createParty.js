@@ -58,6 +58,8 @@ $(document).ready(() => {
 
 	$sortable.sortable({
 		connectWith: '.sortable'
+	}).bind('sortupdate', function(){
+		console.log("BIIIIND");
 	});
 
 	const $userInput = $(".search");
