@@ -43,9 +43,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @return the connection to the database.
    */
   public static Connection getConnection() {
@@ -59,9 +59,9 @@ public final class DbHandler {
    * Set from URL. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param pathToDb
    *          - path
    * @throws SQLException
@@ -117,9 +117,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param conn
    *          the connection we want to use.
    */
@@ -132,9 +132,9 @@ public final class DbHandler {
    * Clear all tables. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @throws SQLException
    *           - exception
    */
@@ -150,9 +150,9 @@ public final class DbHandler {
    * Clear user table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @throws SQLException
    *           - exception
    */
@@ -171,9 +171,9 @@ public final class DbHandler {
    * Clear party table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @throws SQLException
    *           - exception
    */
@@ -192,9 +192,9 @@ public final class DbHandler {
    * Clear song request table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @throws SQLException
    *           - exception
    */
@@ -213,9 +213,9 @@ public final class DbHandler {
    * Clear request votes table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @throws SQLException
    *           - exception
    */
@@ -235,9 +235,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @throws SQLException
    *           - exception
    */
@@ -263,9 +263,9 @@ public final class DbHandler {
    * Adds user to database. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param userId
    *          - id
    * @param email
@@ -303,9 +303,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param spotifySongId
    *          - song id
    * @param partyId
@@ -439,9 +439,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param request
    *          - request
    * @throws SQLException
@@ -486,9 +486,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param request
    *          - request
    * @throws SQLException
@@ -517,9 +517,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param party
    *          - party
    * @throws SQLException
@@ -547,9 +547,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param request
    *          - request that has been upvoted
    * @param user
@@ -583,9 +583,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param request
    *          - request that has been downvoted
    * @param user
@@ -616,9 +616,9 @@ public final class DbHandler {
    * Remove vote from database. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param request
    *          - request to remove vote from
    * @param user
@@ -650,9 +650,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param partyId
    *          - party id
    * @param guest
@@ -688,9 +688,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param partyId
    *          - party id
    * @param guest
@@ -722,9 +722,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param partyId
    *          - id
    * @return list of requests in given party
@@ -761,9 +761,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param partyId
    *          - party id
    * @return list of hosts and list of guests
@@ -805,9 +805,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param partyId
    *          - id
    * @param playlist
@@ -842,9 +842,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param id
    *          - request id
    * @param song
@@ -893,9 +893,9 @@ public final class DbHandler {
    * Retrieve user from id. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param spotifyId
    *          - id
    * @return - user of given id
@@ -928,9 +928,9 @@ public final class DbHandler {
    * Get all parties of a user. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param user
    *          - the user's parties we want
    * @return list of all parties of the given user
@@ -998,9 +998,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param partyId
    *          The id of the party.
    * @return The party of the partyId
@@ -1067,9 +1067,9 @@ public final class DbHandler {
    * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param user
    *          - user's party we are trying to retrieve
    * @return - party
@@ -1109,9 +1109,9 @@ public final class DbHandler {
    * Retrieve queued songs. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
    *
    * =======
-   * 
+   *
    * >>>>>>> added loading button
-   * 
+   *
    * @param playlistId
    *          - playlist id
    * @param partyId
@@ -1121,7 +1121,7 @@ public final class DbHandler {
    *           - exception
    */
   public static PlaylistBean getQueuedSongsForParty(String playlistId,
-      int partyId) throws SQLException {
+      int partyId, User host) throws SQLException {
     String query = SqlStatements.GET_PARTY_QUEUED_SONG_REQUESTS;
     Connection conn = getConnection();
     if (conn == null) {
@@ -1142,7 +1142,7 @@ public final class DbHandler {
           LocalDateTime.parse(time));
       queue.add(r);
     }
-    return new PlaylistBean(playlistId, partyId, queue);
+    return new PlaylistBean(playlistId, partyId, queue, host);
   }
 
 }

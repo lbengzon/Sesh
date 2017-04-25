@@ -136,16 +136,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
   }
 
-  public String getEmbedUrl() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("https://embed.spotify,com/?uri=spotify:user:");
-    sb.append(host.getSpotifyId());
-    sb.append(":playlist:");
-    sb.append(this.spotifyId);
-    return sb.toString();
-
-  }
-
   @Override
   public Request getRequest(String requestId) {
     if (playlistBean == null) {
@@ -193,7 +183,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
       return;
     }
     try {
-      playlistBean = DbHandler.getQueuedSongsForParty(spotifyId, partyId);
+      playlistBean = DbHandler.getQueuedSongsForParty(spotifyId, partyId, host);
     } catch (Exception e) {
       throw new RuntimeException(e.getMessage());
     }
