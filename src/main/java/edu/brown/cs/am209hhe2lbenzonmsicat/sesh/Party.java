@@ -13,7 +13,7 @@ import com.google.gson.JsonElement;
 /**
  * Abstract party class.
  */
-public abstract class Party {
+public abstract class Party implements Jsonable {
 
   /**
    * Models party status.

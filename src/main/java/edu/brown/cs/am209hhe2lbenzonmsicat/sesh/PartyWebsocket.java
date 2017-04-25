@@ -29,7 +29,7 @@ public class PartyWebsocket {
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY
   }
 
   @OnWebSocketConnect
@@ -69,8 +69,7 @@ public class PartyWebsocket {
       User user = User.of(userId);
       switch (messageType) {
         case SET_PARTY_ID:
-          partyIdToSessions.put(partyId, session);
-          sessionToPartyId.put(session, partyId);
+          sendUpdateEntireParty(partyId, session);
           break;
         case ADD_REQUEST:
           sendAddRequestUpdate(payload, user, party, session);
@@ -102,6 +101,26 @@ public class PartyWebsocket {
       e.printStackTrace();
     }
 
+  }
+
+  private void sendUpdateEntireParty(int partyId, Session session)
+      throws IOException {
+    JsonObject updatePayload = new JsonObject();
+    JsonObject updateMessage = new JsonObject();
+    try {
+      partyIdToSessions.put(partyId, session);
+      sessionToPartyId.put(session, partyId);
+      Party party = Party.of(partyId);
+      updatePayload.add("party", party.toJson());
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_ENTIRE_PARTY.ordinal());
+      updateMessage.addProperty("success", true);
+      updateMessage.add("payload", updatePayload);
+    } catch (Exception e) {
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+    }
+    session.getRemote().sendString(updateMessage.toString());
   }
 
   private void sendAddSongDirectlyToPlaylistUpdate(JsonObject payload,

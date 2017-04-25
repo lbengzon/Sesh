@@ -342,4 +342,16 @@ public class PartyProxy extends Party implements Proxy {
     return partyBean.getPlaylistQueueAsJson();
   }
 
+  @Override
+  public Map<String, Object> toMap() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.toMap();
+  }
+
 }
