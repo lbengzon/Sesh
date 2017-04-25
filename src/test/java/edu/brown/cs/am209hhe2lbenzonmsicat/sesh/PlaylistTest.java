@@ -4,20 +4,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 
 import org.junit.Test;
 
 /***
  * This class tests the playlist class.*
- *
+ * 
  * @author Ali
  */
 public class PlaylistTest {
 
   /**
    * This method tests the getID method.
-   *
+   * 
    * @throws SQLException
    *           throws a SQL exception if the db is bad
    * @throws FileNotFoundException
@@ -30,7 +29,7 @@ public class PlaylistTest {
 
   /**
    * This method tests the getUrl function.
-   *
+   * 
    * @throws SQLException
    *           if db malfunctions
    * @throws FileNotFoundException
@@ -44,7 +43,7 @@ public class PlaylistTest {
 
   /**
    * this method tests the remove songs.
-   *
+   * 
    * @throws SQLException
    *           if db doesn't work
    * @throws FileNotFoundException
@@ -57,14 +56,13 @@ public class PlaylistTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("alimiraculous", "ali.ahmed.mir@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now());
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Playlist playlist = p.getPlaylist();
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
-        p.getPartyId(), LocalDateTime.now());
+        p.getPartyId(), "testTime");
     playlist.addSong(r);
     Request r1 = Request.create(Song.of("57tzAvfPHXHzCHUNp9AUBm"), l,
-        p.getPartyId(), LocalDateTime.now());
+        p.getPartyId(), "testTime");
     playlist.addSong(r1);
     assert playlist.getSongs().contains(r);
     assert playlist.getSongs().contains(r1);
@@ -77,7 +75,7 @@ public class PlaylistTest {
 
   /**
    * this tests the add song.
-   *
+   * 
    * @throws SQLException
    *           if db screws up
    * @throws FileNotFoundException
@@ -91,8 +89,7 @@ public class PlaylistTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("alimiraculous", "ali.ahmed.mir@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now());
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
     Playlist playlist = p.getPlaylist();
     Request r = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), l);
     // Somewhere only we know - keane
@@ -111,7 +108,7 @@ public class PlaylistTest {
 
   /**
    * This method tests the Of function.
-   *
+   * 
    * @throws SQLException
    *           from the db
    * @throws FileNotFoundException
@@ -124,7 +121,7 @@ public class PlaylistTest {
 
   /**
    * This tests the get songs from the spotify API.
-   *
+   * 
    * @throws MalformedURLException
    *           if the url doesn't work
    * @throws IOException
