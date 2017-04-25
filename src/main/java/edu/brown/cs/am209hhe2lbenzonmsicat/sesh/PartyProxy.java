@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -19,7 +20,7 @@ public class PartyProxy extends Party implements Proxy {
   private String playlistId;
   private Coordinate location;
   private String name;
-  private String time;
+  private LocalDateTime time;
   private Status status;
 
   // private Location location; Google api stuff?
@@ -42,7 +43,7 @@ public class PartyProxy extends Party implements Proxy {
    *          - status
    */
   public PartyProxy(int partyId, String name, String playlistId,
-      Coordinate location, String time, Status status) {
+      Coordinate location, LocalDateTime time, Status status) {
     this.partyId = partyId;
     this.name = name;
     this.playlistId = playlistId;
@@ -153,7 +154,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public String getTime() {
+  public LocalDateTime getTime() {
     return time;
   }
 

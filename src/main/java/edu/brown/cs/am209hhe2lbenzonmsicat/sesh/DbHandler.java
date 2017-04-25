@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -259,7 +260,7 @@ public final class DbHandler {
    *           - exception
    */
   public static Request requestSong(String spotifySongId, int partyId,
-      User user, String time) throws SQLException {
+      User user, LocalDateTime time) throws SQLException {
     String query = SqlStatements.ADD_SONG_REQUEST;
     Connection conn = getConnection();
     if (conn == null) {
@@ -271,7 +272,7 @@ public final class DbHandler {
     prep.setString(2, spotifySongId);
     prep.setInt(3, partyId);
     prep.setString(4, user.getSpotifyId());
-    prep.setString(5, time);
+    prep.setString(5, time.toString());
 
     int success = prep.executeUpdate();
     if (success >= 1) {
@@ -300,7 +301,8 @@ public final class DbHandler {
    *           - exception
    */
   public static Party addParty(String playlistId, String name,
-      Coordinate coordinate, String time, User host) throws SQLException {
+      Coordinate coordinate, LocalDateTime time, User host)
+      throws SQLException {
     if (getActivePartyOfUser(host) != null) {
       throw new IllegalArgumentException(
           "ERROR: Host is already a host of another active party");
@@ -316,7 +318,7 @@ public final class DbHandler {
     prep.setString(2, name);
     prep.setDouble(3, coordinate.getLat());
     prep.setDouble(4, coordinate.getLon());
-    prep.setString(5, time);
+    prep.setString(5, time.toString());
 
     int success = prep.executeUpdate();
     if (success >= 1) {
@@ -634,7 +636,7 @@ public final class DbHandler {
       String userId = rs.getString(4);
       String time = rs.getString(5);
       Request r = Request.of(requestId, Song.of(spotifySongId), User.of(userId),
-          time);
+          LocalDateTime.parse(time));
       requests.add(r);
     }
     return requests;
@@ -697,7 +699,7 @@ public final class DbHandler {
    *           - exception
    */
   public static PartyBean getFullParty(int partyId, String playlistId,
-      String name, Coordinate location, String time, Status status)
+      String name, Coordinate location, LocalDateTime time, Status status)
       throws SQLException {
     List<Request> requests = getPartySongRequests(partyId);
     List<List<User>> attendees = getPartyHostsAndGuests(partyId);
@@ -724,7 +726,7 @@ public final class DbHandler {
    *           - exception
    */
   public static RequestBean getFullRequest(int partyId, Song song, User user,
-      String requestTime) throws SQLException {
+      LocalDateTime requestTime) throws SQLException {
     String query = SqlStatements.GET_VOTES_FOR_SONG;
     Connection conn = getConnection();
     if (conn == null) {
@@ -815,7 +817,8 @@ public final class DbHandler {
       String time = rs.getString(6);
       String status = rs.getString(7);
       Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+          new Coordinate(lat, lon), LocalDateTime.parse(time),
+          Status.valueOf(status));
       parties.add(p);
     }
     return parties;
@@ -841,7 +844,8 @@ public final class DbHandler {
       String time = rs.getString(6);
       String status = rs.getString(7);
       Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+          new Coordinate(lat, lon), LocalDateTime.parse(time),
+          Status.valueOf(status));
       parties.add(p);
     }
     return parties;
@@ -874,7 +878,8 @@ public final class DbHandler {
       String time = rs.getString(6);
       String status = rs.getString(7);
       Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+          new Coordinate(lat, lon), LocalDateTime.parse(time),
+          Status.valueOf(status));
       return p;
     }
     return null;
@@ -901,7 +906,8 @@ public final class DbHandler {
       String time = rs.getString(6);
       String status = rs.getString(7);
       Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+          new Coordinate(lat, lon), LocalDateTime.parse(time),
+          Status.valueOf(status));
       assert rs.next() == false;
       return p;
     }
@@ -937,7 +943,8 @@ public final class DbHandler {
       String time = rs.getString(6);
       String status = rs.getString(Constants.SEVEN);
       Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), time, Status.valueOf(status));
+          new Coordinate(lat, lon), LocalDateTime.parse(time),
+          Status.valueOf(status));
       assert rs.next() == false;
       return p;
     }
@@ -973,7 +980,7 @@ public final class DbHandler {
       String userId = rs.getString(4);
       String time = rs.getString(5);
       Request r = Request.of(requestId, Song.of(spotifySongId), User.of(userId),
-          time);
+          LocalDateTime.parse(time));
       queue.add(r);
     }
     return new PlaylistBean(playlistId, partyId, queue);

@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class PartyBean extends Party {
   private Map<String, Request> requestIdToRequest;
   private Coordinate location;
   private String name;
-  private String time;
+  private LocalDateTime time;
   private Status status;
 
   /**
@@ -45,7 +46,7 @@ public class PartyBean extends Party {
    *          -status
    */
   public PartyBean(int partyId, String name, User host, Playlist playlist,
-      Coordinate location, String time, Set<Request> requestedSongs,
+      Coordinate location, LocalDateTime time, Set<Request> requestedSongs,
       Set<User> guests, Status status) {
     this.partyId = partyId;
     this.host = host;
@@ -125,7 +126,8 @@ public class PartyBean extends Party {
 
     try {
       if (getAttendees().contains(user)) {
-        Request newRequest = Request.create(song, user, partyId, "testTime");
+        Request newRequest = Request.create(song, user, partyId,
+            LocalDateTime.now());
         requestIdToRequest.put(newRequest.getId(), newRequest);
         return newRequest;
       }
@@ -162,7 +164,7 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public String getTime() {
+  public LocalDateTime getTime() {
     return time;
   }
 
