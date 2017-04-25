@@ -242,4 +242,16 @@ public class RequestProxy extends Request implements Proxy {
     return partyId;
   }
 
+  @Override
+  public Map<String, Object> toMap() {
+    if (requestBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return requestBean.toMap();
+  }
+
 }

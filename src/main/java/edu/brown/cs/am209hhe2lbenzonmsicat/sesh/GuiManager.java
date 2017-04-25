@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -189,7 +190,6 @@ public class GuiManager {
   private static class PartySettingsHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
-
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("createUserId");
 
@@ -210,15 +210,21 @@ public class GuiManager {
       String userId = qm.value("userId");
       String partyName = qm.value("sesh_name"); // required
       String hostName = qm.value("host_name");
-      String privacyStatus = qm.value("privacy_setting");
-      String time = String.valueOf(System.currentTimeMillis() / 1000);
-
+      String privacyStatus = qm.value("privacy_setting"); // add to Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
+      long time = System.currentTimeMillis();
+      Date date = new Date(time);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));
       Party party = null;
+      int partyId = -1;
+
+      if (lat == null || lon == null) {
+        Map<String, Object> variables = ImmutableMap.of("title", "Error");
+        return new ModelAndView(variables, "error.ftl");
+      }
 
       try {
         User host = User.of(userId);
@@ -228,7 +234,7 @@ public class GuiManager {
       }
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
-          "partyName", partyName);
+          "partyId", partyId, "partyName", partyName);
       return new ModelAndView(variables, "createParty.ftl");
     }
 

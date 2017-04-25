@@ -38,6 +38,14 @@ public class SpotifyCommunicator {
   public SpotifyCommunicator() {
   }
 
+  public static void setUpTestApi() {
+    api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
+    api.setAccessToken(Constants.ALI_ACCESS);
+    api.setRefreshToken(Constants.ALI_REFRESH);
+  }
+
   /**
    * Create authorize URL.
    */
@@ -234,6 +242,21 @@ public class SpotifyCommunicator {
 
   public static void addTrack(String userId, String playlistId,
       List<String> uris) {
+    System.out.println("userId : " + userId);
+    System.out.println("playlistId : " + playlistId);
+    System.out.println("uris : " + uris);
     api.addTracksToPlaylist(userId, playlistId, uris);
+  }
+
+  public static String createPlaylist(String userId, String title) {
+    try {
+      String id = api.createPlaylist(userId, title).build().get().getId();
+      System.out.println("id : " + id);
+      return id;
+    } catch (IOException | WebApiException e) {
+      // ERROR
+      return "";
+    }
+
   }
 }
