@@ -220,6 +220,8 @@ public class GuiManager {
       String lon = qm.value("lon");
       Party party = null;
       int partyId = -1;
+      System.out.println("lat " + lat);
+      System.out.println("lon " + lon);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));

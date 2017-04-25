@@ -22,7 +22,7 @@
 <input type="text" id="lon" name="lon" style="display: none;">
 
 <input type="text" id="userId" name="userId" style="display: none;">
-<input type="submit" value="Submit" id="formSubmit" formmethod="post" formaction="/create/party" >
+<input type="submit" value="Loading..." id="formSubmit" formmethod="post" formaction="/create/party" >
 </form>
 </div>
 </div>

@@ -3,18 +3,19 @@ var global_lat = null;
 var global_lon = null;
 
 $(document).ready(() => {
-	$("#lat").val(41);
-	$("#lon").val(-71);
-	//navigator.geolocation.getCurrentPosition(c, errorCallBack);
-	//wait();
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(getLoc, errorCallBack);
+	}
+	wait();
 	$("#userId").val(userId);
 });
 
-var c = function(pos) {
-		global_lat = pos.coords.latitude, 
-		global_lon = pos.coords.longitude;
-		$("#lat").val(41);
-		$("#lon").val(-71);
+function getLoc(position) {
+	console.log("here");
+	global_lat = position.coords.latitude, 
+	global_lon = position.coords.longitude;
+	$("#lat").val(global_lat);
+	$("#lon").val(global_lon);
 	}
 
 function errorCallBack(error) {
