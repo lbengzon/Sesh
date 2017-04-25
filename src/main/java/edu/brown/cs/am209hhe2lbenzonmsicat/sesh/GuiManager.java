@@ -229,11 +229,9 @@ public class GuiManager {
       Date date = new Date(System.currentTimeMillis());
       Party party = null;
       int partyId = -1;
-
-      // if (lat.equals("") || lon.equals("")) {
-      // Map<String, Object> variables = ImmutableMap.of("title", "Error");
-      // return new ModelAndView(variables, "error.ftl");
-      // }
+      System.out.println("partyName: " + partyName);
+      System.out.println("userId: " + userId);
+      System.out.println("lat: " + lat + " lon: " + lon);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));

@@ -6,9 +6,6 @@ $(document).ready(() => {
 	navigator.geolocation.getCurrentPosition(c, errorCallBack);
 	$("#userId").val(userId);
 
-
-
-
 });
 
 var c = function(pos) {
