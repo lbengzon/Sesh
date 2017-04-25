@@ -26,9 +26,15 @@ public class PlaylistBean extends Playlist {
    * @param queuedRequests
    *          - queued requests
    */
-  public PlaylistBean(String id, int partyId, List<Request> queuedRequests) {
+  public PlaylistBean(String id, int partyId, List<Request> queuedRequests,
+      User host) {
     this.setId(id);
-    this.setUrl("find out the actual structure " + id);
+    StringBuilder sb = new StringBuilder();
+    sb.append("https://embed.spotify,com/?uri=spotify:user:");
+    sb.append(host.getSpotifyId());
+    sb.append(":playlist:");
+    sb.append(id);
+    this.setUrl(sb.toString());
     this.partyId = partyId;
     this.queuedRequests = new HashMap<>();
     requestIdToRequest = new HashMap<>();

@@ -428,7 +428,7 @@ public class DbHandlerTest {
         party.getPlaylist().getId(), party.getName(), party.getLocation(),
         party.getTime(), party.getStatus());
     PlaylistBean playlist = DbHandler.getQueuedSongsForParty(
-        party.getPlaylist().getId(), party.getPartyId());
+        party.getPlaylist().getId(), party.getPartyId(), host);
 
     assert playlist.getSongs().contains(song1);
 
@@ -495,7 +495,7 @@ public class DbHandlerTest {
         party.getTime(), party.getStatus());
 
     PlaylistBean playlist = DbHandler.getQueuedSongsForParty(
-        party.getPlaylist().getId(), party.getPartyId());
+        party.getPlaylist().getId(), party.getPartyId(), host);
 
     assert playlist.getSongs().size() == 0;
 
