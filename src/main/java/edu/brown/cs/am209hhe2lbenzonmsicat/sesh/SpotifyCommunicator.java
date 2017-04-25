@@ -58,7 +58,8 @@ public class SpotifyCommunicator {
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
     testApi.setRefreshToken(Constants.SESH_REFRESH);
-
+    userToApi.put("s3shteam32", testApi);
+    userToApi.put("1185743437", testApi);
     String aT;
     try {
       aT = testApi.refreshAccessToken().build().get().getAccessToken();
@@ -226,9 +227,6 @@ public class SpotifyCommunicator {
       List<String> uris) {
     Api api = userToApi.get(userId);
     try {
-      System.out.println("User:" + userId);
-      System.out.println("Playlist:" + playlistId);
-      System.out.println("URI: " + uris);
       api.addTracksToPlaylist(userId, playlistId, uris).build().get();
 
     } catch (IOException | WebApiException e) {
