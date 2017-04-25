@@ -17,11 +17,15 @@
 </div>
 <div class="list-wrapper">
 <div class="tabContentPlaylist" id="playlist-list">
-<ul style="list-style-type:none" class="sortable"></ul>
+<ul style="list-style-type:none" class="sortable" id="ulPlaylist">
+</ul>
 </div>
 
 <div class="tabContentPlaylist" id="request-list">
-<ul style="list-style-type:none" class="sortable"></ul>
+<ul style="list-style-type:none" class="sortable" id="ulRequest">
+<li>Song1</li>
+<li>Song2</li>
+</ul>
 </div>
 
 <div class="tabContentSearch">
