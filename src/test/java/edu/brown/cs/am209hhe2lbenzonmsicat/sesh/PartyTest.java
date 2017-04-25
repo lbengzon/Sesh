@@ -3,6 +3,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -18,7 +19,8 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 2), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
+        LocalDateTime.now());
     assert p.getHost().equals(l);
 
     RequestProxy.clearCache();
@@ -36,7 +38,8 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 2), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
+        LocalDateTime.now());
     assert p.getName().equals("Dope Party");
 
     RequestProxy.clearCache();
@@ -54,14 +57,15 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 2), "time");
-    assert p.getTime().equals("time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
+        LocalDateTime.now());
+    assert p.getTime().equals(LocalDateTime.now());
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
         p.getLocation(), p.getTime(), p.getStatus());
-    assert p1.getTime().equals("time");
+    assert p1.getTime().equals(LocalDateTime.now());
   }
 
   @Test
@@ -72,7 +76,8 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 2), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
+        LocalDateTime.now());
     assert p.getLocation().getLat() == 1;
     assert p.getLocation().getLon() == 2;
 
@@ -92,7 +97,8 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.getStatus() == Status.ongoing;
 
     RequestProxy.clearCache();
@@ -110,7 +116,8 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.endParty();
     assert p.getStatus() == Status.stopped;
 
@@ -129,7 +136,8 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.endParty();
     p.endParty();
     assert p.getStatus() == Status.stopped;
@@ -153,7 +161,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -191,7 +200,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -229,7 +239,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -257,7 +268,8 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     assert p.upvoteSong(a, r1.getId()) == false;
@@ -282,7 +294,8 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     p.approveSong(r1.getId());
@@ -307,7 +320,8 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     p.endParty();
@@ -337,7 +351,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -375,7 +390,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -403,7 +419,8 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     assert p.downvoteSong(a, r1.getId()) == false;
@@ -428,7 +445,8 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     p.approveSong(r1.getId());
@@ -453,7 +471,8 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     p.endParty();
@@ -482,7 +501,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     p.approveSong(r1.getId());
@@ -508,13 +528,14 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
-    p.approveSong(r1);
+    p.approveSong(r1.getId());
     p.endParty();
     try {
-      p.removeFromPlaylist(r1);
+      p.removeFromPlaylist(r1.getId());
       assert false;
     } catch (IllegalStateException e) {
       assert p.getRequestedSongs().isEmpty();
@@ -540,7 +561,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     assert p.removeFromPlaylist(r1) == false;
@@ -566,10 +588,12 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
-    Party p1 = Party.create("Dope Party1", m, new Coordinate(1, 1), "time");
+    Party p1 = Party.create("Dope Party1", m, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p1.getRequestedSongs().size() == 0;
     assert p1.removeFromPlaylist(r1) == false;
     assert p.getRequestedSongs().contains(r1);
@@ -596,7 +620,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     p.addGuest(m);
     p.addGuest(a);
@@ -626,7 +651,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     p.endParty();
     try {
@@ -652,7 +678,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.requestSong(Song.of("song1"), h);
   }
 
@@ -666,7 +693,8 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.requestSong(Song.of("song1"), h);
     p.requestSong(Song.of("song1"), m);
   }
@@ -680,7 +708,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     p.approveSong(r1);
@@ -704,7 +733,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("song1"), h);
     p.endParty();
@@ -737,9 +767,10 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     Request r1 = p.requestSong(Song.of("song1"), h);
-    p.approveSong(r1);
+    p.approveSong(r1.getId());
     p.requestSong(Song.of("song1"), m);
   }
 
@@ -751,7 +782,8 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
 
     assert p.addGuest(l) == false;
   }
@@ -767,7 +799,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
 
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
@@ -793,7 +826,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.endParty();
     try {
       p.addGuest(h);
@@ -819,7 +853,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
 
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
@@ -846,7 +881,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     p.endParty();
     try {
@@ -876,7 +912,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
 
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
@@ -904,7 +941,8 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
     assert p.addGuest(m) == true;
@@ -925,9 +963,11 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
-    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1),
+        LocalDateTime.now());
     p1.addGuest(h);
   }
 
@@ -942,10 +982,12 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
     p.endParty();
-    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1),
+        LocalDateTime.now());
     p1.addGuest(h);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
@@ -966,9 +1008,11 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
-    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1),
+        LocalDateTime.now());
     p1.addGuest(l);
   }
 
@@ -983,9 +1027,11 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
-    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1), "time");
+    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.endParty();
     p1.addGuest(l);
     RequestProxy.clearCache();
@@ -1006,9 +1052,10 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
-    Party.create("Dope Party", h, new Coordinate(1, 1), "time");
+    Party.create("Dope Party", h, new Coordinate(1, 1), LocalDateTime.now());
   }
 
   @Test
@@ -1021,10 +1068,11 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
     p.endParty();
-    Party.create("Dope Party", h, new Coordinate(1, 1), "time");
+    Party.create("Dope Party", h, new Coordinate(1, 1), LocalDateTime.now());
   }
 
   @Test
@@ -1036,10 +1084,12 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
     p.endParty();
-    Party p1 = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p1 = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p1.addGuest(h);
     Party active = Party.getActivePartyOfUser(h);
     assert active.equals(p1);
@@ -1060,7 +1110,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
     p.endParty();
     Party active = Party.getActivePartyOfUser(h);
@@ -1076,7 +1127,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
     p.endParty();
     List<Party> parties = Party.getAllPartiesOfUser(h);
@@ -1095,18 +1147,22 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     assert p.addGuest(h) == true;
     p.endParty();
-    Party p1 = Party.create("Dope Party1", l, new Coordinate(1, 1), "time");
+    Party p1 = Party.create("Dope Party1", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p1.addGuest(h);
     p1.endParty();
 
-    Party p2 = Party.create("Dope Party1", l, new Coordinate(1, 1), "time");
+    Party p2 = Party.create("Dope Party1", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p2.addGuest(h);
     p2.endParty();
 
-    Party p3 = Party.create("Dope Party1", l, new Coordinate(1, 1), "time");
+    Party p3 = Party.create("Dope Party1", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p3.addGuest(h);
     List<Party> parties = Party.getAllPartiesOfUser(h);
     assert parties.size() == 4;
@@ -1126,7 +1182,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
 
     List<Party> parties = Party.getAllPartiesOfUser(h);
     assert parties.size() == 0;
@@ -1141,7 +1198,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
@@ -1163,7 +1221,8 @@ public class PartyTest {
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 1), "time");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now());
     p.addGuest(h);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
@@ -1182,7 +1241,7 @@ public class PartyTest {
         "Leandro Bengzon");
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
     Party p = Party.create("Dope Party", l,
-        new Coordinate(35.967962, -112.124322), "time");
+        new Coordinate(35.967962, -112.124322), LocalDateTime.now());
     Coordinate c = new Coordinate(35.968544, -112.122230);
     assert p.getDistance(c) < 200;
   }
@@ -1200,11 +1259,11 @@ public class PartyTest {
     User m = User.create("mattsicat", "ms@brown.edu", "Matt Sicat");
 
     Party p = Party.create("Dope Party", l,
-        new Coordinate(35.967962, -112.124322), "time");
+        new Coordinate(35.967962, -112.124322), LocalDateTime.now());
     Party p1 = Party.create("Dope Party", h,
-        new Coordinate(35.968726, -112.121458), "time");
+        new Coordinate(35.968726, -112.121458), LocalDateTime.now());
     Party p2 = Party.create("Dope Party", m,
-        new Coordinate(35.966870, -112.114833), "time");
+        new Coordinate(35.966870, -112.114833), LocalDateTime.now());
 
     Coordinate c = new Coordinate(35.968544, -112.122230);
     List<Party> parties = Party.getActivePartiesWithinDistance(c, 200);
