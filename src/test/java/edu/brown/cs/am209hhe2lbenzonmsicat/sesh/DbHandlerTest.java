@@ -10,12 +10,14 @@ import org.sqlite.SQLiteException;
 
 /**
  * This class tests the db handler class.
+ *
  * @author Ali
  */
 public class DbHandlerTest {
 
   /**
    * This tests the add get user function.
+   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -38,6 +40,7 @@ public class DbHandlerTest {
 
   /**
    * This method tests the adding of the same user.
+   *
    * @throws FileNotFoundException
    *           if the db isn't there
    * @throws SQLException
@@ -56,6 +59,7 @@ public class DbHandlerTest {
 
   /**
    * This tests adding the same party.
+   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -140,8 +144,8 @@ public class DbHandlerTest {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
 
-    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+    User host = DbHandler.addUser("s3shteam32", "seshteam32@gmail.com",
+        "Ali Mir");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host);
@@ -269,18 +273,18 @@ public class DbHandlerTest {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
 
-    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat");
+    User host = DbHandler.addUser("s3shteam32", "seshteam32@gmail.com",
+        "Ali Mir");
 
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+    User hannah = DbHandler.addUser("1185743437", "hannahhe97@yahoo.com.au",
+        "Hannah He");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host);
-    DbHandler.addPartyGuest(party.getPartyId(), ali);
+    DbHandler.addPartyGuest(party.getPartyId(), hannah);
 
     Party party1 = DbHandler.addParty("testPlaylistId1", "My Party",
-        new Coordinate(71.6, 41.8), time, ali);
+        new Coordinate(71.6, 41.8), time, hannah);
   }
 
   @Test(expected = IllegalArgumentException.class)

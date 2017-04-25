@@ -315,10 +315,10 @@ public final class DbHandler {
   public static Party addParty(String playlistId, String name,
       Coordinate coordinate, LocalDateTime time, User host)
       throws SQLException {
-    // if (getActivePartyOfUser(host) != null) {
-    // throw new IllegalArgumentException(
-    // "ERROR: Host is already a host of another active party");
-    // }
+    if (getActivePartyOfUser(host) != null) {
+      throw new IllegalArgumentException(
+          "ERROR: Host is already a host of another active party");
+    }
     String query = SqlStatements.ADD_NEW_PARTY;
     Connection conn = getConnection();
     if (conn == null) {
