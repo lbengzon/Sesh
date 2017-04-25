@@ -269,4 +269,5 @@ public class SpotifyCommunicator {
   public static void removePlaylist() {
 
   }
+
 }
