@@ -40,7 +40,7 @@ public class PartyWebsocket {
     JsonObject message = new JsonObject();
     message.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
     message.add("payload", payload);
-    session.getRemote().sendString(message.toString());
+    // session.getRemote().sendString(message.toString());
   }
 
   @OnWebSocketClose
@@ -103,7 +103,6 @@ public class PartyWebsocket {
   private void sendAddRequestUpdate(JsonObject payload, User user, Party party,
       Session session) throws IOException {
     String songId = payload.get("songId").getAsString();
-    String time = payload.get("time").getAsString();
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
     try {
