@@ -5,11 +5,9 @@ import java.util.Objects;
 
 /**
  * User abstract class.
- *
  * @author HE23
- *
  */
-public abstract class User {
+public abstract class User implements Jsonable {
 
   /**
    * @return spotify id.
@@ -28,21 +26,18 @@ public abstract class User {
 
   /**
    * This method gets the user's last name.
-   *
    * @return user's last name.
    */
   public abstract String getLastName();
 
   /**
    * This method gets the user's full name.
-   *
    * @return the user's full name.
    */
   public abstract String getFullName();
 
   /**
    * User of.
-   *
    * @param spotifyId
    *          - id
    * @return User, null if id doesn't exist.
@@ -57,7 +52,6 @@ public abstract class User {
 
   /**
    * Retrieve user data.
-   *
    * @param spotifyId
    *          - id
    * @param email
@@ -76,7 +70,6 @@ public abstract class User {
 
   /**
    * Create user.
-   *
    * @param userId
    *          - id
    * @param email

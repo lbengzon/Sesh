@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.gson.JsonElement;
+
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
@@ -166,7 +168,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean upvoteSong(User user, Request req) {
+  public boolean upvoteSong(User user, String requestId) {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -177,11 +179,11 @@ public class PartyProxy extends Party implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    return partyBean.upvoteSong(user, req);
+    return partyBean.upvoteSong(user, requestId);
   }
 
   @Override
-  public boolean downvoteSong(User user, Request req) {
+  public boolean downvoteSong(User user, String requestId) {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -192,11 +194,11 @@ public class PartyProxy extends Party implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    return partyBean.downvoteSong(user, req);
+    return partyBean.downvoteSong(user, requestId);
   }
 
   @Override
-  public boolean approveSong(Request req) {
+  public boolean approveSong(String requestId) {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -207,11 +209,11 @@ public class PartyProxy extends Party implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    return partyBean.approveSong(req);
+    return partyBean.approveSong(requestId);
   }
 
   @Override
-  public boolean removeFromPlaylist(Request req) {
+  public boolean removeFromPlaylist(String requestId) {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -222,7 +224,7 @@ public class PartyProxy extends Party implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    return partyBean.removeFromPlaylist(req);
+    return partyBean.removeFromPlaylist(requestId);
   }
 
   @Override
@@ -313,6 +315,30 @@ public class PartyProxy extends Party implements Proxy {
   @Override
   public double getDistance(Coordinate coordinate) {
     return location.getDistanceFrom(coordinate);
+  }
+
+  @Override
+  public JsonElement getRequestsAsJson() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.getRequestsAsJson();
+  }
+
+  @Override
+  public JsonElement getPlaylistQueueAsJson() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.getPlaylistQueueAsJson();
   }
 
 }

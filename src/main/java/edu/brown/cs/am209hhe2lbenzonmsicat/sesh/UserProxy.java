@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
- *
  * @author leandro
  */
 public class UserProxy extends User implements Proxy {
@@ -17,7 +16,6 @@ public class UserProxy extends User implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param spotifyId
    *          - unique id
    */
@@ -27,7 +25,6 @@ public class UserProxy extends User implements Proxy {
 
   /**
    * this method is a constructor for the full user proxy.
-   *
    * @param spotifyId
    *          the user id
    * @param email
@@ -139,6 +136,18 @@ public class UserProxy extends User implements Proxy {
       }
     }
     return userBean.getFullName();
+  }
+
+  @Override
+  public Map<String, Object> toMap() {
+    if (userBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return userBean.toMap();
   }
 
 }

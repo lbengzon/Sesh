@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+
 /**
  * Abstract party class.
  */
@@ -71,48 +74,65 @@ public abstract class Party {
   public abstract Coordinate getLocation();
 
   /**
+   * @return Returns the request list as a stringified JSON object that will be
+   *         sent to the front end to display.
+   */
+  public abstract JsonElement getRequestsAsJson();
+
+  /**
+   * @return Returns the request list as a stringified JSON object that will be
+   *         sent to the front end to display.
+   */
+  public abstract JsonElement getPlaylistQueueAsJson();
+
+  /**
    * @return party status
    */
   public abstract Status getStatus();
 
   /**
    * Upvote song.
+   * 
    * @param user
    *          - to upvote
    * @param req
    *          - request
    * @return boolean if successful
    */
-  public abstract boolean upvoteSong(User user, Request req);
+  public abstract boolean upvoteSong(User user, String requestId);
 
   /**
    * Downvote song.
+   * 
    * @param user
    *          - to downvote
    * @param req
    *          - request
    * @return boolean if successful
    */
-  public abstract boolean downvoteSong(User user, Request req);
+  public abstract boolean downvoteSong(User user, String requestId);
 
   /**
    * Approve song.
+   * 
    * @param req
    *          - request
    * @return boolean if successful
    */
-  public abstract boolean approveSong(Request req);
+  public abstract boolean approveSong(String requestId);
 
   /**
    * Remove from playlist.
+   * 
    * @param req
    *          - request
    * @return boolean if successful.
    */
-  public abstract boolean removeFromPlaylist(Request req);
+  public abstract boolean removeFromPlaylist(String requestId);
 
   /**
    * Request song.
+   * 
    * @param song
    *          - request
    * @param user
@@ -123,6 +143,7 @@ public abstract class Party {
 
   /**
    * Add a guest to party.
+   * 
    * @param guest
    *          - guest to add
    * @return boolean if successful.
@@ -131,6 +152,7 @@ public abstract class Party {
 
   /**
    * Removes a guest from the party
+   * 
    * @param guest
    *          -Guest to remove
    * @return boolean if successful
@@ -139,6 +161,7 @@ public abstract class Party {
 
   /**
    * Gets the distance from the party to the coordinate.
+   * 
    * @param coordinate
    *          The coordinate to get the distance from.
    * @return The distance from the coordinate.
@@ -156,6 +179,7 @@ public abstract class Party {
 
   /**
    * Retrieve party data.
+   * 
    * @param partyId
    *          - id
    * @param name
@@ -177,13 +201,14 @@ public abstract class Party {
     if (name == null || playlistId == null || location == null || time == null
         || status == null) {
       throw new NullPointerException(
-          "ERROR: Trying to create an mapnode from a null id");
+          "ERROR: Trying to create an part from a null id");
     }
     return new PartyProxy(partyId, name, playlistId, location, time, status);
   }
 
   /**
    * Gets the party object with the party id passed in.
+   * 
    * @param partyId
    *          The id of the party
    * @return The party object representing the party.
@@ -198,6 +223,7 @@ public abstract class Party {
 
   /**
    * Gets the parties within the distance.
+   * 
    * @param location
    *          The location of the user.
    * @param distance
@@ -222,6 +248,7 @@ public abstract class Party {
 
   /**
    * Create a party and add to db.
+   * 
    * @param name
    *          - name
    * @param host
@@ -234,18 +261,22 @@ public abstract class Party {
    * @throws SQLException
    *           - exception
    */
+  // TODO: Modify parameters to take in Date object for time
   public static Party create(String name, User host, Coordinate location,
       String time) throws SQLException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
-          "ERROR: Trying to create an mapnode from a null id");
+          "ERROR: Trying to create an party from a null id");
     }
-    String newPlaylistId = Playlist.getNewPlaylistId(host);
+    // TODO: REMOVE THIS COMMENT String newPlaylistId =
+    // Playlist.getNewPlaylistId(host);
+    String newPlaylistId = "fdsa";
     return DbHandler.addParty(newPlaylistId, name, location, time, host);
   }
 
   /**
    * Returns the active party of the user if he has any.
+   * 
    * @param user
    *          The user you want to get the active party of
    * @return The active party of the user or null if there is no active party.
@@ -260,6 +291,7 @@ public abstract class Party {
 
   /**
    * Gets all (active and stopped) parties of a user.
+   * 
    * @param user
    *          The user you want to get the parties of.
    * @return The parties of a user.
@@ -294,4 +326,7 @@ public abstract class Party {
   public String toString() {
     return getPartyId() + "";
   }
+
+  public static Gson GSON = new Gson();
+
 }

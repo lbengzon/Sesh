@@ -20,7 +20,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param spotifyId
    *          - playlist id
    * @param partyId
@@ -102,7 +101,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public boolean removeSong(Request request) {
+  public Request removeSong(String requestId) {
     if (playlistBean == null) {
       try {
         fill();
@@ -114,6 +113,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
       // TODO ADD API REQUEST HERE
       int[] positions = new int[10];
       List<Request> reqs = this.getSongs();
+      Request request = getRequest(requestId);
+      assert request != null;
       int pos = reqs.indexOf(request);
       positions[0] = pos;
       StringBuilder sb = new StringBuilder();
@@ -126,11 +127,23 @@ public class PlaylistProxy extends Playlist implements Proxy {
       SpotifyCommunicator.removeTrack(host.getSpotifyId(), this.spotifyId,
           listOfTrackPositions);
       DbHandler.moveSongRequestOutOfQueue(request);
+      return playlistBean.removeSong(requestId);
     } catch (SQLException e) {
       // TODO Auto-generated catch block
       throw new RuntimeException(e.getMessage());
     }
-    return playlistBean.removeSong(request);
+  }
+
+  @Override
+  public Request getRequest(String requestId) {
+    if (playlistBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return playlistBean.getRequest(requestId);
   }
 
   @Override
@@ -149,6 +162,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
       sb.append(request.getSong().getSpotifyId());
       List<String> uris = new ArrayList<String>();
       uris.add(sb.toString());
+      System.out.println("adding track and the id is " + this.spotifyId);
       SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {

@@ -12,10 +12,13 @@ public class PlaylistBean extends Playlist {
   private String id; // youtube/spotify id
   private String url;
   private Map<Song, Request> queuedRequests;
+  private Map<String, Request> requestIdToRequest;
+
   private int partyId;
 
   /**
    * Constructor.
+   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -28,8 +31,10 @@ public class PlaylistBean extends Playlist {
     this.setUrl("find out the actual structure " + id);
     this.partyId = partyId;
     this.queuedRequests = new HashMap<>();
+    requestIdToRequest = new HashMap<>();
     for (Request req : queuedRequests) {
       this.queuedRequests.put(req.getSong(), req);
+      this.requestIdToRequest.put(req.getId(), req);
     }
   }
 
@@ -40,6 +45,7 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
+   *
    * @param id
    *          - id to set
    */
@@ -73,13 +79,21 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
-  public boolean removeSong(Request request) {
-    return queuedRequests.remove(request.getSong()) != null;
+  public Request removeSong(String requestId) {
+    Request toRemove = requestIdToRequest.remove(requestId);
+    return queuedRequests.remove(toRemove.getSong());
+  }
+
+  @Override
+  public Request getRequest(String requestId) {
+    return requestIdToRequest.get(requestId);
   }
 
   @Override
   public boolean addSong(Request request) {
     queuedRequests.put(request.getSong(), request);
+
+    requestIdToRequest.put(request.getId(), request);
     return true;
   }
 

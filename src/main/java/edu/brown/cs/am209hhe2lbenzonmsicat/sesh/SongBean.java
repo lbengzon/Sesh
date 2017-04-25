@@ -1,8 +1,10 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Models a song.
- *
  * @author Matt
  */
 public class SongBean extends Song {
@@ -14,7 +16,6 @@ public class SongBean extends Song {
 
   /**
    * Constructor.
-   *
    * @param spotifyId
    *          - spotify id
    * @param title
@@ -58,6 +59,17 @@ public class SongBean extends Song {
   @Override
   public double getLength() {
     return length;
+  }
+
+  @Override
+  public Map<String, Object> toMap() {
+    Map<String, Object> songMap = new HashMap<>();
+    songMap.put("spotifyId", spotifyId);
+    songMap.put("title", title);
+    songMap.put("album", album);
+    songMap.put("artist", artist);
+    songMap.put("length", length);
+    return songMap;
   }
 
 }

@@ -9,7 +9,6 @@ import com.wrapper.spotify.models.Track;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
- *
  * @author leandro
  */
 public class SongProxy extends Song implements Proxy {
@@ -19,7 +18,6 @@ public class SongProxy extends Song implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param spotifyId
    *          - spotify id
    */
@@ -133,6 +131,18 @@ public class SongProxy extends Song implements Proxy {
       }
     }
     return songBean.getLength();
+  }
+
+  @Override
+  public Map<String, Object> toMap() {
+    if (songBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return songBean.toMap();
   }
 
 }
