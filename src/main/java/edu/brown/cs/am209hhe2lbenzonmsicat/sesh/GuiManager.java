@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,7 @@ public class GuiManager {
   }
 
   private void installRoutes(FreeMarkerEngine fme) {
+    Spark.webSocket("/update", PartyWebsocket.class);
     Spark.get("/login", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
@@ -49,6 +51,15 @@ public class GuiManager {
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
     Spark.post("/addRequest", new AddRequestHandler());
+    Spark.get("/error", new ErrorHandler(), fme);
+  }
+
+  private static class ErrorHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      Map<String, Object> variables = ImmutableMap.of("title", "Error!");
+      return new ModelAndView(variables, "error.ftl");
+    }
   }
 
   private static class AddRequestHandler implements Route {
@@ -66,7 +77,6 @@ public class GuiManager {
    * Displays login page. Backend sends authorization URL to frontend and
    * displays that link as button. After logging in, redirects to
    * /spotifycallback.
-   *
    */
   private class LoginHandler implements TemplateViewRoute {
     @Override
@@ -91,7 +101,6 @@ public class GuiManager {
       String userId = userInfo.get(0);
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
-      System.out.println("User Id at Callback Handler: " + userId);
       try {
         user = User.create(userId, userEmail, userName);
         ftlPage = "createJoin.ftl";
@@ -123,8 +132,10 @@ public class GuiManager {
         String lat = qm.value("latitude");
         String lon = qm.value("longitude");
         List<Party> parties = new ArrayList<>();
+        System.out.println("lat " + lat + " lon " + lon);
 
         if (lat != null && lon != null) {
+          System.out.println("in if block");
           Coordinate coord = new Coordinate(Double.valueOf(lat),
               Double.valueOf(lon));
           parties = Party.getActivePartiesWithinDistance(coord,
@@ -143,7 +154,9 @@ public class GuiManager {
         }
 
         return new ModelAndView(variables, "join.ftl");
-      } catch (Exception e) {
+      } catch (
+
+      Exception e) {
         e.printStackTrace();
         return null;
       }
@@ -164,7 +177,6 @@ public class GuiManager {
        * Get party id from front end (from the one that user clicks on) Add user
        * to party id that user clicks on. Add them to party, update java and db
        * Send back party info (id, name, host, etc.) to display party.
-       *
        */
       // int partyId = Integer.valueOf(qm.value("party_id")); // from frontend
       // String userId = qm.value("user_id"); // from frontend
@@ -177,7 +189,8 @@ public class GuiManager {
       // "userId", userId, "partyId", partyId, "partyName", party.getName(),
       // "hostId", party.getHost().getSpotifyId());
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh");
+      Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
+          "userId", userId);
       return new ModelAndView(variables, "joinParty.ftl");
     }
   }
@@ -213,28 +226,22 @@ public class GuiManager {
       String privacyStatus = qm.value("privacy_setting"); // add to Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
-      long time = System.currentTimeMillis();
-      Date date = new Date(time);
+      Date date = new Date(System.currentTimeMillis());
+      Party party = null;
+      int partyId = -1;
+      System.out.println("partyName: " + partyName);
+      System.out.println("userId: " + userId);
+      System.out.println("lat: " + lat + " lon: " + lon);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));
-      Party party = null;
-      int partyId = -1;
 
-      if (lat == null || lon == null) {
-        Map<String, Object> variables = ImmutableMap.of("title", "Error");
-        return new ModelAndView(variables, "error.ftl");
+      try {
+        User host = User.of(userId);
+        party = Party.create(partyName, host, coord, LocalDateTime.now());
+      } catch (SQLException e) {
+        System.out.println("Failed to add party to database");
       }
-
-      // try {
-      // User host = User.of(userId);
-      // party = Party.create(partyName, host, coord, time); // modify to take
-      // in
-      // // Date
-      // partyId = party.getPartyId();
-      // } catch (SQLException e) {
-      // System.out.println("ERROR: Failed to add party to database");
-      // }
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
           "partyId", partyId, "partyName", partyName);
@@ -247,7 +254,6 @@ public class GuiManager {
    * Handles displaying search results.
    *
    * @author HE23
-   *
    */
   private static class SearchHandler implements Route {
     @Override

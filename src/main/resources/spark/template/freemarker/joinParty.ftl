@@ -1,5 +1,11 @@
 <#assign content>
+<script>
+	var userId;
+</script>
 <script src="/js/joinParty.js"></script>
+<script>
+	userId = "${userId}";
+</script>
 
 <div id="titles">
 <h2 id="playlist-title">Playlist</h2>

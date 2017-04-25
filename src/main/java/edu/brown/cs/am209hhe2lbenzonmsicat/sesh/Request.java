@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -60,7 +61,7 @@ public abstract class Request implements Comparable<Request>, Jsonable {
   /**
    * @return time of request
    */
-  public abstract String getRequestTime();
+  public abstract LocalDateTime getRequestTime();
 
   /**
    * @return user of request
@@ -118,7 +119,7 @@ public abstract class Request implements Comparable<Request>, Jsonable {
    * @return requestproxy
    */
   public static Request of(int partyId, Song song, User user,
-      String requestTime) {
+      LocalDateTime requestTime) {
     if (song == null || user == null || requestTime == null) {
       throw new NullPointerException(
           "ERROR: Trying to create a request from a null id");
@@ -142,8 +143,8 @@ public abstract class Request implements Comparable<Request>, Jsonable {
    *          - set of downvotes
    * @return - requestproxy
    */
-  public static Request of(int partyId, String time, Song song, User user,
-      HashSet<User> upvotes, HashSet<User> downvotes) {
+  public static Request of(int partyId, LocalDateTime time, Song song,
+      User user, HashSet<User> upvotes, HashSet<User> downvotes) {
     // TODO Auto-generated method stub
     return new RequestProxy(partyId, time, song, user, upvotes, downvotes);
   }
@@ -163,7 +164,7 @@ public abstract class Request implements Comparable<Request>, Jsonable {
    *           - exception
    */
   public static Request create(Song song, User user, int partyId,
-      String requestTime) throws SQLException {
+      LocalDateTime requestTime) throws SQLException {
     if (song == null || user == null || requestTime == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an mapnode from a null id");

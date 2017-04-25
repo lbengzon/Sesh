@@ -105,15 +105,15 @@ public class SpotifyCommunicator {
           @Override
           public void onSuccess(
               AuthorizationCodeCredentials authorizationCodeCredentials) {
-            System.out.println("it's working on success");
-            /* The tokens were retrieved successfully! */
-            System.out.println("Successfully retrieved an access token! "
-                + authorizationCodeCredentials.getAccessToken());
-            System.out.println("The access token expires in "
-                + authorizationCodeCredentials.getExpiresIn() + " seconds");
-            System.out
-                .println("Luckily, I can refresh it using this refresh token! "
-                    + authorizationCodeCredentials.getRefreshToken());
+            // System.out.println("it's working on success");
+            // /* The tokens were retrieved successfully! */
+            // System.out.println("Successfully retrieved an access token! "
+            // + authorizationCodeCredentials.getAccessToken());
+            // System.out.println("The access token expires in "
+            // + authorizationCodeCredentials.getExpiresIn() + " seconds");
+            // System.out
+            // .println("Luckily, I can refresh it using this refresh token! "
+            // + authorizationCodeCredentials.getRefreshToken());
 
             /*
              * Set the access token and refresh token so that they are used

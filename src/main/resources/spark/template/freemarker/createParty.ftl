@@ -1,6 +1,5 @@
 <#assign content>
 <script src="/js/createParty.js"></script>
-<!-- <script src="/js/geolocation-create.js"></script> -->
 <div id="titles">
 <h2 class="titles">Playlist | ${partyName} </h2>
 <h2 class="titles">Requests | ${partyName} </h2>

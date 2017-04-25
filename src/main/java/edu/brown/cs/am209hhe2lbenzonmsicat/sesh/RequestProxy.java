@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +17,7 @@ public class RequestProxy extends Request implements Proxy {
   private RequestBean requestBean;
   private int partyId;
   private Song song;
-  private String requestTime;
+  private LocalDateTime requestTime;
   private User userRequestedBy;
 
   // private Location location; Google api stuff?
@@ -33,7 +34,7 @@ public class RequestProxy extends Request implements Proxy {
    *          - time of request
    */
   public RequestProxy(int partyId, Song song, User userRequestedBy,
-      String requestTime) {
+      LocalDateTime requestTime) {
     this.partyId = partyId;
     this.song = song;
     this.userRequestedBy = userRequestedBy;
@@ -55,7 +56,7 @@ public class RequestProxy extends Request implements Proxy {
    * @param downvotes
    *          - set of downvotes
    */
-  public RequestProxy(int partyId, String requestTime, Song song,
+  public RequestProxy(int partyId, LocalDateTime requestTime, Song song,
       User userRequestedBy, HashSet<User> upvotes, HashSet<User> downvotes) {
     this.partyId = partyId;
     this.song = song;
@@ -185,7 +186,7 @@ public class RequestProxy extends Request implements Proxy {
   }
 
   @Override
-  public String getRequestTime() {
+  public LocalDateTime getRequestTime() {
     // TODO Auto-generated method stub
     return requestTime;
   }

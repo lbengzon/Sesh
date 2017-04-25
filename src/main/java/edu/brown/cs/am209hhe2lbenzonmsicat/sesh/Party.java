@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -66,7 +67,7 @@ public abstract class Party {
   /**
    * @return time of party
    */
-  public abstract String getTime();
+  public abstract LocalDateTime getTime();
 
   /**
    * @return party location
@@ -91,8 +92,8 @@ public abstract class Party {
   public abstract Status getStatus();
 
   /**
-   * Upvote song.
-   *
+   * Upvote song. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param user
    *          - to upvote
    * @param req
@@ -102,8 +103,8 @@ public abstract class Party {
   public abstract boolean upvoteSong(User user, String requestId);
 
   /**
-   * Downvote song.
-   *
+   * Downvote song. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param user
    *          - to downvote
    * @param req
@@ -113,8 +114,8 @@ public abstract class Party {
   public abstract boolean downvoteSong(User user, String requestId);
 
   /**
-   * Approve song.
-   *
+   * Approve song. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param req
    *          - request
    * @return boolean if successful
@@ -122,8 +123,8 @@ public abstract class Party {
   public abstract boolean approveSong(String requestId);
 
   /**
-   * Remove from playlist.
-   *
+   * Remove from playlist. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param req
    *          - request
    * @return boolean if successful.
@@ -131,8 +132,8 @@ public abstract class Party {
   public abstract boolean removeFromPlaylist(String requestId);
 
   /**
-   * Request song.
-   *
+   * Request song. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param song
    *          - request
    * @param user
@@ -142,8 +143,8 @@ public abstract class Party {
   public abstract Request requestSong(Song song, User user);
 
   /**
-   * Add a guest to party.
-   *
+   * Add a guest to party. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param guest
    *          - guest to add
    * @return boolean if successful.
@@ -151,8 +152,8 @@ public abstract class Party {
   public abstract boolean addGuest(User guest);
 
   /**
-   * Removes a guest from the party
-   *
+   * Removes a guest from the party <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param guest
    *          -Guest to remove
    * @return boolean if successful
@@ -160,8 +161,8 @@ public abstract class Party {
   public abstract boolean removeGuest(User guest);
 
   /**
-   * Gets the distance from the party to the coordinate.
-   *
+   * Gets the distance from the party to the coordinate. <<<<<<< HEAD =======
+   * >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param coordinate
    *          The coordinate to get the distance from.
    * @return The distance from the coordinate.
@@ -179,7 +180,6 @@ public abstract class Party {
 
   /**
    * Retrieve party data.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -197,7 +197,7 @@ public abstract class Party {
    * @return party
    */
   public static Party of(int partyId, String name, String playlistId,
-      Coordinate location, String time, Status status) {
+      Coordinate location, LocalDateTime time, Status status) {
     if (name == null || playlistId == null || location == null || time == null
         || status == null) {
       throw new NullPointerException(
@@ -207,8 +207,8 @@ public abstract class Party {
   }
 
   /**
-   * Gets the party object with the party id passed in.
-   *
+   * Gets the party object with the party id passed in. <<<<<<< HEAD =======
+   * >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param partyId
    *          The id of the party
    * @return The party object representing the party.
@@ -222,8 +222,8 @@ public abstract class Party {
   }
 
   /**
-   * Gets the parties within the distance.
-   *
+   * Gets the parties within the distance. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param location
    *          The location of the user.
    * @param distance
@@ -247,8 +247,8 @@ public abstract class Party {
   }
 
   /**
-   * Create a party and add to db.
-   *
+   * Create a party and add to db. <<<<<<< HEAD ======= >>>>>>>
+   * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param name
    *          - name
    * @param host
@@ -263,7 +263,7 @@ public abstract class Party {
    */
   // TODO: Modify parameters to take in Date object for time
   public static Party create(String name, User host, Coordinate location,
-      String time) throws SQLException {
+      LocalDateTime time) throws SQLException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an party from a null id");
@@ -273,8 +273,8 @@ public abstract class Party {
   }
 
   /**
-   * Returns the active party of the user if he has any.
-   *
+   * Returns the active party of the user if he has any. <<<<<<< HEAD =======
+   * >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param user
    *          The user you want to get the active party of
    * @return The active party of the user or null if there is no active party.
@@ -288,8 +288,8 @@ public abstract class Party {
   }
 
   /**
-   * Gets all (active and stopped) parties of a user.
-   *
+   * Gets all (active and stopped) parties of a user. <<<<<<< HEAD =======
+   * >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param user
    *          The user you want to get the parties of.
    * @return The parties of a user.

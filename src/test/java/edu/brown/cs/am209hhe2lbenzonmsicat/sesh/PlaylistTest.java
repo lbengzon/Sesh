@@ -9,14 +9,14 @@ import org.junit.Test;
 
 /***
  * This class tests the playlist class.*
- *
+ * 
  * @author Ali
  */
 public class PlaylistTest {
 
   /**
    * This method tests the getID method.
-   *
+   * 
    * @throws SQLException
    *           throws a SQL exception if the db is bad
    * @throws FileNotFoundException
@@ -29,7 +29,7 @@ public class PlaylistTest {
 
   /**
    * This method tests the getUrl function.
-   *
+   * 
    * @throws SQLException
    *           if db malfunctions
    * @throws FileNotFoundException
@@ -43,7 +43,7 @@ public class PlaylistTest {
 
   /**
    * this method tests the remove songs.
-   *
+   * 
    * @throws SQLException
    *           if db doesn't work
    * @throws FileNotFoundException
@@ -75,7 +75,7 @@ public class PlaylistTest {
 
   /**
    * this tests the add song.
-   *
+   * 
    * @throws SQLException
    *           if db screws up
    * @throws FileNotFoundException
@@ -108,7 +108,7 @@ public class PlaylistTest {
 
   /**
    * This method tests the Of function.
-   *
+   * 
    * @throws SQLException
    *           from the db
    * @throws FileNotFoundException
@@ -121,7 +121,7 @@ public class PlaylistTest {
 
   /**
    * This tests the get songs from the spotify API.
-   *
+   * 
    * @throws MalformedURLException
    *           if the url doesn't work
    * @throws IOException
