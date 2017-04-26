@@ -28,6 +28,7 @@ public final class DbHandler {
   private static Connection guiConnection = null;
   private static String startOfPath = "jdbc:sqlite:";
   private static ThreadLocal<Connection> connections = new ThreadLocal<>();
+
   // private static ConcurrentHashMap<String, PreparedStatement> statementMap =
   // new ConcurrentHashMap<String, PreparedStatement>();
 
@@ -40,12 +41,8 @@ public final class DbHandler {
 
   /**
    * Gets the connection a particular thread has. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @return the connection to the database.
    */
   public static Connection getConnection() {
@@ -56,12 +53,8 @@ public final class DbHandler {
   }
 
   /**
-   * Set from URL. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
+   * Set from URL. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d =======
    * >>>>>>> added loading button
-   *
    * @param pathToDb
    *          - path
    * @throws SQLException
@@ -71,22 +64,11 @@ public final class DbHandler {
    */
   public static void setFromUrl(String pathToDb)
       throws SQLException, FileNotFoundException {
-    // System.out.println("1");
     File dbFile = new File(pathToDb);
-    // System.out.println("2");
 
     if (dbFile.exists() && !(dbFile.isDirectory())) {
-      // System.out.println("Found the file. The URL is:");
-      // System.out.println(SQLITE_START + pathToDb);
-      // System.out.println("3");
-
-      // overwrite previous connection
       if (DbHandler.getConnection() != null) {
         assertNotNull(DbHandler.getConnection());
-        // close all previous connections
-        // for (String key : statementMap.keySet()) {
-        // statementMap.get(key).close();
-        // }
         DbHandler.getConnection().close();
         DbHandler.getAllConnections().set(null);
         guiConnection.close();
@@ -114,12 +96,8 @@ public final class DbHandler {
 
   /**
    * Sets the connection to a particular database for the thread. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param conn
    *          the connection we want to use.
    */
@@ -129,12 +107,8 @@ public final class DbHandler {
   }
 
   /**
-   * Clear all tables. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
+   * Clear all tables. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d =======
    * >>>>>>> added loading button
-   *
    * @throws SQLException
    *           - exception
    */
@@ -147,12 +121,8 @@ public final class DbHandler {
   }
 
   /**
-   * Clear user table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
+   * Clear user table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d =======
    * >>>>>>> added loading button
-   *
    * @throws SQLException
    *           - exception
    */
@@ -168,12 +138,8 @@ public final class DbHandler {
   }
 
   /**
-   * Clear party table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
+   * Clear party table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d =======
    * >>>>>>> added loading button
-   *
    * @throws SQLException
    *           - exception
    */
@@ -190,11 +156,7 @@ public final class DbHandler {
 
   /**
    * Clear song request table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * ======= >>>>>>> added loading button
    * @throws SQLException
    *           - exception
    */
@@ -211,11 +173,7 @@ public final class DbHandler {
 
   /**
    * Clear request votes table. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * ======= >>>>>>> added loading button
    * @throws SQLException
    *           - exception
    */
@@ -232,12 +190,8 @@ public final class DbHandler {
 
   /**
    * Clear party attendee table. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @throws SQLException
    *           - exception
    */
@@ -261,11 +215,7 @@ public final class DbHandler {
 
   /**
    * Adds user to database. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * ======= >>>>>>> added loading button
    * @param userId
    *          - id
    * @param email
@@ -300,12 +250,8 @@ public final class DbHandler {
 
   /**
    * Add song request to database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param spotifySongId
    *          - song id
    * @param partyId
@@ -345,7 +291,6 @@ public final class DbHandler {
 
   /**
    * Add party to database.
-   *
    * @param playlist
    *          - playlist
    * @param name
@@ -402,7 +347,6 @@ public final class DbHandler {
 
   /**
    * Add host to database.
-   *
    * @param partyId
    *          - party id
    * @param host
@@ -436,12 +380,8 @@ public final class DbHandler {
 
   /**
    * Move song request out of request list and to the playlist queue <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param request
    *          - request
    * @throws SQLException
@@ -483,12 +423,8 @@ public final class DbHandler {
 
   /**
    * Move song playlist to request list <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param request
    *          - request
    * @throws SQLException
@@ -514,12 +450,8 @@ public final class DbHandler {
 
   /**
    * Remove party from database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param party
    *          - party
    * @throws SQLException
@@ -544,12 +476,8 @@ public final class DbHandler {
 
   /**
    * Upvote request in database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param request
    *          - request that has been upvoted
    * @param user
@@ -580,12 +508,8 @@ public final class DbHandler {
 
   /**
    * Downvote request in the database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param request
    *          - request that has been downvoted
    * @param user
@@ -614,11 +538,7 @@ public final class DbHandler {
 
   /**
    * Remove vote from database. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * ======= >>>>>>> added loading button
    * @param request
    *          - request to remove vote from
    * @param user
@@ -647,12 +567,8 @@ public final class DbHandler {
 
   /**
    * Add guest to party in database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param partyId
    *          - party id
    * @param guest
@@ -685,12 +601,8 @@ public final class DbHandler {
 
   /**
    * Remove guest from party in database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param partyId
    *          - party id
    * @param guest
@@ -719,12 +631,8 @@ public final class DbHandler {
 
   /**
    * Retrieve all requests in party. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param partyId
    *          - id
    * @return list of requests in given party
@@ -742,28 +650,25 @@ public final class DbHandler {
 
     prep.setInt(1, partyId);
 
-    ResultSet rs = prep.executeQuery();
-    List<Request> requests = new ArrayList<>();
-    while (rs.next()) {
-      int requestId = rs.getInt(1);
-      String spotifySongId = rs.getString(2);
-      String userId = rs.getString(4);
-      String time = rs.getString(5);
-      Request r = Request.of(requestId, Song.of(spotifySongId), User.of(userId),
-          LocalDateTime.parse(time));
-      requests.add(r);
+    try (ResultSet rs = prep.executeQuery()) {
+      List<Request> requests = new ArrayList<>();
+      while (rs.next()) {
+        int requestId = rs.getInt(1);
+        String spotifySongId = rs.getString(2);
+        String userId = rs.getString(4);
+        String time = rs.getString(5);
+        Request r = Request.of(requestId, Song.of(spotifySongId),
+            User.of(userId), LocalDateTime.parse(time));
+        requests.add(r);
+      }
+      return requests;
     }
-    return requests;
   }
 
   /**
    * Retrieve all party attendees. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param partyId
    *          - party id
    * @return list of hosts and list of guests
@@ -781,33 +686,30 @@ public final class DbHandler {
 
     prep.setInt(1, partyId);
 
-    ResultSet rs = prep.executeQuery();
-    List<User> hosts = new ArrayList<>();
-    List<User> guests = new ArrayList<>();
-    while (rs.next()) {
-      String userId = rs.getString(2);
-      String type = rs.getString(3);
-      AttendeeType atype = AttendeeType.valueOf(type);
-      if (atype.equals(AttendeeType.host)) {
-        hosts.add(User.of(userId));
-      } else if (atype.equals(AttendeeType.guest)) {
-        guests.add(User.of(userId));
-      } else {
-        // should never reach here
-        assert (false);
+    try (ResultSet rs = prep.executeQuery()) {
+      List<User> hosts = new ArrayList<>();
+      List<User> guests = new ArrayList<>();
+      while (rs.next()) {
+        String userId = rs.getString(2);
+        String type = rs.getString(3);
+        AttendeeType atype = AttendeeType.valueOf(type);
+        if (atype.equals(AttendeeType.host)) {
+          hosts.add(User.of(userId));
+        } else if (atype.equals(AttendeeType.guest)) {
+          guests.add(User.of(userId));
+        } else {
+          // should never reach here
+          assert (false);
+        }
       }
+      return Arrays.asList(hosts, guests);
     }
-    return Arrays.asList(hosts, guests);
   }
 
   /**
    * Retrieve party from database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param partyId
    *          - id
    * @param playlist
@@ -839,12 +741,8 @@ public final class DbHandler {
 
   /**
    * Retrieve request from database. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param id
    *          - request id
    * @param song
@@ -868,34 +766,31 @@ public final class DbHandler {
     String requestId = Request.getId(partyId, song.getSpotifyId());
     prep.setString(1, requestId);
 
-    ResultSet rs = prep.executeQuery();
-    List<User> upvotes = new ArrayList<>();
-    List<User> downvotes = new ArrayList<>();
-    while (rs.next()) {
-      String userId = rs.getString(2);
-      String type = rs.getString(3);
-      VoteType voteType = VoteType.valueOf(type);
-      if (voteType.equals(VoteType.upvote)) {
-        upvotes.add(User.of(userId));
-      } else if (voteType.equals(VoteType.downvote)) {
-        downvotes.add(User.of(userId));
-      } else {
-        // should never reach here
-        assert (false);
+    try (ResultSet rs = prep.executeQuery()) {
+      List<User> upvotes = new ArrayList<>();
+      List<User> downvotes = new ArrayList<>();
+      while (rs.next()) {
+        String userId = rs.getString(2);
+        String type = rs.getString(3);
+        VoteType voteType = VoteType.valueOf(type);
+        if (voteType.equals(VoteType.upvote)) {
+          upvotes.add(User.of(userId));
+        } else if (voteType.equals(VoteType.downvote)) {
+          downvotes.add(User.of(userId));
+        } else {
+          // should never reach here
+          assert (false);
+        }
       }
-    }
 
-    return new RequestBean(partyId, requestTime, song, user,
-        new HashSet<>(upvotes), new HashSet<>(downvotes));
+      return new RequestBean(partyId, requestTime, song, user,
+          new HashSet<>(upvotes), new HashSet<>(downvotes));
+    }
   }
 
   /**
    * Retrieve user from id. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * ======= >>>>>>> added loading button
    * @param spotifyId
    *          - id
    * @return - user of given id
@@ -912,25 +807,22 @@ public final class DbHandler {
 
     prep.setString(1, spotifyId);
 
-    ResultSet rs = prep.executeQuery();
-    List<User> upvotes = new ArrayList<>();
-    List<User> downvotes = new ArrayList<>();
-    if (rs.next()) {
-      String email = rs.getString(2);
-      String name = rs.getString(3);
-      return new UserBean(spotifyId, email, name);
-    }
+    try (ResultSet rs = prep.executeQuery()) {
+      List<User> upvotes = new ArrayList<>();
+      List<User> downvotes = new ArrayList<>();
+      if (rs.next()) {
+        String email = rs.getString(2);
+        String name = rs.getString(3);
+        return new UserBean(spotifyId, email, name);
+      }
 
-    throw new SQLException("ERROR: No User With id of  " + spotifyId);
+      throw new SQLException("ERROR: No User With id of  " + spotifyId);
+    }
   }
 
   /**
    * Get all parties of a user. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * ======= >>>>>>> added loading button
    * @param user
    *          - the user's parties we want
    * @return list of all parties of the given user
@@ -947,23 +839,25 @@ public final class DbHandler {
 
     prep.setString(1, user.getSpotifyId());
 
-    ResultSet rs = prep.executeQuery();
-    List<Party> parties = new ArrayList<>();
+    try (ResultSet rs = prep.executeQuery()) {
 
-    while (rs.next()) {
-      int partyId = rs.getInt(1);
-      String spotifyPlaylistId = rs.getString(2);
-      String name = rs.getString(3);
-      double lat = rs.getDouble(4);
-      double lon = rs.getDouble(5);
-      String time = rs.getString(6);
-      String status = rs.getString(7);
-      Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), LocalDateTime.parse(time),
-          Status.valueOf(status));
-      parties.add(p);
+      List<Party> parties = new ArrayList<>();
+
+      while (rs.next()) {
+        int partyId = rs.getInt(1);
+        String spotifyPlaylistId = rs.getString(2);
+        String name = rs.getString(3);
+        double lat = rs.getDouble(4);
+        double lon = rs.getDouble(5);
+        String time = rs.getString(6);
+        String status = rs.getString(7);
+        Party p = Party.of(partyId, name, spotifyPlaylistId,
+            new Coordinate(lat, lon), LocalDateTime.parse(time),
+            Status.valueOf(status));
+        parties.add(p);
+      }
+      return parties;
     }
-    return parties;
   }
 
   public static List<Party> getAllActiveParties() throws SQLException {
@@ -974,33 +868,30 @@ public final class DbHandler {
     }
     PreparedStatement prep = conn.prepareStatement(query);
 
-    ResultSet rs = prep.executeQuery();
-    List<Party> parties = new ArrayList<>();
+    try (ResultSet rs = prep.executeQuery()) {
+      List<Party> parties = new ArrayList<>();
 
-    while (rs.next()) {
-      int partyId = rs.getInt(1);
-      String spotifyPlaylistId = rs.getString(2);
-      String name = rs.getString(3);
-      double lat = rs.getDouble(4);
-      double lon = rs.getDouble(5);
-      String time = rs.getString(6);
-      String status = rs.getString(7);
-      Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), LocalDateTime.parse(time),
-          Status.valueOf(status));
-      parties.add(p);
+      while (rs.next()) {
+        int partyId = rs.getInt(1);
+        String spotifyPlaylistId = rs.getString(2);
+        String name = rs.getString(3);
+        double lat = rs.getDouble(4);
+        double lon = rs.getDouble(5);
+        String time = rs.getString(6);
+        String status = rs.getString(7);
+        Party p = Party.of(partyId, name, spotifyPlaylistId,
+            new Coordinate(lat, lon), LocalDateTime.parse(time),
+            Status.valueOf(status));
+        parties.add(p);
+      }
+      return parties;
     }
-    return parties;
   }
 
   /**
    * Gets the party from the id. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param partyId
    *          The id of the party.
    * @return The party of the partyId
@@ -1017,20 +908,22 @@ public final class DbHandler {
 
     prep.setInt(1, partyId);
 
-    ResultSet rs = prep.executeQuery();
-    if (rs.next()) {
-      String spotifyPlaylistId = rs.getString(2);
-      String name = rs.getString(3);
-      double lat = rs.getDouble(4);
-      double lon = rs.getDouble(5);
-      String time = rs.getString(6);
-      String status = rs.getString(7);
-      Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), LocalDateTime.parse(time),
-          Status.valueOf(status));
-      return p;
+    try (ResultSet rs = prep.executeQuery()) {
+
+      if (rs.next()) {
+        String spotifyPlaylistId = rs.getString(2);
+        String name = rs.getString(3);
+        double lat = rs.getDouble(4);
+        double lon = rs.getDouble(5);
+        String time = rs.getString(6);
+        String status = rs.getString(7);
+        Party p = Party.of(partyId, name, spotifyPlaylistId,
+            new Coordinate(lat, lon), LocalDateTime.parse(time),
+            Status.valueOf(status));
+        return p;
+      }
+      return null;
     }
-    return null;
   }
 
   public static Party getActivePartyOfUser(User user) throws SQLException {
@@ -1043,33 +936,29 @@ public final class DbHandler {
 
     prep.setString(1, user.getSpotifyId());
 
-    ResultSet rs = prep.executeQuery();
-
-    if (rs.next()) {
-      int partyId = rs.getInt(1);
-      String spotifyPlaylistId = rs.getString(2);
-      String name = rs.getString(3);
-      double lat = rs.getDouble(4);
-      double lon = rs.getDouble(5);
-      String time = rs.getString(6);
-      String status = rs.getString(7);
-      Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), LocalDateTime.parse(time),
-          Status.valueOf(status));
-      assert rs.next() == false;
-      return p;
+    try (ResultSet rs = prep.executeQuery()) {
+      if (rs.next()) {
+        int partyId = rs.getInt(1);
+        String spotifyPlaylistId = rs.getString(2);
+        String name = rs.getString(3);
+        double lat = rs.getDouble(4);
+        double lon = rs.getDouble(5);
+        String time = rs.getString(6);
+        String status = rs.getString(7);
+        Party p = Party.of(partyId, name, spotifyPlaylistId,
+            new Coordinate(lat, lon), LocalDateTime.parse(time),
+            Status.valueOf(status));
+        assert rs.next() == false;
+        return p;
+      }
+      return null;
     }
-    return null;
   }
 
   /**
    * Get party hosted by the passed in user. <<<<<<<
-   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d ======= >>>>>>> added loading
+   * button
    * @param user
    *          - user's party we are trying to retrieve
    * @return - party
@@ -1086,32 +975,28 @@ public final class DbHandler {
 
     prep.setString(1, user.getSpotifyId());
 
-    ResultSet rs = prep.executeQuery();
-
-    if (rs.next()) {
-      int partyId = rs.getInt(1);
-      String spotifyPlaylistId = rs.getString(2);
-      String name = rs.getString(3);
-      double lat = rs.getDouble(4);
-      double lon = rs.getDouble(5);
-      String time = rs.getString(6);
-      String status = rs.getString(Constants.SEVEN);
-      Party p = Party.of(partyId, name, spotifyPlaylistId,
-          new Coordinate(lat, lon), LocalDateTime.parse(time),
-          Status.valueOf(status));
-      assert rs.next() == false;
-      return p;
+    try (ResultSet rs = prep.executeQuery()) {
+      if (rs.next()) {
+        int partyId = rs.getInt(1);
+        String spotifyPlaylistId = rs.getString(2);
+        String name = rs.getString(3);
+        double lat = rs.getDouble(4);
+        double lon = rs.getDouble(5);
+        String time = rs.getString(6);
+        String status = rs.getString(Constants.SEVEN);
+        Party p = Party.of(partyId, name, spotifyPlaylistId,
+            new Coordinate(lat, lon), LocalDateTime.parse(time),
+            Status.valueOf(status));
+        assert rs.next() == false;
+        return p;
+      }
+      return null;
     }
-    return null;
   }
 
   /**
    * Retrieve queued songs. <<<<<<< a0bc68e6b32cad1e2eca184b9f28eb5c42b3049d
-   *
-   * =======
-   *
-   * >>>>>>> added loading button
-   *
+   * ======= >>>>>>> added loading button
    * @param playlistId
    *          - playlist id
    * @param partyId
@@ -1131,18 +1016,20 @@ public final class DbHandler {
 
     prep.setInt(1, partyId);
 
-    ResultSet rs = prep.executeQuery();
-    List<Request> queue = new ArrayList<>();
-    while (rs.next()) {
-      int requestId = rs.getInt(1);
-      String spotifySongId = rs.getString(2);
-      String userId = rs.getString(4);
-      String time = rs.getString(5);
-      Request r = Request.of(requestId, Song.of(spotifySongId), User.of(userId),
-          LocalDateTime.parse(time));
-      queue.add(r);
+    try (ResultSet rs = prep.executeQuery()) {
+      List<Request> queue = new ArrayList<>();
+      while (rs.next()) {
+        int requestId = rs.getInt(1);
+        String spotifySongId = rs.getString(2);
+        String userId = rs.getString(4);
+        String time = rs.getString(5);
+        Request r = Request.of(requestId, Song.of(spotifySongId),
+            User.of(userId), LocalDateTime.parse(time));
+        queue.add(r);
+      }
+      return new PlaylistBean(playlistId, partyId, queue, host);
     }
-    return new PlaylistBean(playlistId, partyId, queue, host);
+
   }
 
 }
