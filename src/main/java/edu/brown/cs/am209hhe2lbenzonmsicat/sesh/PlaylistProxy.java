@@ -188,7 +188,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
       sb.append(request.getSong().getSpotifyId());
       List<String> uris = new ArrayList<String>();
       uris.add(sb.toString());
-      SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
+      SpotifyCommunicator.addTrackInPosition(host.getSpotifyId(),
+          this.spotifyId, uris, pos);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
 

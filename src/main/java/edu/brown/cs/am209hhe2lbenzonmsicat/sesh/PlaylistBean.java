@@ -20,6 +20,7 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Constructor.
+   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -53,6 +54,7 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
+   *
    * @param id
    *          - id to set
    */
@@ -92,6 +94,14 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
+  public boolean addSongInPosition(Request request, int pos) {
+    queuedRequests.put(request.getSong(), request);
+
+    requestIdToRequest.put(request.getId(), request);
+    return true;
+  }
+
+  @Override
   public Request getRequest(String requestId) {
     return requestIdToRequest.get(requestId);
   }
@@ -107,6 +117,11 @@ public class PlaylistBean extends Playlist {
   @Override
   public Set<Request> getSetOfSongs() {
     return new HashSet<>(queuedRequests.values());
+  }
+
+  @Override
+  public void reorderPlaylist(int rangeStart, int insertBefore) {
+
   }
 
 }
