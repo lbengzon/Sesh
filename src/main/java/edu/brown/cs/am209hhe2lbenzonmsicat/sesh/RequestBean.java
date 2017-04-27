@@ -181,7 +181,7 @@ public class RequestBean extends Request {
     downvotes.forEach((downvote) -> downvoteIds.add(downvote.getSpotifyId()));
     rMap.put("upvotes", upvoteIds);
     rMap.put("downvotes", downvoteIds);
-    rMap.put("score", getRanking());
+    rMap.put("score", getVotes());
     rMap.put("time", requestTime);
     try {
       rMap.put("song", song.toMap());
