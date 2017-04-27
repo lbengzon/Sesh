@@ -110,6 +110,7 @@ function setupWebsockets() {
               console.log("position: " + ui.item.index());
             } 
           }).disableSelection();
+          
           $player.attr("src", $player.attr("src"));
 
           break;
