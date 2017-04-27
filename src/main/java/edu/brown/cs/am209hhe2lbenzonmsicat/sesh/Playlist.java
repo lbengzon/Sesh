@@ -6,6 +6,7 @@ import java.util.Set;
 
 /**
  * Abstract playlist class.
+ *
  * @author HE23
  */
 public abstract class Playlist {
@@ -46,8 +47,13 @@ public abstract class Playlist {
    */
   public abstract boolean addSong(Request request);
 
+  public abstract boolean addSongInPosition(Request request, int pos);
+
+  public abstract void reorderSongs(int rangeStart, int insertBefore);
+
   /**
    * This should only be used for testing!
+   *
    * @param spotifyId
    *          - spotify id
    * @param partyId
@@ -62,6 +68,7 @@ public abstract class Playlist {
 
   /**
    * Add playlist to database.
+   *
    * @param user
    *          - user
    * @return playlist

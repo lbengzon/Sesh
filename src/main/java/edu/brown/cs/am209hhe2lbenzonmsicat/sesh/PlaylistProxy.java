@@ -111,7 +111,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
       }
     }
     try {
-      // TODO ADD API REQUEST HERE
       int[] positions = new int[10];
       List<Request> reqs = this.getSongs();
       Request request = getRequest(requestId);
@@ -173,6 +172,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
     return playlistBean.addSong(request);
   }
 
+  @Override
   public boolean addSongInPosition(Request request, int pos) {
     if (playlistBean == null) {
       try {
@@ -197,6 +197,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
     return playlistBean.addSong(request);
   }
 
+  @Override
   public void reorderPlaylist(int rangeStart, int insertBefore) {
     SpotifyCommunicator.reorderPlaylist(host.getSpotifyId(), this.spotifyId,
         rangeStart, insertBefore);
