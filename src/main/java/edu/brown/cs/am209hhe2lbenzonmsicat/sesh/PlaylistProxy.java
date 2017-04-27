@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.wrapper.spotify.models.PlaylistTrackPosition;
@@ -20,7 +21,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param spotifyId
    *          - playlist id
    * @param partyId
@@ -204,6 +204,18 @@ public class PlaylistProxy extends Playlist implements Proxy {
   @Override
   public boolean isBeanNull() {
     return playlistBean == null;
+  }
+
+  @Override
+  public Set<Request> getSetOfSongs() {
+    if (playlistBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return playlistBean.getSetOfSongs();
   }
 
 }

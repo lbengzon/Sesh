@@ -2,10 +2,10 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Abstract playlist class.
- *
  * @author HE23
  */
 public abstract class Playlist {
@@ -21,9 +21,14 @@ public abstract class Playlist {
   public abstract String getUrl();
 
   /**
-   * @return requested songs
+   * @return ordered list of requested songs
    */
   public abstract List<Request> getSongs();
+
+  /**
+   * @return the set of songs
+   */
+  public abstract Set<Request> getSetOfSongs();
 
   /**
    * @param request
@@ -43,7 +48,6 @@ public abstract class Playlist {
 
   /**
    * This should only be used for testing!
-   *
    * @param spotifyId
    *          - spotify id
    * @param partyId
@@ -58,7 +62,6 @@ public abstract class Playlist {
 
   /**
    * Add playlist to database.
-   *
    * @param user
    *          - user
    * @return playlist

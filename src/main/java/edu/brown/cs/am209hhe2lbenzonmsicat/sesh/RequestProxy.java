@@ -172,9 +172,9 @@ public class RequestProxy extends Request implements Proxy {
   }
 
   @Override
-  public int voteCount() {
+  public Double getRanking() {
     if (requestBean != null) {
-      return requestBean.voteCount();
+      return requestBean.getRanking();
     } else {
       try {
         fill();
@@ -182,7 +182,7 @@ public class RequestProxy extends Request implements Proxy {
         throw new RuntimeException(e.getMessage());
       }
     }
-    return requestBean.voteCount();
+    return requestBean.getRanking();
   }
 
   @Override
