@@ -240,12 +240,14 @@ public class PartyWebsocket {
       Party party, Session session, TRANSFER_TYPE transferType)
       throws IOException {
     String requestId = payload.get("requestId").getAsString();
+
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
     try {
       boolean success;
       if (transferType.equals(TRANSFER_TYPE.REQUEST_TO_PLAYLIST)) {
-        success = party.approveSong(requestId);
+        int insertIndex = payload.get("insertIndex").getAsInt();
+        success = party.approveSong(requestId, insertIndex);
       } else {
         assert transferType.equals(TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
         success = party.removeFromPlaylist(requestId);

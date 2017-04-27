@@ -13,7 +13,7 @@ UPDATE_VOTE_REQUESTS: 10,
 UPDATE_AFTER_REQUEST_TRANSFER: 11,
 UPDATE_ENTIRE_PARTY: 12,
 UPDATE_REARRANGE_PLAYLIST: 13, 
-MOVE_PLAYLIST_TRACK: 14
+REORDER_PLAYLIST_TRACK: 14
 };
 
 let conn;
@@ -52,6 +52,7 @@ function setupWebsockets() {
           setPartyId(partyId, userId);
           break;
         case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
+          //Add the new request to the end of the list
           $requests.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + "<div id=\"vote\"> <button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
           
           $(".upvote").click(function(x) {
@@ -63,6 +64,7 @@ function setupWebsockets() {
           });
           break;
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
+          //update the request list
           console.log("adding song to request list");
           $requests.empty();
           const requestList = data.payload.requestList;
@@ -90,8 +92,8 @@ function setupWebsockets() {
           // $last = $listItems.last();
           // $last.attr("class", "sortable");
           break;
-        case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
-          console.log("adding song directly to playlist");
+        case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
+          //TODO reload the entire playlist list and request list
           break;
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
         console.log("updating whole party");
@@ -177,7 +179,8 @@ function moveRequestToQueue (partyId, userId, requestId, index) {
     payload:{
       userId: userId,
       partyId: partyId,
-      requestId: requestId
+      requestId: requestId,
+      insertIndex: index
     }
   }
   conn.send(JSON.stringify(message));
@@ -197,7 +200,7 @@ function moveFromQueueToRequest (partyId, userId, requestId) {
 
 function reorderPlaylistTrack(partyId, userId, requestId, oldIndex, newIndex){
   let message = {
-    type: MESSAGE_TYPE.MOVE_FROM_QUEUE_TO_REQUEST, 
+    type: MESSAGE_TYPE.REORDER_PLAYLIST_TRACK, 
     payload:{
       userId: userId,
       partyId: partyId,
