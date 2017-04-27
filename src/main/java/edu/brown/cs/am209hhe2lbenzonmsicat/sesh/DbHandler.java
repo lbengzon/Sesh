@@ -27,6 +27,7 @@ public final class DbHandler {
 
   private static Connection guiConnection = null;
   private static String startOfPath = "jdbc:sqlite:";
+  // Threadpool
   private static ThreadLocal<Connection> connections = new ThreadLocal<>();
 
   // private static ConcurrentHashMap<String, PreparedStatement> statementMap =

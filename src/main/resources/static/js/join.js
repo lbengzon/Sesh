@@ -16,7 +16,7 @@ $(document).ready(() => {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			const lat = position.coords.latitude;
-			const lon = position.coords.longitude
+			const lon = position.coords.longitude;
 			const postParameters = {latitude: lat, longitude: lon};
 			$.post("/join2", postParameters, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);

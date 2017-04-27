@@ -1,4 +1,15 @@
 $(document).ready(() => {
+
+	// //get user location
+	// if (navigator.geolocation) {
+	// 	navigator.geolocation.getCurrentPosition(function(position) {
+	// 		const lat = position.coords.latitude;
+	// 		const lon = position.coords.longitude;
+	// 		$("#joinlat").val(lat);
+	// 		$("#joinlon").val(lon);
+	// 	});
+	// }
+
 	const $div = $("#createJoin");
 	const $buttons = $(".createJoin");
 	const $form = $("#createJoinForm");
