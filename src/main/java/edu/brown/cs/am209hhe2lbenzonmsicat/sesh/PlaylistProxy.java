@@ -21,6 +21,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
+   *
    * @param spotifyId
    *          - playlist id
    * @param partyId
@@ -158,6 +159,29 @@ public class PlaylistProxy extends Playlist implements Proxy {
       }
     }
     try {
+      StringBuilder sb = new StringBuilder();
+      sb.append("spotify:track:");
+      sb.append(request.getSong().getSpotifyId());
+      List<String> uris = new ArrayList<String>();
+      uris.add(sb.toString());
+      SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
+      DbHandler.moveSongRequestToQueue(request);
+    } catch (SQLException e) {
+
+      throw new RuntimeException(e.getMessage());
+    }
+    return playlistBean.addSong(request);
+  }
+
+  public boolean addSongInPosition(Request request, int pos) {
+    if (playlistBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    try {
       // TODO ADD API REQUEST HERE
       StringBuilder sb = new StringBuilder();
       sb.append("spotify:track:");
@@ -171,6 +195,11 @@ public class PlaylistProxy extends Playlist implements Proxy {
       throw new RuntimeException(e.getMessage());
     }
     return playlistBean.addSong(request);
+  }
+
+  public void reorderPlaylist(int rangeStart, int insertBefore) {
+    SpotifyCommunicator.reorderPlaylist(host.getSpotifyId(), this.spotifyId,
+        rangeStart, insertBefore);
   }
 
   @Override
