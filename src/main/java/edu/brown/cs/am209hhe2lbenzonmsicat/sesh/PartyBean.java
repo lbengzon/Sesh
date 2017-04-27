@@ -177,11 +177,13 @@ public class PartyBean extends Party {
           .count(r2.getUserRequestedBy());
       int numTotalRequestOfUser2 = userToNumTotalRequests
           .count(r2.getUserRequestedBy());
-      double r1Multiplier = numApprovedRequestsOfUser1 / numTotalRequestOfUser1;
-      double r2Multiplier = numApprovedRequestsOfUser2 / numTotalRequestOfUser2;
+      // double r1Multiplier = numApprovedRequestsOfUser1 /
+      // numTotalRequestOfUser1;
+      // double r2Multiplier = numApprovedRequestsOfUser2 /
+      // numTotalRequestOfUser2;
       Double r1Rank = r1.getRanking();
       Double r2Rank = r2.getRanking();
-      return r1.getRanking().compareTo(r2.getRanking());
+      return r1Rank.compareTo(r2Rank);
     }
 
   }
