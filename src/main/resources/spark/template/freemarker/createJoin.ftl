@@ -14,6 +14,8 @@
 </form>
 <form action="/join" method="post">
 <input type="text" style="display: none;" id="joinUserId" name="joinUserId">
+<input type="text" style="display: none;" id="joinlat" name="joinlat">
+<input type="text" style="display: none;" id="joinlon" name="joinlon">
 <input type="submit" class="createJoin" id="joinSesh" value="Join a sesh">
 </form>
 </#assign>

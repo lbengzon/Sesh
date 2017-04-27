@@ -32,7 +32,7 @@ public class PlaylistBean extends Playlist {
       User host) {
     this.setId(id);
     StringBuilder sb = new StringBuilder();
-    sb.append("https://embed.spotify,com/?uri=spotify%3Auser%3A");
+    sb.append("https://embed.spotify.com/?uri=spotify%3Auser%3A");
     sb.append(host.getSpotifyId());
     sb.append("%3Aplaylist%3A");
     sb.append(id);

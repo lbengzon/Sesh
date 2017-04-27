@@ -70,7 +70,12 @@ function setupWebsockets() {
           const requestList = data.payload.requestList;
           for (var key in requestList) {
             if (requestList.hasOwnProperty(key)) {
-              $requests.append("<li " + "id=\"" + key + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + requestList[key].song.title + " - " + requestList[key].song.artist + " " + requestList[key].score + "<div id=\"vote\"> <button class=\"upvote\" id=\"" + key + "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+              $requests.append("<li " + "id=\"" + key + "\" onmouseover=\"hoverOn(this)\"" + 
+                " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + requestList[key].song.title + 
+                " - " + requestList[key].song.artist + " " + requestList[key].score + 
+                "<div id=\"vote\"> <button class=\"upvote\" id=\"" + key + 
+                "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
+                key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
             }
           }
 
@@ -85,18 +90,31 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           //TODO reload the entire playlist list
           break;
+        case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
+          $playlist.empty();
+          $requests.empty();
+          break;
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
-          $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + "</div> </li>");
-          // $listItems = $("#playlist-list li");
-          // $last = $listItems.last();
-          // $last.attr("class", "sortable");
-          break;
-        case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
-          //TODO reload the entire playlist list and request list
+
+          $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
+                " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + 
+                " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + 
+                "<div id=\"vote\"> <button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + 
+                "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
+                key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+
+          $playlist.sortable({
+            connectWith: "#request-list",
+            receive: function(event, ui) {
+              console.log("position: " + ui.item.index());
+            } 
+          }).disableSelection();
+          $player.attr("src", $player.attr("src"));
+
           break;
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
-        console.log("updating whole party");
+          console.log("updating whole party");
           const playlist = data.payload.party.playlistQueue;
           const requests = data.payload.party.requests;
 
@@ -115,7 +133,15 @@ function setupWebsockets() {
           }
           console.log("finished");
 
+          $requests.sortable({
+            connectWith: "#playlist-list",
+            receive: function(event, ui) {
+              console.log("position: " + ui.item.index());
+            }
+          }).disableSelection();
+
           $player.attr("src", data.payload.party.playlistUrl);
+
           break;
       }
     } else{

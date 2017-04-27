@@ -82,7 +82,9 @@ $(document).ready(() => {
 
 			$results.empty();
 			for (var i = 0; i < suggestions.length; i++) {
-				$results.append("<li " + "id=\"" + songIds[i] + "\"" + "onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
+				$results.append("<li " + "id=\"" + songIds[i] + "\"" + 
+					"onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" 
+					+ suggestions[i] + "</li>");
 			}
 		});
 	});
