@@ -250,4 +250,31 @@ public class SpotifyCommunicator {
 
   }
 
+  /**
+   * This method reorders tracks in the playlist.
+   *
+   * @param userId
+   *          the user id
+   * @param playlistId
+   *          playlist id
+   * @param rangeStart
+   *          the current position of the track (or if there are many tracks,
+   *          the first track to be reordered)
+   * @param insertBefore
+   *          the new position of the track
+   */
+  public static void reorderPlaylist(String userId, String playlistId,
+      int rangeStart, int insertBefore) {
+    Api api = userToApi.get(userId);
+    api.reorderTracksInPlaylist(userId, playlistId, rangeStart, insertBefore);
+
+  }
+
+  public static void addTrackInPosition(String userId, String playlistId,
+      List<String> uris, int pos) {
+    Api api = userToApi.get(userId);
+    api.addTracksToPlaylist(userId, playlistId, uris).position(pos).build();
+
+  }
+
 }
