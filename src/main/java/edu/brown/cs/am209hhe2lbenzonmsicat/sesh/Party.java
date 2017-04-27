@@ -128,6 +128,22 @@ public abstract class Party implements Jsonable {
   public abstract boolean approveSong(String requestId);
 
   /**
+   * Approve song.
+   * @param req
+   *          - request
+   * @return boolean if successful
+   */
+  public abstract boolean approveSong(String requestId, int index);
+
+  /**
+   * Approve song.
+   * @param req
+   *          - request
+   * @return boolean if successful
+   */
+  public abstract boolean reorderSong(int startIndex, int endIndex);
+
+  /**
    * Remove from playlist. <<<<<<< HEAD ======= >>>>>>>
    * d50b8f626056187d3c69cea53817244af4c7c6f8
    * @param req
