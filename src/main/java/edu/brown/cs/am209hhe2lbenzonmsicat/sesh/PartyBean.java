@@ -2,16 +2,21 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import com.google.gson.JsonElement;
 
 /**
  * Models a party.
- *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -20,6 +25,9 @@ public class PartyBean extends Party {
   private User host;
   private Set<User> guests;
   private Map<String, Request> requestIdToRequest;
+  private Multiset<User> userToNumApprovedRequests;
+  private Multiset<User> userToNumTotalRequests;
+
   private Coordinate location;
   private String name;
   private LocalDateTime time;
@@ -27,7 +35,6 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -54,8 +61,15 @@ public class PartyBean extends Party {
     this.host = host;
     this.guests = guests;
     this.requestIdToRequest = new HashMap<>();
+
+    this.userToNumApprovedRequests = HashMultiset.create();
+    this.userToNumTotalRequests = HashMultiset.create();
     for (Request request : requestedSongs) {
+      userToNumTotalRequests.add(request.getUserRequestedBy());
       requestIdToRequest.put(request.getId(), request);
+    }
+    for (Request request : playlist.getSetOfSongs()) {
+      userToNumApprovedRequests.add(request.getUserRequestedBy());
     }
     this.playlist = playlist;
     this.location = location;
@@ -97,7 +111,6 @@ public class PartyBean extends Party {
       return false;
     }
     return false;
-
   }
 
   @Override
@@ -109,6 +122,7 @@ public class PartyBean extends Party {
     }
     playlist.addSong(request);
     requestIdToRequest.remove(requestId);
+    userToNumApprovedRequests.add(request.getUserRequestedBy());
     return true;
   }
 
@@ -118,6 +132,7 @@ public class PartyBean extends Party {
     Request req = playlist.removeSong(requestId);
     if (req != null) {
       requestIdToRequest.put(req.getId(), req);
+      userToNumApprovedRequests.remove(req.getUserRequestedBy());
       return true;
     }
     return false;
@@ -133,6 +148,7 @@ public class PartyBean extends Party {
         Request newRequest = Request.create(song, user, partyId,
             LocalDateTime.now());
         requestIdToRequest.put(newRequest.getId(), newRequest);
+        userToNumTotalRequests.add(newRequest.getUserRequestedBy());
         return newRequest;
       }
     } catch (SQLException e) {
@@ -143,8 +159,31 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public Set<Request> getRequestedSongs() {
-    return new HashSet<>(requestIdToRequest.values());
+  public List<Request> getRequestedSongsOrderedByRank() {
+    RequestComparator comp = new RequestComparator();
+    List<Request> rankedRequests = new ArrayList<>(requestIdToRequest.values());
+    Collections.sort(rankedRequests, comp);
+    return rankedRequests;
+  }
+
+  private class RequestComparator implements Comparator<Request> {
+    @Override
+    public int compare(Request r1, Request r2) {
+      int numApprovedRequestsOfUser1 = userToNumApprovedRequests
+          .count(r1.getUserRequestedBy());
+      int numTotalRequestOfUser1 = userToNumTotalRequests
+          .count(r1.getUserRequestedBy());
+      int numApprovedRequestsOfUser2 = userToNumApprovedRequests
+          .count(r2.getUserRequestedBy());
+      int numTotalRequestOfUser2 = userToNumTotalRequests
+          .count(r2.getUserRequestedBy());
+      double r1Multiplier = numApprovedRequestsOfUser1 / numTotalRequestOfUser1;
+      double r2Multiplier = numApprovedRequestsOfUser2 / numTotalRequestOfUser2;
+      Double r1Rank = r1.getRanking();
+      Double r2Rank = r2.getRanking();
+      return r1.getRanking().compareTo(r2.getRanking());
+    }
+
   }
 
   @Override
@@ -218,7 +257,7 @@ public class PartyBean extends Party {
   @Override
   public JsonElement getRequestsAsJson() {
     Map<String, Object> requestsMap = new HashMap<>();
-    for (Request r : requestIdToRequest.values()) {
+    for (Request r : getRequestedSongsOrderedByRank()) {
       requestsMap.put(r.getId(), r.toMap());
     }
     return GSON.toJsonTree(requestsMap);
@@ -246,6 +285,11 @@ public class PartyBean extends Party {
     partyMap.put("time", time.toString());
     partyMap.put("status", status);
     return partyMap;
+  }
+
+  @Override
+  public Set<Request> getRequestedSongs() {
+    return new HashSet<>(requestIdToRequest.values());
   }
 
 }

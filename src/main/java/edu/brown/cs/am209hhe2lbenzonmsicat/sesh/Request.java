@@ -56,7 +56,7 @@ public abstract class Request implements Comparable<Request>, Jsonable {
   /**
    * @return vote count on this request
    */
-  public abstract int voteCount();
+  public abstract Double getRanking();
 
   /**
    * @return time of request
@@ -90,10 +90,10 @@ public abstract class Request implements Comparable<Request>, Jsonable {
     // we can order
     // requests better (divide votecount by
     // time elapsed?)
-    if (this.voteCount() > req.voteCount()) {
+    if (this.getRanking() > req.getRanking()) {
       return 1;
     }
-    if (this.voteCount() < req.voteCount()) {
+    if (this.getRanking() < req.getRanking()) {
       return -1;
     }
     // if (this.getTime() < req.getTime()) {

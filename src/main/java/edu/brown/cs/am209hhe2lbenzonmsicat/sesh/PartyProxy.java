@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -354,4 +355,15 @@ public class PartyProxy extends Party implements Proxy {
     return partyBean.toMap();
   }
 
+  @Override
+  public List<Request> getRequestedSongsOrderedByRank() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.getRequestedSongsOrderedByRank();
+  }
 }

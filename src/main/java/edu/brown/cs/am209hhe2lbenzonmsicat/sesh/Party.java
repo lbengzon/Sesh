@@ -40,6 +40,11 @@ public abstract class Party implements Jsonable {
   public abstract Set<Request> getRequestedSongs();
 
   /**
+   * @return requested songs
+   */
+  public abstract List<Request> getRequestedSongsOrderedByRank();
+
+  /**
    * @return playlist
    */
   public abstract Playlist getPlaylist();
