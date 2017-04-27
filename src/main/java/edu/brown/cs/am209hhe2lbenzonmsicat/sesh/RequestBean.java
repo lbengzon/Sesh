@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -75,15 +76,45 @@ public class RequestBean extends Request {
         upvotes.remove(user);
       }
     }
-
   }
 
   /**
-   * Gets the RequestBean's vote count.
+   * Ranks the request based on the votes and the time it was posted.
    * @return - vote count
    */
   @Override
-  public int voteCount() {
+  public Double getRanking() {
+    int x = getVotes();
+    long t = getRequestTimeSeconds();
+    int y;
+    if (x > 0) {
+      y = 1;
+    } else if (x < 0) {
+      y = -1;
+    } else {
+      y = 0;
+    }
+    int z = Math.max(Math.abs(x), 1);
+
+    double finalRank = Math.log10(z) + (y * t) / 45000.0;
+    return finalRank;
+  }
+
+  /**
+   * Returns the time in seconds that this request was made
+   * @return
+   */
+  public long getRequestTimeSeconds() {
+    ZoneId zoneId = ZoneId.systemDefault();
+    long requestTimeSeconds = requestTime.atZone(zoneId).toEpochSecond();
+    return requestTimeSeconds;
+  }
+
+  /**
+   * Returns the difference in votes
+   * @return
+   */
+  public int getVotes() {
     return upvotes.size() - downvotes.size();
   }
 
@@ -150,7 +181,7 @@ public class RequestBean extends Request {
     downvotes.forEach((downvote) -> downvoteIds.add(downvote.getSpotifyId()));
     rMap.put("upvotes", upvoteIds);
     rMap.put("downvotes", downvoteIds);
-    rMap.put("score", voteCount());
+    rMap.put("score", getRanking());
     rMap.put("time", requestTime);
     try {
       rMap.put("song", song.toMap());

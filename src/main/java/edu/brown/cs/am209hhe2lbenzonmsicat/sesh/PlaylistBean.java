@@ -2,8 +2,10 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Playlist bean class.
@@ -18,7 +20,6 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Constructor.
-   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -52,7 +53,6 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
-   *
    * @param id
    *          - id to set
    */
@@ -102,6 +102,11 @@ public class PlaylistBean extends Playlist {
 
     requestIdToRequest.put(request.getId(), request);
     return true;
+  }
+
+  @Override
+  public Set<Request> getSetOfSongs() {
+    return new HashSet<>(queuedRequests.values());
   }
 
 }
