@@ -118,19 +118,9 @@ function setupWebsockets() {
           const playlist = data.payload.party.playlistQueue;
           const requests = data.payload.party.requests;
 
-          for (var key in playlist) {
-            console.log("populating playlist");
-            if (playlist.hasOwnProperty(key)) {
-              $playlist.append("<li " + "id=\"" + key + "\">" + playlist[key].song.title + " - " + playlist[key].song.artist + " " + playlist[key].score + "</li>");
-            }
-          }
-
-          for (var key in requests) {
-            if (requests.hasOwnProperty(key)) {
-              console.log("populating request");
-              $requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
-            }
-          }
+          clearAndPopulatePlaylist(playlist, $playlist);
+          clearAndPopulateRequests(requests, $requests);
+          
           console.log("finished");
 
           $requests.sortable({
@@ -149,6 +139,25 @@ function setupWebsockets() {
     }
     
   };
+}
+
+function clearAndPopulateRequests(requests, $requests){
+  for (var key in requests) {
+    if (requests.hasOwnProperty(key)) {
+      console.log("populating request");
+      $requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
+    }
+  }
+}
+
+
+function clearAndPopulatePlaylist(playlist, $playlist){
+  for (var key in playlist) {
+    console.log("populating playlist");
+    if (playlist.hasOwnProperty(key)) {
+      $playlist.append("<li " + "id=\"" + key + "\">" + playlist[key].song.title + " - " + playlist[key].song.artist + " " + playlist[key].score + "</li>");
+    }
+  }
 }
 
 function setPartyId (partyId, userId) {
