@@ -29,7 +29,7 @@ public class PartyWebsocket {
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK
   }
 
   @OnWebSocketConnect
@@ -96,13 +96,21 @@ public class PartyWebsocket {
         case ADD_SONG_DIRECTLY_TO_PLAYLIST:
           sendAddSongDirectlyToPlaylistUpdate(payload, user, party, session);
           break;
-
+        case REORDER_PLAYLIST_TRACK:
+          sendReorderPlaylistTrackUpdate(payload, user, party, session);
+          break;
         default:
           assert false : "you should never get here!!!";
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
+
+  }
+
+  private void sendReorderPlaylistTrackUpdate(JsonObject payload, User user,
+      Party party, Session session) {
+    // TODO Auto-generated method stub
 
   }
 

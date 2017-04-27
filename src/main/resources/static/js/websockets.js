@@ -11,7 +11,9 @@ UPDATE_ADD_REQUEST: 8,
 UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST: 9, 
 UPDATE_VOTE_REQUESTS: 10, 
 UPDATE_AFTER_REQUEST_TRANSFER: 11,
-UPDATE_ENTIRE_PARTY: 12
+UPDATE_ENTIRE_PARTY: 12,
+UPDATE_REARRANGE_PLAYLIST: 13, 
+MOVE_PLAYLIST_TRACK: 14
 };
 
 let conn;
@@ -78,7 +80,8 @@ function setupWebsockets() {
             downvoteRequest(partyId, userId, x.currentTarget.id);
           });
           break;
-        case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
+        case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
+          //TODO reload the entire playlist list
           break;
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
@@ -86,6 +89,9 @@ function setupWebsockets() {
           // $listItems = $("#playlist-list li");
           // $last = $listItems.last();
           // $last.attr("class", "sortable");
+          break;
+        case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
+          console.log("adding song directly to playlist");
           break;
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
         console.log("updating whole party");
@@ -165,7 +171,7 @@ function downvoteRequest (partyId, userId, requestId) {
   conn.send(JSON.stringify(message));
 }
 
-function moveRequestToQueue (partyId, userId, requestId) {
+function moveRequestToQueue (partyId, userId, requestId, index) {
   let message = {
     type: MESSAGE_TYPE.MOVE_REQUEST_TO_QUEUE, 
     payload:{
@@ -184,6 +190,20 @@ function moveFromQueueToRequest (partyId, userId, requestId) {
       userId: userId,
       partyId: partyId,
       requestId: requestId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function reorderPlaylistTrack(partyId, userId, requestId, oldIndex, newIndex){
+  let message = {
+    type: MESSAGE_TYPE.MOVE_FROM_QUEUE_TO_REQUEST, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      requestId: requestId,
+      oldIndex: oldIndex,
+      newIndex: newIndex
     }
   }
   conn.send(JSON.stringify(message));
