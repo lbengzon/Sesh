@@ -49,7 +49,7 @@ public abstract class Playlist {
 
   public abstract boolean addSongInPosition(Request request, int pos);
 
-  public abstract void reorderSongs(int rangeStart, int insertBefore);
+  public abstract void reorderPlaylist(int rangeStart, int insertBefore);
 
   /**
    * This should only be used for testing!
