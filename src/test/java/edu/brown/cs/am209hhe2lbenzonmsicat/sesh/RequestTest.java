@@ -11,14 +11,12 @@ import org.sqlite.SQLiteException;
 
 /**
  * This class tests the request class.
- *
  * @author Ali
  */
 public class RequestTest {
 
   /**
    * This test the getID function.
-   *
    * @throws SQLException
    *           if db messes up
    * @throws FileNotFoundException
@@ -238,7 +236,8 @@ public class RequestTest {
   }
 
   @Test
-  public void testVoteCount() throws SQLException, FileNotFoundException {
+  public void testVoteCount()
+      throws SQLException, FileNotFoundException, InterruptedException {
     SpotifyCommunicator.setUpPublicApi();
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
@@ -250,12 +249,19 @@ public class RequestTest {
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
-        p.getPartyId(), LocalDateTime.now());
+        p.getPartyId(), LocalDateTime.now().minusMinutes(100));
     r.downvote(l);
+
+    Request r1 = Request.create(Song.of("7zye9v6B785eFWEFYs13C2"), l,
+        p.getPartyId(), LocalDateTime.now());
+    r1.downvote(l);
     RequestProxy.clearCache();
-    Request r1 = Request.of(r.getPartyId(), Song.of("7AQAlklmptrrkBSeujkXsD"),
-        l, LocalDateTime.now());
-    assert r1.voteCount() == -1;
+    Request r2 = Request.of(r.getPartyId(), Song.of("7AQAlklmptrrkBSeujkXsD"),
+        l, r.getRequestTime());
+    Request r3 = Request.of(r1.getPartyId(), Song.of("7zye9v6B785eFWEFYs13C2"),
+        l, r1.getRequestTime());
+    assert r2.getRanking() > r3.getRanking();
+    // assert r1.getRanking() == -1;
   }
 
   @Test
