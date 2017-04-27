@@ -294,4 +294,25 @@ public class PartyBean extends Party {
     return new HashSet<>(requestIdToRequest.values());
   }
 
+  @Override
+  public boolean approveSong(String requestId, int index) {
+    assert isActive() == true;
+    Request request = requestIdToRequest.get(requestId);
+    if (request == null) {
+      return false;
+    }
+    playlist.addSong(request, index);
+    requestIdToRequest.remove(requestId);
+    userToNumApprovedRequests.add(request.getUserRequestedBy());
+    return true;
+  }
+
+  @Override
+  public boolean reorderSong(int startIndex, int endIndex) {
+    // TODO Auto-generated method stub
+    assert isActive() == true;
+    playlist.reorderSong(startIndex, endIndex);
+    return false;
+  }
+
 }
