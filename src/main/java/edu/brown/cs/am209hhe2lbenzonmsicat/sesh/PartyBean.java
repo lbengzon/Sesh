@@ -301,7 +301,7 @@ public class PartyBean extends Party {
     if (request == null) {
       return false;
     }
-    playlist.addSong(request, index);
+    playlist.addSongInPosition(request, index);
     requestIdToRequest.remove(requestId);
     userToNumApprovedRequests.add(request.getUserRequestedBy());
     return true;
@@ -311,7 +311,7 @@ public class PartyBean extends Party {
   public boolean reorderSong(int startIndex, int endIndex) {
     // TODO Auto-generated method stub
     assert isActive() == true;
-    playlist.reorderSong(startIndex, endIndex);
+    playlist.reorderPlaylist(startIndex, endIndex);
     return false;
   }
 
