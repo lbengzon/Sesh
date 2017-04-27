@@ -109,9 +109,29 @@ public class PartyWebsocket {
   }
 
   private void sendReorderPlaylistTrackUpdate(JsonObject payload, User user,
-      Party party, Session session) {
-    // TODO Auto-generated method stub
-
+      Party party, Session session) throws IOException {
+    int startIndex = payload.get("startIndex").getAsInt();
+    int endIndex = payload.get("endIndex").getAsInt();
+    JsonObject updatePayload = new JsonObject();
+    JsonObject updateMessage = new JsonObject();
+    try {
+      boolean success = party.reorderSong(startIndex, endIndex);
+      if (success == false) {
+        throw new RuntimeException("ERROR: could not add song");
+      }
+      updatePayload.add("playlist", party.getPlaylistQueueAsJson());
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST.ordinal());
+      updateMessage.addProperty("success", true);
+      updateMessage.add("payload", updatePayload);
+      for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
+    } catch (Exception e) {
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
   }
 
   private void sendUpdateEntireParty(int partyId, Session session)
