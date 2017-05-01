@@ -78,7 +78,7 @@ public class SpotifyCommunicator {
     final List<String> scopes = Arrays.asList("user-read-private",
         "user-read-email", "playlist-modify-private", "playlist-modify-public",
         "playlist-read-private",
-        "playlist-read-collaborative, user-read-playback-state");
+        "playlist-read-collaborative, user-read-playback-state, user-read-currently-playing");
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
