@@ -102,6 +102,12 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
+  public Song getCurrentSong() {
+    return SpotifyCommunicator.getCurrentSong(host.getSpotifyId(),
+        this.spotifyId);
+  }
+
+  @Override
   public Request removeSong(String requestId) {
     if (playlistBean == null) {
       try {
