@@ -59,6 +59,11 @@ $(document).ready(() => {
     const $results = $(".searchResults");
     const $playlist = $("#tabContentPlaylist ul");
 
+    $(".sortable").sortable({
+        dropOnEmpty: true,
+        connectWith: ".sortable"
+    }).disableSelection();
+
     //search for songs
     $userInput.keyup(function() {
         const postParameters = {userInput: $userInput.val()};
