@@ -27,6 +27,12 @@ function hoverOff(x) {
   x.classList.remove('selected');
 }
 
+function getSongPlaying(){
+    const player = $("#playback")[0];
+    console.log(player)
+
+}
+
 // Setup the WebSocket connection for live updating of scores.
 function setupWebsockets() {
   const $requests = $("#request-list ul");
