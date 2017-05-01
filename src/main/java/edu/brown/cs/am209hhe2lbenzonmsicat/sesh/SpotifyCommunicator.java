@@ -277,4 +277,16 @@ public class SpotifyCommunicator {
 
   }
 
+  public static void getCurrentSong(String userId, String playlistId) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+    } catch (IOException | WebApiException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
+  }
+
 }
