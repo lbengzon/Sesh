@@ -1,6 +1,10 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
 import com.wrapper.spotify.exceptions.WebApiException;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
@@ -18,6 +24,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -99,6 +106,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -168,6 +176,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
+   *
    * @param userId
    *          user id
    * @param playlistId
@@ -250,6 +259,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
+   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -274,14 +284,49 @@ public class SpotifyCommunicator {
 
   }
 
-  public static void getCurrentSong(String userId, String playlistId) {
+  public static Song getCurrentSong(String userId, String playlistId) {
     Api api = userToApi.get(userId);
+    Song s = null;
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/currently-playing");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      conn.setRequestProperty("Authorization", accessToken);
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+      String inputLine;
+      StringBuilder response = new StringBuilder();
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
+      JsonParser p = new JsonParser();
+      JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
+      JsonObject context = p.parse(jsonObject.get("context").toString())
+          .getAsJsonObject();
+      JsonObject item = p.parse(jsonObject.get("item").toString())
+          .getAsJsonObject();
+      String type = context.get("type").toString();
+      if (!type.equals("playlist")) {
+        return null;
+      }
+      String uri = context.get("uri").toString();
+      sb = new StringBuilder();
+      sb.append("spotify:user:spotify:playlist:");
+      sb.append(playlistId);
+      if (!uri.equals(sb.toString())) {
+        return null;
+      }
+      String spotifyId = item.get("id").toString();
+      s = Song.of(spotifyId);
+      return s;
     } catch (IOException | WebApiException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      throw new RuntimeException(e.getMessage());
     }
 
   }
