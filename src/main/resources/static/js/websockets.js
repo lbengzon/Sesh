@@ -47,73 +47,51 @@ function setupWebsockets() {
         default:
           console.log('Unknown message type!', data.type);
           break;
+
         case MESSAGE_TYPE.CONNECT:
           console.log("connected");
           setPartyId(partyId, userId);
           break;
-        case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
-          //Add the new request to the end of the list
-          $requests.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + "<div id=\"vote\"> <button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
-          
-          $(".upvote").click(function(x) {
-            upvoteRequest(partyId, userId, x.currentTarget.id);
-          });
 
-          $(".downvote").click(function(x) {
-            downvoteRequest(partyId, userId, x.currentTarget.id);
-          });
+        case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
+          console.log("adding new request");
+          appendToRequests($requests, data);
+          vote();
+          $requests.sortable("refresh");
           break;
+
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
-          //update the request list
-          console.log("adding song to request list");
+          console.log("updating request vote");
           $requests.empty();
           const requestList = data.payload.requestList;
+
           for (var key in requestList) {
             if (requestList.hasOwnProperty(key)) {
-              $requests.append("<li " + "id=\"" + key + "\" onmouseover=\"hoverOn(this)\"" + 
-                " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + requestList[key].song.title + 
-                " - " + requestList[key].song.artist + " " + requestList[key].score + 
-                "<div id=\"vote\"> <button class=\"upvote\" id=\"" + key + 
-                "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
-                key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+              updateRequestVotes($requests, key, requestList);
             }
           }
 
-          $(".upvote").click(function(x) {
-            upvoteRequest(partyId, userId, x.currentTarget.id);
-          });
-
-          $(".downvote").click(function(x) {
-            downvoteRequest(partyId, userId, x.currentTarget.id);
-          });
+          vote();
           break;
+
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
+          $playlist.empty();
           //TODO reload the entire playlist list
           break;
+
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           $playlist.empty();
           $requests.empty();
           break;
+
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
+          appendToPlaylist($playlist, data);
 
-          $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
-                " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + 
-                " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + 
-                "<div id=\"vote\"> <button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + 
-                "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
-                key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
-
-          $playlist.sortable({
-            connectWith: "#request-list",
-            receive: function(event, ui) {
-              console.log("position: " + ui.item.index());
-            } 
-          }).disableSelection();
-          
+          $playlist.sortable("refresh");
           $player.attr("src", $player.attr("src"));
-
           break;
+
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
           console.log("updating whole party");
           const playlist = data.payload.party.playlistQueue;
@@ -121,18 +99,15 @@ function setupWebsockets() {
 
           clearAndPopulatePlaylist(playlist, $playlist);
           clearAndPopulateRequests(requests, $requests);
-          
-          console.log("finished");
 
-          $requests.sortable({
-            connectWith: "#playlist-list",
-            receive: function(event, ui) {
-              console.log("position: " + ui.item.index());
-            }
-          }).disableSelection();
+          // $requests.sortable({
+          //   connectWith: "#playlist-list",
+          //   receive: function(event, ui) {
+          //     console.log("position: " + ui.item.index());
+          //   }
+          // }).disableSelection();
 
           $player.attr("src", data.payload.party.playlistUrl);
-
           break;
       }
     } else{
@@ -140,6 +115,45 @@ function setupWebsockets() {
     }
     
   };
+}
+
+function vote() {
+  $(".upvote").click(function(x) {
+    upvoteRequest(partyId, userId, x.currentTarget.id);
+  });
+
+  $(".downvote").click(function(x) {
+    downvoteRequest(partyId, userId, x.currentTarget.id);
+  });
+}
+
+function appendToRequests($requests, data) {
+  $requests.append("<li " + "id=\"" + data.payload.newRequest.requestId + 
+    "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" 
+    + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist 
+    + " " + data.payload.newRequest.score + "<div id=\"vote\"> <button class=\"upvote\" id=\"" 
+    + data.payload.newRequest.requestId 
+    + "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" 
+    + data.payload.newRequest.requestId 
+    + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+}
+
+function updateRequestVotes($requests, key, requestList) {
+  $requests.append("<li " + "id=\"" + key + "\" onmouseover=\"hoverOn(this)\"" + 
+    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + requestList[key].song.title + 
+    " - " + requestList[key].song.artist + " " + requestList[key].score + 
+    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + key + 
+    "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
+    key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+}
+
+function appendToPlaylist($playlist, data) {
+  $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
+    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + 
+    " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + 
+    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + 
+    "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
+    data.payload.newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
 }
 
 function clearAndPopulateRequests(requests, $requests){
