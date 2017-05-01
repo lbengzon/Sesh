@@ -40,6 +40,8 @@ public abstract class Playlist {
 
   public abstract Request getRequest(String requestId);
 
+  public abstract Song getCurrentSong();
+
   /**
    * @param request
    *          - to add
