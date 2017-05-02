@@ -608,13 +608,13 @@ public class PartyTest {
     PlaylistProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
-    p.addGuest(h);
+    p.addGuest(m);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
-    Party p1 = Party.create("Dope Party1", m, new Coordinate(1, 1),
+    Party p1 = Party.create("Dope Party1", h, new Coordinate(1, 1),
         LocalDateTime.now());
     assert p1.getRequestedSongs().size() == 0;
     assert p1.removeFromPlaylist(r1.getId()) == false;
@@ -1091,8 +1091,7 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
-
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
     assert p.addGuest(h) == true;
@@ -1306,15 +1305,13 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     User m = User.create("mattsicat", "ms@brown.edu", "Matt Sicat");
 
     Party p = Party.create("Dope Party", l,
         new Coordinate(35.967962, -112.124322), LocalDateTime.now());
     Party p1 = Party.create("Dope Party", h,
         new Coordinate(35.968726, -112.121458), LocalDateTime.now());
-    Party p2 = Party.create("Dope Party", m,
-        new Coordinate(35.966870, -112.114833), LocalDateTime.now());
 
     Coordinate c = new Coordinate(35.968544, -112.122230);
     List<Party> parties = Party.getActivePartiesWithinDistance(c, 200);

@@ -25,10 +25,12 @@ public final class Constants {
       + "FJPqlRVYMM6QW9kLxtaij0oqmnSBi-VLjVCr59OTdDoVAgjQjNm"
       + "_9E_flrxsjXmMV0yKvJF8LyRTq-b1gQBOsbNok6wBLSN3ggzdLO29e9wSVQQ"
       + "0Nh5189mCMoCvDKq0EDRLAJY3wzKWP0G5s_Di66RutiGjT40";
-  public static final String SESH_REFRESH = "AQD5AAphNkAVY_YVbi1"
-      + "93j_gQmsqoMeS" + "ThCs0SedZXVmx4iERVLXnTJmuLwxZywHa-uUyQp8G5XYoQQb_R"
-      + "Bf090CUTcXPS-W2fBlYkudZeXPHhKs3-c-CavlgzacVtxvlv4";
+  public static final String SESH_REFRESH = "AQAfR1nQTxBa3Ri3hV"
+      + "Irebv-DD53xC-zKIGYzr3QRUimXVzsPGkNY"
+      + "d7q8GV7BcLKFomRS1WJZ63e59qTfnkuiNS9FTxUXxjeIUGwdUy"
+      + "SZyGkVNgyBwNDX3giKOQ7Lt4knBE";
 
+  public static final String HANNAH_REFRESH = "";
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;
