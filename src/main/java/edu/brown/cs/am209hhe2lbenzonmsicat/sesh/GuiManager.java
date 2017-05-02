@@ -22,7 +22,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +30,6 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -50,6 +48,7 @@ public class GuiManager {
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
+    Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
   }
 
@@ -139,7 +138,6 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -192,7 +190,6 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -246,7 +243,6 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -277,6 +273,34 @@ public class GuiManager {
       }
       Map<String, Object> variables = ImmutableMap.of("results",
           new ArrayList<String>(), "songIds", new ArrayList<String>());
+      return GSON.toJson(variables);
+    }
+  }
+
+  /**
+   * Handles returning the current song being played at the party. Will return
+   * null if no current song is playing.
+   * @author HE23
+   */
+  private static class CurrentSongHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      try {
+        QueryParamsMap qm = req.queryMap();
+        int partyId = Integer.parseInt(qm.value("partyId"));
+        Party p = Party.of(partyId);
+        Song curr = p.getSongBeingCurrentlyPlayed();
+        Map<String, Object> variables;
+        if (curr != null) {
+          variables = ImmutableMap.of("currentSong", curr.toMap());
+        } else {
+          variables = ImmutableMap.of("currentSong", null);
+        }
+        return GSON.toJson(variables);
+      } catch (Exception c) {
+        c.printStackTrace();
+      }
+      Map<String, Object> variables = ImmutableMap.of("currentSong", null);
       return GSON.toJson(variables);
     }
   }
