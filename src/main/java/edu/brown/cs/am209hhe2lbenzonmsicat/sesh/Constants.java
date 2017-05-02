@@ -30,7 +30,10 @@ public final class Constants {
       + "d7q8GV7BcLKFomRS1WJZ63e59qTfnkuiNS9FTxUXxjeIUGwdUy"
       + "SZyGkVNgyBwNDX3giKOQ7Lt4knBE";
 
-  public static final String HANNAH_REFRESH = "";
+  public static final String HANNAH_REFRESH = "AQAZl5TBDPPa5hxWgELg2elD9hu9Mbr8YXjP06"
+      + "2YIu2smq3Qg2mNh1"
+      + "5wFbXxrcrVEIzJ14SYSw2ziHHIT_IVFQ8sAuwA_Er9LSaM9Xlbh4ZivmMBW9G"
+      + "D4QxR-pXZfcSEGW0";
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;
