@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
@@ -84,7 +86,19 @@ public class SpotifyCommunicator {
       throw new RuntimeException(e.getMessage());
     }
     userToApi.put("1185743437", hannahApi);
-    // userToApi.put("hhe", testApi);
+    userToApi.put("hhe", testApi);
+    Api aliApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
+    aliApi.setRefreshToken(Constants.ALI_REFRESH);
+    String aT3;
+    try {
+      aT3 = aliApi.refreshAccessToken().build().get().getAccessToken();
+      aliApi.setAccessToken(aT3);
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+    userToApi.put("alimiraculous", aliApi);
 
   }
 
@@ -308,7 +322,10 @@ public class SpotifyCommunicator {
       URL url = new URL(sb.toString());
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("GET");
-      conn.setRequestProperty("Authorization", accessToken);
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
       BufferedReader in = new BufferedReader(
           new InputStreamReader(conn.getInputStream()));
       String inputLine;
@@ -319,22 +336,22 @@ public class SpotifyCommunicator {
       in.close();
       JsonParser p = new JsonParser();
       JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
-      JsonObject context = p.parse(jsonObject.get("context").toString())
-          .getAsJsonObject();
-      JsonObject item = p.parse(jsonObject.get("item").toString())
-          .getAsJsonObject();
-      String type = context.get("type").toString();
-      if (!type.equals("playlist")) {
-        return null;
-      }
-      String uri = context.get("uri").toString();
-      sb = new StringBuilder();
-      sb.append("spotify:user:spotify:playlist:");
-      sb.append(playlistId);
-      if (!uri.equals(sb.toString())) {
-        return null;
-      }
-      String spotifyId = item.get("id").toString();
+
+      JsonElement context = p.parse(jsonObject.get("context").toString());
+      JsonArray item = jsonObject.getAsJsonArray();
+
+      // String type = context.get("type").toString();
+      // if (!type.equals("playlist")) {
+      // return null;
+      // }
+      // String uri = context.get("uri").toString();
+      // sb = new StringBuilder();
+      // sb.append("spotify:user:spotify:playlist:");
+      // sb.append(playlistId);
+      // if (!uri.equals(sb.toString())) {
+      // return null;
+      // }
+      String spotifyId = item.get(2).getAsString();
       s = Song.of(spotifyId);
       return s;
     } catch (IOException | WebApiException e) {
