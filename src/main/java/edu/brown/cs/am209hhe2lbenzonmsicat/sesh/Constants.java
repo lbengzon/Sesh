@@ -34,6 +34,10 @@ public final class Constants {
       + "2YIu2smq3Qg2mNh1"
       + "5wFbXxrcrVEIzJ14SYSw2ziHHIT_IVFQ8sAuwA_Er9LSaM9Xlbh4ZivmMBW9G"
       + "D4QxR-pXZfcSEGW0";
+
+  public static final String ALI_REFRESH = "AQCx1Stf-6IZRvOmkudYNn52dOeEY18-D2JPrYw"
+      + "UdWGmuT9LNaK8svLfu02kbzEXWiU3itRn8JiW_leBKP"
+      + "dW1Lbwnoasq_o2-ZnwprJwDELISi5dMMy8QbrLq-RL790tH9Q";
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;
