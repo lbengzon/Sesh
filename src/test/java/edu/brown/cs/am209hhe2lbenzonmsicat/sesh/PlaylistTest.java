@@ -9,19 +9,15 @@ import java.time.LocalDateTime;
 import org.junit.Test;
 
 /***
- * This class tests the playlist class.* <<<<<<< HEAD
+ * This class tests the playlist class.
  *
- * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
- * 
  * @author Ali
  */
 public class PlaylistTest {
 
   /**
-   * This method tests the getID method. <<<<<<< HEAD
+   * This method tests the getID method.
    *
-   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
-   * 
    * @throws SQLException
    *           throws a SQL exception if the db is bad
    * @throws FileNotFoundException
@@ -35,8 +31,6 @@ public class PlaylistTest {
   /**
    * This method tests the getUrl function. <<<<<<< HEAD
    *
-   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
-   * 
    * @throws SQLException
    *           if db malfunctions
    * @throws FileNotFoundException
@@ -49,10 +43,8 @@ public class PlaylistTest {
   }
 
   /**
-   * this method tests the remove songs. <<<<<<< HEAD
+   * this method tests the remove songs.
    *
-   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
-   * 
    * @throws SQLException
    *           if db doesn't work
    * @throws FileNotFoundException
@@ -87,7 +79,7 @@ public class PlaylistTest {
    * this tests the add song. <<<<<<< HEAD
    *
    * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
-   * 
+   *
    * @throws SQLException
    *           if db screws up
    * @throws FileNotFoundException
@@ -122,8 +114,7 @@ public class PlaylistTest {
   /**
    * This method tests the Of function. <<<<<<< HEAD
    *
-   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
-   * 
+   *
    * @throws SQLException
    *           from the db
    * @throws FileNotFoundException
@@ -135,10 +126,8 @@ public class PlaylistTest {
   }
 
   /**
-   * This tests the get songs from the spotify API. <<<<<<< HEAD
+   * This tests the get songs from the spotify API.
    *
-   * ======= >>>>>>> bc35e56bdd59f40419aadfc80079750a4699bdff
-   * 
    * @throws MalformedURLException
    *           if the url doesn't work
    * @throws IOException

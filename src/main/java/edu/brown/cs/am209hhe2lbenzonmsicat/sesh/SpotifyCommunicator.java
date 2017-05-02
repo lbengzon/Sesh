@@ -64,15 +64,27 @@ public class SpotifyCommunicator {
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
     testApi.setRefreshToken(Constants.SESH_REFRESH);
+    String aT2;
+    try {
+      aT2 = testApi.refreshAccessToken().build().get().getAccessToken();
+      testApi.setAccessToken(aT2);
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
     userToApi.put("s3shteam32", testApi);
-    userToApi.put("1185743437", testApi);
+    Api hannahApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
+    hannahApi.setRefreshToken(Constants.HANNAH_REFRESH);
     String aT;
     try {
-      aT = testApi.refreshAccessToken().build().get().getAccessToken();
-      testApi.setAccessToken(aT);
+      aT = hannahApi.refreshAccessToken().build().get().getAccessToken();
+      hannahApi.setAccessToken(aT);
     } catch (IOException | WebApiException e) {
-      // ERROR
+      throw new RuntimeException(e.getMessage());
     }
+    userToApi.put("1185743437", hannahApi);
+    // userToApi.put("hhe", testApi);
 
   }
 
@@ -84,8 +96,8 @@ public class SpotifyCommunicator {
     /* Set the necessary scopes that the application will need from the user */
     final List<String> scopes = Arrays.asList("user-read-private",
         "user-read-email", "playlist-modify-private", "playlist-modify-public",
-        "playlist-read-private",
-        "playlist-read-collaborative, user-read-playback-state, user-read-currently-playing");
+        "playlist-read-private", "playlist-read-collaborative",
+        "user-read-playback-state", "user-read-currently-playing");
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
