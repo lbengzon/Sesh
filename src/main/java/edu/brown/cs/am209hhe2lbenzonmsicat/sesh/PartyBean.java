@@ -315,4 +315,9 @@ public class PartyBean extends Party {
     return false;
   }
 
+  @Override
+  public Song getSongBeingCurrentlyPlayed() {
+    return playlist.getCurrentSong();
+  }
+
 }

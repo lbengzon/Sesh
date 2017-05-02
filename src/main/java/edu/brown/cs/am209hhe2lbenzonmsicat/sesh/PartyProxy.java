@@ -267,14 +267,12 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public void endParty() {
-    // TODO Auto-generated method stub
     if (partyBean != null) {
       partyBean.endParty();
     }
     try {
       DbHandler.endParty(partyId);
     } catch (SQLException e) {
-      // TODO Auto-generated catch block
       throw new RuntimeException(e.getMessage());
     }
     status = Status.stopped;
@@ -285,7 +283,6 @@ public class PartyProxy extends Party implements Proxy {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
-    // TODO Auto-generated method stub
     if (partyBean == null) {
       try {
         fill();
@@ -297,7 +294,6 @@ public class PartyProxy extends Party implements Proxy {
       DbHandler.removePartyGuest(partyId, guest);
       return partyBean.removeGuest(guest);
     } catch (SQLException e) {
-      // TODO Auto-generated catch block
       return false;
     }
   }
@@ -389,5 +385,17 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     return partyBean.reorderSong(startIndex, endIndex);
+  }
+
+  @Override
+  public Song getSongBeingCurrentlyPlayed() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.getSongBeingCurrentlyPlayed();
   }
 }
