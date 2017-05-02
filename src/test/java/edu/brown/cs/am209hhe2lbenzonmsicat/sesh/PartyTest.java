@@ -998,14 +998,14 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
-    assert p.addGuest(h) == true;
-    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1),
+    assert p.addGuest(a) == true;
+    Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
         LocalDateTime.now());
-    p1.addGuest(h);
+    p1.addGuest(a);
   }
 
   @Test
@@ -1018,21 +1018,21 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
-    assert p.addGuest(h) == true;
+    assert p.addGuest(a) == true;
     p.endParty();
-    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1),
+    Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
         LocalDateTime.now());
-    p1.addGuest(h);
+    p1.addGuest(a);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getPlaylist().getId(),
         p1.getLocation(), p1.getTime(), p1.getStatus());
     assert p2.getGuests().size() == 1;
-    assert p2.getGuests().contains(h);
+    assert p2.getGuests().contains(a);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -1045,12 +1045,12 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
-    assert p.addGuest(h) == true;
-    Party p1 = Party.create("Dope Party", a, new Coordinate(1, 1),
+    assert p.addGuest(a) == true;
+    Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
         LocalDateTime.now());
     p1.addGuest(l);
   }
@@ -1108,7 +1108,7 @@ public class PartyTest {
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
         LocalDateTime.now());
     assert p.addGuest(h) == true;
@@ -1327,9 +1327,9 @@ public class PartyTest {
     DbHandler.clearAllTables();
     RequestProxy.clearCache();
     PartyProxy.clearCache();
-    User l = User.create("alimiraculous", "ali.ahmed.mir@gmail.com", "Ali Mir");
+    User l = User.create("s3shteam32", "ali.ahmed.mir@gmail.com", "Ali Mir");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He");
+    User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
