@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.wrapper.spotify.models.PlaylistTrackPosition;
-
 /**
  * Playlist proxy class.
  */
@@ -122,14 +120,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
       if (request == null) {
         return null;
       }
-      StringBuilder sb = new StringBuilder();
-      sb.append("spotify:track:");
-      sb.append(request.getSong().getSpotifyId());
-      PlaylistTrackPosition ptp = new PlaylistTrackPosition(sb.toString());
-      List<PlaylistTrackPosition> listOfTrackPositions = new ArrayList<PlaylistTrackPosition>();
-      listOfTrackPositions.add(ptp);
       SpotifyCommunicator.removeTrack(host.getSpotifyId(), this.spotifyId,
-          listOfTrackPositions);
+          request);
       DbHandler.moveSongRequestOutOfQueue(request);
       return playlistBean.removeSong(requestId);
     } catch (SQLException e) {
@@ -161,12 +153,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
       }
     }
     try {
-      StringBuilder sb = new StringBuilder();
-      sb.append("spotify:track:");
-      sb.append(request.getSong().getSpotifyId());
-      List<String> uris = new ArrayList<String>();
-      uris.add(sb.toString());
-      SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, uris);
+
+      SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId,
+          request);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
 
@@ -186,13 +175,9 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
       // TODO ADD API REQUEST HERE
-      StringBuilder sb = new StringBuilder();
-      sb.append("spotify:track:");
-      sb.append(request.getSong().getSpotifyId());
-      List<String> uris = new ArrayList<String>();
-      uris.add(sb.toString());
+
       SpotifyCommunicator.addTrackInPosition(host.getSpotifyId(),
-          this.spotifyId, uris, pos);
+          this.spotifyId, request, pos);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
 

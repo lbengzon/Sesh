@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -252,10 +253,17 @@ public class SpotifyCommunicator {
   }
 
   public static void removeTrack(String userId, String playlistId,
-      List<PlaylistTrackPosition> trackUris) {
+      Request request) {
+    StringBuilder sb = new StringBuilder();
+    sb.append("spotify:track:");
+    sb.append(request.getSong().getSpotifyId());
+    PlaylistTrackPosition ptp = new PlaylistTrackPosition(sb.toString());
+    List<PlaylistTrackPosition> listOfTrackPositions = new ArrayList<PlaylistTrackPosition>();
+    listOfTrackPositions.add(ptp);
     try {
       Api api = userToApi.get(userId);
-      api.removeTrackFromPlaylist(userId, playlistId, trackUris).build().get();
+      api.removeTrackFromPlaylist(userId, playlistId, listOfTrackPositions)
+          .build().get();
 
     } catch (IOException | WebApiException e) {
       throw new RuntimeException(e.getMessage());
@@ -263,8 +271,13 @@ public class SpotifyCommunicator {
   }
 
   public static void addTrack(String userId, String playlistId,
-      List<String> uris) {
+      Request request) {
     Api api = userToApi.get(userId);
+    StringBuilder sb = new StringBuilder();
+    sb.append("spotify:track:");
+    sb.append(request.getSong().getSpotifyId());
+    List<String> uris = new ArrayList<String>();
+    uris.add(sb.toString());
     try {
       api.addTracksToPlaylist(userId, playlistId, uris).build().get();
 
@@ -315,8 +328,13 @@ public class SpotifyCommunicator {
   }
 
   public static void addTrackInPosition(String userId, String playlistId,
-      List<String> uris, int pos) {
+      Request request, int pos) {
     Api api = userToApi.get(userId);
+    StringBuilder sb = new StringBuilder();
+    sb.append("spotify:track:");
+    sb.append(request.getSong().getSpotifyId());
+    List<String> uris = new ArrayList<String>();
+    uris.add(sb.toString());
     try {
       api.addTracksToPlaylist(userId, playlistId, uris).position(pos).build()
           .get();
@@ -376,6 +394,39 @@ public class SpotifyCommunicator {
     } catch (IOException | WebApiException e) {
       throw new RuntimeException(e.getMessage());
     }
+
+  }
+
+  public static void getDevices(String userId) {
+
+  }
+
+  public static void playPlaylist(String userId, String playlistId,
+      int offset) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/play");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("PUT");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      // NEED TO APPEND OFFSET
+      JsonArray uris = new JsonArray();
+
+      conn.setRequestProperty("Authorization", sb2.toString());
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  public static void play(String userId) {
 
   }
 
