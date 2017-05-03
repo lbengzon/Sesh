@@ -1,7 +1,7 @@
 <#assign content>
 <script>
-	var userId;
-	var partyId;
+	let userId;
+	let partyId;
 </script>
 <script src="/js/joinParty.js"></script>
 <script>

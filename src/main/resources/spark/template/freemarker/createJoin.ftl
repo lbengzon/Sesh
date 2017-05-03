@@ -1,6 +1,6 @@
 <#assign content>
 <script>
-	var userId;
+	let userId;
 </script>
 <script src="/js/createJoin.js"></script>
 <script>
