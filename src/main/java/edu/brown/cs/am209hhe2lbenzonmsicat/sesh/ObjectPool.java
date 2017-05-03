@@ -37,7 +37,7 @@ public abstract class ObjectPool<T> {
    *          - object
    * @return - boolean
    */
-  protected abstract boolean validate(Object o);
+  protected abstract boolean validate(T o);
 
   /**
    * Expires an object.
@@ -45,7 +45,7 @@ public abstract class ObjectPool<T> {
    * @param o
    *          - object
    */
-  protected abstract void expire(Object o);
+  protected abstract void expire(T o);
 
   /**
    * Checks an object out of the pool.
@@ -69,7 +69,7 @@ public abstract class ObjectPool<T> {
           } else {
             /* object is valid */
             unlocked.remove(o);
-            locked.put((T) o, new Long(now));
+            locked.put(o, new Long(now));
             System.out.println("ping!");
             return o;
           }

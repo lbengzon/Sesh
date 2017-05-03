@@ -26,6 +26,12 @@
 </ul>
 </div>
 
+<div id="musicPlayer">
+<button id="prevButton" class="playerButton" type="button">Previous</button>
+<button id="playPauseButton" class="playerButton" type="button">Play/Pause</button>
+<button id="nextButton" class="playerButton" type="button">Next</button>
+</div>
+
 <div class="tabContentPlaylist" id="request-list">
 <ul style="list-style-type:none" class="sortable" id="ulRequest">
 </ul>

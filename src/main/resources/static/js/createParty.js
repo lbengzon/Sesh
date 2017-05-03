@@ -39,6 +39,19 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
     $listWrapper.height("56%");
 }
 
+function playPause() {
+	//FILL IN
+	console.log("ping!");
+}
+
+function previousSong() {
+	//FILL IN
+}
+
+function nextSong() {
+	//FILL IN
+}
+
 $(document).ready(() => {
 
     //dj tab content
@@ -57,6 +70,12 @@ $(document).ready(() => {
     const $userInput = $(".search");
     const $results = $(".searchResults");
     const $playlist = $("#tabContentPlaylist ul");
+
+    //music player buttons
+    const $prevButton = $("#prevButton");
+    const $playPauseButton = $("#playPauseButton");
+    const $nextButton = $("#nextButton");
+
 
     let startPlaylistIndex;
     let startList;
@@ -169,6 +188,18 @@ $(document).ready(() => {
 
     $options.click(function() {
         showOptions($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+    });
+
+    $prevButton.click(function() {
+    	playPause();
+    });
+
+    $playPauseButton.click(function() {
+
+    });
+
+    $nextButton.click(function() {
+
     });
 
 });
