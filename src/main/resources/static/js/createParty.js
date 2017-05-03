@@ -59,9 +59,60 @@ $(document).ready(() => {
     const $results = $(".searchResults");
     const $playlist = $("#tabContentPlaylist ul");
 
+    var startPlaylistIndex;
+    var startList;
+
     $(".sortable").sortable({
         dropOnEmpty: true,
-        connectWith: ".sortable"
+        connectWith: ".sortable",
+        start: function(event, ui) {
+            // console.log("start playlist index: " + ui.item.index());
+            // console.log("the song started in list: " + ui.item.parent().attr("id"));
+            if (ui.item.parent().attr("id") === "ulPlaylist") {
+                startPlaylistIndex = ui.item.index();
+                startList = ui.item.parent().attr("id");
+            } else {
+                startList = ui.item.parent().attr("id");
+            }
+        },
+        beforeStop: function(event, ui) {
+            if ($(this).attr('id') === "ulRequest") {
+                $(this).sortable("option", "selfDrop", $(ui.placeholder).parent()[0] == this);
+            }
+        },
+        stop: function(event, ui) {
+            if ($(this).attr('id') === "ulRequest") {
+                var $sortable = $(this);
+                if ($sortable.sortable("option", "selfDrop")) {
+                    $sortable.sortable('cancel');
+                } 
+            }
+        },
+
+        receive: function(event, ui) {
+            //dropped into request list
+            if (ui.item.parent().attr("id") === "ulRequest") {
+                console.log("moving song from playlist to request");
+                moveFromQueueToRequest(partyId, userId, ui.item.attr("id"));
+            } else {
+                console.log("moving song from request to playlist");
+                moveRequestToQueue (partyId, userId, ui.item.attr("id"), ui.item.index());
+            }
+        },
+        update: function(event, ui) {
+            if (ui.item.parent().attr("id") === "ulPlaylist" && startList === "ulPlaylist") {
+                console.log("reordering within playlist");
+                console.log("starting at: " + startPlaylistIndex);
+                console.log("ending at: " + ui.item.index());
+                console.log("==========================");
+                reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, ui.item.index());
+            }
+            // if (ui.item.parent().attr("id") === "ulPlaylist") {
+            //     console.log("here!!!!");
+            // }
+            //console.log("update parent id: " + ui.item.parent().attr("id"));
+
+        }
     }).disableSelection();
 
     //search for songs

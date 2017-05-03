@@ -37,6 +37,7 @@ public class SpotifyCommunicator {
   private static Api testApi;
   private List<String> results;
   private static ConcurrentHashMap<String, Api> userToApi = new ConcurrentHashMap<String, Api>();
+  private static ApiPool apiPool;
 
   private static Api publicApi = Api.builder()
       .clientId(Constants.LEANDRO_CLIENT_ID)
@@ -47,8 +48,10 @@ public class SpotifyCommunicator {
    * This is the constructor which creates our map.
    */
   public SpotifyCommunicator() {
+    apiPool = new ApiPool();
   }
 
+  // TODO: Fix this so it works with the Api Pool!
   public static void setUpPublicApi() {
     publicApi.setRefreshToken(Constants.SESH_REFRESH);
     String aT;
@@ -248,9 +251,13 @@ public class SpotifyCommunicator {
 
   public static void removeTrack(String userId, String playlistId,
       List<PlaylistTrackPosition> trackUris) {
-    Api api = userToApi.get(userId);
-    api.removeTrackFromPlaylist(userId, playlistId, trackUris).build();
+    try {
+      Api api = userToApi.get(userId);
+      api.removeTrackFromPlaylist(userId, playlistId, trackUris).build().get();
 
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   public static void addTrack(String userId, String playlistId,

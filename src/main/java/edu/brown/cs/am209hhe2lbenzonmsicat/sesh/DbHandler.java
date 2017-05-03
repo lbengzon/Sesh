@@ -40,11 +40,9 @@ public final class DbHandler {
   /**
    * Gets the connection a particular thread has.
    *
-   * @return the connection to the database.
+   * @return a connection to the database.
    */
   public static Connection getConnection() {
-    // return guiConnection;
-
     if (connectionPool != null) {
       try {
         return connectionPool.getConnection();
@@ -74,10 +72,7 @@ public final class DbHandler {
     /* if database is already loaded, close connection to old one */
     if (dbFile.exists() && !(dbFile.isDirectory())) {
       if (DbHandler.getConnection() != null) {
-        // assertNotNull(DbHandler.getConnection());
-        // DbHandler.getConnection().close();
-        // guiConnection.close();
-        // guiConnection = null;
+        assert (getConnection() != null);
         connectionPool.close();
       }
       /* setting up connection pool */
@@ -88,14 +83,6 @@ public final class DbHandler {
       connectionPool.setDriver(driver);
       Statement stat = connectionPool.getConnection().createStatement();
       stat.executeUpdate("PRAGMA foreign_keys = ON;");
-
-      // now we add the new DbConnection to the ThreadLocal, turn on foreign
-      // keys.
-      // Connection conn = DriverManager.getConnection(startOfPath + pathToDb);
-      // DbHandler.setConnection(conn);
-      // guiConnection = conn;
-      // Statement stat = conn.createStatement();
-      // stat.executeUpdate("PRAGMA foreign_keys = ON;");
 
     } else {
       throw new FileNotFoundException("ERROR: Not a valid database. "
