@@ -25,11 +25,33 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST,
+    PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK
+    CONNECT,
+    SET_PARTY_ID,
+    ADD_REQUEST,
+    UPVOTE_REQUEST,
+    DOWNVOTE_REQUEST,
+    MOVE_REQUEST_TO_QUEUE,
+    MOVE_FROM_QUEUE_TO_REQUEST,
+    ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_ADD_REQUEST,
+    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_VOTE_REQUESTS,
+    UPDATE_AFTER_REQUEST_TRANSFER,
+    UPDATE_ENTIRE_PARTY,
+    UPDATE_REARRANGE_PLAYLIST,
+    REORDER_PLAYLIST_TRACK,
+    PLAY_PLAYLIST,
+    RESUME_SONG,
+    PAUSE_SONG,
+    NEXT_SONG,
+    PREVIOUS_SONG,
+    UPDATE_PLAYER
+
   }
 
   @OnWebSocketConnect
@@ -99,13 +121,109 @@ public class PartyWebsocket {
         case REORDER_PLAYLIST_TRACK:
           sendReorderPlaylistTrackUpdate(payload, user, party, session);
           break;
+        case PLAY_PLAYLIST:
+          playPlaylistAndUpdate(payload, user, party, session);
+          break;
+        case RESUME_SONG:
+          resumeSongAndUpdate(payload, user, party, session);
+          break;
+        case PAUSE_SONG:
+          pauseSongAndUpdate(payload, user, party, session);
+          break;
+        case NEXT_SONG:
+          nextSongAndUpdate(payload, user, party, session);
+          break;
+        case PREVIOUS_SONG:
+          previousSongAndUpdate(payload, user, party, session);
+          break;
         default:
           assert false : "you should never get here!!!";
       }
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
 
+  private void previousSongAndUpdate(JsonObject payload, User user, Party party,
+      Session session) throws IOException {
+    try {
+      party.prevSong();
+      updatePartiesCurrentSong(party);
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
+
+  private void nextSongAndUpdate(JsonObject payload, User user, Party party,
+      Session session) throws IOException {
+    try {
+      party.nextSong();
+      updatePartiesCurrentSong(party);
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
+
+  private void pauseSongAndUpdate(JsonObject payload, User user, Party party,
+      Session session) throws IOException {
+    try {
+      party.pause();
+      updatePartiesCurrentSong(party);
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
+
+  private void resumeSongAndUpdate(JsonObject payload, User user, Party party,
+      Session session) throws IOException {
+    try {
+      party.resume();
+      updatePartiesCurrentSong(party);
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
+
+  private void playPlaylistAndUpdate(JsonObject payload, User user, Party party,
+      Session session) throws IOException {
+    try {
+      int index = payload.get("index").getAsInt();
+      party.playPlaylist(index);
+      updatePartiesCurrentSong(party);
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
+
+  private void updatePartiesCurrentSong(Party party) {
+    try {
+      JsonObject updatePayload = new JsonObject();
+      JsonObject updateMessage = new JsonObject();
+      updatePayload.add("currentSong",
+          party.getSongBeingCurrentlyPlayed().toJson());
+      updateMessage.add("message", updatePayload);
+      updateMessage.addProperty("success", true);
+      for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
+    } catch (IOException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   private void sendReorderPlaylistTrackUpdate(JsonObject payload, User user,

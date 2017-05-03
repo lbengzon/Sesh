@@ -13,7 +13,13 @@ UPDATE_VOTE_REQUESTS: 10,
 UPDATE_AFTER_REQUEST_TRANSFER: 11,
 UPDATE_ENTIRE_PARTY: 12,
 UPDATE_REARRANGE_PLAYLIST: 13, 
-REORDER_PLAYLIST_TRACK: 14
+REORDER_PLAYLIST_TRACK: 14,
+PLAY_PLAYLIST: 15,
+RESUME_SONG: 16,
+PAUSE_SONG: 17,
+NEXT_SONG: 18,
+PREVIOUS_SONG: 19,
+UPDATE_PLAYER: 20,
 };
 
 let conn;
@@ -116,6 +122,9 @@ function setupWebsockets() {
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
           $player.attr("src", data.payload.party.playlistUrl);
+          break;
+        case MESSAGE_TYPE.UPDATE_PLAYER:
+          console.log("Have not implemented the update player message in websockets.js");
           break;
       }
     } else{
@@ -284,7 +293,7 @@ function reorderPlaylistTrack(partyId, userId, requestId, oldIndex, newIndex){
 }
 
 function addToPlaylist(partyId, userId, songId) {
-    let message = {
+  let message = {
     type: MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST, 
     payload:{
       userId: userId,
@@ -295,3 +304,58 @@ function addToPlaylist(partyId, userId, songId) {
   conn.send(JSON.stringify(message));
 }
 
+function playPlaylist(partyId, userId, index){
+  let message = {
+    type: MESSAGE_TYPE.PLAY_PLAYLIST, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      index: index
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function resumeSong (partyId, userId) {
+  let message = {
+    type: MESSAGE_TYPE.RESUME_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function pauseSong (partyId, userId) {
+  let message = {
+    type: MESSAGE_TYPE.PAUSE_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function nextSong (partyId, userId) {
+  let message = {
+    type: MESSAGE_TYPE.NEXT_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function prevSong (partyId, userId) {
+  let message = {
+    type: MESSAGE_TYPE.PREVIOUS_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
