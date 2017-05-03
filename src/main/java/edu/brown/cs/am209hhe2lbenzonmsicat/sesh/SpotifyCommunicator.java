@@ -3,6 +3,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
@@ -40,11 +40,6 @@ public class SpotifyCommunicator {
   private static ConcurrentHashMap<String, Api> userToApi = new ConcurrentHashMap<String, Api>();
   private static ApiPool apiPool;
 
-  private static Api publicApi = Api.builder()
-      .clientId(Constants.LEANDRO_CLIENT_ID)
-      .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-      .redirectURI(Constants.REDIRECT_URL).build();
-
   /**
    * This is the constructor which creates our map.
    */
@@ -52,15 +47,7 @@ public class SpotifyCommunicator {
   }
 
   public static void setUpPublicApi() {
-    publicApi.setRefreshToken(Constants.SESH_REFRESH);
-    String aT;
     apiPool = new ApiPool();
-    try {
-      aT = publicApi.refreshAccessToken().build().get().getAccessToken();
-      publicApi.setAccessToken(aT);
-    } catch (IOException | WebApiException e) {
-      // ERROR
-    }
   }
 
   public static void setUpTestApi() {
@@ -231,7 +218,6 @@ public class SpotifyCommunicator {
   }
 
   public static List<Track> searchTracks(String query) {
-    // Api api = publicApi;
     Api api = apiPool.checkOut();
     List<Track> tracks = new ArrayList<Track>();
     try {
@@ -245,7 +231,6 @@ public class SpotifyCommunicator {
   }
 
   public static Track getTrack(String id) {
-    // Api api = publicApi;
     Api api = apiPool.checkOut();
     try {
       Track t = api.getTrack(id).build().get();
@@ -377,23 +362,28 @@ public class SpotifyCommunicator {
       in.close();
       JsonParser p = new JsonParser();
       JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
-      JsonElement context = p.parse(jsonObject.get("context").toString());
-      JsonObject item = jsonObject.getAsJsonObject();
+      JsonObject context = jsonObject.get("context").getAsJsonObject();
+      JsonObject item = jsonObject.get("item").getAsJsonObject();
 
-      // String type = context.get("type").toString();
-      // if (!type.equals("playlist")) {
-      // return null;
-      // }
-      // String uri = context.get("uri").toString();
-      // sb = new StringBuilder();
-      // sb.append("spotify:user:spotify:playlist:");
-      // sb.append(playlistId);
-      // if (!uri.equals(sb.toString())) {
-      // return null;
-      // }
-      String spotifyId = item.get("item").getAsJsonObject().get("id")
-          .getAsString();
-      s = Song.of(spotifyId);
+      if (context != null) {
+        String type = context.get("type").toString();
+        if (!type.equals("playlist")) {
+          return null;
+        }
+        String uri = context.get("uri").toString();
+        sb = new StringBuilder();
+        sb.append("spotify:user:spotify:playlist:");
+        sb.append(playlistId);
+        if (!uri.equals(sb.toString())) {
+          return null;
+        }
+      }
+      if (item != null) {
+        String spotifyId = item.get("item").getAsJsonObject().get("id")
+            .getAsString();
+        s = Song.of(spotifyId);
+      }
+
       return s;
     } catch (IOException | WebApiException e) {
       throw new RuntimeException(e.getMessage());
@@ -431,7 +421,96 @@ public class SpotifyCommunicator {
   }
 
   public static void play(String userId) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/play");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("PUT");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
 
+      conn.setRequestProperty("Authorization", sb2.toString());
+      sb = new StringBuilder();
+
+      OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+      out.write("Resource content");
+      out.close();
+
+      conn.connect();
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
+  public static void pause(String userId) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/pause");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("PUT");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  public static void nextSong(String userId) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/next");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("POST");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  public static void prevSong(String userId) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/previous");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("POST");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
 }
