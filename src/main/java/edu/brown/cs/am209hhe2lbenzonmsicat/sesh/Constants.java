@@ -25,19 +25,18 @@ public final class Constants {
       + "FJPqlRVYMM6QW9kLxtaij0oqmnSBi-VLjVCr59OTdDoVAgjQjNm"
       + "_9E_flrxsjXmMV0yKvJF8LyRTq-b1gQBOsbNok6wBLSN3ggzdLO29e9wSVQQ"
       + "0Nh5189mCMoCvDKq0EDRLAJY3wzKWP0G5s_Di66RutiGjT40";
-  public static final String SESH_REFRESH = "AQAfR1nQTxBa3Ri3hV"
-      + "Irebv-DD53xC-zKIGYzr3QRUimXVzsPGkNY"
-      + "d7q8GV7BcLKFomRS1WJZ63e59qTfnkuiNS9FTxUXxjeIUGwdUy"
-      + "SZyGkVNgyBwNDX3giKOQ7Lt4knBE";
+  public static final String SESH_REFRESH = "AQD15ivwaTJ5-132BG_s-olHJJJEyTMt24xq_u"
+      + "Z1j2mROQriizhruefwbkDf2KVXDatzgZTn4A3gKSclfjadt"
+      + "lBe8wEJw6b5NDzKVqNgN2rTtuEZoRR4kjPoPaE30MOnhDU";
 
   public static final String HANNAH_REFRESH = "AQAZl5TBDPPa5hxWgELg2elD9hu9Mbr8YXjP06"
       + "2YIu2smq3Qg2mNh1"
       + "5wFbXxrcrVEIzJ14SYSw2ziHHIT_IVFQ8sAuwA_Er9LSaM9Xlbh4ZivmMBW9G"
       + "D4QxR-pXZfcSEGW0";
 
-  public static final String ALI_REFRESH = "AQCx1Stf-6IZRvOmkudYNn52dOeEY18-D2JPrYw"
-      + "UdWGmuT9LNaK8svLfu02kbzEXWiU3itRn8JiW_leBKP"
-      + "dW1Lbwnoasq_o2-ZnwprJwDELISi5dMMy8QbrLq-RL790tH9Q";
+  public static final String ALI_REFRESH = "AQBzc0E9m2GJxuaNpMBcNKb3SxPpqWLd_P9GrMod3uJs_"
+      + "kYI5H16KUDQ6pjJ074Dp9w92WnnoQaoCSRFFJ-NfpTrK"
+      + "aLfYA_C48ipu-nvVD-OrqOyaTavA4g96TQNDIVKoUA";
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;
