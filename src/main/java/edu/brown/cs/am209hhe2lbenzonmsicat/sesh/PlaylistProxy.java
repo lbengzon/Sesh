@@ -95,9 +95,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
     Map<Song, Request> map = playlistBean.getQueuedRequests();
     for (Song s : songs) {
       Request r = map.get(s);
-      results.add(map.get(s));
+      results.add(r);
     }
-
     return results;
   }
 
@@ -117,19 +116,14 @@ public class PlaylistProxy extends Playlist implements Proxy {
       }
     }
     try {
-      int[] positions = new int[10];
-      List<Request> reqs = this.getSongs();
       Request request = getRequest(requestId);
       if (request == null) {
         return null;
       }
-      int pos = reqs.indexOf(request);
-      positions[0] = pos;
       StringBuilder sb = new StringBuilder();
       sb.append("spotify:track:");
       sb.append(request.getSong().getSpotifyId());
-      PlaylistTrackPosition ptp = new PlaylistTrackPosition(sb.toString(),
-          positions);
+      PlaylistTrackPosition ptp = new PlaylistTrackPosition(sb.toString());
       List<PlaylistTrackPosition> listOfTrackPositions = new ArrayList<PlaylistTrackPosition>();
       listOfTrackPositions.add(ptp);
       SpotifyCommunicator.removeTrack(host.getSpotifyId(), this.spotifyId,
@@ -138,6 +132,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
       return playlistBean.removeSong(requestId);
     } catch (SQLException e) {
       // TODO Auto-generated catch block
+      e.printStackTrace();
       throw new RuntimeException(e.getMessage());
     }
   }

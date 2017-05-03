@@ -251,9 +251,13 @@ public class SpotifyCommunicator {
 
   public static void removeTrack(String userId, String playlistId,
       List<PlaylistTrackPosition> trackUris) {
-    Api api = userToApi.get(userId);
-    api.removeTrackFromPlaylist(userId, playlistId, trackUris).build();
+    try {
+      Api api = userToApi.get(userId);
+      api.removeTrackFromPlaylist(userId, playlistId, trackUris).build().get();
 
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   public static void addTrack(String userId, String playlistId,
