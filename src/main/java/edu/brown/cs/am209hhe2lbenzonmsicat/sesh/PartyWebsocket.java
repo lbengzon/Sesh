@@ -166,7 +166,7 @@ public class PartyWebsocket {
       if (newRequest == null || success == false) {
         throw new RuntimeException("ERROR: could not add song");
       }
-      updatePayload.add("newRequest", newRequest.toJson());
+      updatePayload.add("playlist", party.getPlaylistQueueAsJson());
       updateMessage.addProperty("type",
           MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST.ordinal());
       updateMessage.addProperty("success", true);

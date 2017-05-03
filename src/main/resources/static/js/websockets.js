@@ -47,7 +47,8 @@ function setupWebsockets() {
 
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
-    console.log(data);
+    console.log("DATA TYPE: " , data.type)
+    console.log("DATA OBJECT: " , data);
     if(data.success){
       switch (data.type) {
         default:
@@ -83,21 +84,26 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           console.log("update rearrange playlist");
-
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
+          playlistFull = data.payload.playlist;
+          clearAndPopulatePlaylist($playlist);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
+          playlistFull = data.payload.playlist;
+          clearAndPopulatePlaylist($playlist);
 
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           clearAndPopulateRequests(data.payload.requestList, $requests);
 
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
-          appendToPlaylist($playlist, data.payload.newRequest);
+          //playlistFull[data.payload.newRequest.id] = data.payload.newRequest;
+          playlistFull = data.payload.playlist;
+          clearAndPopulatePlaylist($playlist);
+
+          //appendToPlaylist($playlist, data.payload.newRequest);
 
           $playlist.sortable("refresh");
           $player.attr("src", $player.attr("src"));
@@ -105,8 +111,8 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
           console.log("updating whole party");
-
-          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
+          playlistFull = data.payload.party.playlist;
+          clearAndPopulatePlaylist($playlist);
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
           $player.attr("src", data.payload.party.playlistUrl);
@@ -150,7 +156,6 @@ function updateRequestVotes($requests, key, requestList) {
 }
 
 function appendToPlaylist($playlist, newRequest) {
-  console.log(newRequest);
   $playlist.append("<li " + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
     " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
     " - " + newRequest.song.artist + " " + newRequest.score + 
@@ -173,15 +178,20 @@ function clearAndPopulateRequests(requests, $requests){
 }
 
 
-function clearAndPopulatePlaylist(playlist, $playlist){
+function clearAndPopulatePlaylist($playlist){
   $playlist.empty();
-  console.log("playlist: " + playlist);
-  for (var key in playlist) {
-    console.log("populating playlist");
-    if (playlist.hasOwnProperty(key)) {
-      console.log("playlist key: " + playlist[key]);
-      appendToPlaylist($playlist, playlist[key]);
-      //$playlist.append("<li " + "id=\"" + key + "\">" + playlist[key].song.title + " - " + playlist[key].song.artist + " " + playlist[key].score + "</li>");
+  // startAddingSongs = false;
+
+  for (var key in playlistFull) {
+    if (playlistFull.hasOwnProperty(key)) {
+      console.log("request being looked at ", playlistFull[key]);
+      // if(currSongId === playlistFull[key].song.spotifyId){
+      //   startAddingSongs = true;
+      // }
+      // if(startAddingSongs === true || showPlayed === true || currSongId === undefined){
+        // console.log("Added that request");
+        appendToPlaylist($playlist, playlistFull[key]);
+      // }
     }
   }
 }

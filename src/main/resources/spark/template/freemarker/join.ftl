@@ -9,8 +9,8 @@ ${userId}
 </div>
 
 <script>
-	var userId;
-	var parties;
+	let userId;
+	let parties;
 </script>
 <script src="/js/join.js"></script>
 <script>

@@ -132,16 +132,20 @@ $(document).ready(() => {
         });
     });
 
-    function getCurrentSong() {
-        const postParameters = {partyId: partyId};
-        $.post("/currentSong", postParameters, responseJSON => {
-            const responseObject = JSON.parse(responseJSON);
-            const currSong = responseObject.currentSong;
-            console.log("curr song: " + currSong.id);
-        });
-    }
+    // function getCurrentSong() {
+    //     const postParameters = {partyId: partyId};
+    //     $.post("/currentSong", postParameters, responseJSON => {
+    //         const responseObject = JSON.parse(responseJSON);
+    //         if (currSongId !== responseObject.currentSong) {
+    //             console.log("Reloading playlist cause current song changed");
+    //             currSongId = responseObject.currentSong;
+    //             clearAndPopulatePlaylist($playlist);
+    //         }
+            
+    //     });
+    // }
 
-    setInterval(getCurrentSong, 15000);
+    //setInterval(getCurrentSong, 7000);
 
     $results.on("click", event => {
         $listItems = $("li");
