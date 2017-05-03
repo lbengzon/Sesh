@@ -285,7 +285,7 @@ public class PartyBean extends Party {
   public Map<String, Object> toMap() {
     Map<String, Object> partyMap = new HashMap<>();
     partyMap.put("partyId", partyId);
-    partyMap.put("playlistQueue", getPlaylistQueueAsJson());
+    partyMap.put("playlist", getPlaylistQueueAsJson());
     partyMap.put("requests", getRequestsAsJson());
     partyMap.put("playlistUrl", playlist.getUrl());
     partyMap.put("host", host.toJson());
