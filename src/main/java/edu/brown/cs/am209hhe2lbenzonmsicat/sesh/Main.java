@@ -53,7 +53,7 @@ public final class Main {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
-    SpotifyCommunicator.setUpPublicApi();
+    // SpotifyCommunicator.setUpPublicApi();
 
     // comm.createAuthorizeURL();
 
