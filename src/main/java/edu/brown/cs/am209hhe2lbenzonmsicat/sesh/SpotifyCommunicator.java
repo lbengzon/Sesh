@@ -199,7 +199,8 @@ public class SpotifyCommunicator {
    *          playlist id
    * @return list of all the playlist songs
    */
-  public static List<Song> getPlaylistTracks(String userId, String playlistId) {
+  public static List<Song> getPlaylistTracks(String userId, String playlistId,
+      boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     List<Song> res = new ArrayList<Song>();
     try {
@@ -212,12 +213,15 @@ public class SpotifyCommunicator {
         res.add(s);
       }
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        return getPlaylistTracks(userId, playlistId, false);
+      }
       throw new RuntimeException(e.getMessage());
     }
     return res;
   }
 
-  public static List<Track> searchTracks(String query) {
+  public static List<Track> searchTracks(String query, boolean shouldRefresh) {
     Api api = apiPool.checkOut();
     List<Track> tracks = new ArrayList<Track>();
     try {
@@ -225,24 +229,30 @@ public class SpotifyCommunicator {
       apiPool.checkIn(api);
       return tracks;
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        return searchTracks(query, false);
+      }
       throw new RuntimeException(e.getMessage());
     }
 
   }
 
-  public static Track getTrack(String id) {
+  public static Track getTrack(String id, boolean shouldRefresh) {
     Api api = apiPool.checkOut();
     try {
       Track t = api.getTrack(id).build().get();
       apiPool.checkIn(api);
       return t;
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        return getTrack(id, false);
+      }
       throw new RuntimeException(e.getMessage());
     }
   }
 
   public static void removeTrack(String userId, String playlistId,
-      Request request) {
+      Request request, boolean shouldRefresh) {
     StringBuilder sb = new StringBuilder();
     sb.append("spotify:track:");
     sb.append(request.getSong().getSpotifyId());
@@ -255,12 +265,16 @@ public class SpotifyCommunicator {
           .build().get();
 
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        removeTrack(userId, playlistId, request, false);
+        return;
+      }
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  public static void addTrack(String userId, String playlistId,
-      Request request) {
+  public static void addTrack(String userId, String playlistId, Request request,
+      boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     StringBuilder sb = new StringBuilder();
     sb.append("spotify:track:");
@@ -268,21 +282,30 @@ public class SpotifyCommunicator {
     List<String> uris = new ArrayList<String>();
     uris.add(sb.toString());
     try {
+
       api.addTracksToPlaylist(userId, playlistId, uris).build().get();
 
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        addTrack(userId, playlistId, request, false);
+        return;
+      }
       System.out.println("message" + e.getMessage());
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  public static String createPlaylist(String userId, String title) {
+  public static String createPlaylist(String userId, String title,
+      boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
       String id = api.createPlaylist(userId, title).build().get().getId();
       return id;
     } catch (IOException | WebApiException e) {
       // ERROR
+      if (shouldRefresh) {
+        return createPlaylist(userId, title, false);
+      }
       throw new RuntimeException(e.getMessage());
     }
   }
@@ -305,19 +328,22 @@ public class SpotifyCommunicator {
    *          the new position of the track
    */
   public static void reorderPlaylist(String userId, String playlistId,
-      int rangeStart, int insertBefore) {
+      int rangeStart, int insertBefore, boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
       api.reorderTracksInPlaylist(userId, playlistId, rangeStart, insertBefore)
           .build().get();
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        reorderPlaylist(userId, playlistId, rangeStart, insertBefore, false);
+      }
       throw new RuntimeException(e.getMessage());
     }
 
   }
 
   public static void addTrackInPosition(String userId, String playlistId,
-      Request request, int pos) {
+      Request request, int pos, boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     StringBuilder sb = new StringBuilder();
     sb.append("spotify:track:");
@@ -328,17 +354,20 @@ public class SpotifyCommunicator {
       api.addTracksToPlaylist(userId, playlistId, uris).position(pos).build()
           .get();
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        addTrackInPosition(userId, playlistId, request, pos, false);
+        return;
+      }
       throw new RuntimeException(e.getMessage());
     }
 
   }
 
-  public static Song getCurrentSong(String userId, String playlistId) {
+  public static Song getCurrentSong(String userId, String playlistId,
+      boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     Song s = null;
     try {
-      System.out.println("===========================================");
-      System.out.println("Api " + api);
 
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
@@ -362,6 +391,8 @@ public class SpotifyCommunicator {
       in.close();
       JsonParser p = new JsonParser();
       JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
+      System.out.println("response : " + response);
+      System.out.println("jsonObj : " + jsonObject);
       JsonObject context = jsonObject.get("context").getAsJsonObject();
       JsonObject item = jsonObject.get("item").getAsJsonObject();
 
@@ -386,17 +417,20 @@ public class SpotifyCommunicator {
 
       return s;
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        return getCurrentSong(userId, playlistId, false);
+      }
       throw new RuntimeException(e.getMessage());
     }
 
   }
 
-  public static void getDevices(String userId) {
+  public static void getDevices(String userId, boolean shouldRefresh) {
 
   }
 
-  public static void playPlaylist(String userId, String playlistId,
-      int offset) {
+  public static void playPlaylist(String userId, String playlistId, int offset,
+      boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -416,11 +450,17 @@ public class SpotifyCommunicator {
 
       conn.setRequestProperty("Authorization", sb2.toString());
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        playPlaylist(userId, playlistId, offset, false);
+        return;
+
+      }
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  public static void play(String userId) {
+  public static void play(String userId, String playlistId,
+      boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -436,19 +476,42 @@ public class SpotifyCommunicator {
       sb2.append(accessToken);
 
       conn.setRequestProperty("Authorization", sb2.toString());
+      conn.setDoOutput(true);
       sb = new StringBuilder();
-
+      sb.append("{context_uri:\"spotify:playlist:");
+      sb.append(playlistId);
+      sb.append("\"}");
+      String context_uri = sb.toString();
+      sb = new StringBuilder();
+      JsonArray jArray = new JsonArray();
+      sb.append("{\"uris\":");
+      sb.append(jArray.toString());
+      sb.append("}");
+      String uris = sb.toString();
+      sb = new StringBuilder();
+      sb.append("\"offset\":{}");
+      String offset = sb.toString();
       OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-      out.write("Resource content");
+      out.write(context_uri);
+      out.write(uris);
+      out.write(offset);
+      System.out.println(context_uri);
+      System.out.println(uris);
+      System.out.println(offset);
       out.close();
 
       conn.connect();
+      System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        play(userId, playlistId, false);
+        return;
+      }
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  public static void pause(String userId) {
+  public static void pause(String userId, boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -466,11 +529,15 @@ public class SpotifyCommunicator {
       BufferedReader in = new BufferedReader(
           new InputStreamReader(conn.getInputStream()));
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        pause(userId, false);
+        return;
+      }
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  public static void nextSong(String userId) {
+  public static void nextSong(String userId, boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -488,11 +555,15 @@ public class SpotifyCommunicator {
       BufferedReader in = new BufferedReader(
           new InputStreamReader(conn.getInputStream()));
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        nextSong(userId, false);
+        return;
+      }
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  public static void prevSong(String userId) {
+  public static void prevSong(String userId, boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -510,6 +581,10 @@ public class SpotifyCommunicator {
       BufferedReader in = new BufferedReader(
           new InputStreamReader(conn.getInputStream()));
     } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        prevSong(userId, false);
+        return;
+      }
       throw new RuntimeException(e.getMessage());
     }
   }

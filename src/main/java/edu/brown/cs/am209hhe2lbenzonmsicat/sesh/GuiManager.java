@@ -256,7 +256,7 @@ public class GuiManager {
       try {
         QueryParamsMap qm = req.queryMap();
         String input = qm.value("userInput");
-        List<Track> results = SpotifyCommunicator.searchTracks(input);
+        List<Track> results = SpotifyCommunicator.searchTracks(input, true);
         List<String> names = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         for (Track t : results) {
