@@ -87,7 +87,7 @@ public abstract class Playlist {
     // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
     // get the spotify id
     String id = SpotifyCommunicator.createPlaylist(user.getSpotifyId(),
-        "testTitle");
+        "testTitle", true);
     return id;
   }
 

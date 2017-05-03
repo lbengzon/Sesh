@@ -89,7 +89,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
     // sort that requsts the same way that the songs in the spotify playlists
     // are
     List<Song> songs = SpotifyCommunicator
-        .getPlaylistTracks(host.getSpotifyId(), this.spotifyId);
+        .getPlaylistTracks(host.getSpotifyId(), this.spotifyId, true);
     System.out.println("Songs from spotify = " + songs);
     Map<Song, Request> map = playlistBean.getQueuedRequests();
     for (Song s : songs) {
@@ -103,7 +103,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   @Override
   public Song getCurrentSong() {
     return SpotifyCommunicator.getCurrentSong(host.getSpotifyId(),
-        this.spotifyId);
+        this.spotifyId, true);
   }
 
   @Override
@@ -121,7 +121,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
         return null;
       }
       SpotifyCommunicator.removeTrack(host.getSpotifyId(), this.spotifyId,
-          request);
+          request, true);
       DbHandler.moveSongRequestOutOfQueue(request);
       return playlistBean.removeSong(requestId);
     } catch (SQLException e) {
@@ -154,8 +154,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
     }
     try {
 
-      SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId,
-          request);
+      SpotifyCommunicator.addTrack(host.getSpotifyId(), this.spotifyId, request,
+          true);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
 
@@ -177,7 +177,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
       // TODO ADD API REQUEST HERE
 
       SpotifyCommunicator.addTrackInPosition(host.getSpotifyId(),
-          this.spotifyId, request, pos);
+          this.spotifyId, request, pos, true);
       DbHandler.moveSongRequestToQueue(request);
     } catch (SQLException e) {
 
@@ -189,7 +189,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   @Override
   public void reorderPlaylist(int rangeStart, int insertBefore) {
     SpotifyCommunicator.reorderPlaylist(host.getSpotifyId(), this.spotifyId,
-        rangeStart, insertBefore);
+        rangeStart, insertBefore, true);
   }
 
   @Override

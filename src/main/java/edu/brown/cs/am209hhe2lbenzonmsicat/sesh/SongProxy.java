@@ -9,6 +9,7 @@ import com.wrapper.spotify.models.Track;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ * 
  * @author leandro
  */
 public class SongProxy extends Song implements Proxy {
@@ -18,6 +19,7 @@ public class SongProxy extends Song implements Proxy {
 
   /**
    * Constructor.
+   * 
    * @param spotifyId
    *          - spotify id
    */
@@ -42,7 +44,7 @@ public class SongProxy extends Song implements Proxy {
     }
     try {
       // TODO songBean = some api call here
-      Track t = SpotifyCommunicator.getTrack(this.spotifyId);
+      Track t = SpotifyCommunicator.getTrack(this.spotifyId, true);
       String id = t.getId();
       String title = t.getName();
       String album = t.getAlbum().getName();

@@ -7,13 +7,17 @@ public class SpotifyCommunicatorTest {
   @Test
   public void testPlay() {
     SpotifyCommunicator.setUpTestApi();
-    SpotifyCommunicator.play("alimiraculous");
+    // spotify:user:alimiraculous:playlist:6SnHyWgrI3Jo2cmququpbN
+    System.out.println(SpotifyCommunicator
+        .getCurrentSong("alimiraculous", "6SnHyWgrI3Jo2cmququpbN", true)
+        .getTitle());
+    SpotifyCommunicator.play("alimiraculous", "6SnHyWgrI3Jo2cmququpbN", true);
   }
 
   @Test
   public void testNext() {
     SpotifyCommunicator.setUpTestApi();
-    SpotifyCommunicator.nextSong("alimiraculous");
+    SpotifyCommunicator.nextSong("alimiraculous", true);
   }
 
 }
