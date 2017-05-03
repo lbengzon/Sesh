@@ -17,6 +17,7 @@ import com.google.gson.JsonElement;
 
 /**
  * Models a party.
+ *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -35,6 +36,7 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -129,8 +131,11 @@ public class PartyBean extends Party {
   @Override
   public boolean removeFromPlaylist(String requestId) {
     assert isActive() == true;
+
     Request req = playlist.removeSong(requestId);
+
     if (req != null) {
+
       requestIdToRequest.put(req.getId(), req);
       userToNumApprovedRequests.remove(req.getUserRequestedBy());
       return true;
@@ -152,6 +157,7 @@ public class PartyBean extends Party {
         return newRequest;
       }
     } catch (SQLException e) {
+      e.printStackTrace();
       throw new RuntimeException(e.getMessage());
     }
     throw new IllegalArgumentException(
@@ -268,6 +274,7 @@ public class PartyBean extends Party {
   @Override
   public JsonElement getPlaylistQueueAsJson() {
     Map<String, Object> requestsMap = new HashMap<>();
+    List<Request> songs = playlist.getSongs();
     for (Request r : playlist.getSongs()) {
       requestsMap.put(r.getId(), r.toMap());
     }

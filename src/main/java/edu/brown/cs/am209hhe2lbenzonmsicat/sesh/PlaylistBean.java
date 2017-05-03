@@ -90,7 +90,8 @@ public class PlaylistBean extends Playlist {
   @Override
   public Request removeSong(String requestId) {
     Request toRemove = requestIdToRequest.remove(requestId);
-    return queuedRequests.remove(toRemove.getSong());
+    Request alsoToRemove = queuedRequests.remove(toRemove.getSong());
+    return alsoToRemove;
   }
 
   @Override
