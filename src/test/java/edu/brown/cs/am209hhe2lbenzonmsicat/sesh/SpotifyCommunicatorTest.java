@@ -5,8 +5,15 @@ import org.junit.Test;
 public class SpotifyCommunicatorTest {
 
   @Test
-  public void test() {
-    SpotifyCommunicator spot = new SpotifyCommunicator();
+  public void testPlay() {
+    SpotifyCommunicator.setUpTestApi();
+    SpotifyCommunicator.play("alimiraculous");
+  }
+
+  @Test
+  public void testNext() {
+    SpotifyCommunicator.setUpTestApi();
+    SpotifyCommunicator.nextSong("alimiraculous");
   }
 
 }
