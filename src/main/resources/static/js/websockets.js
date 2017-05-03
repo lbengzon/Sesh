@@ -62,8 +62,8 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
           console.log("adding new request");
           appendToRequests($requests, data);
-          vote();
           $requests.sortable("refresh");
+          vote();
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
@@ -77,17 +77,20 @@ function setupWebsockets() {
             }
           }
 
-          vote();
           break;
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
-          $playlist.empty();
-          //TODO reload the entire playlist list
+          console.log("update rearrange playlist");
+
+          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
-          $playlist.empty();
-          $requests.empty();
+          console.log("update after request transfer");
+
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
+          clearAndPopulateRequests(data.payload.party.requestList, $requests);
+
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
@@ -100,18 +103,9 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
           console.log("updating whole party");
-          const playlist = data.payload.party.playlistQueue;
-          const requests = data.payload.party.requests;
 
-          clearAndPopulatePlaylist(playlist, $playlist);
-          clearAndPopulateRequests(requests, $requests);
-
-          // $requests.sortable({
-          //   connectWith: "#playlist-list",
-          //   receive: function(event, ui) {
-          //     console.log("position: " + ui.item.index());
-          //   }
-          // }).disableSelection();
+          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
+          clearAndPopulateRequests(data.payload.party.requests, $requests);
 
           $player.attr("src", data.payload.party.playlistUrl);
           break;
@@ -163,16 +157,20 @@ function appendToPlaylist($playlist, data) {
 }
 
 function clearAndPopulateRequests(requests, $requests){
+  $requests.empty();
   for (var key in requests) {
     if (requests.hasOwnProperty(key)) {
       console.log("populating request");
       $requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
     }
   }
+
+  vote();
 }
 
 
 function clearAndPopulatePlaylist(playlist, $playlist){
+  $playlist.empty();
   for (var key in playlist) {
     console.log("populating playlist");
     if (playlist.hasOwnProperty(key)) {

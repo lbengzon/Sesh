@@ -59,8 +59,8 @@ $(document).ready(() => {
     const $results = $(".searchResults");
     const $playlist = $("#tabContentPlaylist ul");
 
-    var startPlaylistIndex;
-    var startList;
+    let startPlaylistIndex;
+    let startList;
 
     $(".sortable").sortable({
         dropOnEmpty: true,
