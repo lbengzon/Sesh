@@ -26,7 +26,6 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
- *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -132,7 +131,6 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
-   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -202,7 +200,6 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
-   *
    * @param userId
    *          user id
    * @param playlistId
@@ -285,7 +282,6 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
-   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -299,14 +295,24 @@ public class SpotifyCommunicator {
   public static void reorderPlaylist(String userId, String playlistId,
       int rangeStart, int insertBefore) {
     Api api = userToApi.get(userId);
-    api.reorderTracksInPlaylist(userId, playlistId, rangeStart, insertBefore);
+    try {
+      api.reorderTracksInPlaylist(userId, playlistId, rangeStart, insertBefore)
+          .build().get();
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
 
   }
 
   public static void addTrackInPosition(String userId, String playlistId,
       List<String> uris, int pos) {
     Api api = userToApi.get(userId);
-    api.addTracksToPlaylist(userId, playlistId, uris).position(pos).build();
+    try {
+      api.addTracksToPlaylist(userId, playlistId, uris).position(pos).build()
+          .get();
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
 
   }
 
