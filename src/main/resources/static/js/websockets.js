@@ -77,28 +77,18 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
           console.log("updating request vote");
           clearAndPopulateRequests(data.payload.requestList, $requests);
-          // $requests.empty();
-          // const requestList = data.payload.requestList;
-
-          // for (var key in requestList) {
-          //   if (requestList.hasOwnProperty(key)) {
-          //     updateRequestVotes($requests, key, requestList);
-          //   }
-          // }
-
           break;
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           console.log("update rearrange playlist");
-          playlistFull = data.payload.playlist;
-          clearAndPopulatePlaylist($playlist);
+          //playlistFull = data.payload.playlist;
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
-          playlistFull = data.payload.playlist;
-          clearAndPopulatePlaylist($playlist);
-
+          //playlistFull = data.payload.playlist;
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           clearAndPopulateRequests(data.payload.requestList, $requests);
 
           break;
@@ -106,8 +96,8 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
           //playlistFull[data.payload.newRequest.id] = data.payload.newRequest;
-          playlistFull = data.payload.playlist;
-          clearAndPopulatePlaylist($playlist);
+          //playlistFull = data.payload.playlist;
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
 
           //appendToPlaylist($playlist, data.payload.newRequest);
 
@@ -117,8 +107,8 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
           console.log("updating whole party");
-          playlistFull = data.payload.party.playlist;
-          clearAndPopulatePlaylist($playlist);
+          //playlistFull = data.payload.party.playlist;
+          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
           $player.attr("src", data.payload.party.playlistUrl);
@@ -175,7 +165,7 @@ function appendToPlaylist($playlist, newRequest) {
 
 function clearAndPopulateRequests(requests, $requests){
   $requests.empty();
-  for (var key in requests) {
+  for (let key in requests) {
     if (requests.hasOwnProperty(key)) {
       console.log("populating request");
       updateRequestVotes($requests, key, requests);
@@ -187,19 +177,41 @@ function clearAndPopulateRequests(requests, $requests){
 }
 
 
-function clearAndPopulatePlaylist($playlist){
+function clearAndPopulatePlaylist(playlist, $playlist){
+  //console.log("clearing and populating playlist");
   $playlist.empty();
-  // startAddingSongs = false;
+  let startAddingSongs = false;
 
-  for (var key in playlistFull) {
-    if (playlistFull.hasOwnProperty(key)) {
-      console.log("request being looked at ", playlistFull[key]);
-      // if(currSongId === playlistFull[key].song.spotifyId){
+  for (let key in playlist) {
+    if (playlist.hasOwnProperty(key)) {
+      //let songId = playlist[key].requestId;
+      // console.log($("#" + requestId));
+      // console.log("current song id index: " + $("#"+currSongId).index());
+      // console.log("looking at song at index: " + $("#"+songId).index());
+      //if ($("#songId").index() < $("#currSongId").index() || currSongId === undefined) {
+        //console.log("appending to playlist");
+        appendToPlaylist($playlist, playlist[key]);
+        // console.log("looking at song of index: " + $playlist.find("#" + songId).index());
+        // console.log("current playing song is at index: " + $playlist.find("#" + currSongId).index());
+
+        // if ($playlist.find("#" + songId).index() < $playlist.find("#" + currSongId).index()) {
+
+        // }
+      // } else {
+      //   continue;
+      // }
+      
+      // if(currSongId === playlist[key].song.spotifyId){
+      //   console.log("currSongId matches request being looked at --- will re-populate playlist shortly");
       //   startAddingSongs = true;
+      // }
+      // if (startAddingSongs || currSongId === undefined) {
+      //   console.log("re-adding songs");
+      //   appendToPlaylist($playlist, playlist[key]);
       // }
       // if(startAddingSongs === true || showPlayed === true || currSongId === undefined){
         // console.log("Added that request");
-        appendToPlaylist($playlist, playlistFull[key]);
+        
       // }
     }
   }

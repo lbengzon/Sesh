@@ -3,7 +3,7 @@
 	let userId;
 	let partyId;
 	let currSongId;
-	let playlistFull;
+	// let playlistFull;
 	let showPlayed = false;
 </script>
 <script src="/js/createParty.js"></script>
