@@ -62,40 +62,42 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
           console.log("adding new request");
           appendToRequests($requests, data);
-          $requests.sortable("refresh");
           vote();
+
+          $requests.sortable("refresh");
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
           console.log("updating request vote");
-          $requests.empty();
-          const requestList = data.payload.requestList;
+          clearAndPopulateRequests(data.payload.requestList, $requests);
+          // $requests.empty();
+          // const requestList = data.payload.requestList;
 
-          for (var key in requestList) {
-            if (requestList.hasOwnProperty(key)) {
-              updateRequestVotes($requests, key, requestList);
-            }
-          }
+          // for (var key in requestList) {
+          //   if (requestList.hasOwnProperty(key)) {
+          //     updateRequestVotes($requests, key, requestList);
+          //   }
+          // }
 
           break;
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           console.log("update rearrange playlist");
 
-          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
 
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
-          clearAndPopulateRequests(data.payload.party.requestList, $requests);
+          clearAndPopulateRequests(data.payload.requestList, $requests);
 
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
-          appendToPlaylist($playlist, data);
+          appendToPlaylist($playlist, data.payload.newRequest);
 
           $playlist.sortable("refresh");
           $player.attr("src", $player.attr("src"));
@@ -147,13 +149,14 @@ function updateRequestVotes($requests, key, requestList) {
     key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
 }
 
-function appendToPlaylist($playlist, data) {
-  $playlist.append("<li " + "id=\"" + data.payload.newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
-    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + data.payload.newRequest.song.title + 
-    " - " + data.payload.newRequest.song.artist + " " + data.payload.newRequest.score + 
-    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + 
+function appendToPlaylist($playlist, newRequest) {
+  console.log(newRequest);
+  $playlist.append("<li " + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
+    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
+    " - " + newRequest.song.artist + " " + newRequest.score + 
+    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + newRequest.requestId + 
     "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
-    data.payload.newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+    newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
 }
 
 function clearAndPopulateRequests(requests, $requests){
@@ -161,7 +164,8 @@ function clearAndPopulateRequests(requests, $requests){
   for (var key in requests) {
     if (requests.hasOwnProperty(key)) {
       console.log("populating request");
-      $requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
+      updateRequestVotes($requests, key, requests);
+      //$requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
     }
   }
 
@@ -171,10 +175,13 @@ function clearAndPopulateRequests(requests, $requests){
 
 function clearAndPopulatePlaylist(playlist, $playlist){
   $playlist.empty();
+  console.log("playlist: " + playlist);
   for (var key in playlist) {
     console.log("populating playlist");
     if (playlist.hasOwnProperty(key)) {
-      $playlist.append("<li " + "id=\"" + key + "\">" + playlist[key].song.title + " - " + playlist[key].song.artist + " " + playlist[key].score + "</li>");
+      console.log("playlist key: " + playlist[key]);
+      appendToPlaylist($playlist, playlist[key]);
+      //$playlist.append("<li " + "id=\"" + key + "\">" + playlist[key].song.title + " - " + playlist[key].song.artist + " " + playlist[key].score + "</li>");
     }
   }
 }
@@ -259,8 +266,8 @@ function reorderPlaylistTrack(partyId, userId, requestId, oldIndex, newIndex){
       userId: userId,
       partyId: partyId,
       requestId: requestId,
-      oldIndex: oldIndex,
-      newIndex: newIndex
+      startIndex: oldIndex,
+      endIndex: newIndex
     }
   }
   conn.send(JSON.stringify(message));

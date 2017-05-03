@@ -40,7 +40,6 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
 }
 
 $(document).ready(() => {
-    setupWebsockets();
 
     //dj tab content
     const $tabContentPlaylist = $(".tabContentPlaylist");
@@ -115,6 +114,8 @@ $(document).ready(() => {
         }
     }).disableSelection();
 
+    setupWebsockets();
+
     //search for songs
     $userInput.keyup(function() {
         const postParameters = {userInput: $userInput.val()};
@@ -130,6 +131,17 @@ $(document).ready(() => {
             }
         });
     });
+
+    function getCurrentSong() {
+        const postParameters = {partyId: partyId};
+        $.post("/currentSong", postParameters, responseJSON => {
+            const responseObject = JSON.parse(responseJSON);
+            const currSong = responseObject.currentSong;
+            console.log("curr song: " + currSong.id);
+        });
+    }
+
+    setInterval(getCurrentSong, 15000);
 
     $results.on("click", event => {
         $listItems = $("li");
