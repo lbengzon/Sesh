@@ -162,6 +162,7 @@ public class PartyWebsocket {
     try {
       Request newRequest = party.requestSong(Song.of(songId), user);
       boolean success = party.approveSong(newRequest.getId());
+
       if (newRequest == null || success == false) {
         throw new RuntimeException("ERROR: could not add song");
       }
@@ -240,7 +241,6 @@ public class PartyWebsocket {
       Party party, Session session, TRANSFER_TYPE transferType)
       throws IOException {
     String requestId = payload.get("requestId").getAsString();
-
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
     try {
@@ -251,6 +251,7 @@ public class PartyWebsocket {
       } else {
         assert transferType.equals(TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
         success = party.removeFromPlaylist(requestId);
+
       }
       if (success == false) {
         throw new RuntimeException("ERROR: Cannot vote on request");
@@ -265,10 +266,12 @@ public class PartyWebsocket {
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
         sesh.getRemote().sendString(updateMessage.toString());
       }
+
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
       session.getRemote().sendString(updateMessage.toString());
+      e.printStackTrace();
     }
   }
 }
