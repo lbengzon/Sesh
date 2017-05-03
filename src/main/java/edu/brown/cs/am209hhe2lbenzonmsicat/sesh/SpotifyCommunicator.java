@@ -231,7 +231,7 @@ public class SpotifyCommunicator {
   }
 
   public static List<Track> searchTracks(String query) {
-    Api api = (Api) apiPool.checkOut();
+    Api api = publicApi;
     List<Track> tracks = new ArrayList<Track>();
     try {
       tracks = api.searchTracks(query).build().get().getItems();
@@ -243,7 +243,7 @@ public class SpotifyCommunicator {
   }
 
   public static Track getTrack(String id) {
-    Api api = (Api) apiPool.checkOut();
+    Api api = publicApi;
     try {
       Track t = api.getTrack(id).build().get();
       return t;
