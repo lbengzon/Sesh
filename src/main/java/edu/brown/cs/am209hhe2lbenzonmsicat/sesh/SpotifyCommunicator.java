@@ -40,28 +40,14 @@ public class SpotifyCommunicator {
   private static ConcurrentHashMap<String, Api> userToApi = new ConcurrentHashMap<String, Api>();
   private static ApiPool apiPool;
 
-  private static Api publicApi = Api.builder()
-      .clientId(Constants.LEANDRO_CLIENT_ID)
-      .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-      .redirectURI(Constants.REDIRECT_URL).build();
-
   /**
    * This is the constructor which creates our map.
    */
   public SpotifyCommunicator() {
-    apiPool = new ApiPool();
   }
 
-  // TODO: Fix this so it works with the Api Pool!
   public static void setUpPublicApi() {
-    publicApi.setRefreshToken(Constants.SESH_REFRESH);
-    String aT;
-    try {
-      aT = publicApi.refreshAccessToken().build().get().getAccessToken();
-      publicApi.setAccessToken(aT);
-    } catch (IOException | WebApiException e) {
-      // ERROR
-    }
+    apiPool = new ApiPool();
   }
 
   public static void setUpTestApi() {
@@ -69,6 +55,7 @@ public class SpotifyCommunicator {
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
     testApi.setRefreshToken(Constants.SESH_REFRESH);
+    apiPool = new ApiPool();
     String aT2;
     try {
       aT2 = testApi.refreshAccessToken().build().get().getAccessToken();
@@ -231,10 +218,11 @@ public class SpotifyCommunicator {
   }
 
   public static List<Track> searchTracks(String query) {
-    Api api = publicApi;
+    Api api = apiPool.checkOut();
     List<Track> tracks = new ArrayList<Track>();
     try {
       tracks = api.searchTracks(query).build().get().getItems();
+      apiPool.checkIn(api);
       return tracks;
     } catch (IOException | WebApiException e) {
       throw new RuntimeException(e.getMessage());
@@ -243,9 +231,10 @@ public class SpotifyCommunicator {
   }
 
   public static Track getTrack(String id) {
-    Api api = publicApi;
+    Api api = apiPool.checkOut();
     try {
       Track t = api.getTrack(id).build().get();
+      apiPool.checkIn(api);
       return t;
     } catch (IOException | WebApiException e) {
       throw new RuntimeException(e.getMessage());
