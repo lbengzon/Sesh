@@ -398,4 +398,64 @@ public class PartyProxy extends Party implements Proxy {
     }
     return partyBean.getSongBeingCurrentlyPlayed();
   }
+
+  @Override
+  public boolean playPlaylist(int index) {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.playPlaylist(index);
+  }
+
+  @Override
+  public boolean resume() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.resume();
+  }
+
+  @Override
+  public boolean pause() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.pause();
+  }
+
+  @Override
+  public boolean nextSong() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.nextSong();
+  }
+
+  @Override
+  public boolean prevSong() {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.prevSong();
+  }
 }
