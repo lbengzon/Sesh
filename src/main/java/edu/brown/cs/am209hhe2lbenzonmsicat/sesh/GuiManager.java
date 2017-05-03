@@ -298,7 +298,10 @@ public class GuiManager {
         Song curr = p.getSongBeingCurrentlyPlayed();
         Map<String, Object> variables;
         if (curr != null) {
-          variables = ImmutableMap.of("currentSong", curr.getSpotifyId());
+          String requestId = edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request
+              .getId(p.getPartyId(), curr.getSpotifyId());
+          System.out.println("CURR SONG: " + requestId);
+          variables = ImmutableMap.of("currentSong", requestId);
         } else {
           variables = ImmutableMap.of("currentSong", null);
         }

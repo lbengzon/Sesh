@@ -151,20 +151,33 @@ $(document).ready(() => {
         });
     });
 
-    // function getCurrentSong() {
-    //     const postParameters = {partyId: partyId};
-    //     $.post("/currentSong", postParameters, responseJSON => {
-    //         const responseObject = JSON.parse(responseJSON);
-    //         if (currSongId !== responseObject.currentSong) {
-    //             console.log("Reloading playlist cause current song changed");
-    //             currSongId = responseObject.currentSong;
-    //             clearAndPopulatePlaylist($playlist);
-    //         }
-            
-    //     });
-    // }
+    function getCurrentSong() {
+        const postParameters = {partyId: partyId};
+        $.post("/currentSong", postParameters, responseJSON => {
+            const responseObject = JSON.parse(responseJSON);
+            if (currSongId !== responseObject.currentSong) {
+                //console.log("Reloading playlist: the current song changed");
+                currSongId = responseObject.currentSong;
+            }
 
-    //setInterval(getCurrentSong, 7000);
+            for (let i = 0; i < $("#ulPlaylist li").length; i++) {
+                console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
+                if ($("#ulPlaylist").find("#" + currSongId).index() > i) {
+                    $("#ulPlaylist li").eq(i).hide();
+                }
+            }
+        });
+    }
+
+    setInterval(getCurrentSong, 500);
+
+    $("#ulPlaylist").dblclick(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter('.selected');
+        alert("you double clicked on song with id " + $selected.index());
+    });
+
+
 
     $results.on("click", event => {
         $listItems = $("li");
