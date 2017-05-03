@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -26,6 +25,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -134,6 +134,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -203,6 +204,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
+   *
    * @param userId
    *          user id
    * @param playlistId
@@ -289,6 +291,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
+   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -327,6 +330,9 @@ public class SpotifyCommunicator {
     Api api = userToApi.get(userId);
     Song s = null;
     try {
+      System.out.println("===========================================");
+      System.out.println("Api " + api);
+
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
       api.setAccessToken(accessToken);
@@ -349,9 +355,8 @@ public class SpotifyCommunicator {
       in.close();
       JsonParser p = new JsonParser();
       JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
-
       JsonElement context = p.parse(jsonObject.get("context").toString());
-      JsonArray item = jsonObject.getAsJsonArray();
+      JsonObject item = jsonObject.getAsJsonObject();
 
       // String type = context.get("type").toString();
       // if (!type.equals("playlist")) {
@@ -364,7 +369,8 @@ public class SpotifyCommunicator {
       // if (!uri.equals(sb.toString())) {
       // return null;
       // }
-      String spotifyId = item.get(2).getAsString();
+      String spotifyId = item.get("item").getAsJsonObject().get("id")
+          .getAsString();
       s = Song.of(spotifyId);
       return s;
     } catch (IOException | WebApiException e) {

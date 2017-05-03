@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -168,7 +169,7 @@ public class PartyBean extends Party {
   public List<Request> getRequestedSongsOrderedByRank() {
     RequestComparator comp = new RequestComparator();
     List<Request> rankedRequests = new ArrayList<>(requestIdToRequest.values());
-    Collections.sort(rankedRequests, comp);
+    Collections.sort(rankedRequests, comp.reversed());
     return rankedRequests;
   }
 
@@ -264,7 +265,7 @@ public class PartyBean extends Party {
 
   @Override
   public JsonElement getRequestsAsJson() {
-    Map<String, Object> requestsMap = new HashMap<>();
+    Map<String, Object> requestsMap = new LinkedHashMap<>();
     for (Request r : getRequestedSongsOrderedByRank()) {
       requestsMap.put(r.getId(), r.toMap());
     }
@@ -273,9 +274,10 @@ public class PartyBean extends Party {
 
   @Override
   public JsonElement getPlaylistQueueAsJson() {
-    Map<String, Object> requestsMap = new HashMap<>();
+    System.out.println("inside party bean queue as JSON");
+    Map<String, Object> requestsMap = new LinkedHashMap<>();
     List<Request> songs = playlist.getSongs();
-    for (Request r : playlist.getSongs()) {
+    for (Request r : songs) {
       requestsMap.put(r.getId(), r.toMap());
     }
     return GSON.toJsonTree(requestsMap);
@@ -319,7 +321,7 @@ public class PartyBean extends Party {
     // TODO Auto-generated method stub
     assert isActive() == true;
     playlist.reorderPlaylist(startIndex, endIndex);
-    return false;
+    return true;
   }
 
   @Override
