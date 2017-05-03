@@ -164,12 +164,8 @@ public abstract class Party implements Jsonable {
   public abstract Song getSongBeingCurrentlyPlayed();
 
   /**
-   * Remove from playlist. <<<<<<< HEAD ======= >>>>>>>
-   * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 =======
+   * Remove from playlist.
    *
-   * >>>>>>> fixed bug related to moving request from playlist to request list
-   * 
    * @param req
    *          - request
    * @return boolean if successful.
@@ -177,11 +173,7 @@ public abstract class Party implements Jsonable {
   public abstract boolean removeFromPlaylist(String requestId);
 
   /**
-   * Request song. <<<<<<< HEAD ======= >>>>>>>
-   * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 =======
-   *
-   * >>>>>>> fixed bug related to moving request from playlist to request list
+   * Request song.
    * 
    * @param song
    *          - request
