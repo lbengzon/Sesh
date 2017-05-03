@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Models an arbitrary Sesh user.
+ *
  * @author Matt
  */
 public class UserBean extends User {
@@ -15,6 +16,7 @@ public class UserBean extends User {
 
   /**
    * This is the constructor for the User class.
+   *
    * @param spotifyId
    *          - user id
    * @param email
@@ -25,14 +27,25 @@ public class UserBean extends User {
   public UserBean(String spotifyId, String email, String name) {
     this.spotifyId = spotifyId;
     this.email = email;
-    String[] names = name.split(" ");
-    this.firstName = names[0];
-    this.lastName = names[1];
+
+    if (name != null) {
+      String[] names = name.split(" ");
+      this.firstName = names[0];
+      if (names.length > 1) {
+        this.lastName = names[1];
+      } else {
+        this.lastName = "";
+      }
+    } else {
+      this.firstName = spotifyId;
+      this.lastName = "";
+    }
 
   }
 
   /**
    * This method gets the email of the user.
+   *
    * @return the user's email
    */
   @Override
@@ -42,6 +55,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the id of the user.
+   *
    * @return the user's id
    */
   @Override
@@ -51,6 +65,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the user's first name.
+   *
    * @return user's first name.
    */
   @Override
@@ -60,6 +75,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the user's last name.
+   *
    * @return user's last name.
    */
   @Override
@@ -69,6 +85,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the user's full name.
+   *
    * @return the user's full name.
    */
   @Override

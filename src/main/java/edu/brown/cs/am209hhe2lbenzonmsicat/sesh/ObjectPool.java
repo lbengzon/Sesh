@@ -37,7 +37,7 @@ public abstract class ObjectPool<T> {
    *          - object
    * @return - boolean
    */
-  protected abstract boolean validate(Object o);
+  protected abstract boolean validate(T o);
 
   /**
    * Expires an object.
@@ -45,18 +45,17 @@ public abstract class ObjectPool<T> {
    * @param o
    *          - object
    */
-  protected abstract void expire(Object o);
+  protected abstract void expire(T o);
 
   /**
    * Checks an object out of the pool.
    *
    * @return - object
    */
-  @SuppressWarnings("unchecked")
-  synchronized Object checkOut() {
+  synchronized T checkOut() {
     long now = System.currentTimeMillis();
     if (!unlocked.isEmpty()) {
-      for (Object o : unlocked.keySet()) {
+      for (T o : unlocked.keySet()) {
         if (now - (long) unlocked.get(o) > expirationTime) {
           /* object has expired */
           unlocked.remove(o);
@@ -70,15 +69,16 @@ public abstract class ObjectPool<T> {
           } else {
             /* object is valid */
             unlocked.remove(o);
-            locked.put((T) o, new Long(now));
+            locked.put(o, new Long(now));
+            System.out.println("ping!");
             return o;
           }
 
         }
       }
     }
-    Object o = create();
-    locked.put((T) o, new Long(now));
+    T o = create();
+    locked.put(o, new Long(now));
     return o;
   }
 
@@ -88,9 +88,8 @@ public abstract class ObjectPool<T> {
    * @param o
    *          - object
    */
-  @SuppressWarnings("unchecked")
-  synchronized void checkIn(Object o) {
+  synchronized void checkIn(T o) {
     locked.remove(o);
-    unlocked.put((T) o, new Long(System.currentTimeMillis()));
+    unlocked.put(o, new Long(System.currentTimeMillis()));
   }
 }

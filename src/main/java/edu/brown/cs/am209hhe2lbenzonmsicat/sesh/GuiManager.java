@@ -22,7 +22,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- * 
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +31,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -140,7 +140,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -193,7 +193,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -247,7 +247,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
+   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -285,7 +285,7 @@ public class GuiManager {
   /**
    * Handles returning the current song being played at the party. Will return
    * null if no current song is playing.
-   * 
+   *
    * @author HE23
    */
   private static class CurrentSongHandler implements Route {
@@ -294,13 +294,11 @@ public class GuiManager {
       try {
         QueryParamsMap qm = req.queryMap();
         int partyId = Integer.parseInt(qm.value("partyId"));
-        System.out.println("party id: " + partyId);
         Party p = Party.of(partyId);
-        System.out.println("PARTY!!!: " + p);
         Song curr = p.getSongBeingCurrentlyPlayed();
         Map<String, Object> variables;
         if (curr != null) {
-          variables = ImmutableMap.of("currentSong", curr.toMap());
+          variables = ImmutableMap.of("currentSong", curr.getSpotifyId());
         } else {
           variables = ImmutableMap.of("currentSong", null);
         }

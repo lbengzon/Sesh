@@ -103,7 +103,7 @@ public final class DbHandler {
 
   /**
    * Clear all tables.
-   * 
+   *
    * @throws SQLException
    *           - exception
    */
@@ -227,8 +227,11 @@ public final class DbHandler {
 
       prep.setString(1, userId);
       prep.setString(2, email);
+      if (name == null) {
+        name = userId;
+        prep.setString(3, name);
+      }
       prep.setString(3, name);
-
       int success = prep.executeUpdate();
       if (success >= 1) {
         return User.of(userId, email, name);
@@ -341,7 +344,7 @@ public final class DbHandler {
 
   /**
    * Add host to database.
-   * 
+   *
    * @param partyId
    *          - party id
    * @param host
@@ -806,8 +809,8 @@ public final class DbHandler {
       prep.setString(1, spotifyId);
 
       try (ResultSet rs = prep.executeQuery()) {
-        List<User> upvotes = new ArrayList<>();
-        List<User> downvotes = new ArrayList<>();
+        // List<User> upvotes = new ArrayList<>();
+        // List<User> downvotes = new ArrayList<>();
         if (rs.next()) {
           String email = rs.getString(2);
           String name = rs.getString(3);
