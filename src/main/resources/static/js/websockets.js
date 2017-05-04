@@ -20,9 +20,12 @@ PAUSE_SONG: 17,
 NEXT_SONG: 18,
 PREVIOUS_SONG: 19,
 UPDATE_PLAYER: 20,
+SONG_MOVED_TO_NEXT: 21,
+UPDATE_NEXT_CURR_SONG_REQUEST: 22
 };
 
 let conn;
+let timeoutCheckForNewCurrSong;
 let myId = -1;
 
 function hoverOn(x) {
@@ -114,8 +117,22 @@ function setupWebsockets() {
           $player.attr("src", data.payload.party.playlistUrl);
           break;
         case MESSAGE_TYPE.UPDATE_PLAYER:
-          console.log("Have not implemented the update player message in websockets.js");
+          console.log("You need to set the new current song")
+          hideSongsNotPlaying()
           break;
+        case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
+          console.log("You need to set the new current song");
+          if(timeoutCheckForNewCurrSong != undefined && timeoutCheckForNewCurrSong != null){
+            clearTimeout(timeoutCheckForNewCurrSong)
+          }
+          console.log("You need to set timeout value")
+          timeoutCheckForNewCurrSong = setTimeout(updatePartyCurrentSong, 1000)
+          hideSongsNotPlaying();
+
+          //TODO: you need to check how much time is left in the current song and use 
+          //set timeout to call the function updatePartyCurrentSong that many seconds later.
+          break;
+
       }
     } else{
       console.log("SERVER SIDE WEBSOCKET ERROR MESSAGE: " + data.message);
@@ -123,6 +140,17 @@ function setupWebsockets() {
     
   };
 }
+
+function hideSongsNotPlaying(){
+  for (let i = 0; i < $("#ulPlaylist li").length; i++) {
+      console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
+      if ($("#ulPlaylist").find("#" + currSongId).index() > i) {
+          $("#ulPlaylist li").eq(i).hide();
+      }
+  }
+}
+
+
 
 function vote() {
   $(".upvote").click(function(x) {
@@ -364,6 +392,17 @@ function nextSong (partyId, userId) {
 function prevSong (partyId, userId) {
   let message = {
     type: MESSAGE_TYPE.PREVIOUS_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function updatePartyCurrentSong (partyId, userId) {
+  let message = {
+    type: MESSAGE_TYPE.SONG_MOVED_TO_NEXT, 
     payload:{
       userId: userId,
       partyId: partyId
