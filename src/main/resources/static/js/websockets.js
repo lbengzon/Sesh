@@ -35,11 +35,6 @@ function hoverOff(x) {
   x.classList.remove('selected');
 }
 
-function getSongPlaying(){
-    const player = $("#playback")[0];
-    console.log(player)
-
-}
 
 // Setup the WebSocket connection for live updating of scores.
 function setupWebsockets() {
@@ -87,13 +82,11 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           console.log("update rearrange playlist");
-          //playlistFull = data.payload.playlist;
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
-          //playlistFull = data.payload.playlist;
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           clearAndPopulateRequests(data.payload.requestList, $requests);
 
@@ -101,11 +94,8 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
-          //playlistFull[data.payload.newRequest.id] = data.payload.newRequest;
-          //playlistFull = data.payload.playlist;
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
 
-          //appendToPlaylist($playlist, data.payload.newRequest);
 
           $playlist.sortable("refresh");
           $player.attr("src", $player.attr("src"));
@@ -113,7 +103,6 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
           console.log("updating whole party");
-          //playlistFull = data.payload.party.playlist;
           clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
@@ -145,25 +134,38 @@ function updatePlayer(data){
       $("#albumTitle").html(data.payload.albumTitle)
       $("#artistName").html(data.payload.artistName)
   }
-  hideSongsNotPlaying()
+  console.log("isplaying", data.payload.isPlaying)
+  if(data.payload.isPlaying === true){
+    $("#playButton").hide();
+    $("#pauseButton").show();
+  } else{
+    $("#playButton").show();
+    $("#pauseButton").hide();
+  }
+  hideSongsNotPlaying();
 
-
-  $("#progressbar").attr("value", data.payload.timePassed)
+  timePassed = data.payload.timePassed;
+  $("#progressbar").attr("value", data.payload.timePassed);
 }
 
 function hideSongsNotPlaying(){
-  console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index())
+  currSongIndex = getCurrentSongIndex()
+  console.log("current playing song is at index: " + currSongIndex)
   for (let i = 0; i < $("#ulPlaylist li").length; i++) {
       $("#ulPlaylist li").eq(i).show();
-      if ($("#ulPlaylist").find("#" + currSongId).index() >= i) {
+      if (currSongIndex >= i) {
           console.log("hiding song", i)
           $("#ulPlaylist li").eq(i).hide();
       }
   }
 }
 
-function getIndexOfCurrentSongPlaying(){
-  
+function getCurrentSongIndex(){
+  index = $("#ulPlaylist").find("#" + currSongId).index();
+  if(index < 0){
+    return 0;
+  }
+  return index;
 }
 
 function vote() {
@@ -196,13 +198,22 @@ function updateRequestVotes($requests, key, requestList) {
     key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
 }
 
-function appendToPlaylist($playlist, newRequest) {
-  $playlist.append("<li " + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
+function appendToPlaylist($playlist, newRequest, startShowing) {
+  if (!startShowing) {
+    $playlist.append("<li style=\"display:none;\"" + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
     " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
     " - " + newRequest.song.artist + " " + newRequest.score + 
     "<div id=\"vote\"> <button class=\"upvote\" id=\"" + newRequest.requestId + 
     "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
     newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+  } else {
+    $playlist.append("<li " + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
+    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
+    " - " + newRequest.song.artist + " " + newRequest.score + 
+    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + newRequest.requestId + 
+    "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
+    newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+  }
 }
 
 function clearAndPopulateRequests(requests, $requests){
@@ -211,7 +222,6 @@ function clearAndPopulateRequests(requests, $requests){
     if (requests.hasOwnProperty(key)) {
       console.log("populating request");
       updateRequestVotes($requests, key, requests);
-      //$requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
     }
   }
 
@@ -220,44 +230,24 @@ function clearAndPopulateRequests(requests, $requests){
 
 
 function clearAndPopulatePlaylist(playlist, $playlist){
-  //console.log("clearing and populating playlist");
-  $playlist.empty();
-  let startAddingSongs = false;
+  console.log("curr song id: " + currSongId);
+  let startShowing = false
 
+  $playlist.empty();
   for (let key in playlist) {
     if (playlist.hasOwnProperty(key)) {
-      //let songId = playlist[key].requestId;
-      // console.log($("#" + requestId));
-      // console.log("current song id index: " + $("#"+currSongId).index());
-      // console.log("looking at song at index: " + $("#"+songId).index());
-      //if ($("#songId").index() < $("#currSongId").index() || currSongId === undefined) {
-        //console.log("appending to playlist");
-        appendToPlaylist($playlist, playlist[key]);
-        // console.log("looking at song of index: " + $playlist.find("#" + songId).index());
-        // console.log("current playing song is at index: " + $playlist.find("#" + currSongId).index());
-
-        // if ($playlist.find("#" + songId).index() < $playlist.find("#" + currSongId).index()) {
-
-        // }
-      // } else {
-      //   continue;
-      // }
-      
-      // if(currSongId === playlist[key].song.spotifyId){
-      //   console.log("currSongId matches request being looked at --- will re-populate playlist shortly");
-      //   startAddingSongs = true;
-      // }
-      // if (startAddingSongs || currSongId === undefined) {
-      //   console.log("re-adding songs");
-      //   appendToPlaylist($playlist, playlist[key]);
-      // }
-      // if(startAddingSongs === true || showPlayed === true || currSongId === undefined){
-        // console.log("Added that request");
-        
-      // }
+        appendToPlaylist($playlist, playlist[key], startShowing);
+        if(key === currSongId){
+          startShowing = true;
+        }//If a song is not playing, and you just added the first song. Play that song 
+        else if ((currSongId === -1 || currSongId === undefined) && startShowing == false){
+          startShowing = true;
+          playPlaylist(partyId, userId)
+          pauseSong(partyId, userId);
+        }
+      }   
     }
   }
-}
 
 function setPartyId (partyId, userId) {
   console.log("send party id");
@@ -371,7 +361,12 @@ function addToPlaylist(partyId, userId, songId) {
 // }
 
 function playPlaylist(partyId, userId, index){
-  console.log("playplalist sent ", partyId, userId, index)
+  console.log("playplalist sent ", partyId, userId)
+  //IF you should play the current song (i.e it was paused) if you dont go into his if statement it means 
+  //the host double clicked on a song to play it.
+  if(index === undefined || index === null){
+      index = getCurrentSongIndex();
+  }
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
     payload:{
@@ -394,8 +389,9 @@ function pauseSong (partyId, userId) {
   conn.send(JSON.stringify(message));
 }
 
+
 function nextSong (partyId, userId) {
-  index = $("#ulPlaylist").find("#" + currSongId).index() + 1;
+  index = getCurrentSongIndex() + 1;
   //TODO add check to see if the index is greater than the current size of the list
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
@@ -409,7 +405,7 @@ function nextSong (partyId, userId) {
 }
 
 function prevSong (partyId, userId) {
-  index = $("#ulPlaylist").find("#" + currSongId).index() - 1;
+  index = getCurrentSongIndex() - 1;
   if(index < 0){
     return;
   }

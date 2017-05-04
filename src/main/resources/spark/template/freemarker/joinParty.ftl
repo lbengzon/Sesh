@@ -4,6 +4,7 @@
 	let partyId;
 	let currSongId;
 	let showPlayed = false;
+	let isPaused = true;
 </script>
 <script src="/js/joinParty.js"></script>
 <script>
@@ -15,7 +16,8 @@
 	<h4 id="artistName"></h4>
 	<h4 id="albumTitle"></h4>
 	<img id="songArt" height="168" width="168">
-	<button id="playPauseButton" class="playerButton" type="button">Play/Pause</button>
+	<button id="playButton" class="playerButton" type="button">Play</button>
+	<button id="pauseButton" class="playerButton" type="button" style="display: none">Pause</button>
 	<progress id="progressbar" style="width:60%"></progress>
 </div>
 <div id="titles">

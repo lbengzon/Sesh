@@ -62,7 +62,8 @@ $(document).ready(() => {
 
     //music player buttons
     const $prevButton = $("#prevButton");
-    const $playPauseButton = $("#playPauseButton");
+    const $playButton = $("#playButton");
+    const $pauseButton = $("#pauseButton");
     const $nextButton = $("#nextButton");
 
 
@@ -99,10 +100,8 @@ $(document).ready(() => {
         receive: function(event, ui) {
             //dropped into request list
             if (ui.item.parent().attr("id") === "ulRequest") {
-                console.log("moving song from playlist to request");
                 moveFromQueueToRequest(partyId, userId, ui.item.attr("id"));
             } else {
-                console.log("moving song from request to playlist");
                 moveRequestToQueue (partyId, userId, ui.item.attr("id"), ui.item.index());
             }
         },
@@ -110,9 +109,14 @@ $(document).ready(() => {
             if (ui.item.parent().attr("id") === "ulPlaylist" && startList === "ulPlaylist") {
                 console.log("reordering within playlist");
                 console.log("starting at: " + startPlaylistIndex);
-                console.log("ending at: " + ui.item.index());
+                endIndex = ui.item.index();
+                if(startPlaylistIndex < endIndex){
+                    endIndex = endIndex + 1
+                }
+                console.log("ending at: " + endIndex);
                 console.log("==========================");
-                reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, ui.item.index());
+
+                reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, endIndex);
             }
             // if (ui.item.parent().attr("id") === "ulPlaylist") {
             //     console.log("here!!!!");
@@ -166,7 +170,7 @@ $(document).ready(() => {
     $("#ulPlaylist").dblclick(function() {
         $listItems = $("li"); 
         $selected = $listItems.filter('.selected');
-        alert("you double clicked on song with id " + $selected.index());
+        playPlaylist(partyId, userId, $selected.index())
     });
 
     //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
@@ -174,19 +178,26 @@ $(document).ready(() => {
         return 1;
     }
 
-    function playPauseHandler() {
+    function playHandler() {
         //FILL IN
-        console.log("ping!");
         //TODO get the current index of the song and use that
-        playPlaylist(partyId, userId, 0)
+        playPlaylist(partyId, userId);
+        $playButton.hide();
+        $pauseButton.show();
+    }
+
+    function pauseHandler(){
+        pauseSong(partyId, userId);
+        $playButton.show();
+        $pauseButton.hide();
     }
 
     function previousSongHandler() {
-        prevSong(partyId, userId)
+        prevSong(partyId, userId);
     }
 
     function nextSongHandler() {
-        nextSong(partyId, userId)
+        nextSong(partyId, userId);
     }
 
     $results.on("click", event => {
@@ -215,7 +226,9 @@ $(document).ready(() => {
 
     $prevButton.click(previousSongHandler);
 
-    $playPauseButton.click(playPauseHandler);
+    $playButton.click(playHandler);
+
+    $pauseButton.click(pauseHandler);
 
     $nextButton.click(nextSongHandler);
 

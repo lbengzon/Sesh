@@ -3,8 +3,9 @@
 	let userId;
 	let partyId;
 	let currSongId;
-	// let playlistFull;
 	let showPlayed = false;
+	let isPaused = true;
+	let timePassed;
 </script>
 <script src="/js/createParty.js"></script>
 <script>
@@ -23,7 +24,8 @@
 	<h4 id="albumTitle"></h4>
 	<img id="songArt" height="168" width="168">
 	<button id="prevButton" class="playerButton" type="button">Previous</button>
-	<button id="playPauseButton" class="playerButton" type="button">Play/Pause</button>
+	<button id="playButton" class="playerButton" type="button">Play</button>
+	<button id="pauseButton" class="playerButton" type="button" style="display: none">Pause</button>
 	<button id="nextButton" class="playerButton" type="button">Next</button>
 	<progress id="progressbar" style="width:60%"></progress>
 </div>

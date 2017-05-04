@@ -407,6 +407,7 @@ public class SpotifyCommunicator {
       // JsonObject item = jsonObject.get("item").getAsJsonObject();
       JsonObject jsonObj = new JsonParser().parse(response.toString())
           .getAsJsonObject();
+
       JsonObject context = null;
       try {
         context = jsonObj.get("context").getAsJsonObject();
@@ -433,6 +434,7 @@ public class SpotifyCommunicator {
       }
       JsonObject item = jsonObj.getAsJsonObject("item");
       if (item != null) {
+        boolean isPlaying = jsonObj.get("is_playing").getAsBoolean();
         JsonElement progEl = jsonObj.get("progress_ms");
         long progress_ms = progEl.getAsLong();
         JsonObject album = item.get("album").getAsJsonObject();
@@ -449,7 +451,8 @@ public class SpotifyCommunicator {
         String title = item.get("name").getAsString();
 
         Song s = Song.of(spotifyId, title, albumName, artistName, duration);
-        result = new CurrentSongPlaying(s, duration, progress_ms, imgLink);
+        result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
+            isPlaying);
       }
       return result;
     } catch (IOException | WebApiException e) {
