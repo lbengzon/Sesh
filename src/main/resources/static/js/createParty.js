@@ -39,18 +39,7 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
     $listWrapper.height("56%");
 }
 
-function playPause() {
-	//FILL IN
-	console.log("ping!");
-}
 
-function previousSong() {
-	//FILL IN
-}
-
-function nextSong() {
-	//FILL IN
-}
 
 $(document).ready(() => {
 
@@ -151,33 +140,51 @@ $(document).ready(() => {
         });
     });
 
-    function getCurrentSong() {
-        const postParameters = {partyId: partyId};
-        $.post("/currentSong", postParameters, responseJSON => {
-            const responseObject = JSON.parse(responseJSON);
-            if (currSongId !== responseObject.currentSong) {
-                //console.log("Reloading playlist: the current song changed");
-                currSongId = responseObject.currentSong;
-            }
+    // function getCurrentSong() {
+    //     const postParameters = {partyId: partyId};
+    //     $.post("/currentSong", postParameters, responseJSON => {
+    //         const responseObject = JSON.parse(responseJSON);
+    //         if (currSongId !== responseObject.currentSong) {
+    //             //console.log("Reloading playlist: the current song changed");
+    //             currSongId = responseObject.currentSong;
+    //         }
 
-            for (let i = 0; i < $("#ulPlaylist li").length; i++) {
-                console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
-                if ($("#ulPlaylist").find("#" + currSongId).index() > i) {
-                    $("#ulPlaylist li").eq(i).hide();
-                }
-            }
-        });
-    }
+    //         for (let i = 0; i < $("#ulPlaylist li").length; i++) {
+    //             console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
+    //             if ($("#ulPlaylist").find("#" + currSongId).index() > i) {
+    //                 $("#ulPlaylist li").eq(i).hide();
+    //             }
+    //         }
+    //     });
+    // }
 
-    setInterval(getCurrentSong, 500);
+    //setInterval(getCurrentSong, 500);
 
     $("#ulPlaylist").dblclick(function() {
-        $listItems = $("li");
+        $listItems = $("li"); 
         $selected = $listItems.filter('.selected');
         alert("you double clicked on song with id " + $selected.index());
     });
 
+    //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
+    function getIndexOfCurrentSong(){
+        return 1;
+    }
 
+    function playPause() {
+        //FILL IN
+        console.log("ping!");
+        //TODO get the current index of the song and use that
+        playPlaylist(parytyId, userId, 0)
+    }
+
+    function previousSong() {
+        prevSong(partyId, userId)
+    }
+
+    function nextSong() {
+        nextSong(partyId, userId)
+    }
 
     $results.on("click", event => {
         $listItems = $("li");
