@@ -62,7 +62,7 @@ $(document).ready(() => {
 
     //music player buttons
     const $prevButton = $("#prevButton");
-    const $playPauseButton = $("#playButton");
+    const $playButton = $("#playButton");
     const $pauseButton = $("#pauseButton");
     const $nextButton = $("#nextButton");
 
@@ -109,9 +109,14 @@ $(document).ready(() => {
             if (ui.item.parent().attr("id") === "ulPlaylist" && startList === "ulPlaylist") {
                 console.log("reordering within playlist");
                 console.log("starting at: " + startPlaylistIndex);
-                console.log("ending at: " + ui.item.index());
+                endIndex = ui.item.index();
+                if(startPlaylistIndex < endIndex){
+                    endIndex = endIndex + 1
+                }
+                console.log("ending at: " + endIndex);
                 console.log("==========================");
-                reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, ui.item.index() + 1);
+
+                reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, endIndex);
             }
             // if (ui.item.parent().attr("id") === "ulPlaylist") {
             //     console.log("here!!!!");
@@ -221,7 +226,7 @@ $(document).ready(() => {
 
     $prevButton.click(previousSongHandler);
 
-    $playPauseButton.click(playHandler);
+    $playButton.click(playHandler);
 
     $pauseButton.click(pauseHandler);
 
