@@ -198,8 +198,8 @@ function updateRequestVotes($requests, key, requestList) {
     key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
 }
 
-function appendToPlaylist($playlist, newRequest, hide) {
-  if (hide) {
+function appendToPlaylist($playlist, newRequest, startShowing) {
+  if (!startShowing) {
     $playlist.append("<li style=\"display:none;\"" + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
     " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
     " - " + newRequest.song.artist + " " + newRequest.score + 
@@ -214,7 +214,6 @@ function appendToPlaylist($playlist, newRequest, hide) {
     "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
     newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
   }
-
 }
 
 function clearAndPopulateRequests(requests, $requests){
@@ -231,22 +230,22 @@ function clearAndPopulateRequests(requests, $requests){
 
 
 function clearAndPopulatePlaylist(playlist, $playlist){
-  //console.log("clearing and populating playlist");
+  console.log("curr song id: " + currSongId);
+  let startShowing = false
+
+  if (currSongId === -1 || currSongId === undefined) {
+    startShowing = true;
+  }
   $playlist.empty();
-  let startAddingSongs = false;
-  let i = 0;
   for (let key in playlist) {
     if (playlist.hasOwnProperty(key)) {
-      if (i < $("#ulPlaylist").find("#" + currSongId).index()) {
-        appendToPlaylist($playlist, playlist[key], true)
-      } else {
-        appendToPlaylist($playlist, playlist[key], false);
-      }
-        
+        appendToPlaylist($playlist, playlist[key], startShowing);
+        if(key === currSongId){
+          startShowing = true;
+        }
+      }   
     }
-    i++;
   }
-}
 
 function setPartyId (partyId, userId) {
   console.log("send party id");
