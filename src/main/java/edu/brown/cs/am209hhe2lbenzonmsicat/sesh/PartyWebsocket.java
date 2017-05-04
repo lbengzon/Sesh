@@ -219,6 +219,7 @@ public class PartyWebsocket {
       updatePayload.addProperty("songTitle", curr.getSong().getTitle());
       updatePayload.addProperty("albumTitle", curr.getSong().getAlbum());
       updatePayload.addProperty("artist", curr.getSong().getArtist());
+      updatePayload.addProperty("isPlaying", curr.getIsPlaying());
       updateMessage.add("payload", updatePayload);
       updateMessage.addProperty("type", MESSAGE_TYPE.UPDATE_PLAYER.ordinal());
       updateMessage.addProperty("success", true);
