@@ -130,4 +130,24 @@ public class PlaylistBean extends Playlist {
     return null;
   }
 
+  @Override
+  public void play(int offset) {
+
+  }
+
+  @Override
+  public void pause() {
+
+  }
+
+  @Override
+  public void nextSong() {
+
+  }
+
+  @Override
+  public void prevSong() {
+
+  }
+
 }
