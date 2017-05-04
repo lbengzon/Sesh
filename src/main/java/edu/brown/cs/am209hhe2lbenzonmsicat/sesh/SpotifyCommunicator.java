@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
@@ -89,6 +88,18 @@ public class SpotifyCommunicator {
       throw new RuntimeException(e.getMessage());
     }
     userToApi.put("alimiraculous", aliApi);
+    Api leandroApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
+    leandroApi.setRefreshToken(Constants.LEANDRO_REFRESH);
+    String aT4;
+    try {
+      aT4 = leandroApi.refreshAccessToken().build().get().getAccessToken();
+      leandroApi.setAccessToken(aT4);
+    } catch (IOException | WebApiException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+    userToApi.put("22f3kk24xtzmkkuw477v3dntq", leandroApi);
 
   }
 
@@ -101,7 +112,8 @@ public class SpotifyCommunicator {
     final List<String> scopes = Arrays.asList("user-read-private",
         "user-read-email", "playlist-modify-private", "playlist-modify-public",
         "playlist-read-private", "playlist-read-collaborative",
-        "user-read-playback-state", "user-read-currently-playing");
+        "user-read-playback-state", "user-read-currently-playing",
+        "user-modify-playback-state");
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
@@ -389,13 +401,22 @@ public class SpotifyCommunicator {
         response.append(inputLine);
       }
       in.close();
-      JsonParser p = new JsonParser();
-      JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
-      System.out.println("response : " + response);
-      System.out.println("jsonObj : " + jsonObject);
-      JsonObject context = jsonObject.get("context").getAsJsonObject();
-      JsonObject item = jsonObject.get("item").getAsJsonObject();
+      // JsonParser p = new JsonParser();
+      // JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
+      // System.out
+      // .println("jsonObj size : " + jsonObject.getAsJsonObject());
+      // JsonObject context = jsonObject.get("context").getAsJsonObject();
+      // JsonObject item = jsonObject.get("item").getAsJsonObject();
+      JsonObject jsonObj = new JsonParser().parse(response.toString())
+          .getAsJsonObject();
+      JsonObject context = null;
+      try {
+        context = jsonObj.get("context").getAsJsonObject();
+      } catch (IllegalStateException e) {
+        // THUS context doesn't exist"
+      }
 
+      JsonObject item = jsonObj.getAsJsonObject("item");
       if (context != null) {
         String type = context.get("type").toString();
         if (!type.equals("playlist")) {
@@ -410,11 +431,10 @@ public class SpotifyCommunicator {
         }
       }
       if (item != null) {
-        String spotifyId = item.get("item").getAsJsonObject().get("id")
-            .getAsString();
+        String spotifyId = item.get("id").getAsString();
         s = Song.of(spotifyId);
       }
-
+      System.out.println(s.getTitle());
       return s;
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
@@ -429,37 +449,7 @@ public class SpotifyCommunicator {
 
   }
 
-  public static void playPlaylist(String userId, String playlistId, int offset,
-      boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
-    try {
-      String accessToken = api.refreshAccessToken().build().get()
-          .getAccessToken();
-      api.setAccessToken(accessToken);
-      StringBuilder sb = new StringBuilder();
-      sb.append("https://api.spotify.com/v1/me/player/play");
-      URL url = new URL(sb.toString());
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-      conn.setRequestMethod("PUT");
-      StringBuilder sb2 = new StringBuilder();
-      sb2.append("Bearer ");
-      sb2.append(accessToken);
-      conn.setRequestProperty("Authorization", sb2.toString());
-      // NEED TO APPEND OFFSET
-      JsonArray uris = new JsonArray();
-
-      conn.setRequestProperty("Authorization", sb2.toString());
-    } catch (IOException | WebApiException e) {
-      if (shouldRefresh) {
-        playPlaylist(userId, playlistId, offset, false);
-        return;
-
-      }
-      throw new RuntimeException(e.getMessage());
-    }
-  }
-
-  public static void play(String userId, String playlistId,
+  public static void play(String userId, String playlistId, int offset,
       boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
@@ -478,33 +468,34 @@ public class SpotifyCommunicator {
       conn.setRequestProperty("Authorization", sb2.toString());
       conn.setDoOutput(true);
       sb = new StringBuilder();
-      sb.append("{context_uri:\"spotify:playlist:");
+      sb.append("spotify:user:");
+      sb.append(userId);
+      sb.append(":playlist:");
       sb.append(playlistId);
-      sb.append("\"}");
-      String context_uri = sb.toString();
-      sb = new StringBuilder();
-      JsonArray jArray = new JsonArray();
-      sb.append("{\"uris\":");
-      sb.append(jArray.toString());
-      sb.append("}");
-      String uris = sb.toString();
-      sb = new StringBuilder();
-      sb.append("\"offset\":{}");
-      String offset = sb.toString();
+      // JsonObject context_uri = new JsonObject();
+      // context_uri.addProperty("context_uri", sb.toString());
+
+      JsonObject offsetObject = new JsonObject();
+      offsetObject.addProperty("position", Integer.toString(offset));
+      JsonObject body = new JsonObject();
+      body.addProperty("context_uri", sb.toString());
+      body.add("offset", offsetObject);
       OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-      out.write(context_uri);
-      out.write(uris);
-      out.write(offset);
-      System.out.println(context_uri);
-      System.out.println(uris);
-      System.out.println(offset);
+      // out.write(context_uri.toString());
+      // out.write(offset.toString());
+      System.out.println(body.toString());
+      out.write(body.toString());
+      // out.write(offset);
+      // System.out.println(context_uri);
+      // System.out.println(uris);
+      // System.out.println(offset);
       out.close();
 
       conn.connect();
       System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
-        play(userId, playlistId, false);
+        play(userId, playlistId, offset, false);
         return;
       }
       throw new RuntimeException(e.getMessage());
@@ -526,8 +517,8 @@ public class SpotifyCommunicator {
       sb2.append("Bearer ");
       sb2.append(accessToken);
       conn.setRequestProperty("Authorization", sb2.toString());
-      BufferedReader in = new BufferedReader(
-          new InputStreamReader(conn.getInputStream()));
+      conn.connect();
+      System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         pause(userId, false);

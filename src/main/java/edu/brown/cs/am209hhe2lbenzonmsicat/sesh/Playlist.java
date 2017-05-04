@@ -42,6 +42,14 @@ public abstract class Playlist {
 
   public abstract Song getCurrentSong();
 
+  public abstract void play(int offset);
+
+  public abstract void pause();
+
+  public abstract void nextSong();
+
+  public abstract void prevSong();
+
   /**
    * @param request
    *          - to add
