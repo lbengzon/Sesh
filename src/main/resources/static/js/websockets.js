@@ -145,10 +145,18 @@ function updatePlayer(data){
       $("#albumTitle").html(data.payload.albumTitle)
       $("#artistName").html(data.payload.artistName)
   }
-  hideSongsNotPlaying()
+  console.log("isplaying", data.payload.isPlaying)
+  if(data.payload.isPlaying === true){
+    $("#playButton").hide();
+    $("#pauseButton").show();
+  } else{
+    $("#playButton").show();
+    $("#pauseButton").hide();
+  }
+  hideSongsNotPlaying();
 
-
-  $("#progressbar").attr("value", data.payload.timePassed)
+  timePassed = data.payload.timePassed;
+  $("#progressbar").attr("value", data.payload.timePassed);
 }
 
 function hideSongsNotPlaying(){
@@ -370,8 +378,9 @@ function addToPlaylist(partyId, userId, songId) {
 //   conn.send(JSON.stringify(message));
 // }
 
-function playPlaylist(partyId, userId, index){
-  console.log("playplalist sent ", partyId, userId, index)
+function playPlaylist(partyId, userId){
+  console.log("playplalist sent ", partyId, userId)
+  index = getCurrentSongIndex();
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
     payload:{
@@ -394,8 +403,17 @@ function pauseSong (partyId, userId) {
   conn.send(JSON.stringify(message));
 }
 
+function getCurrentSongIndex(){
+  index = $("#ulPlaylist").find("#" + currSongId).index();
+  if(index < 0){
+    return 0;
+  }
+  return index;
+}
+
 function nextSong (partyId, userId) {
-  index = $("#ulPlaylist").find("#" + currSongId).index() + 1;
+  index = getCurrentSongIndex() + 1;
+  console.log("next song index" + index);
   //TODO add check to see if the index is greater than the current size of the list
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
@@ -409,7 +427,7 @@ function nextSong (partyId, userId) {
 }
 
 function prevSong (partyId, userId) {
-  index = $("#ulPlaylist").find("#" + currSongId).index() - 1;
+  index = getCurrentSongIndex() - 1;
   if(index < 0){
     return;
   }

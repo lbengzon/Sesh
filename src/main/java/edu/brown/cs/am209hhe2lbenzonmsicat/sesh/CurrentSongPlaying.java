@@ -6,12 +6,15 @@ public class CurrentSongPlaying {
   private long timePassed;
   private String imageURL;
   private long duration;
+  private boolean isPlaying;
 
-  public CurrentSongPlaying(Song s, long d, long t, String image) {
+  public CurrentSongPlaying(Song s, long d, long t, String image,
+      boolean isPlaying) {
     song = s;
     timePassed = t;
     imageURL = image;
     duration = d;
+    this.isPlaying = isPlaying;
   }
 
   public Song getSong() {
@@ -32,6 +35,10 @@ public class CurrentSongPlaying {
 
   public long getDuration() {
     return duration;
+  }
+
+  public boolean getIsPlaying() {
+    return isPlaying;
   }
 
 }

@@ -62,7 +62,8 @@ $(document).ready(() => {
 
     //music player buttons
     const $prevButton = $("#prevButton");
-    const $playPauseButton = $("#playPauseButton");
+    const $playPauseButton = $("#playButton");
+    const $pauseButton = $("#pauseButton");
     const $nextButton = $("#nextButton");
 
 
@@ -174,19 +175,23 @@ $(document).ready(() => {
         return 1;
     }
 
-    function playPauseHandler() {
+    function playHandler() {
         //FILL IN
         console.log("ping!");
         //TODO get the current index of the song and use that
-        playPlaylist(partyId, userId, 0)
+        playPlaylist(partyId, userId, 0);
+    }
+
+    function pauseHandler(){
+        pauseSong(partyId, userId);
     }
 
     function previousSongHandler() {
-        prevSong(partyId, userId)
+        prevSong(partyId, userId);
     }
 
     function nextSongHandler() {
-        nextSong(partyId, userId)
+        nextSong(partyId, userId);
     }
 
     $results.on("click", event => {
@@ -215,7 +220,9 @@ $(document).ready(() => {
 
     $prevButton.click(previousSongHandler);
 
-    $playPauseButton.click(playPauseHandler);
+    $playPauseButton.click(playHandler);
+
+    $pauseButton.click(pauseHandler);
 
     $nextButton.click(nextSongHandler);
 
