@@ -100,10 +100,8 @@ $(document).ready(() => {
         receive: function(event, ui) {
             //dropped into request list
             if (ui.item.parent().attr("id") === "ulRequest") {
-                console.log("moving song from playlist to request");
                 moveFromQueueToRequest(partyId, userId, ui.item.attr("id"));
             } else {
-                console.log("moving song from request to playlist");
                 moveRequestToQueue (partyId, userId, ui.item.attr("id"), ui.item.index());
             }
         },
@@ -113,7 +111,7 @@ $(document).ready(() => {
                 console.log("starting at: " + startPlaylistIndex);
                 console.log("ending at: " + ui.item.index());
                 console.log("==========================");
-                reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, ui.item.index());
+                reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, ui.item.index() + 1);
             }
             // if (ui.item.parent().attr("id") === "ulPlaylist") {
             //     console.log("here!!!!");
@@ -167,7 +165,7 @@ $(document).ready(() => {
     $("#ulPlaylist").dblclick(function() {
         $listItems = $("li"); 
         $selected = $listItems.filter('.selected');
-        alert("you double clicked on song with id " + $selected.index());
+        playPlaylist(partyId, userId, $selected.index())
     });
 
     //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
@@ -177,13 +175,16 @@ $(document).ready(() => {
 
     function playHandler() {
         //FILL IN
-        console.log("ping!");
         //TODO get the current index of the song and use that
-        playPlaylist(partyId, userId, 0);
+        playPlaylist(partyId, userId);
+        $playButton.hide();
+        $pauseButton.show();
     }
 
     function pauseHandler(){
         pauseSong(partyId, userId);
+        $playButton.show();
+        $pauseButton.hide();
     }
 
     function previousSongHandler() {
