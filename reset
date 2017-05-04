@@ -1,0 +1,7 @@
+#!/bin/sh
+
+rm new.db
+
+sqlite3 new.db < createDatabase.sql
+
+./run

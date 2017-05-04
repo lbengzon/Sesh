@@ -88,6 +88,9 @@ public class PartyWebsocket {
       System.out.println(typeInt);
       System.out.println("Message Recieved" + messageType);
       JsonObject payload = received.get("payload").getAsJsonObject();
+      System.out.println(payload);
+      System.out.println(payload.get("userId"));
+      System.out.println(payload.get("userId").getAsString());
       String userId = payload.get("userId").getAsString();
       int partyId = payload.get("partyId").getAsInt();
       Party party = Party.of(partyId);
@@ -134,7 +137,10 @@ public class PartyWebsocket {
           previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
+
+          System.out.println("********************************");
           updatePartiesCurrentSong(party, session);
+          break;
         default:
           assert false : "you should never get here!!!";
       }
@@ -147,7 +153,7 @@ public class PartyWebsocket {
       Session session) throws IOException {
     try {
       party.prevSong();
-      updatePartiesCurrentSong(party, session);
+      // updatePartiesCurrentSong(party, session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -160,7 +166,7 @@ public class PartyWebsocket {
       Session session) throws IOException {
     try {
       party.nextSong();
-      updatePartiesCurrentSong(party, session);
+      // updatePartiesCurrentSong(party, session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -173,7 +179,7 @@ public class PartyWebsocket {
       Session session) throws IOException {
     try {
       party.pause();
-      updatePartiesCurrentSong(party, session);
+      // updatePartiesCurrentSong(party, session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -187,7 +193,7 @@ public class PartyWebsocket {
     try {
       int index = payload.get("index").getAsInt();
       party.playPlaylist(index);
-      updatePartiesCurrentSong(party, session);
+      // updatePartiesCurrentSong(party, session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -200,8 +206,12 @@ public class PartyWebsocket {
     try {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
-      Song curr = party.getSongBeingCurrentlyPlayed();
-      updatePayload.add("currentSong", curr.toJson());
+      CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
+      String requestId = Request.getId(party.getPartyId(),
+          curr.getSong().getSpotifyId());
+      updatePayload.addProperty("currentSongId", requestId);
+      updatePayload.addProperty("timeLeft", curr.getTimeLeft());
+      updatePayload.addProperty("imageUrl", curr.getImageURL());
       updateMessage.add("payload", updatePayload);
       updateMessage.addProperty("type", MESSAGE_TYPE.UPDATE_PLAYER.ordinal());
       updateMessage.addProperty("success", true);
@@ -212,11 +222,13 @@ public class PartyWebsocket {
           senderUpdateMessage.addProperty("type",
               MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST.ordinal());
           senderUpdateMessage.addProperty("success", true);
+          sesh.getRemote().sendString(senderUpdateMessage.toString());
         } else {
           sesh.getRemote().sendString(updateMessage.toString());
         }
       }
     } catch (IOException e) {
+      e.printStackTrace();
       throw new RuntimeException(e.getMessage());
     }
   }

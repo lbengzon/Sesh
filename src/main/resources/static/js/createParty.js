@@ -160,6 +160,9 @@ $(document).ready(() => {
 
     //setInterval(getCurrentSong, 500);
 
+    setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
+
+
     $("#ulPlaylist").dblclick(function() {
         $listItems = $("li"); 
         $selected = $listItems.filter('.selected');
@@ -171,18 +174,18 @@ $(document).ready(() => {
         return 1;
     }
 
-    function playPause() {
+    function playPauseHandler() {
         //FILL IN
         console.log("ping!");
         //TODO get the current index of the song and use that
-        playPlaylist(parytyId, userId, 0)
+        playPlaylist(partyId, userId, 0)
     }
 
-    function previousSong() {
+    function previousSongHandler() {
         prevSong(partyId, userId)
     }
 
-    function nextSong() {
+    function nextSongHandler() {
         nextSong(partyId, userId)
     }
 
@@ -210,16 +213,10 @@ $(document).ready(() => {
         showOptions($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
     });
 
-    $prevButton.click(function() {
-    	playPause();
-    });
+    $prevButton.click(previousSongHandler);
 
-    $playPauseButton.click(function() {
+    $playPauseButton.click(playPauseHandler);
 
-    });
-
-    $nextButton.click(function() {
-
-    });
+    $nextButton.click(nextSongHandler);
 
 });

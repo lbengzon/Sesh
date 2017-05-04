@@ -155,7 +155,7 @@ public abstract class Party implements Jsonable {
    * @return If a song is being played by the host, this will return the song
    *         being played. If not, this will return null.
    */
-  public abstract Song getSongBeingCurrentlyPlayed();
+  public abstract CurrentSongPlaying getSongBeingCurrentlyPlayed();
 
   /**
    * Remove from playlist.
