@@ -203,7 +203,7 @@ $(document).ready(() => {
 
     $results.on("click", event => {
         $listItems = $("li");
-        $selected = $listItems.filter('.selected');
+        $selected = $listItems.filter('.hover');
         addToPlaylist(partyId, userId, $selected.attr("id"));
         showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
     });
