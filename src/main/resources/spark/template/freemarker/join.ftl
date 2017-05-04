@@ -4,14 +4,13 @@
 <#if userId??>
 ${userId}
 </#if>
-
-
 </div>
 
 <script>
 	let userId;
 	let parties;
 </script>
+<!-- <script src="/js/createJoin.js"></script> -->
 <script src="/js/join.js"></script>
 <script>
 <#if userId??>
@@ -22,6 +21,7 @@ ${userId}
 
 <div id="party-list">
 <ul style="list-style-type:none"></ul>
+<h2 id="loadingParties"> Loading Parties ... </h2>
 </div>
 
 <form method="POST" action="/join/party">

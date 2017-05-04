@@ -1,9 +1,9 @@
 function hoverOn(x) {
-    x.className = 'selected';
+    x.className = 'hover';
 }
 
 function hoverOff(x) {
-    x.classList.remove('selected');
+    x.classList.remove('hover');
 }
 
 function showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper) {
@@ -169,8 +169,9 @@ $(document).ready(() => {
 
     $("#ulPlaylist").dblclick(function() {
         $listItems = $("li"); 
-        $selected = $listItems.filter('.selected');
         playPlaylist(partyId, userId, $selected.index())
+        $selected = $listItems.filter('.hover');
+        alert("you double clicked on song with id " + $selected.index());
     });
 
     //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
