@@ -126,7 +126,7 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
-  public Song getCurrentSong() {
+  public CurrentSongPlaying getCurrentSong() {
     return null;
   }
 
