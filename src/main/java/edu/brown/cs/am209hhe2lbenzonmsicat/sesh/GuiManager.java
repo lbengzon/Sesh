@@ -177,7 +177,9 @@ public class GuiManager {
 
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
-      party.addGuest(user);
+      if (!party.getAttendees().contains(user)) {
+        party.addGuest(user);
+      }
 
       // should probably get party name from previous page to display on guest's
       // party view

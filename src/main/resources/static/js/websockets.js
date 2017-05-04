@@ -49,6 +49,10 @@ function setupWebsockets() {
   // TODO Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("ws://localhost:4567/update");
 
+  conn.onclose = function(){
+    setTimeout(setupWebsockets, 1000)
+  }
+
   conn.onerror = err => {
     console.log('Connection error:', err);
   };
@@ -116,27 +120,12 @@ function setupWebsockets() {
           $player.attr("src", data.payload.party.playlistUrl);
           break;
         case MESSAGE_TYPE.UPDATE_PLAYER:
-          //console.log("You need to set the new current song")
-          if (currSongId !== data.payload.currentSongId) {
-              console.log("Reloading playlist: the current song changed");
-              currSongId = data.payload.currentSongId;
-          }
-          hideSongsNotPlaying()
+          console.log("Got update player")
+          updatePlayer(data)
           break;
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
-          console.log("You need to set the new current song");
-          if(timeoutCheckForNewCurrSong != undefined && timeoutCheckForNewCurrSong != null){
-            clearTimeout(timeoutCheckForNewCurrSong)
-          }
-          if (currSongId !== data.payload.currentSongId) {
-              console.log("Reloading playlist: the current song changed");
-              currSongId = data.payload.currentSongId;
-          }
-          //timeoutCheckForNewCurrSong = setTimeout(updatePartyCurrentSong, data.payload.timeLeft)
-          hideSongsNotPlaying();
-
-          //TODO: you need to check how much time is left in the current song and use 
-          //set timeout to call the function updatePartyCurrentSong that many seconds later.
+          console.log("got update next curr song request")
+          updatePlayer(data)
           break;
 
       }
@@ -147,15 +136,34 @@ function setupWebsockets() {
   };
 }
 
+function updatePlayer(data){
+  if (currSongId !== data.payload.currentSongId) {
+      currSongId = data.payload.currentSongId;
+      $("#songArt").attr("src", data.payload.imageUrl);
+      $("#progressbar").attr("max", data.payload.duration)
+      $("#songTitle").html(data.payload.songTitle)
+      $("#albumTitle").html(data.payload.albumTitle)
+      $("#artistName").html(data.payload.artistName)
+  }
+  hideSongsNotPlaying()
+
+
+  $("#progressbar").attr("value", data.payload.timePassed)
+}
+
 function hideSongsNotPlaying(){
-  console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
+  console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index())
   for (let i = 0; i < $("#ulPlaylist li").length; i++) {
       $("#ulPlaylist li").eq(i).show();
-      if ($("#ulPlaylist").find("#" + currSongId).index() > i) {
+      if ($("#ulPlaylist").find("#" + currSongId).index() >= i) {
           console.log("hiding song", i)
           $("#ulPlaylist li").eq(i).hide();
       }
   }
+}
+
+function getIndexOfCurrentSongPlaying(){
+  
 }
 
 function vote() {
@@ -350,6 +358,18 @@ function addToPlaylist(partyId, userId, songId) {
   conn.send(JSON.stringify(message));
 }
 
+
+// function resumeSong (partyId, userId) {
+//   let message = {
+//     type: MESSAGE_TYPE.RESUME_SONG, 
+//     payload:{
+//       userId: userId,
+//       partyId: partyId
+//     }
+//   }
+//   conn.send(JSON.stringify(message));
+// }
+
 function playPlaylist(partyId, userId, index){
   console.log("playplalist sent ", partyId, userId, index)
   let message = {
@@ -363,17 +383,6 @@ function playPlaylist(partyId, userId, index){
   conn.send(JSON.stringify(message));
 }
 
-// function resumeSong (partyId, userId) {
-//   let message = {
-//     type: MESSAGE_TYPE.RESUME_SONG, 
-//     payload:{
-//       userId: userId,
-//       partyId: partyId
-//     }
-//   }
-//   conn.send(JSON.stringify(message));
-// }
-
 function pauseSong (partyId, userId) {
   let message = {
     type: MESSAGE_TYPE.PAUSE_SONG, 
@@ -386,29 +395,36 @@ function pauseSong (partyId, userId) {
 }
 
 function nextSong (partyId, userId) {
+  index = $("#ulPlaylist").find("#" + currSongId).index() + 1;
+  //TODO add check to see if the index is greater than the current size of the list
   let message = {
-    type: MESSAGE_TYPE.NEXT_SONG, 
+    type: MESSAGE_TYPE.PLAY_PLAYLIST, 
     payload:{
       userId: userId,
-      partyId: partyId
+      partyId: partyId,
+      index: index
     }
   }
   conn.send(JSON.stringify(message));
 }
 
 function prevSong (partyId, userId) {
+  index = $("#ulPlaylist").find("#" + currSongId).index() - 1;
+  if(index < 0){
+    return;
+  }
   let message = {
-    type: MESSAGE_TYPE.PREVIOUS_SONG, 
+    type: MESSAGE_TYPE.PLAY_PLAYLIST, 
     payload:{
       userId: userId,
-      partyId: partyId
+      partyId: partyId,
+      index: index
     }
   }
   conn.send(JSON.stringify(message));
 }
 
 function updatePartyCurrentSong (partyId, userId) {
-  console.log("updatecurrentsong")
   let message = {
     type: MESSAGE_TYPE.SONG_MOVED_TO_NEXT, 
     payload:{
@@ -416,7 +432,5 @@ function updatePartyCurrentSong (partyId, userId) {
       partyId: partyId,
     }
   }
-  console.log(message);
-  console.log(JSON.stringify(message));
   conn.send(JSON.stringify(message));
 }

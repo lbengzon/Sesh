@@ -207,11 +207,18 @@ public class PartyWebsocket {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
       CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
+      if (curr == null) {
+        return;
+      }
       String requestId = Request.getId(party.getPartyId(),
           curr.getSong().getSpotifyId());
       updatePayload.addProperty("currentSongId", requestId);
-      updatePayload.addProperty("timeLeft", curr.getTimeLeft());
+      updatePayload.addProperty("timePassed", curr.getTimePassed());
+      updatePayload.addProperty("duration", curr.getDuration());
       updatePayload.addProperty("imageUrl", curr.getImageURL());
+      updatePayload.addProperty("songTitle", curr.getSong().getTitle());
+      updatePayload.addProperty("albumTitle", curr.getSong().getAlbum());
+      updatePayload.addProperty("artist", curr.getSong().getArtist());
       updateMessage.add("payload", updatePayload);
       updateMessage.addProperty("type", MESSAGE_TYPE.UPDATE_PLAYER.ordinal());
       updateMessage.addProperty("success", true);

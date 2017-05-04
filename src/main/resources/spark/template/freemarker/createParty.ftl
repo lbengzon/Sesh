@@ -13,8 +13,19 @@
 	console.log("user id: " + userId);
 	console.log("party id: " + partyId);
 </script>
-<div id="embedHider">
+<!-- <div id="embedHider">
     <iframe id="playback" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>
+</div> -->
+
+<div id="musicPlayer">
+	<h4 id="songTitle"></h4>
+	<h4 id="artistName"></h4>
+	<h4 id="albumTitle"></h4>
+	<img id="songArt" height="168" width="168">
+	<button id="prevButton" class="playerButton" type="button">Previous</button>
+	<button id="playPauseButton" class="playerButton" type="button">Play/Pause</button>
+	<button id="nextButton" class="playerButton" type="button">Next</button>
+	<progress id="progressbar" style="width:60%"></progress>
 </div>
 <div id="titles">
 <h2 class="titles">Playlist | ${partyName} </h2>
@@ -24,12 +35,6 @@
 <div class="tabContentPlaylist" id="playlist-list">
 <ul style="list-style-type:none" class="sortable" id="ulPlaylist">
 </ul>
-</div>
-
-<div id="musicPlayer">
-<button id="prevButton" class="playerButton" type="button">Previous</button>
-<button id="playPauseButton" class="playerButton" type="button">Play/Pause</button>
-<button id="nextButton" class="playerButton" type="button">Next</button>
 </div>
 
 <div class="tabContentPlaylist" id="request-list">
