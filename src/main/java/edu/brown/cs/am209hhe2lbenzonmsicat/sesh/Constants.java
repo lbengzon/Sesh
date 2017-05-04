@@ -34,9 +34,15 @@ public final class Constants {
       + "5wFbXxrcrVEIzJ14SYSw2ziHHIT_IVFQ8sAuwA_Er9LSaM9Xlbh4ZivmMBW9G"
       + "D4QxR-pXZfcSEGW0";
 
-  public static final String ALI_REFRESH = "AQBzc0E9m2GJxuaNpMBcNKb3SxPpqWLd_P9GrMod3uJs_"
-      + "kYI5H16KUDQ6pjJ074Dp9w92WnnoQaoCSRFFJ-NfpTrK"
-      + "aLfYA_C48ipu-nvVD-OrqOyaTavA4g96TQNDIVKoUA";
+  public static final String ALI_REFRESH = "AQCT3rEraLINz85pd3iHY8c_Ej"
+      + "wbdqtYQ7eysxfa"
+      + "paZKHyWVLx8296WusX5cuw-L7CTEaG3yV3AymDjtGQexSRuRhETk-DIRu"
+      + "2F-Ui6is5KakAW-zkHlk85Mij_sPAV-Qbs";
+
+  public static final String LEANDRO_REFRESH = "AQDiBGRqNXzNAYy"
+      + "DVWChZGpU3ws_Kb3zePwOcN43jLKEF6r88"
+      + "XxntAj_PyUWU7XXIQmfEi58V7cl9oOio0f3PkN2mZe7WTfnrHt"
+      + "3RDJuSl3wAk6Gg5ipKS5WZRYXBkFsks0";
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;
