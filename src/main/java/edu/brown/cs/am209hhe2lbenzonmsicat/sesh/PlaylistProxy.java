@@ -19,7 +19,6 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param spotifyId
    *          - playlist id
    * @param partyId
@@ -102,8 +101,14 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   @Override
   public CurrentSongPlaying getCurrentSong() {
-    return SpotifyCommunicator.getCurrentSong(host.getSpotifyId(),
-        this.spotifyId, true);
+    if (playlistBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return playlistBean.getCurrentSong();
   }
 
   @Override

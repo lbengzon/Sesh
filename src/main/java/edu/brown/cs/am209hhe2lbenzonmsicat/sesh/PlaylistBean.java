@@ -15,12 +15,12 @@ public class PlaylistBean extends Playlist {
   private String url;
   private Map<Song, Request> queuedRequests;
   private Map<String, Request> requestIdToRequest;
+  private User host;
 
   private int partyId;
 
   /**
    * Constructor.
-   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -31,6 +31,7 @@ public class PlaylistBean extends Playlist {
   public PlaylistBean(String id, int partyId, List<Request> queuedRequests,
       User host) {
     this.setId(id);
+    this.host = host;
     StringBuilder sb = new StringBuilder();
     sb.append("https://embed.spotify.com/?uri=spotify%3Auser%3A");
     sb.append(host.getSpotifyId());
@@ -54,7 +55,6 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
-   *
    * @param id
    *          - id to set
    */
@@ -127,6 +127,11 @@ public class PlaylistBean extends Playlist {
 
   @Override
   public CurrentSongPlaying getCurrentSong() {
+    CurrentSongPlaying curr = SpotifyCommunicator
+        .getCurrentSong(host.getSpotifyId(), id, true);
+    if (queuedRequests.containsKey(curr.getSong())) {
+      return curr;
+    }
     return null;
   }
 
