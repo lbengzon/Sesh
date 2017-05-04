@@ -3,13 +3,13 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 public class CurrentSongPlaying {
 
   private Song song;
-  private long timeLeft;
+  private long timePassed;
   private String imageURL;
   private long duration;
 
   public CurrentSongPlaying(Song s, long d, long t, String image) {
     song = s;
-    timeLeft = t;
+    timePassed = t;
     imageURL = image;
     duration = d;
   }
@@ -19,7 +19,11 @@ public class CurrentSongPlaying {
   }
 
   public long getTimeLeft() {
-    return timeLeft;
+    return duration - timePassed;
+  }
+
+  public long getTimePassed() {
+    return timePassed;
   }
 
   public String getImageURL() {

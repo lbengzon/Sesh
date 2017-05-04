@@ -116,7 +116,11 @@ function setupWebsockets() {
           $player.attr("src", data.payload.party.playlistUrl);
           break;
         case MESSAGE_TYPE.UPDATE_PLAYER:
-          console.log("You need to set the new current song")
+          //console.log("You need to set the new current song")
+          if (currSongId !== data.payload.currentSongId) {
+              console.log("Reloading playlist: the current song changed");
+              currSongId = data.payload.currentSongId;
+          }
           hideSongsNotPlaying()
           break;
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
@@ -124,8 +128,11 @@ function setupWebsockets() {
           if(timeoutCheckForNewCurrSong != undefined && timeoutCheckForNewCurrSong != null){
             clearTimeout(timeoutCheckForNewCurrSong)
           }
-          console.log("You need to set timeout value")
-          timeoutCheckForNewCurrSong = setTimeout(updatePartyCurrentSong, 1000)
+          if (currSongId !== data.payload.currentSongId) {
+              console.log("Reloading playlist: the current song changed");
+              currSongId = data.payload.currentSongId;
+          }
+          //timeoutCheckForNewCurrSong = setTimeout(updatePartyCurrentSong, data.payload.timeLeft)
           hideSongsNotPlaying();
 
           //TODO: you need to check how much time is left in the current song and use 
@@ -141,15 +148,15 @@ function setupWebsockets() {
 }
 
 function hideSongsNotPlaying(){
+  console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
   for (let i = 0; i < $("#ulPlaylist li").length; i++) {
-      console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
+      $("#ulPlaylist li").eq(i).show();
       if ($("#ulPlaylist").find("#" + currSongId).index() > i) {
+          console.log("hiding song", i)
           $("#ulPlaylist li").eq(i).hide();
       }
   }
 }
-
-
 
 function vote() {
   $(".upvote").click(function(x) {
@@ -344,6 +351,7 @@ function addToPlaylist(partyId, userId, songId) {
 }
 
 function playPlaylist(partyId, userId, index){
+  console.log("playplalist sent ", partyId, userId, index)
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
     payload:{
@@ -400,12 +408,15 @@ function prevSong (partyId, userId) {
 }
 
 function updatePartyCurrentSong (partyId, userId) {
+  console.log("updatecurrentsong")
   let message = {
     type: MESSAGE_TYPE.SONG_MOVED_TO_NEXT, 
     payload:{
       userId: userId,
-      partyId: partyId
+      partyId: partyId,
     }
   }
+  console.log(message);
+  console.log(JSON.stringify(message));
   conn.send(JSON.stringify(message));
 }

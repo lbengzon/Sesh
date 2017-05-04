@@ -388,7 +388,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public Song getSongBeingCurrentlyPlayed() {
+  public CurrentSongPlaying getSongBeingCurrentlyPlayed() {
     if (partyBean == null) {
       try {
         fill();
