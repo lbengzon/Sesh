@@ -87,13 +87,11 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           console.log("update rearrange playlist");
-          //playlistFull = data.payload.playlist;
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
-          //playlistFull = data.payload.playlist;
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           clearAndPopulateRequests(data.payload.requestList, $requests);
 
@@ -101,11 +99,8 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
-          //playlistFull[data.payload.newRequest.id] = data.payload.newRequest;
-          //playlistFull = data.payload.playlist;
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
 
-          //appendToPlaylist($playlist, data.payload.newRequest);
 
           $playlist.sortable("refresh");
           $player.attr("src", $player.attr("src"));
@@ -113,7 +108,6 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
           console.log("updating whole party");
-          //playlistFull = data.payload.party.playlist;
           clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
@@ -196,13 +190,23 @@ function updateRequestVotes($requests, key, requestList) {
     key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
 }
 
-function appendToPlaylist($playlist, newRequest) {
-  $playlist.append("<li " + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
+function appendToPlaylist($playlist, newRequest, hide) {
+  if (hide) {
+    $playlist.append("<li style=\"display:none;\"" + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
     " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
     " - " + newRequest.song.artist + " " + newRequest.score + 
     "<div id=\"vote\"> <button class=\"upvote\" id=\"" + newRequest.requestId + 
     "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
     newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+  } else {
+    $playlist.append("<li " + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
+    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
+    " - " + newRequest.song.artist + " " + newRequest.score + 
+    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + newRequest.requestId + 
+    "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
+    newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+  }
+
 }
 
 function clearAndPopulateRequests(requests, $requests){
@@ -211,7 +215,6 @@ function clearAndPopulateRequests(requests, $requests){
     if (requests.hasOwnProperty(key)) {
       console.log("populating request");
       updateRequestVotes($requests, key, requests);
-      //$requests.append("<li " + "id\"" + key + "\">" + requests[key].song.title + " - " + requests[key].song.artist + " " + requests[key].score + "</li>");
     }
   }
 
@@ -223,39 +226,17 @@ function clearAndPopulatePlaylist(playlist, $playlist){
   //console.log("clearing and populating playlist");
   $playlist.empty();
   let startAddingSongs = false;
-
+  let i = 0;
   for (let key in playlist) {
     if (playlist.hasOwnProperty(key)) {
-      //let songId = playlist[key].requestId;
-      // console.log($("#" + requestId));
-      // console.log("current song id index: " + $("#"+currSongId).index());
-      // console.log("looking at song at index: " + $("#"+songId).index());
-      //if ($("#songId").index() < $("#currSongId").index() || currSongId === undefined) {
-        //console.log("appending to playlist");
-        appendToPlaylist($playlist, playlist[key]);
-        // console.log("looking at song of index: " + $playlist.find("#" + songId).index());
-        // console.log("current playing song is at index: " + $playlist.find("#" + currSongId).index());
-
-        // if ($playlist.find("#" + songId).index() < $playlist.find("#" + currSongId).index()) {
-
-        // }
-      // } else {
-      //   continue;
-      // }
-      
-      // if(currSongId === playlist[key].song.spotifyId){
-      //   console.log("currSongId matches request being looked at --- will re-populate playlist shortly");
-      //   startAddingSongs = true;
-      // }
-      // if (startAddingSongs || currSongId === undefined) {
-      //   console.log("re-adding songs");
-      //   appendToPlaylist($playlist, playlist[key]);
-      // }
-      // if(startAddingSongs === true || showPlayed === true || currSongId === undefined){
-        // console.log("Added that request");
+      if (i < $("#ulPlaylist").find("#" + currSongId).index()) {
+        appendToPlaylist($playlist, playlist[key], true)
+      } else {
+        appendToPlaylist($playlist, playlist[key], false);
+      }
         
-      // }
     }
+    i++;
   }
 }
 
