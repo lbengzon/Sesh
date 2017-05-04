@@ -129,7 +129,7 @@ public class PlaylistBean extends Playlist {
   public CurrentSongPlaying getCurrentSong() {
     CurrentSongPlaying curr = SpotifyCommunicator
         .getCurrentSong(host.getSpotifyId(), id, true);
-    if (queuedRequests.containsKey(curr.getSong())) {
+    if (curr != null && queuedRequests.containsKey(curr.getSong())) {
       return curr;
     }
     return null;

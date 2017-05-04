@@ -233,15 +233,17 @@ function clearAndPopulatePlaylist(playlist, $playlist){
   console.log("curr song id: " + currSongId);
   let startShowing = false
 
-  if (currSongId === -1 || currSongId === undefined) {
-    startShowing = true;
-  }
   $playlist.empty();
   for (let key in playlist) {
     if (playlist.hasOwnProperty(key)) {
         appendToPlaylist($playlist, playlist[key], startShowing);
         if(key === currSongId){
           startShowing = true;
+        }//If a song is not playing, and you just added the first song. Play that song 
+        else if ((currSongId === -1 || currSongId === undefined) && startShowing == false){
+          startShowing = true;
+          playPlaylist(partyId, userId)
+          pauseSong(partyId, userId);
         }
       }   
     }
