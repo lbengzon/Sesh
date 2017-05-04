@@ -329,32 +329,29 @@ public class PartyBean extends Party {
 
   @Override
   public boolean playPlaylist(int index) {
-
-    return false;
-  }
-
-  @Override
-  public boolean resume() {
-    // TODO Auto-generated method stub
-    return false;
+    playlist.play(index);
+    return true;
   }
 
   @Override
   public boolean pause() {
     // TODO Auto-generated method stub
-    return false;
+    playlist.pause();
+    return true;
   }
 
   @Override
   public boolean nextSong() {
     // TODO Auto-generated method stub
-    return false;
+    playlist.nextSong();
+    return true;
   }
 
   @Override
   public boolean prevSong() {
     // TODO Auto-generated method stub
-    return false;
+    playlist.prevSong();
+    return true;
   }
 
 }

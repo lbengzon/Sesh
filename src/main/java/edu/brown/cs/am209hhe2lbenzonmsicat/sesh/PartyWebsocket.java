@@ -46,7 +46,6 @@ public class PartyWebsocket {
     UPDATE_REARRANGE_PLAYLIST,
     REORDER_PLAYLIST_TRACK,
     PLAY_PLAYLIST,
-    RESUME_SONG,
     PAUSE_SONG,
     NEXT_SONG,
     PREVIOUS_SONG,
@@ -125,9 +124,6 @@ public class PartyWebsocket {
         case PLAY_PLAYLIST:
           playPlaylistAndUpdate(payload, user, party, session);
           break;
-        case RESUME_SONG:
-          resumeSongAndUpdate(payload, user, party, session);
-          break;
         case PAUSE_SONG:
           pauseSongAndUpdate(payload, user, party, session);
           break;
@@ -177,19 +173,6 @@ public class PartyWebsocket {
       Session session) throws IOException {
     try {
       party.pause();
-      updatePartiesCurrentSong(party, session);
-    } catch (Exception e) {
-      JsonObject updateMessage = new JsonObject();
-      updateMessage.addProperty("success", false);
-      updateMessage.addProperty("message", e.getMessage());
-      session.getRemote().sendString(updateMessage.toString());
-    }
-  }
-
-  private void resumeSongAndUpdate(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
-    try {
-      party.resume();
       updatePartiesCurrentSong(party, session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
