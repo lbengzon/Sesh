@@ -32,9 +32,9 @@ import com.wrapper.spotify.models.Track;
  */
 public class SpotifyCommunicator {
 
-  // private final Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+  // private final Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
   // .clientSecret(Consta
-  // nts.ALI_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL_ONLINE)
+  // nts.LEANDRO_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
   // .build();
   private static Api testApi;
   private List<String> results;
@@ -52,9 +52,9 @@ public class SpotifyCommunicator {
   }
 
   public static void setUpTestApi() {
-    testApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
+    testApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     testApi.setRefreshToken(Constants.SESH_REFRESH);
     apiPool = new ApiPool();
     String aT2;
@@ -65,9 +65,9 @@ public class SpotifyCommunicator {
       throw new RuntimeException(e.getMessage());
     }
     userToApi.put("s3shteam32", testApi);
-    Api hannahApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
+    Api hannahApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     hannahApi.setRefreshToken(Constants.HANNAH_REFRESH);
     String aT;
     try {
@@ -78,9 +78,9 @@ public class SpotifyCommunicator {
     }
     userToApi.put("1185743437", hannahApi);
     userToApi.put("hhe", testApi);
-    Api aliApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
+    Api aliApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     aliApi.setRefreshToken(Constants.ALI_REFRESH);
     String aT3;
     try {
@@ -90,9 +90,9 @@ public class SpotifyCommunicator {
       throw new RuntimeException(e.getMessage());
     }
     userToApi.put("alimiraculous", aliApi);
-    Api leandroApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
+    Api leandroApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     leandroApi.setRefreshToken(Constants.LEANDRO_REFRESH);
     String aT4;
     try {
@@ -119,9 +119,9 @@ public class SpotifyCommunicator {
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
-    Api newApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
+    Api newApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     String authorizeURL = newApi.createAuthorizeURL(scopes, state);
 
     /*
@@ -147,9 +147,9 @@ public class SpotifyCommunicator {
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
-    Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
-        .clientSecret(Constants.ALI_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
+    Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL).build();
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
 
