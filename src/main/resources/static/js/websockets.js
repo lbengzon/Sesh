@@ -35,11 +35,6 @@ function hoverOff(x) {
   x.classList.remove('selected');
 }
 
-function getSongPlaying(){
-    const player = $("#playback")[0];
-    console.log(player)
-
-}
 
 // Setup the WebSocket connection for live updating of scores.
 function setupWebsockets() {
@@ -154,18 +149,23 @@ function updatePlayer(data){
 }
 
 function hideSongsNotPlaying(){
-  console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index())
+  currSongIndex = getCurrentSongIndex()
+  console.log("current playing song is at index: " + currSongIndex)
   for (let i = 0; i < $("#ulPlaylist li").length; i++) {
       $("#ulPlaylist li").eq(i).show();
-      if ($("#ulPlaylist").find("#" + currSongId).index() >= i) {
+      if (currSongIndex >= i) {
           console.log("hiding song", i)
           $("#ulPlaylist li").eq(i).hide();
       }
   }
 }
 
-function getIndexOfCurrentSongPlaying(){
-  
+function getCurrentSongIndex(){
+  index = $("#ulPlaylist").find("#" + currSongId).index();
+  if(index < 0){
+    return 0;
+  }
+  return index;
 }
 
 function vote() {
@@ -359,9 +359,13 @@ function addToPlaylist(partyId, userId, songId) {
 //   conn.send(JSON.stringify(message));
 // }
 
-function playPlaylist(partyId, userId){
+function playPlaylist(partyId, userId, index){
   console.log("playplalist sent ", partyId, userId)
-  index = getCurrentSongIndex();
+  //IF you should play the current song (i.e it was paused) if you dont go into his if statement it means 
+  //the host double clicked on a song to play it.
+  if(index === undefined || index === null){
+      index = getCurrentSongIndex();
+  }
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
     payload:{
@@ -384,17 +388,9 @@ function pauseSong (partyId, userId) {
   conn.send(JSON.stringify(message));
 }
 
-function getCurrentSongIndex(){
-  index = $("#ulPlaylist").find("#" + currSongId).index();
-  if(index < 0){
-    return 0;
-  }
-  return index;
-}
 
 function nextSong (partyId, userId) {
   index = getCurrentSongIndex() + 1;
-  console.log("next song index" + index);
   //TODO add check to see if the index is greater than the current size of the list
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
