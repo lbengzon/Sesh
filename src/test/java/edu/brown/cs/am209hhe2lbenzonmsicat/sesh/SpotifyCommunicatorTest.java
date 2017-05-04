@@ -20,9 +20,8 @@ public class SpotifyCommunicatorTest {
     // System.out.println(SpotifyCommunicator
     // .getCurrentSong("alimiraculous", "6SnHyWgrI3Jo2cmququpbN", true)
     // .getTitle());
-    System.out.println(
-        SpotifyCommunicator.getCurrentSong("starwars.bengzon@gmail.com",
-            "6SnHyWgrI3Jo2cmququpbN", true).getTitle());
+    System.out.println(SpotifyCommunicator.getCurrentSong(
+        "22f3kk24xtzmkkuw477v3dntq", "7JB7rWkoXeO2Ov5DGJkFic", true));
   }
 
   // @Test

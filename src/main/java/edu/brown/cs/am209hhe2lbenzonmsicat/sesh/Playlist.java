@@ -40,7 +40,7 @@ public abstract class Playlist {
 
   public abstract Request getRequest(String requestId);
 
-  public abstract Song getCurrentSong();
+  public abstract CurrentSongPlaying getCurrentSong();
 
   public abstract void play(int offset);
 
