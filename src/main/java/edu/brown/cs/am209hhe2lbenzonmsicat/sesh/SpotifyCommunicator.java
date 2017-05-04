@@ -14,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wrapper.spotify.Api;
@@ -375,10 +377,10 @@ public class SpotifyCommunicator {
 
   }
 
-  public static Song getCurrentSong(String userId, String playlistId,
-      boolean shouldRefresh) {
+  public static CurrentSongPlaying getCurrentSong(String userId,
+      String playlistId, boolean shouldRefresh) {
     Api api = userToApi.get(userId);
-    Song s = null;
+    CurrentSongPlaying result = null;
     try {
 
       String accessToken = api.refreshAccessToken().build().get()
@@ -417,25 +419,36 @@ public class SpotifyCommunicator {
       }
 
       JsonObject item = jsonObj.getAsJsonObject("item");
+      JsonElement progEl = jsonObj.get("progress_ms");
+      long progress_ms = progEl.getAsLong();
+      JsonObject album = item.get("album").getAsJsonObject();
+
+      JsonArray images = album.get("images").getAsJsonArray();
+      JsonObject desiredImage = images.get(1).getAsJsonObject();
+      String imgLink = desiredImage.get("url").getAsString();
       if (context != null) {
         String type = context.get("type").toString();
-        if (!type.equals("playlist")) {
+        if (!type.equals("\"playlist\"")) {
           return null;
         }
         String uri = context.get("uri").toString();
         sb = new StringBuilder();
-        sb.append("spotify:user:spotify:playlist:");
+        sb.append("\"spotify:user:");
+        sb.append(userId);
+        sb.append(":playlist:");
         sb.append(playlistId);
+        sb.append("\"");
         if (!uri.equals(sb.toString())) {
           return null;
         }
       }
       if (item != null) {
         String spotifyId = item.get("id").getAsString();
-        s = Song.of(spotifyId);
+        long duration = item.get("duration_ms").getAsLong();
+        Song s = Song.of(spotifyId);
+        result = new CurrentSongPlaying(s, duration, progress_ms, imgLink);
       }
-      System.out.println(s.getTitle());
-      return s;
+      return result;
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         return getCurrentSong(userId, playlistId, false);
