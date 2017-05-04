@@ -15,13 +15,12 @@ UPDATE_ENTIRE_PARTY: 12,
 UPDATE_REARRANGE_PLAYLIST: 13, 
 REORDER_PLAYLIST_TRACK: 14,
 PLAY_PLAYLIST: 15,
-RESUME_SONG: 16,
-PAUSE_SONG: 17,
-NEXT_SONG: 18,
-PREVIOUS_SONG: 19,
-UPDATE_PLAYER: 20,
-SONG_MOVED_TO_NEXT: 21,
-UPDATE_NEXT_CURR_SONG_REQUEST: 22
+PAUSE_SONG: 16,
+NEXT_SONG: 17,
+PREVIOUS_SONG: 18,
+UPDATE_PLAYER: 19,
+SONG_MOVED_TO_NEXT: 20,
+UPDATE_NEXT_CURR_SONG_REQUEST: 21
 };
 
 let conn;
@@ -356,16 +355,16 @@ function playPlaylist(partyId, userId, index){
   conn.send(JSON.stringify(message));
 }
 
-function resumeSong (partyId, userId) {
-  let message = {
-    type: MESSAGE_TYPE.RESUME_SONG, 
-    payload:{
-      userId: userId,
-      partyId: partyId
-    }
-  }
-  conn.send(JSON.stringify(message));
-}
+// function resumeSong (partyId, userId) {
+//   let message = {
+//     type: MESSAGE_TYPE.RESUME_SONG, 
+//     payload:{
+//       userId: userId,
+//       partyId: partyId
+//     }
+//   }
+//   conn.send(JSON.stringify(message));
+// }
 
 function pauseSong (partyId, userId) {
   let message = {

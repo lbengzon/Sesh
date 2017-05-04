@@ -210,8 +210,6 @@ public abstract class Party implements Jsonable {
 
   public abstract boolean playPlaylist(int index);
 
-  public abstract boolean resume();
-
   public abstract boolean pause();
 
   public abstract boolean nextSong();
