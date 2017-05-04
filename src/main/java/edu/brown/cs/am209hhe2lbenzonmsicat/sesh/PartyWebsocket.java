@@ -84,13 +84,9 @@ public class PartyWebsocket {
       JsonObject received = GSON.fromJson(message, JsonObject.class);
       int typeInt = received.get("type").getAsInt();
       MESSAGE_TYPE messageType = MESSAGE_TYPE.values()[typeInt];
-      System.out.println("=================================");
-      System.out.println(typeInt);
       System.out.println("Message Recieved" + messageType);
       JsonObject payload = received.get("payload").getAsJsonObject();
       System.out.println(payload);
-      System.out.println(payload.get("userId"));
-      System.out.println(payload.get("userId").getAsString());
       String userId = payload.get("userId").getAsString();
       int partyId = payload.get("partyId").getAsInt();
       Party party = Party.of(partyId);
@@ -137,8 +133,6 @@ public class PartyWebsocket {
           previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
-
-          System.out.println("********************************");
           updatePartiesCurrentSong(party, session);
           break;
         default:
@@ -219,6 +213,7 @@ public class PartyWebsocket {
       updatePayload.addProperty("songTitle", curr.getSong().getTitle());
       updatePayload.addProperty("albumTitle", curr.getSong().getAlbum());
       updatePayload.addProperty("artist", curr.getSong().getArtist());
+      updatePayload.addProperty("isPlaying", curr.getIsPlaying());
       updateMessage.add("payload", updatePayload);
       updateMessage.addProperty("type", MESSAGE_TYPE.UPDATE_PLAYER.ordinal());
       updateMessage.addProperty("success", true);
