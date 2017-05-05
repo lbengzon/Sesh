@@ -6,7 +6,36 @@ function hoverOff(x) {
     x.classList.remove('hover');
 }
 
+//HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
+function getIndexOfCurrentSong(){
+    alert("woah");
+    return 1;
+}
+
+function playHandler() {
+    //FILL IN
+    //TODO get the current index of the song and use that
+    playPlaylist(partyId, userId);
+    $playButton.hide();
+    $pauseButton.show();
+}
+
+function pauseHandler(){
+    pauseSong(partyId, userId);
+    $playButton.show();
+    $pauseButton.hide();
+}
+
+function previousSongHandler() {
+    prevSong(partyId, userId);
+}
+
+function nextSongHandler() {
+    nextSong(partyId, userId);
+}
+
 function showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper) {
+    $('.list-wrapper').height("50%");
     $listview.addClass("active");
     $search.removeClass("active");
     $options.removeClass("active");
@@ -15,7 +44,6 @@ function showPlaylists($search, $listview, $options, $tabContentSearch, $tabCont
     $tabContentFavorites.hide();
     $tabContentOptions.hide();
     $titles.show();
-    $listWrapper.height("50%");
 }
 
 function showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper) {
@@ -200,38 +228,14 @@ $(document).ready(() => {
     });
 
 
-    //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
-    function getIndexOfCurrentSong(){
-        alert("woah");
-        return 1;
-    }
 
-    function playHandler() {
-        //FILL IN
-        //TODO get the current index of the song and use that
-        playPlaylist(partyId, userId);
-        $playButton.hide();
-        $pauseButton.show();
-    }
 
-    function pauseHandler(){
-        pauseSong(partyId, userId);
-        $playButton.show();
-        $pauseButton.hide();
-    }
-
-    function previousSongHandler() {
-        prevSong(partyId, userId);
-    }
-
-    function nextSongHandler() {
-        nextSong(partyId, userId);
-    }
-
-    $results.on("click", event => {
+    $results.click(function() {
         $listItems = $("li");
         $selected = $listItems.filter('.hover');
         addToPlaylist(partyId, userId, $selected.attr("id"));
+        console.log("WHAT IS HAPPENING")
+        console.log("LIST WRAPPER ===========", $listWrapper)
         showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
     });
 
