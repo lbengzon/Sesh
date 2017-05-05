@@ -193,6 +193,7 @@ $(document).ready(() => {
 
     //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
     function getIndexOfCurrentSong(){
+        alert("woah");
         return 1;
     }
 
