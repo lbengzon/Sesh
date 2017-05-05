@@ -12,7 +12,6 @@ public class Device {
     type = t;
     name = n;
     isActive = active;
-
   }
 
   public String getId() {
