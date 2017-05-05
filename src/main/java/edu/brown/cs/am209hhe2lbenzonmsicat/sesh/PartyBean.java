@@ -18,7 +18,6 @@ import com.google.gson.JsonElement;
 
 /**
  * Models a party.
- *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -38,7 +37,6 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -338,6 +336,7 @@ public class PartyBean extends Party {
 
   @Override
   public boolean playPlaylist(int index) {
+    System.out.println(deviceId);
     playlist.play(index, deviceId);
     return true;
   }
