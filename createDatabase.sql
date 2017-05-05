@@ -54,3 +54,11 @@ CREATE TABLE "PartyAttendee"(
     ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE "Favorites"(
+  "userId" Text,
+  "songId" TEXT,
+  PRIMARY KEY ("userId"),
+  FOREIGN KEY ("userId") REFERENCES User(userId)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+

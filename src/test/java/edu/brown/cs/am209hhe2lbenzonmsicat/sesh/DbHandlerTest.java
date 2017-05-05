@@ -10,12 +10,14 @@ import org.sqlite.SQLiteException;
 
 /**
  * This class tests the db handler class.
+ *
  * @author Ali
  */
 public class DbHandlerTest {
 
   /**
    * This tests the add get user function.
+   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -38,6 +40,7 @@ public class DbHandlerTest {
 
   /**
    * This method tests the adding of the same user.
+   *
    * @throws FileNotFoundException
    *           if the db isn't there
    * @throws SQLException
@@ -56,6 +59,7 @@ public class DbHandlerTest {
 
   /**
    * This tests adding the same party.
+   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -879,5 +883,20 @@ public class DbHandlerTest {
     UserProxy.clearCache();
     User h = User.of("lbengzon");
     assert h.getType().equals("premium");
+  }
+
+  @Test
+  public void testAddSongsToFavorite()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    User host = User.of("s3shteam32", "seshteam32@gmail.com", "Sesh",
+        "premium");
+    Song s = Song.of("7AQAlklmptrrkBSeujkXsD");
+    DbHandler.AddSongToFavorites("s3shteam32", s.getSpotifyId());
+    List<Song> songs = DbHandler.GetUserFavoritedSongs("s3shteam32");
+    assert songs.size() == 1;
+    assert songs.get(0).getSpotifyId().equals("7AQAlklmptrrkBSeujkXsD");
+
   }
 }
