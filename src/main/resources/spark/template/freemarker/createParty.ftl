@@ -51,6 +51,13 @@
 	</div>
 </div>
 
+<div class="tabContentFavorites">
+	<input type="text" class="favoritesSearch" name="favoritesSearch">
+	<div class="favorites">
+	<ul style="list-style: none;" class="favoritesList"></ul>
+	</div>
+</div>
+
 <div class="tabContentOptions"></div>
 
 </div>
@@ -58,6 +65,7 @@
 <div id="footer">
 <button class="footerButtons" id="playlist-dj">Playlist</button>
 <button class="footerButtons" id="search-dj">Search</button>
+<button class="footerButtons" id="favorites-dj">Favorites</button>
 <button class="footerButtons" id="options-dj">Options</button>
 </div>
 

@@ -249,6 +249,14 @@ input#private_sesh, input#public_sesh {
 	text-align: center;
 }
 
+.tabContentFavorites, .tabContentFavoritesGuest {
+	width: 75%;
+	height: 100%;
+	background-color: white;
+	display: block;
+	text-align: center;
+}
+
 #footer {
 	width: 100%;
 	height: 15%;
@@ -310,6 +318,17 @@ input#private_sesh, input#public_sesh {
 }
 
 .search {
+	width: 90%;
+	height: 5%;
+	padding: 1%;
+	font-size: 150%;
+	margin: auto;
+	margin-top: 2%;
+	margin-bottom: 1%;
+	border: 2px solid black;
+}
+
+.favoritesSearch, .favoritesSearchGuest {
 	width: 90%;
 	height: 5%;
 	padding: 1%;

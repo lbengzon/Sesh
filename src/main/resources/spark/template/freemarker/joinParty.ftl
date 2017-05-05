@@ -40,6 +40,13 @@
 	</div>
 </div>
 
+<div class="tabContentFavoritesGuest">
+	<input type="text" class="favoritesSearchGuest" name="favoritesSearchGuest">
+	<div class="favorites">
+	<ul style="list-style: none;" class="favoritesList"></ul>
+	</div>
+</div>
+
 <div class="tabContentOptionsGuest"></div>
 </div>
 
@@ -47,6 +54,7 @@
 <button class="footerButtons" id="request-guest">Requests</button>
 <button class="footerButtons" id="playlist-guest">Playlist</button>
 <button class="footerButtons" id="search-guest">Search</button>
+<button class="footerButtons" id="favorites-guest">Favorites</button>
 <button class="footerButtons" id="options-guest">Options</button>
 </div>
 </#assign>
