@@ -6,13 +6,14 @@ function hoverOff(x) {
 	x.classList.remove('hover');
 }
 
-function showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
+function showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest,$tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
 	$playlistGuest.addClass("active");
 	$requestsGuest.removeClass("active");
 	$searchGuest.removeClass("active");
 	$optionsGuest.removeClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.hide();
+	$tabContentFavoritesGuest.hide();
 	$tabContentSearchGuest.hide();
 	$tabContentPlaylistGuest.show();
 	$requestTitle.hide();
@@ -20,13 +21,14 @@ function showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGues
 	$listWrapper.height("50%");
 }
 
-function showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
+function showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
 	$playlistGuest.removeClass("active");
 	$requestsGuest.addClass("active");
 	$searchGuest.removeClass("active");
 	$optionsGuest.removeClass("active");
 	$tabContentRequestGuest.show();
 	$tabContentOptionsGuest.hide();
+	$tabContentFavoritesGuest.hide();
 	$tabContentSearchGuest.hide();
 	$tabContentPlaylistGuest.hide();
 	$playlistTitle.hide();
@@ -34,13 +36,14 @@ function showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGues
 	$listWrapper.height("50%");
 }
 
-function showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
+function showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
 	$playlistGuest.removeClass("active");
 	$requestsGuest.removeClass("active");
 	$searchGuest.addClass("active");
 	$optionsGuest.removeClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.hide();
+	$tabContentFavoritesGuest.hide();
 	$tabContentSearchGuest.show();
 	$tabContentPlaylistGuest.hide();
 	$playlistTitle.hide();
@@ -48,13 +51,29 @@ function showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest,
 	$listWrapper.height("56%");
 }
 
-function showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
+function showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
 	$playlistGuest.removeClass("active");
 	$requestsGuest.removeClass("active");
 	$searchGuest.removeClass("active");
 	$optionsGuest.addClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.show();
+	$tabContentFavoritesGuest.hide();
+	$tabContentSearchGuest.hide();
+	$tabContentPlaylistGuest.hide();
+	$playlistTitle.hide();
+	$requestTitle.hide();
+	$listWrapper.height("56%");
+}
+
+function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
+	$playlistGuest.removeClass("active");
+	$requestsGuest.removeClass("active");
+	$searchGuest.removeClass("active");
+	$optionsGuest.addClass("active");
+	$tabContentRequestGuest.hide();
+	$tabContentOptionsGuest.hide();
+	$tabContentFavoritesGuest.show();
 	$tabContentSearchGuest.hide();
 	$tabContentPlaylistGuest.hide();
 	$playlistTitle.hide();
@@ -96,7 +115,7 @@ $(document).ready(() => {
 		$selected = $listItems.filter('.hover');
 		console.log($selected);
 		addRequest(partyId, userId, $selected.attr("id"));
-		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
 	
@@ -116,6 +135,7 @@ $(document).ready(() => {
 	const $tabContentPlaylistGuest = $(".tabContentPlaylistGuest");
 	const $tabContentSearchGuest = $(".tabContentSearchGuest");
 	const $tabContentOptionsGuest = $(".tabContentOptionsGuest");
+	const $tabContentFavoritesGuest = $(".tabContentFavoritesGuest");
 	const $playlistTitle = $("#playlist-title");
 	const $requestTitle = $("#request-title");
 	const $listWrapper = $('.list-wrapper');
@@ -126,29 +146,35 @@ $(document).ready(() => {
 	const $playlistGuest = $("#playlist-guest");
 	const $searchGuest = $("#search-guest");
 	const $optionsGuest = $("#options-guest");
+	const $favoritesGuest = $("#favorites-guest");
 
 	$requestsGuest.addClass("active");
 	$tabContentPlaylistGuest.hide();
 	$tabContentSearchGuest.hide();
 	$tabContentOptionsGuest.hide();
+	$tabContentFavoritesGuest.hide();
 	$playlistTitle.hide();
 
 
 	$playlistGuest.click(function() {
-		showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
 	$requestsGuest.click(function() {
-		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
 	$searchGuest.click(function() {
-		showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
 	$optionsGuest.click(function() {
-		showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
+
+	$favoritesGuest.click(function(){
+    	showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+    });
 
 
 });
