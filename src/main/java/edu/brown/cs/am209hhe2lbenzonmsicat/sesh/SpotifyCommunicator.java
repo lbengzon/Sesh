@@ -594,7 +594,6 @@ public class SpotifyCommunicator {
   public static List<Device> getDevices(String userId, boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     List<Device> results = new ArrayList<Device>();
-
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
@@ -628,16 +627,44 @@ public class SpotifyCommunicator {
         String name = currDevice.get("name").getAsString();
         String type = currDevice.get("type").getAsString();
         results.add(new Device(id, type, name, isActive));
-
       }
-
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         return getDevices(userId, false);
-
       }
       throw new RuntimeException(e.getMessage());
     }
     return results;
+  }
+
+  public static void seek(String userId, int position_ms, String deviceId,
+      boolean shouldRefresh) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/seek?position_ms=");
+      sb.append(position_ms);
+      sb.append("&");
+      sb.append("device_id=");
+      sb.append(deviceId);
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("PUT");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      conn.connect();
+      System.out.println(sb.toString());
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        seek(userId, position_ms, deviceId, false);
+        return;
+      }
+      throw new RuntimeException(e.getMessage());
+    }
   }
 }

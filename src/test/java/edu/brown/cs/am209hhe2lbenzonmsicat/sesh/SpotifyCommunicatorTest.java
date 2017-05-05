@@ -54,4 +54,11 @@ public class SpotifyCommunicatorTest {
     SpotifyCommunicator.getDevices("22f3kk24xtzmkkuw477v3dntq", true);
   }
 
+  @Test
+  public void testSeek() {
+    SpotifyCommunicator.setUpTestApi();
+    SpotifyCommunicator.seek("22f3kk24xtzmkkuw477v3dntq", 10000,
+        "e38a34f0fb9fc1b3c406a6fba28fa7b61e255fbe", true);
+  }
+
 }
