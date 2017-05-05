@@ -191,6 +191,15 @@ $(document).ready(() => {
         alert("you double clicked on song with id " + $selected.index());
     });
 
+    $("#ulRequest").dblclick(function() {
+        $listItems = $("li"); 
+        playPlaylist(partyId, userId, $selected.index())
+        $selected = $listItems.filter('.hover');
+        addToPlaylist(partyId, userId, $selected.attr("id"));
+        alert("you double clicked on song with id " + $selected.index());
+    });
+
+
     //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
     function getIndexOfCurrentSong(){
         alert("woah");
