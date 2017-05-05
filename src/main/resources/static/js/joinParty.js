@@ -118,17 +118,6 @@ $(document).ready(() => {
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
-	
-
-
-	/* HANDLES UPVOTE/DOWNVOTE */
-	// $requests.on("click", event => {
-	// 	$listItems = $('li');
-	// 	$selected = $listItems.filter(".selected");
-	// 	console.log($selected button);
-	// 	//console.log($this.attr("id"));
-	// })
-	
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");

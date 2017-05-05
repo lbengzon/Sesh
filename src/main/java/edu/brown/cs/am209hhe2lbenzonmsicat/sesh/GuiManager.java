@@ -22,7 +22,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- * 
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +31,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -47,6 +47,7 @@ public class GuiManager {
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
     Spark.post("/join2", new JoinHandler2());
+    Spark.post("/getParty", new GetPartyHandler());
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
@@ -140,7 +141,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -195,7 +196,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -212,11 +213,15 @@ public class GuiManager {
   }
 
   /**
-   * Handles displaying newly created party.
+   * Creates party in the backend.
+   *
+   * @author HE23
+   *
    */
-  private class CreatePartyHandler implements TemplateViewRoute {
+  private class GetPartyHandler implements Route {
     @Override
-    public ModelAndView handle(Request req, Response res) {
+    public String handle(Request req, Response res) {
+      System.out.println("HERE");
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
       String partyName = qm.value("sesh_name"); // required
@@ -232,14 +237,40 @@ public class GuiManager {
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));
 
+      Map<String, Object> variables = ImmutableMap.of("partyId", "",
+          "partyName", partyName, "userId", userId);
+
       try {
         User host = User.of(userId);
         party = Party.create(partyName, host, coord, LocalDateTime.now());
         partyId = party.getPartyId();
+        variables = ImmutableMap.of("partyId", partyId, "partyName", partyName,
+            "userId", userId);
+        System.out.println("successfully created party in backend");
       } catch (SQLException e) {
         System.out.println("Failed to add party to database");
       }
 
+      System.out.println("reached end!!!!!");
+      return GSON.toJson(variables);
+
+    }
+  }
+
+  /**
+   * Handles displaying newly created party.
+   */
+  private class CreatePartyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      String partyId = qm.value("partyId");
+      String partyName = qm.value("partyName"); // required
+      System.out.println("======In create party handler======");
+      System.out.println("userId: " + userId);
+      System.out.println("partyId: " + partyId);
+      System.out.println("partyName: " + partyName);
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
           "partyId", partyId, "partyName", partyName, "userId", userId);
       return new ModelAndView(variables, "createParty.ftl");
@@ -249,7 +280,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
+   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
