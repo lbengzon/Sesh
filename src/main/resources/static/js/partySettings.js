@@ -27,13 +27,35 @@ $(document).ready(() => {
 	});
 
 	//FIX THIS!!!!!!!
+
+
 	$deviceList.on("click", event => {
 		$listItems = $("li");
+		$listItems.each(function(idx, li) {
+			console.log(li.class);
+		});
 		$listItems.addClass("selected");
 		$selected = $listItems.filter(".selected");
 		global_device_id = $selected.attr("id");
 		console.log("device id set: " + global_device_id);
 		$("#deviceId").val($selected.attr("id"));
+	});
+
+	$("#refresh").click(function() {
+		console.log("here");
+		$deviceList.empty();
+		const postParams = {userId, userId};
+		$.post("/devices", postParams, responseJSON => {
+			const responseObject = JSON.parse(responseJSON);
+			const devices = responseObject.devices;
+			for (let key in devices) {
+				const deviceId = devices[key].id;
+				const deviceType = devices[key].type;
+				console.log(devices[key].name);
+				$("#loadingDevices").hide();
+				$deviceList.append("<li id=\"" + deviceId + "\">" + devices[key].name + "</li>");
+			}
+		});
 	});
 
 	$("#formSubmit").click(function() {

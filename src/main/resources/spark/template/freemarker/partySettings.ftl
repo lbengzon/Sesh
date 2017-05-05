@@ -33,7 +33,7 @@
 
 <div>
 <p> If you don't see your device, make sure spotify is open on a device and press refresh </p>
-
+<input type="button" value="Refresh" id="refresh">
 </div>
 </div>
 
