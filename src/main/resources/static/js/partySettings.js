@@ -8,35 +8,51 @@ $(document).ready(() => {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(getLoc, errorCallBack);
 	}
+
 	wait();
+
 	$("#userId").val(userId);
 
 	const postParams = {userId, userId};
 	$.post("/devices", postParams, responseJSON => {
 		const responseObject = JSON.parse(responseJSON);
 		const devices = responseObject.devices;
-		console.log(devices);
 		for (let key in devices) {
 			const deviceId = devices[key].id;
 			const deviceType = devices[key].type;
+			console.log(devices[key].name);
 			$("#loadingDevices").hide();
-			$deviceList.append("<li id=\"" + deviceId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + devices[key].name + "</li>");
+			$deviceList.append("<li id=\">" + deviceId + "\">" + devices[key].name + "</li>");
 		}
 	});
 
 	$deviceList.on("click", event => {
 		$listItems = $("li");
-		$selected = $listItems.filter('.hover');
-		$selected.addClass("selected");
+		$listItems.addClass("selected");
+		$selected = $listItems.filter(".selected");
 		global_device_id = $selected.attr("id");
 		console.log("device id set: " + global_device_id);
 		$("#deviceId").val($selected.attr("id"));
 	});
 
+	$("#formSubmit").click(function() {
+		if (global_device_id === null) {
+			alert("You must select a device to play from first!");
+		} 
 
+		if ($("#sesh_name").val() !== "" && $("#host_name").val() !== "") {
+			const postParams = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), privacy_setting: $("input[name=privacy_setting]:checked").val(), lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
+			$.post("/getParty", postParams, responseJSON => {
+				const responseObject = JSON.parse(responseJSON);
+				const postParams = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
+				post("/create/party", postParams);
+			});
+		} else {
+			alert("Please fill out the sesh name and host name fields!");
+		}
 
+	});
 
-	
 });
 
 function hoverOn(x) {
@@ -90,29 +106,6 @@ function wait() {
 		console.log("values set "+ " lat: " + global_lat + " lon: " + global_lon);
 		document.getElementById("formSubmit").disabled = false;
 		document.getElementById("formSubmit").value = "Submit";
-		$("#formSubmit").click(function() {
-		console.log("USER ID: " + userId);
-		console.log("SESH NAME: " + $("#sesh_name").val());
-		console.log("HOST NAME: " + $("#host_name").val());
-		console.log("PRIVACY SETTING: " + $("input[name=privacy_setting]:checked").val());
-		console.log("LAT: " + $("#lat").val());
-		console.log("LON: " + $("#lon").val());
-
-		const postParameters = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), privacy_setting: $("input[name=privacy_settings]:checked").val(), lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
-		$.post("/getParty", postParameters, responseJSON => {
-			const responseObject = JSON.parse(responseJSON);
-			const partyId = responseObject.partyId;
-			const partyName = responseObject.partyName;
-			const uId = responseObject.userId;
-			console.log("party id: " + partyId);
-			console.log("party name: " + partyName);
-			console.log("uId: " + uId);
-			const postParams = {userId: uId, partyId: partyId, partyName: partyName, deviceId: global_device_id};
-			post("/create/party", postParams);
-
-		});
-	});
-
 	} else {
 		setTimeout(wait, 300);
 		console.log("waiting...");
