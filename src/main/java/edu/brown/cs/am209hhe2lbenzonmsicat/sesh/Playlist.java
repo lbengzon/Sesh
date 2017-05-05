@@ -42,13 +42,13 @@ public abstract class Playlist {
 
   public abstract CurrentSongPlaying getCurrentSong();
 
-  public abstract void play(int offset);
+  public abstract void play(int offset, String deviceId);
 
-  public abstract void pause();
+  public abstract void pause(String deviceId);
 
-  public abstract void nextSong();
-
-  public abstract void prevSong();
+  // public abstract void nextSong(String deviceId);
+  //
+  // public abstract void prevSong(String deviceId);
 
   public abstract void seek(int position_ms, String deviceId);
 

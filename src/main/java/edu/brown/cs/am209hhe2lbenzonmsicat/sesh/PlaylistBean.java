@@ -21,7 +21,7 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Constructor.
-   * 
+   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -56,7 +56,7 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
-   * 
+   *
    * @param id
    *          - id to set
    */
@@ -138,22 +138,12 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
-  public void play(int offset) {
+  public void play(int offset, String deviceId) {
 
   }
 
   @Override
-  public void pause() {
-
-  }
-
-  @Override
-  public void nextSong() {
-
-  }
-
-  @Override
-  public void prevSong() {
+  public void pause(String deviceId) {
 
   }
 

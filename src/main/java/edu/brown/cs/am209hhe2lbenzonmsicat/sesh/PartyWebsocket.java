@@ -25,33 +25,11 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST,
-    PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT,
-    SET_PARTY_ID,
-    ADD_REQUEST,
-    UPVOTE_REQUEST,
-    DOWNVOTE_REQUEST,
-    MOVE_REQUEST_TO_QUEUE,
-    MOVE_FROM_QUEUE_TO_REQUEST,
-    ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_ADD_REQUEST,
-    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_VOTE_REQUESTS,
-    UPDATE_AFTER_REQUEST_TRANSFER,
-    UPDATE_ENTIRE_PARTY,
-    UPDATE_REARRANGE_PLAYLIST,
-    REORDER_PLAYLIST_TRACK,
-    PLAY_PLAYLIST,
-    PAUSE_SONG,
-    NEXT_SONG,
-    PREVIOUS_SONG,
-    UPDATE_PLAYER,
-    SONG_MOVED_TO_NEXT,
-    UPDATE_NEXT_CURR_SONG_REQUEST
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, NEXT_SONG, PREVIOUS_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST
   }
 
   @OnWebSocketConnect
@@ -127,10 +105,10 @@ public class PartyWebsocket {
           pauseSongAndUpdate(payload, user, party, session);
           break;
         case NEXT_SONG:
-          nextSongAndUpdate(payload, user, party, session);
+          // nextSongAndUpdate(payload, user, party, session);
           break;
         case PREVIOUS_SONG:
-          previousSongAndUpdate(payload, user, party, session);
+          // previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
           updatePartiesCurrentSong(party, session);
@@ -143,31 +121,32 @@ public class PartyWebsocket {
     }
   }
 
-  private void previousSongAndUpdate(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
-    try {
-      party.prevSong();
-      // updatePartiesCurrentSong(party, session);
-    } catch (Exception e) {
-      JsonObject updateMessage = new JsonObject();
-      updateMessage.addProperty("success", false);
-      updateMessage.addProperty("message", e.getMessage());
-      session.getRemote().sendString(updateMessage.toString());
-    }
-  }
-
-  private void nextSongAndUpdate(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
-    try {
-      party.nextSong();
-      // updatePartiesCurrentSong(party, session);
-    } catch (Exception e) {
-      JsonObject updateMessage = new JsonObject();
-      updateMessage.addProperty("success", false);
-      updateMessage.addProperty("message", e.getMessage());
-      session.getRemote().sendString(updateMessage.toString());
-    }
-  }
+  // private void previousSongAndUpdate(JsonObject payload, User user, Party
+  // party,
+  // Session session) throws IOException {
+  // try {
+  // party.prevSong();
+  // // updatePartiesCurrentSong(party, session);
+  // } catch (Exception e) {
+  // JsonObject updateMessage = new JsonObject();
+  // updateMessage.addProperty("success", false);
+  // updateMessage.addProperty("message", e.getMessage());
+  // session.getRemote().sendString(updateMessage.toString());
+  // }
+  // }
+  //
+  // private void nextSongAndUpdate(JsonObject payload, User user, Party party,
+  // Session session) throws IOException {
+  // try {
+  // party.nextSong();
+  // // updatePartiesCurrentSong(party, session);
+  // } catch (Exception e) {
+  // JsonObject updateMessage = new JsonObject();
+  // updateMessage.addProperty("success", false);
+  // updateMessage.addProperty("message", e.getMessage());
+  // session.getRemote().sendString(updateMessage.toString());
+  // }
+  // }
 
   private void pauseSongAndUpdate(JsonObject payload, User user, Party party,
       Session session) throws IOException {
