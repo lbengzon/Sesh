@@ -26,12 +26,9 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
 import com.wrapper.spotify.models.Track;
 
 /**
- * Class that integrates Spotify API for Sesh.
-<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
- * 
-=======
- *
->>>>>>> fixed device id issue
+ * Class that integrates Spotify API for Sesh. <<<<<<<
+ * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
+ * issue
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -143,12 +140,8 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * Get access token.
-<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
-   * 
-=======
-   *
->>>>>>> fixed device id issue
+   * Get access token. <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 =======
+   * >>>>>>> fixed device id issue
    * @param code
    *          - code
    * @return a list of the user's info
@@ -216,12 +209,9 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * This method gets the playlist tracks.
-<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
-   * 
-=======
-   *
->>>>>>> fixed device id issue
+   * This method gets the playlist tracks. <<<<<<<
+   * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
+   * issue
    * @param userId
    *          user id
    * @param playlistId
@@ -370,12 +360,9 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * This method reorders tracks in the playlist.
-<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
-   * 
-=======
-   *
->>>>>>> fixed device id issue
+   * This method reorders tracks in the playlist. <<<<<<<
+   * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
+   * issue
    * @param userId
    *          the user id
    * @param playlistId
@@ -520,7 +507,6 @@ public class SpotifyCommunicator {
       api.setAccessToken(accessToken);
       StringBuilder sb = new StringBuilder();
       sb.append("https://api.spotify.com/v1/me/player/play?device_id=");
-      System.out.println("deviceID = " + deviceId);
       sb.append(deviceId);
       URL url = new URL(sb.toString());
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -541,12 +527,9 @@ public class SpotifyCommunicator {
       body.addProperty("context_uri", sb.toString());
       body.add("offset", offsetObject);
       OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-      System.out.println(body.toString());
       out.write(body.toString());
       out.close();
       conn.connect();
-      System.out.println("body " + body.toString());
-      System.out.println("url : " + url.toString());
 
       System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
@@ -692,10 +675,6 @@ public class SpotifyCommunicator {
       boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
-      System.out.println("IN SEEK METHOD OF SPOTIFY COMM");
-      System.out.println("Position" + position_ms);
-      System.out.println("deviceId" + deviceId);
-      System.out.println("userId" + userId);
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
       api.setAccessToken(accessToken);
@@ -706,7 +685,6 @@ public class SpotifyCommunicator {
       sb.append("device_id=");
       sb.append(deviceId);
       URL url = new URL(sb.toString());
-      System.out.println(sb.toString());
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("PUT");
       StringBuilder sb2 = new StringBuilder();
