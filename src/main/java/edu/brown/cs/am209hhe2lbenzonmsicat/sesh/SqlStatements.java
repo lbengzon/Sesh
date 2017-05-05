@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 /**
  * A class that holds useful sql statements.
+ *
  * @author leandro
  */
 final class SqlStatements {
@@ -161,4 +162,6 @@ final class SqlStatements {
       + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=? "
       + "AND Party.status='ongoing';";
 
+  public static final String ADD_SONG_TO_FAVORITES = "INSERT INTO Favorites (userId, songId) VALUES (?, ?);";
+  public static final String GET_USER_FAVORITES = "SELECT songId FROM Favorites where userId = ?;";
 }
