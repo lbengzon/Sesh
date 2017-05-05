@@ -61,4 +61,11 @@ public class SpotifyCommunicatorTest {
         "e38a34f0fb9fc1b3c406a6fba28fa7b61e255fbe", true);
   }
 
+  @Test
+  public void testUnfollow() {
+    SpotifyCommunicator.setUpTestApi();
+    SpotifyCommunicator.unfollowPlaylist("22f3kk24xtzmkkuw477v3dntq",
+        "5DnDsEbL6Gppqg9wSFTX8I", true);
+  }
+
 }

@@ -181,6 +181,7 @@ public class SpotifyCommunicator {
               results.add(u.getId());
               results.add(u.getEmail());
               results.add(u.getDisplayName());
+              results.add(u.getProduct().type);
             } catch (IOException | WebApiException e) {
               throw new RuntimeException(e.getMessage());
             }
@@ -324,8 +325,34 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static void removePlaylist() {
-
+  public static void unfollowPlaylist(String userId, String playlistId,
+      boolean shouldRefresh) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/users/");
+      sb.append(userId);
+      sb.append("/playlists/");
+      sb.append(playlistId);
+      sb.append("/followers");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("DELETE");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      conn.connect();
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        unfollowPlaylist(userId, playlistId, false);
+        return;
+      }
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   /**
@@ -658,7 +685,7 @@ public class SpotifyCommunicator {
       sb2.append(accessToken);
       conn.setRequestProperty("Authorization", sb2.toString());
       conn.connect();
-      System.out.println(sb.toString());
+
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         seek(userId, position_ms, deviceId, false);
