@@ -528,6 +528,7 @@ public class SpotifyCommunicator {
       out.write(body.toString());
       out.close();
       conn.connect();
+      System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         play(userId, playlistId, offset, false, deviceId);

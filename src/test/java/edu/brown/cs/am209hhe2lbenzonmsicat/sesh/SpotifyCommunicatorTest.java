@@ -7,11 +7,9 @@ public class SpotifyCommunicatorTest {
   @Test
   public void testPlay() {
     SpotifyCommunicator.setUpTestApi();
-    // SpotifyCommunicator.play("alimiraculous", "6SnHyWgrI3Jo2cmququpbN", 2,
-    // true);
     SpotifyCommunicator.play("22f3kk24xtzmkkuw477v3dntq",
         "7JB7rWkoXeO2Ov5DGJkFic", 2, true,
-        "e38a34f0fb9fc1b3c406a6fba28fa7b61e255fbe");
+        "cd319d9b74e13b54f820921bfd125d6733c8efde");
   }
 
   @Test
@@ -35,7 +33,7 @@ public class SpotifyCommunicatorTest {
   public void testPause() {
     SpotifyCommunicator.setUpTestApi();
     SpotifyCommunicator.pause("22f3kk24xtzmkkuw477v3dntq", true,
-        "e38a34f0fb9fc1b3c406a6fba28fa7b61e255fbe");
+        "cd319d9b74e13b54f820921bfd125d6733c8efde");
   }
 
   @Test
@@ -60,7 +58,7 @@ public class SpotifyCommunicatorTest {
   public void testSeek() {
     SpotifyCommunicator.setUpTestApi();
     SpotifyCommunicator.seek("22f3kk24xtzmkkuw477v3dntq", 10000,
-        "e38a34f0fb9fc1b3c406a6fba28fa7b61e255fbe", true);
+        "cd319d9b74e13b54f820921bfd125d6733c8efde", true);
   }
 
   @Test

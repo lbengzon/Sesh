@@ -19,7 +19,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
-   * 
+   *
    * @param spotifyId
    *          - playlist id
    * @param partyId
