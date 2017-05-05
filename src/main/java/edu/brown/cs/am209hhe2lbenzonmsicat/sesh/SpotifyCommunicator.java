@@ -27,7 +27,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
- * 
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -140,7 +140,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
-   * 
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -209,7 +209,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
-   * 
+   *
    * @param userId
    *          user id
    * @param playlistId
@@ -359,7 +359,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
-   * 
+   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -460,27 +460,31 @@ public class SpotifyCommunicator {
             return null;
           }
         }
-        JsonObject item = jsonObj.getAsJsonObject("item");
-        if (item != null) {
-          boolean isPlaying = jsonObj.get("is_playing").getAsBoolean();
-          JsonElement progEl = jsonObj.get("progress_ms");
-          long progress_ms = progEl.getAsLong();
-          JsonObject album = item.get("album").getAsJsonObject();
-          String albumName = album.get("name").getAsString();
-          JsonArray artist = item.get("artists").getAsJsonArray();
-          String artistName = artist.get(0).getAsJsonObject().get("name")
-              .getAsString();
-          JsonArray images = album.get("images").getAsJsonArray();
-          JsonObject desiredImage = images.get(1).getAsJsonObject();
-          String imgLink = desiredImage.get("url").getAsString();
-          String spotifyId = item.get("id").getAsString();
+        try {
+          JsonObject item = jsonObj.getAsJsonObject("item");
+          if (item != null) {
+            boolean isPlaying = jsonObj.get("is_playing").getAsBoolean();
+            JsonElement progEl = jsonObj.get("progress_ms");
+            long progress_ms = progEl.getAsLong();
+            JsonObject album = item.get("album").getAsJsonObject();
+            String albumName = album.get("name").getAsString();
+            JsonArray artist = item.get("artists").getAsJsonArray();
+            String artistName = artist.get(0).getAsJsonObject().get("name")
+                .getAsString();
+            JsonArray images = album.get("images").getAsJsonArray();
+            JsonObject desiredImage = images.get(1).getAsJsonObject();
+            String imgLink = desiredImage.get("url").getAsString();
+            String spotifyId = item.get("id").getAsString();
 
-          long duration = item.get("duration_ms").getAsLong();
-          String title = item.get("name").getAsString();
+            long duration = item.get("duration_ms").getAsLong();
+            String title = item.get("name").getAsString();
 
-          Song s = Song.of(spotifyId, title, albumName, artistName, duration);
-          result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
-              isPlaying);
+            Song s = Song.of(spotifyId, title, albumName, artistName, duration);
+            result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
+                isPlaying);
+          }
+        } catch (IllegalStateException e) {
+          return result;
         }
       } catch (NullPointerException | IllegalStateException e) {
         return result;
