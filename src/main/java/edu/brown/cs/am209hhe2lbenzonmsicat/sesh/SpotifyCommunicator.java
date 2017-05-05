@@ -51,6 +51,10 @@ public class SpotifyCommunicator {
     apiPool = new ApiPool();
   }
 
+  public static void removeApi(String userId) {
+    userToApi.remove(userId);
+  }
+
   public static void setUpTestApi() {
     testApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
@@ -185,9 +189,7 @@ public class SpotifyCommunicator {
             } catch (IOException | WebApiException e) {
               throw new RuntimeException(e.getMessage());
             }
-
             userToApi.put(results.get(0), api);
-
           }
 
           @Override

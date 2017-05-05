@@ -2,6 +2,7 @@ CREATE TABLE "User"(
   "userId" TEXT,
   "email" TEXT,
   "name" TEXT,
+  "type" TEXT,
   PRIMARY KEY ("userId")
 );
 
@@ -13,6 +14,7 @@ CREATE TABLE "Party"(
   "lon" REAL,
   "time" TEXT,
   "status" TEXT,
+  "deviceId" TEXT,
   PRIMARY KEY ("partyId")
 );
 
