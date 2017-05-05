@@ -50,6 +50,8 @@ public abstract class Playlist {
 
   public abstract void prevSong();
 
+  public abstract void seek(int position_ms, String deviceId);
+
   /**
    * @param request
    *          - to add
