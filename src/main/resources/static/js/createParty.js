@@ -15,7 +15,12 @@ function getIndexOfCurrentSong(){
 function playHandler() {
     //FILL IN
     //TODO get the current index of the song and use that
-    playPlaylist(partyId, userId);
+    if(timePassed === undefined || timePassed === null){
+        playPlaylist(partyId, userId);
+    } 
+    else{
+        resumeSong(partyId, userId, timePassed);
+    }
     $playButton.hide();
     $pauseButton.show();
 }
