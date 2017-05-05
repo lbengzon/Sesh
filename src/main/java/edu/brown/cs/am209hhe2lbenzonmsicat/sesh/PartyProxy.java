@@ -12,7 +12,6 @@ import com.google.gson.JsonElement;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
- *
  * @author leandro
  */
 public class PartyProxy extends Party implements Proxy {
@@ -30,7 +29,6 @@ public class PartyProxy extends Party implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -430,6 +428,18 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     return partyBean.pause();
+  }
+
+  @Override
+  public boolean seekSong(long seekPosition) {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return partyBean.seekSong(seekPosition);
   }
 
   // @Override

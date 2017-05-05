@@ -21,7 +21,6 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Constructor.
-   *
    * @param id
    *          - playlist id
    * @param partyId
@@ -56,7 +55,6 @@ public class PlaylistBean extends Playlist {
 
   /**
    * Set id.
-   *
    * @param id
    *          - id to set
    */
@@ -148,7 +146,7 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
-  public void seek(int position_ms, String deviceId) {
+  public void seek(long position_ms, String deviceId) {
 
   }
 

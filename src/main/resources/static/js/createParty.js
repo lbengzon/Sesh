@@ -34,6 +34,19 @@ function nextSongHandler() {
     nextSong(partyId, userId);
 }
 
+function progressBarHandler(e){
+    if(currSongId != -1 && currSongId != undefined && currSongId != null){ 
+        console.log("logging e", e)
+        let x = e.pageX - this.offsetLeft; // or e.offsetX (less support, though)
+        let y = e.pageY - this.offsetTop;  // or e.offsetY
+        let clickedValue = x * this.max / this.offsetWidth;
+
+        console.log("clicked value", clickedValue);
+        seekSong(partyId, userId, clickedValue);
+        console.log(x, y);
+    }
+}
+
 function showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper) {
     $('.list-wrapper').height("50%");
     $listview.addClass("active");
@@ -110,6 +123,7 @@ $(document).ready(() => {
     const $playButton = $("#playButton");
     const $pauseButton = $("#pauseButton");
     const $nextButton = $("#nextButton");
+    const $progressBar = $("#progressbar");
 
 
     let startPlaylistIndex;
@@ -207,16 +221,14 @@ $(document).ready(() => {
     //     });
     // }
 
-    //setInterval(getCurrentSong, 500);
 
-    // setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
+    setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
 
 
     $("#ulPlaylist").dblclick(function() {
         $listItems = $("li"); 
         playPlaylist(partyId, userId, $selected.index())
         $selected = $listItems.filter('.hover');
-        alert("you double clicked on song with id " + $selected.index());
     });
 
     $("#ulRequest").dblclick(function() {
@@ -264,6 +276,8 @@ $(document).ready(() => {
     });
 
     $prevButton.click(previousSongHandler);
+
+    $progressBar.click(progressBarHandler);
 
     $playButton.click(playHandler);
 
