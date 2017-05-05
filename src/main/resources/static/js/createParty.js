@@ -234,7 +234,7 @@ $(document).ready(() => {
         $listItems = $("li"); 
         $selected = $listItems.filter('.hover');
         console.log("index :" + $selected.index());
-        playPlaylist(partyId, userId, $selected.index())
+        playPlaylist(partyId, userId, $selected.index());
         // alert("you double clicked on song with id " + $selected.index());
     });
 
