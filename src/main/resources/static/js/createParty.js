@@ -6,7 +6,36 @@ function hoverOff(x) {
     x.classList.remove('hover');
 }
 
+//HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
+function getIndexOfCurrentSong(){
+    alert("woah");
+    return 1;
+}
+
+function playHandler() {
+    //FILL IN
+    //TODO get the current index of the song and use that
+    playPlaylist(partyId, userId);
+    $playButton.hide();
+    $pauseButton.show();
+}
+
+function pauseHandler(){
+    pauseSong(partyId, userId);
+    $playButton.show();
+    $pauseButton.hide();
+}
+
+function previousSongHandler() {
+    prevSong(partyId, userId);
+}
+
+function nextSongHandler() {
+    nextSong(partyId, userId);
+}
+
 function showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper) {
+    $('.list-wrapper').height("50%");
     $listview.addClass("active");
     $search.removeClass("active");
     $options.removeClass("active");
@@ -15,7 +44,6 @@ function showPlaylists($search, $listview, $options, $tabContentSearch, $tabCont
     $tabContentFavorites.hide();
     $tabContentOptions.hide();
     $titles.show();
-    $listWrapper.height("50%");
 }
 
 function showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper) {
@@ -119,7 +147,7 @@ $(document).ready(() => {
             if (ui.item.parent().attr("id") === "ulRequest") {
                 moveFromQueueToRequest(partyId, userId, ui.item.attr("id"));
             } else {
-                moveRequestToQueue (partyId, userId, ui.item.attr("id"), ui.item.index());
+                moveRequestToQueue(partyId, userId, ui.item.attr("id"), ui.item.index());
             }
         },
         update: function(event, ui) {
@@ -181,7 +209,7 @@ $(document).ready(() => {
 
     //setInterval(getCurrentSong, 500);
 
-    setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
+    // setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
 
 
     $("#ulPlaylist").dblclick(function() {
@@ -193,45 +221,22 @@ $(document).ready(() => {
 
     $("#ulRequest").dblclick(function() {
         $listItems = $("li"); 
-        playPlaylist(partyId, userId, $selected.index())
         $selected = $listItems.filter('.hover');
-        addToPlaylist(partyId, userId, $selected.attr("id"));
-        alert("you double clicked on song with id " + $selected.index());
+        console.log($selected.attr("id"));
+        if ($selected.attr("id")!= undefined) {
+            moveRequestToQueue(partyId, userId, $selected.attr("id"), $("#ulPlaylist li").length);
+        }
     });
 
 
-    //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
-    function getIndexOfCurrentSong(){
-        alert("woah");
-        return 1;
-    }
 
-    function playHandler() {
-        //FILL IN
-        //TODO get the current index of the song and use that
-        playPlaylist(partyId, userId);
-        $playButton.hide();
-        $pauseButton.show();
-    }
 
-    function pauseHandler(){
-        pauseSong(partyId, userId);
-        $playButton.show();
-        $pauseButton.hide();
-    }
-
-    function previousSongHandler() {
-        prevSong(partyId, userId);
-    }
-
-    function nextSongHandler() {
-        nextSong(partyId, userId);
-    }
-
-    $results.on("click", event => {
+    $results.click(function() {
         $listItems = $("li");
         $selected = $listItems.filter('.hover');
         addToPlaylist(partyId, userId, $selected.attr("id"));
+        console.log("WHAT IS HAPPENING")
+        console.log("LIST WRAPPER ===========", $listWrapper)
         showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
     });
 
