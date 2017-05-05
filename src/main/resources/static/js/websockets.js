@@ -16,11 +16,11 @@ UPDATE_REARRANGE_PLAYLIST: 13,
 REORDER_PLAYLIST_TRACK: 14,
 PLAY_PLAYLIST: 15,
 PAUSE_SONG: 16,
-NEXT_SONG: 17,
-PREVIOUS_SONG: 18,
-UPDATE_PLAYER: 19,
-SONG_MOVED_TO_NEXT: 20,
-UPDATE_NEXT_CURR_SONG_REQUEST: 21
+UPDATE_PLAYER: 17,
+SONG_MOVED_TO_NEXT: 18,
+UPDATE_NEXT_CURR_SONG_REQUEST: 19,
+SEEK_SONG: 20,
+RESUME_SONG: 21
 };
 
 let conn;
@@ -415,6 +415,18 @@ function prevSong (partyId, userId) {
       userId: userId,
       partyId: partyId,
       index: index
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function seekSong (partyId, userId, position) {
+  let message = {
+    type: MESSAGE_TYPE.SEEK_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      seekPosition: position
     }
   }
   conn.send(JSON.stringify(message));
