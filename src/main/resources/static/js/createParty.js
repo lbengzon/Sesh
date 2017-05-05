@@ -21,14 +21,14 @@ function playHandler() {
     else{
         resumeSong(partyId, userId, timePassed);
     }
-    $playButton.hide();
-    $pauseButton.show();
+    // $("#playButton").hide();
+    // $("#pauseButton").show();
 }
 
 function pauseHandler(){
     pauseSong(partyId, userId);
-    $playButton.show();
-    $pauseButton.hide();
+    // $("#playButton").show();
+    // $("#pauseButton").hide();
 }
 
 function previousSongHandler() {
@@ -73,7 +73,7 @@ function showSearch($search, $listview, $options, $tabContentSearch, $tabContent
     $tabContentFavorites.hide();
     $tabContentOptions.hide();
     $titles.hide();
-    $listWrapper.height("56%");
+    $('.list-wrapper').height("56%");
 }
 
 function showOptions($search, $listview, $options, $tabContentSearch, $tabContentPlaylist,$tabContentFavorites,$tabContentOptions, $titles, $listWrapper) {
@@ -85,7 +85,7 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
     $tabContentFavorites.hide();
     $tabContentOptions.show();
     $titles.hide();
-    $listWrapper.height("56%");
+    $('.list-wrapper').height("56%");
 }
 
 function showFavorites($search, $listview, $options, $tabContentSearch, $tabContentPlaylist,$tabContentFavorites,$tabContentOptions, $titles, $listWrapper) {
@@ -97,7 +97,7 @@ function showFavorites($search, $listview, $options, $tabContentSearch, $tabCont
     $tabContentFavorites.show();
     $tabContentOptions.hide();
     $titles.hide();
-    $listWrapper.height("56%");
+    $('.list-wrapper').height("56%");
 }
 
 

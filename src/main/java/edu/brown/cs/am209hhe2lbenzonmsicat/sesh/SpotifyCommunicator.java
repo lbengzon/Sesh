@@ -27,7 +27,11 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
+<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
  * 
+=======
+ *
+>>>>>>> fixed device id issue
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -140,7 +144,11 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
+<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
    * 
+=======
+   *
+>>>>>>> fixed device id issue
    * @param code
    *          - code
    * @return a list of the user's info
@@ -209,7 +217,11 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
+<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
    * 
+=======
+   *
+>>>>>>> fixed device id issue
    * @param userId
    *          user id
    * @param playlistId
@@ -359,7 +371,11 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
+<<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
    * 
+=======
+   *
+>>>>>>> fixed device id issue
    * @param userId
    *          the user id
    * @param playlistId
@@ -504,6 +520,7 @@ public class SpotifyCommunicator {
       api.setAccessToken(accessToken);
       StringBuilder sb = new StringBuilder();
       sb.append("https://api.spotify.com/v1/me/player/play?device_id=");
+      System.out.println("deviceID = " + deviceId);
       sb.append(deviceId);
       URL url = new URL(sb.toString());
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -528,6 +545,9 @@ public class SpotifyCommunicator {
       out.write(body.toString());
       out.close();
       conn.connect();
+      System.out.println("body " + body.toString());
+      System.out.println("url : " + url.toString());
+
       System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
