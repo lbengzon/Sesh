@@ -279,7 +279,6 @@ public class PartyBean extends Party {
 
   @Override
   public JsonElement getPlaylistQueueAsJson() {
-    System.out.println("inside party bean queue as JSON");
     Map<String, Object> requestsMap = new LinkedHashMap<>();
     List<Request> songs = playlist.getSongs();
     for (Request r : songs) {
@@ -336,7 +335,6 @@ public class PartyBean extends Party {
 
   @Override
   public boolean playPlaylist(int index) {
-    System.out.println(deviceId);
     playlist.play(index, deviceId);
     return true;
   }

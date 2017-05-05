@@ -89,7 +89,6 @@ function setupWebsockets() {
           console.log("update after request transfer");
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           clearAndPopulateRequests(data.payload.requestList, $requests);
-
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
@@ -426,6 +425,22 @@ function seekSong (partyId, userId, position) {
     payload:{
       userId: userId,
       partyId: partyId,
+      seekPosition: position
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function resumeSong(partyId, userId, position){
+  index = getCurrentSongIndex();
+  //IF you should play the current song (i.e it was paused) if you dont go into his if statement it means 
+  //the host double clicked on a song to play it.
+  let message = {
+    type: MESSAGE_TYPE.RESUME_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      index: index,
       seekPosition: position
     }
   }

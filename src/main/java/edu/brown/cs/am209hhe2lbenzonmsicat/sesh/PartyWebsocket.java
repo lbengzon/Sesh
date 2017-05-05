@@ -131,6 +131,7 @@ public class PartyWebsocket {
           // nextSongAndUpdate(payload, user, party, session);
           break;
         case RESUME_SONG:
+          resumeSong(payload, user, party, session);
           // previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
@@ -144,39 +145,27 @@ public class PartyWebsocket {
     }
   }
 
-  // private void previousSongAndUpdate(JsonObject payload, User user, Party
-  // party,
-  // Session session) throws IOException {
-  // try {
-  // party.prevSong();
-  // // updatePartiesCurrentSong(party, session);
-  // } catch (Exception e) {
-  // JsonObject updateMessage = new JsonObject();
-  // updateMessage.addProperty("success", false);
-  // updateMessage.addProperty("message", e.getMessage());
-  // session.getRemote().sendString(updateMessage.toString());
-  // }
-  // }
-  //
-  // private void nextSongAndUpdate(JsonObject payload, User user, Party party,
-  // Session session) throws IOException {
-  // try {
-  // party.nextSong();
-  // // updatePartiesCurrentSong(party, session);
-  // } catch (Exception e) {
-  // JsonObject updateMessage = new JsonObject();
-  // updateMessage.addProperty("success", false);
-  // updateMessage.addProperty("message", e.getMessage());
-  // session.getRemote().sendString(updateMessage.toString());
-  // }
-  // }
+  private void resumeSong(JsonObject payload, User user, Party party,
+      Session session) throws IOException {
+    try {
+      int index = payload.get("index").getAsInt();
+      long seekPosition = payload.get("seekPosition").getAsLong();
+      party.playPlaylist(index);
+      party.seekSong(seekPosition);
+      // updatePartiesCurrentSong(party, session);
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
 
   private void seekSong(JsonObject payload, User user, Party party,
       Session session) throws IOException {
     try {
 
       long position = payload.get("seekPosition").getAsLong();
-      System.out.println("Seek position = " + position);
       party.seekSong(position);
       // updatePartiesCurrentSong(party, session);
     } catch (Exception e) {
@@ -220,6 +209,7 @@ public class PartyWebsocket {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
       CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
+
       if (curr == null) {
         return;
       }
@@ -399,12 +389,9 @@ public class PartyWebsocket {
         success = party.removeFromPlaylist(requestId);
 
       }
-      System.out.println("success = " + success);
       if (success == false) {
         throw new RuntimeException("ERROR: Cannot vote on request");
       }
-      System.out.println("calling get playlist queue as json");
-      System.out.println(party.getPlaylistQueueAsJson());
       updatePayload.add("requestList", party.getRequestsAsJson());
       updatePayload.add("playlist", party.getPlaylistQueueAsJson());
       updateMessage.addProperty("type",
