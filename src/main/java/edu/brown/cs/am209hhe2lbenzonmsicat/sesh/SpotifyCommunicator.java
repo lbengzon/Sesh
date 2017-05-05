@@ -432,54 +432,58 @@ public class SpotifyCommunicator {
         response.append(inputLine);
       }
       in.close();
-      JsonObject jsonObj = new JsonParser().parse(response.toString())
-          .getAsJsonObject();
-
-      JsonObject context = null;
       try {
-        context = jsonObj.get("context").getAsJsonObject();
+        JsonObject jsonObj = new JsonParser().parse(response.toString())
+            .getAsJsonObject();
 
-      } catch (IllegalStateException e) {
-        // THUS context doesn't exist"
-      }
+        JsonObject context = null;
+        try {
+          context = jsonObj.get("context").getAsJsonObject();
 
-      if (context != null) {
-        String type = context.get("type").toString();
-        if (!type.equals("\"playlist\"")) {
-          return null;
+        } catch (IllegalStateException e) {
+          // THUS context doesn't exist"
         }
-        String uri = context.get("uri").toString();
-        sb = new StringBuilder();
-        sb.append("\"spotify:user:");
-        sb.append(userId);
-        sb.append(":playlist:");
-        sb.append(playlistId);
-        sb.append("\"");
-        if (!uri.equals(sb.toString())) {
-          return null;
+
+        if (context != null) {
+          String type = context.get("type").toString();
+          if (!type.equals("\"playlist\"")) {
+            return null;
+          }
+          String uri = context.get("uri").toString();
+          sb = new StringBuilder();
+          sb.append("\"spotify:user:");
+          sb.append(userId);
+          sb.append(":playlist:");
+          sb.append(playlistId);
+          sb.append("\"");
+          if (!uri.equals(sb.toString())) {
+            return null;
+          }
         }
-      }
-      JsonObject item = jsonObj.getAsJsonObject("item");
-      if (item != null) {
-        boolean isPlaying = jsonObj.get("is_playing").getAsBoolean();
-        JsonElement progEl = jsonObj.get("progress_ms");
-        long progress_ms = progEl.getAsLong();
-        JsonObject album = item.get("album").getAsJsonObject();
-        String albumName = album.get("name").getAsString();
-        JsonArray artist = item.get("artists").getAsJsonArray();
-        String artistName = artist.get(0).getAsJsonObject().get("name")
-            .getAsString();
-        JsonArray images = album.get("images").getAsJsonArray();
-        JsonObject desiredImage = images.get(1).getAsJsonObject();
-        String imgLink = desiredImage.get("url").getAsString();
-        String spotifyId = item.get("id").getAsString();
+        JsonObject item = jsonObj.getAsJsonObject("item");
+        if (item != null) {
+          boolean isPlaying = jsonObj.get("is_playing").getAsBoolean();
+          JsonElement progEl = jsonObj.get("progress_ms");
+          long progress_ms = progEl.getAsLong();
+          JsonObject album = item.get("album").getAsJsonObject();
+          String albumName = album.get("name").getAsString();
+          JsonArray artist = item.get("artists").getAsJsonArray();
+          String artistName = artist.get(0).getAsJsonObject().get("name")
+              .getAsString();
+          JsonArray images = album.get("images").getAsJsonArray();
+          JsonObject desiredImage = images.get(1).getAsJsonObject();
+          String imgLink = desiredImage.get("url").getAsString();
+          String spotifyId = item.get("id").getAsString();
 
-        long duration = item.get("duration_ms").getAsLong();
-        String title = item.get("name").getAsString();
+          long duration = item.get("duration_ms").getAsLong();
+          String title = item.get("name").getAsString();
 
-        Song s = Song.of(spotifyId, title, albumName, artistName, duration);
-        result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
-            isPlaying);
+          Song s = Song.of(spotifyId, title, albumName, artistName, duration);
+          result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
+              isPlaying);
+        }
+      } catch (NullPointerException | IllegalStateException e) {
+        return result;
       }
       return result;
     } catch (IOException | WebApiException e) {
@@ -492,21 +496,21 @@ public class SpotifyCommunicator {
   }
 
   public static void play(String userId, String playlistId, int offset,
-      boolean shouldRefresh) {
+      boolean shouldRefresh, String deviceId) {
     Api api = userToApi.get(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
       api.setAccessToken(accessToken);
       StringBuilder sb = new StringBuilder();
-      sb.append("https://api.spotify.com/v1/me/player/play");
+      sb.append("https://api.spotify.com/v1/me/player/play?device_id=");
+      sb.append(deviceId);
       URL url = new URL(sb.toString());
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("PUT");
       StringBuilder sb2 = new StringBuilder();
       sb2.append("Bearer ");
       sb2.append(accessToken);
-
       conn.setRequestProperty("Authorization", sb2.toString());
       conn.setDoOutput(true);
       sb = new StringBuilder();
@@ -514,9 +518,6 @@ public class SpotifyCommunicator {
       sb.append(userId);
       sb.append(":playlist:");
       sb.append(playlistId);
-      // JsonObject context_uri = new JsonObject();
-      // context_uri.addProperty("context_uri", sb.toString());
-
       JsonObject offsetObject = new JsonObject();
       offsetObject.addProperty("position", Integer.toString(offset));
       JsonObject body = new JsonObject();
@@ -525,31 +526,27 @@ public class SpotifyCommunicator {
       OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
       System.out.println(body.toString());
       out.write(body.toString());
-      // out.write(offset);
-      // System.out.println(context_uri);
-      // System.out.println(uris);
-      // System.out.println(offset);
       out.close();
-
       conn.connect();
-      System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
-        play(userId, playlistId, offset, false);
+        play(userId, playlistId, offset, false, deviceId);
         return;
       }
       throw new RuntimeException(e.getMessage());
     }
   }
 
-  public static void pause(String userId, boolean shouldRefresh) {
+  public static void pause(String userId, boolean shouldRefresh,
+      String deviceId) {
     Api api = userToApi.get(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
       api.setAccessToken(accessToken);
       StringBuilder sb = new StringBuilder();
-      sb.append("https://api.spotify.com/v1/me/player/pause");
+      sb.append("https://api.spotify.com/v1/me/player/pause?device_id=");
+      sb.append(deviceId);
       URL url = new URL(sb.toString());
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("PUT");
@@ -561,7 +558,7 @@ public class SpotifyCommunicator {
       System.out.println(conn.getResponseCode());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
-        pause(userId, false);
+        pause(userId, false, deviceId);
         return;
       }
       throw new RuntimeException(e.getMessage());
@@ -645,6 +642,7 @@ public class SpotifyCommunicator {
       }
       in.close();
       try {
+
         JsonObject jsonObj = new JsonParser().parse(response.toString())
             .getAsJsonObject();
         System.out.println(jsonObj);
@@ -657,7 +655,7 @@ public class SpotifyCommunicator {
           String type = currDevice.get("type").getAsString();
           results.add(new Device(id, type, name, isActive));
         }
-      } catch (NullPointerException e) {
+      } catch (NullPointerException | IllegalStateException e) {
         return results;
       }
     } catch (IOException | WebApiException e) {
