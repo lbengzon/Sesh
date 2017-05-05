@@ -25,33 +25,11 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST,
-    PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT,
-    SET_PARTY_ID,
-    ADD_REQUEST,
-    UPVOTE_REQUEST,
-    DOWNVOTE_REQUEST,
-    MOVE_REQUEST_TO_QUEUE,
-    MOVE_FROM_QUEUE_TO_REQUEST,
-    ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_ADD_REQUEST,
-    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_VOTE_REQUESTS,
-    UPDATE_AFTER_REQUEST_TRANSFER,
-    UPDATE_ENTIRE_PARTY,
-    UPDATE_REARRANGE_PLAYLIST,
-    REORDER_PLAYLIST_TRACK,
-    PLAY_PLAYLIST,
-    PAUSE_SONG,
-    UPDATE_PLAYER,
-    SONG_MOVED_TO_NEXT,
-    UPDATE_NEXT_CURR_SONG_REQUEST,
-    SEEK_SONG,
-    RESUME_SONG,
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST, SEEK_SONG, RESUME_SONG,
   }
 
   @OnWebSocketConnect
@@ -134,6 +112,7 @@ public class PartyWebsocket {
           // previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
+          System.out.println("fdsafds");
           updatePartiesCurrentSong(party, session);
           break;
         default:
@@ -220,7 +199,9 @@ public class PartyWebsocket {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
       CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
+
       if (curr == null) {
+        System.out.println("its null");
         return;
       }
       String requestId = Request.getId(party.getPartyId(),
@@ -236,7 +217,9 @@ public class PartyWebsocket {
       updateMessage.add("payload", updatePayload);
       updateMessage.addProperty("type", MESSAGE_TYPE.UPDATE_PLAYER.ordinal());
       updateMessage.addProperty("success", true);
+      System.out.println("over here");
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
+        System.out.println("sesh");
         if (sesh.equals(sender)) {
           JsonObject senderUpdateMessage = new JsonObject();
           senderUpdateMessage.add("payload", updatePayload);

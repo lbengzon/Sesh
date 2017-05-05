@@ -22,10 +22,11 @@ $(document).ready(() => {
 			const deviceType = devices[key].type;
 			console.log(devices[key].name);
 			$("#loadingDevices").hide();
-			$deviceList.append("<li id=\">" + deviceId + "\">" + devices[key].name + "</li>");
+			$deviceList.append("<li id=\"" + deviceId + "\">" + devices[key].name + "</li>");
 		}
 	});
 
+	//FIX THIS!!!!!!!
 	$deviceList.on("click", event => {
 		$listItems = $("li");
 		$listItems.addClass("selected");
