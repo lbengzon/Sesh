@@ -25,11 +25,33 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST,
+    PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, NEXT_SONG, PREVIOUS_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST
+    CONNECT,
+    SET_PARTY_ID,
+    ADD_REQUEST,
+    UPVOTE_REQUEST,
+    DOWNVOTE_REQUEST,
+    MOVE_REQUEST_TO_QUEUE,
+    MOVE_FROM_QUEUE_TO_REQUEST,
+    ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_ADD_REQUEST,
+    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_VOTE_REQUESTS,
+    UPDATE_AFTER_REQUEST_TRANSFER,
+    UPDATE_ENTIRE_PARTY,
+    UPDATE_REARRANGE_PLAYLIST,
+    REORDER_PLAYLIST_TRACK,
+    PLAY_PLAYLIST,
+    PAUSE_SONG,
+    UPDATE_PLAYER,
+    SONG_MOVED_TO_NEXT,
+    UPDATE_NEXT_CURR_SONG_REQUEST,
+    SEEK_SONG,
+    RESUME_SONG,
   }
 
   @OnWebSocketConnect
@@ -104,10 +126,11 @@ public class PartyWebsocket {
         case PAUSE_SONG:
           pauseSongAndUpdate(payload, user, party, session);
           break;
-        case NEXT_SONG:
+        case SEEK_SONG:
+          seekSong(payload, user, party, session);
           // nextSongAndUpdate(payload, user, party, session);
           break;
-        case PREVIOUS_SONG:
+        case RESUME_SONG:
           // previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
@@ -147,6 +170,23 @@ public class PartyWebsocket {
   // session.getRemote().sendString(updateMessage.toString());
   // }
   // }
+
+  private void seekSong(JsonObject payload, User user, Party party,
+      Session session) throws IOException {
+    try {
+
+      long position = payload.get("seekPosition").getAsLong();
+      System.out.println("Seek position = " + position);
+      party.seekSong(position);
+      // updatePartiesCurrentSong(party, session);
+    } catch (Exception e) {
+      e.printStackTrace();
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
 
   private void pauseSongAndUpdate(JsonObject payload, User user, Party party,
       Session session) throws IOException {
