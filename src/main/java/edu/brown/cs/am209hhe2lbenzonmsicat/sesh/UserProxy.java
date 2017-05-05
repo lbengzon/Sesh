@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,9 +33,9 @@ public class UserProxy extends User implements Proxy {
    * @param name
    *          their name
    */
-  public UserProxy(String spotifyId, String email, String name) {
+  public UserProxy(String spotifyId, String email, String name, String type) {
     this.spotifyId = spotifyId;
-    userBean = new UserBean(spotifyId, email, name);
+    userBean = new UserBean(spotifyId, email, name, type);
   }
 
   /**
@@ -148,6 +149,23 @@ public class UserProxy extends User implements Proxy {
       }
     }
     return userBean.toMap();
+  }
+
+  @Override
+  public String getType() {
+    if (userBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return userBean.getType();
+  }
+
+  @Override
+  public List<Device> getDevices() {
+    return SpotifyCommunicator.getDevices(spotifyId, true);
   }
 
 }

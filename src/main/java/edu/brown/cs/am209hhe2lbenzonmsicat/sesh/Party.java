@@ -192,6 +192,8 @@ public abstract class Party implements Jsonable {
    */
   public abstract boolean addGuest(User guest);
 
+  public abstract String getDeviceId();
+
   /**
    * Removes a guest from the party <<<<<<< HEAD ======= >>>>>>>
    * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
@@ -255,13 +257,14 @@ public abstract class Party implements Jsonable {
    * @return party
    */
   public static Party of(int partyId, String name, String playlistId,
-      Coordinate location, LocalDateTime time, Status status) {
+      Coordinate location, LocalDateTime time, Status status, String deviceId) {
     if (name == null || playlistId == null || location == null || time == null
         || status == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an part from a null id");
     }
-    return new PartyProxy(partyId, name, playlistId, location, time, status);
+    return new PartyProxy(partyId, name, playlistId, location, time, status,
+        deviceId);
   }
 
   /**
@@ -325,13 +328,14 @@ public abstract class Party implements Jsonable {
    */
   // TODO: Modify parameters to take in Date object for time
   public static Party create(String name, User host, Coordinate location,
-      LocalDateTime time) throws SQLException {
+      LocalDateTime time, String deviceId) throws SQLException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an party from a null id");
     }
     String newPlaylistId = Playlist.getNewPlaylistId(host);
-    return DbHandler.addParty(newPlaylistId, name, location, time, host);
+    return DbHandler.addParty(newPlaylistId, name, location, time, host,
+        deviceId);
   }
 
   /**

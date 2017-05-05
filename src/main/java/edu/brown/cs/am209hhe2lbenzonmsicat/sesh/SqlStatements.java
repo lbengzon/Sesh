@@ -26,7 +26,7 @@ final class SqlStatements {
    * Adds a new user into the user table.
    */
   public static final String ADD_NEW_USER = "INSERT INTO \"User\" "
-      + "(userId, email, name) VALUES (?, ?, ?);";
+      + "(userId, email, name, type) VALUES (?, ?, ?, ?);";
 
   /**
    * Adds a new song request into the song request table.
@@ -39,8 +39,8 @@ final class SqlStatements {
    * Adds a new party to the party table with the status of "ongoing".
    */
   public static final String ADD_NEW_PARTY = "INSERT INTO Party "
-      + "(spotifyPlaylistId, name, lat, lon, time, status) "
-      + "VALUES (?, ?, ?, ?, ?, 'ongoing');";
+      + "(spotifyPlaylistId, name, lat, lon, time, deviceId, status) "
+      + "VALUES (?, ?, ?, ?, ?, ?, 'ongoing');";
 
   public static final String END_PARTY = "UPDATE "
       + "PARTY SET status='stopped' WHERE partyId = ?;";
@@ -146,18 +146,18 @@ final class SqlStatements {
    */
   public static final String GET_USER_PARTY = "SELECT Party.PartyId, "
       + "spotifyPlaylistId, "
-      + "name, lat, lon, time, status FROM PartyAttendee JOIN Party"
+      + "name, lat, lon, time, status, deviceId FROM PartyAttendee JOIN Party"
       + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=?;";
 
   public static final String GET_PARTY_HOSTED_BY_USER = "SELECT "
       + "Party.PartyId, spotifyPlaylistId, name, lat, lon, time, "
-      + "status FROM PartyAttendee JOIN Party"
+      + "status, deviceId FROM PartyAttendee JOIN Party"
       + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=? "
       + "AND PartyAttendee.type='host' AND Party.status='ongoing';";
 
   public static final String GET_ACTIVE_PARTY_OF_USER = "SELECT "
       + "Party.PartyId, spotifyPlaylistId, name, lat, lon, time, "
-      + "status FROM PartyAttendee JOIN Party"
+      + "status, deviceId FROM PartyAttendee JOIN Party"
       + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=? "
       + "AND Party.status='ongoing';";
 
