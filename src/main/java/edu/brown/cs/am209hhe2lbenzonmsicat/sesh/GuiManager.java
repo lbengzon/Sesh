@@ -23,6 +23,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 /**
  * Gui Manager class. <<<<<<< HEAD ======= >>>>>>>
  * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -32,6 +33,7 @@ public class GuiManager {
   /**
    * Default constructor. <<<<<<< HEAD ======= >>>>>>>
    * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -93,19 +95,42 @@ public class GuiManager {
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
       String type = userInfo.get(3);
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
       try {
-        user = User.create(userId, userEmail, userName, type);
         ftlPage = "createJoin.ftl";
+        user = User.create(userId, userEmail, userName, type);
       } catch (SQLException e) {
         /* user already exists */
         user = User.of(userId);
-        // TODO check if user is currently attending a party, and if so must
-        // redirect to that party's view
-        ftlPage = "createJoin.ftl";
+        Party p = Party.getActivePartyOfUser(user);
+
+        /* user is not part of an active party */
+        if (p == null) {
+          ftlPage = "createJoin.ftl";
+        } else {
+          assert p != null;
+          /* user is host */
+          if (p.getHost().equals(user)) {
+            ftlPage = "createParty.ftl";
+            int partyId = p.getPartyId();
+            String partyName = p.getName();
+            variables = ImmutableMap.of("title", partyName, "userId", userId,
+                "partyId", partyId, "partyName", partyName);
+          } else {
+            assert p.getGuests().contains(user);
+            ftlPage = "joinParty.ftl";
+            int partyId = p.getPartyId();
+            String partyName = p.getName();
+            variables = ImmutableMap.of("title", partyName, "userId", userId,
+                "partyId", partyId, "partyName", partyName);
+          }
+
+        }
+
+        // ftlPage = "createJoin.ftl";
       }
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
-          userId);
       return new ModelAndView(variables, ftlPage);
     }
   }
@@ -144,6 +169,7 @@ public class GuiManager {
   /**
    * Handles request to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
    * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -199,6 +225,7 @@ public class GuiManager {
   /**
    * Handles request to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
    * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -216,6 +243,7 @@ public class GuiManager {
 
   /**
    * Creates party in the backend.
+   *
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -284,6 +312,7 @@ public class GuiManager {
   /**
    * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
    * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   *
    * @author HE23
    */
   private static class SearchHandler implements Route {

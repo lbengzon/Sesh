@@ -27,7 +27,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
- * 
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -140,7 +140,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
-   * 
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -209,7 +209,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
-   * 
+   *
    * @param userId
    *          user id
    * @param playlistId
@@ -359,7 +359,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
-   * 
+   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -644,18 +644,21 @@ public class SpotifyCommunicator {
         response.append(inputLine);
       }
       in.close();
-      JsonObject jsonObj = new JsonParser().parse(response.toString())
-          .getAsJsonObject();
-      System.out.println(jsonObj);
-      // System.out.println(jsonObj.get("devices"));
-      JsonArray deviceArray = jsonObj.get("devices").getAsJsonArray();
-      for (JsonElement el : deviceArray) {
-        JsonObject currDevice = el.getAsJsonObject();
-        String id = currDevice.get("id").getAsString();
-        boolean isActive = currDevice.get("is_active").getAsBoolean();
-        String name = currDevice.get("name").getAsString();
-        String type = currDevice.get("type").getAsString();
-        results.add(new Device(id, type, name, isActive));
+      try {
+        JsonObject jsonObj = new JsonParser().parse(response.toString())
+            .getAsJsonObject();
+        System.out.println(jsonObj);
+        JsonArray deviceArray = jsonObj.get("devices").getAsJsonArray();
+        for (JsonElement el : deviceArray) {
+          JsonObject currDevice = el.getAsJsonObject();
+          String id = currDevice.get("id").getAsString();
+          boolean isActive = currDevice.get("is_active").getAsBoolean();
+          String name = currDevice.get("name").getAsString();
+          String type = currDevice.get("type").getAsString();
+          results.add(new Device(id, type, name, isActive));
+        }
+      } catch (NullPointerException e) {
+        return results;
       }
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
