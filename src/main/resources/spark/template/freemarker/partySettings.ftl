@@ -9,7 +9,7 @@
 
 <div id="form-wrapper">
 <div id="create_sesh">
-<form id="formId" method="POST" action="/create/party">
+<form id="formId">
 
 <label>Sesh Name:</label><input type="text" id="sesh_name" name="sesh_name" autocomplete="off" required>
 <label>Host Name:</label><input type="text" id="host_name" name="host_name" autocomplete="off">
@@ -22,7 +22,7 @@
 <input type="text" id="lon" name="lon" style="display: none;">
 
 <input type="text" id="userId" name="userId" style="display: none;">
-<input type="submit" value="Loading..." id="formSubmit" formmethod="post" formaction="/create/party" >
+<input type="button" value="Loading..." id="formSubmit">
 </form>
 </div>
 </div>

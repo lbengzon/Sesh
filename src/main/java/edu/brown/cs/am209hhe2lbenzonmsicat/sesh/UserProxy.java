@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -160,6 +161,11 @@ public class UserProxy extends User implements Proxy {
       }
     }
     return userBean.getType();
+  }
+
+  @Override
+  public List<Device> getDevices() {
+    return SpotifyCommunicator.getDevices(spotifyId, true);
   }
 
 }
