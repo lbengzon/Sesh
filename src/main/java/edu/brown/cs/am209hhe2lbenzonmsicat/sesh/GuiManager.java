@@ -51,6 +51,7 @@ public class GuiManager {
     Spark.post("/create/party", new CreatePartyHandler(), fme);
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
+    Spark.post("/devices", new DevicesHandler());
     // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
   }
@@ -206,9 +207,8 @@ public class GuiManager {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("createUserId");
       User user = User.of(userId);
-      List<Device> devices = user.getDevices();
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
-          "userId", userId, "devices", devices);
+          "userId", userId);
 
       return new ModelAndView(variables, "partySettings.ftl");
     }
@@ -229,6 +229,8 @@ public class GuiManager {
       String privacyStatus = qm.value("privacy_setting"); // add to Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
+      String deviceId = qm.value("deviceId");
+
       Party party = null;
       int partyId = -1;
       System.out.println("lat " + lat);
@@ -243,7 +245,7 @@ public class GuiManager {
       try {
         User host = User.of(userId);
         party = Party.create(partyName, host, coord, LocalDateTime.now(),
-            "DEVICE_ID");
+            deviceId);
         partyId = party.getPartyId();
         variables = ImmutableMap.of("partyId", partyId, "partyName", partyName,
             "userId", userId);
@@ -313,6 +315,25 @@ public class GuiManager {
       Map<String, Object> variables = ImmutableMap.of("results",
           new ArrayList<String>(), "songIds", new ArrayList<String>());
       return GSON.toJson(variables);
+    }
+  }
+
+  private static class DevicesHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      try {
+        QueryParamsMap qm = req.queryMap();
+        String userId = qm.value("userId");
+        List<Device> devices = User.of(userId).getDevices();
+        Map<String, Object> variables = ImmutableMap.of("success", true,
+            "devices", devices);
+        return GSON.toJson(variables);
+      } catch (Exception c) {
+        c.printStackTrace();
+        Map<String, Object> variables = ImmutableMap.of("success", false,
+            "message", c.getMessage());
+        return GSON.toJson(variables);
+      }
     }
   }
 
