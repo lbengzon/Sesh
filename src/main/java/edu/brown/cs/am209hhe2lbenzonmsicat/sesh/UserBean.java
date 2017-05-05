@@ -13,6 +13,7 @@ public class UserBean extends User {
   private String email;
   private String firstName;
   private String lastName;
+  private String type;
 
   /**
    * This is the constructor for the User class.
@@ -24,9 +25,10 @@ public class UserBean extends User {
    * @param name
    *          - user's first name
    */
-  public UserBean(String spotifyId, String email, String name) {
+  public UserBean(String spotifyId, String email, String name, String t) {
     this.spotifyId = spotifyId;
     this.email = email;
+    this.type = t;
 
     if (name != null) {
       String[] names = name.split(" ");
