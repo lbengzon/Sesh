@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -110,6 +111,12 @@ public class UserBean extends User {
   @Override
   public String getType() {
     return type;
+  }
+
+  @Override
+  public List<Device> getDevices() {
+    assert false : "should never really get here";
+    return SpotifyCommunicator.getDevices(spotifyId, true);
   }
 
 }

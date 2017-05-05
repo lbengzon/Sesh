@@ -1,6 +1,7 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -37,6 +38,8 @@ public abstract class User implements Jsonable {
   public abstract String getFullName();
 
   public abstract String getType();
+
+  public abstract List<Device> getDevices();
 
   /**
    * User of.

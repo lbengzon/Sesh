@@ -6,35 +6,50 @@ function hoverOff(x) {
     x.classList.remove('hover');
 }
 
-function showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper) {
+function showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper) {
     $listview.addClass("active");
     $search.removeClass("active");
     $options.removeClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.show();
+    $tabContentFavorites.hide();
     $tabContentOptions.hide();
     $titles.show();
     $listWrapper.height("50%");
 }
 
-function showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper) {
+function showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper) {
     $search.addClass("active");
     $listview.removeClass("active");
     $options.removeClass("active");
     $tabContentSearch.show();
     $tabContentPlaylist.hide();
+    $tabContentFavorites.hide();
     $tabContentOptions.hide();
     $titles.hide();
     $listWrapper.height("56%");
 }
 
-function showOptions($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper) {
+function showOptions($search, $listview, $options, $tabContentSearch, $tabContentPlaylist,$tabContentFavorites,$tabContentOptions, $titles, $listWrapper) {
     $options.addClass("active");
     $listview.removeClass("active");
     $search.removeClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.hide();
+    $tabContentFavorites.hide();
     $tabContentOptions.show();
+    $titles.hide();
+    $listWrapper.height("56%");
+}
+
+function showFavorites($search, $listview, $options, $tabContentSearch, $tabContentPlaylist,$tabContentFavorites,$tabContentOptions, $titles, $listWrapper) {
+    $options.addClass("active");
+    $listview.removeClass("active");
+    $search.removeClass("active");
+    $tabContentSearch.hide();
+    $tabContentPlaylist.hide();
+    $tabContentFavorites.show();
+    $tabContentOptions.hide();
     $titles.hide();
     $listWrapper.height("56%");
 }
@@ -47,6 +62,7 @@ $(document).ready(() => {
     const $tabContentPlaylist = $(".tabContentPlaylist");
     const $tabContentSearch = $(".tabContentSearch");
     const $tabContentOptions = $(".tabContentOptions");
+    const $tabContentFavorites = $(".tabContentFavorites");
     const $titles = $(".titles");
     const $listWrapper = $('.list-wrapper');
 
@@ -54,6 +70,7 @@ $(document).ready(() => {
     const $listview = $("#playlist-dj");
     const $search = $("#search-dj");
     const $options = $("#options-dj");
+    const $favorites = $("#favorites-dj");
 
 
     const $userInput = $(".search");
@@ -212,17 +229,23 @@ $(document).ready(() => {
     $listview.addClass("active");
     $tabContentSearch.hide();
     $tabContentOptions.hide();
+    $tabContentFavorites.hide();
+
 
     $search.click(function() {
-        showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+        showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper);
     });
 
     $listview.click(function() {
-        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper);
     });
 
     $options.click(function() {
-        showOptions($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+        showOptions($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper);
+    });
+
+    $favorites.click(function(){
+    	showFavorites($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper);
     });
 
     $prevButton.click(previousSongHandler);
