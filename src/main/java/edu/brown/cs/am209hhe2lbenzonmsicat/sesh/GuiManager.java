@@ -312,8 +312,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
-   * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * Handles displaying search results.
    *
    * @author HE23
    */
