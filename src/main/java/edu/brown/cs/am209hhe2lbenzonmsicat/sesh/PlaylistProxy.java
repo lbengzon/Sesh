@@ -113,24 +113,25 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public void play(int offset) {
-    SpotifyCommunicator.play(host.getSpotifyId(), this.spotifyId, offset, true);
+  public void play(int offset, String deviceId) {
+    SpotifyCommunicator.play(host.getSpotifyId(), this.spotifyId, offset, true,
+        deviceId);
   }
 
   @Override
-  public void pause() {
-    SpotifyCommunicator.pause(host.getSpotifyId(), true);
+  public void pause(String deviceId) {
+    SpotifyCommunicator.pause(host.getSpotifyId(), true, deviceId);
   }
 
-  @Override
-  public void nextSong() {
-    SpotifyCommunicator.nextSong(host.getSpotifyId(), true);
-  }
-
-  @Override
-  public void prevSong() {
-    SpotifyCommunicator.prevSong(host.getSpotifyId(), true);
-  }
+  // @Override
+  // public void nextSong() {
+  // SpotifyCommunicator.nextSong(host.getSpotifyId(), true);
+  // }
+  //
+  // @Override
+  // public void prevSong() {
+  // SpotifyCommunicator.prevSong(host.getSpotifyId(), true);
+  // }
 
   @Override
   public void seek(int position_ms, String deviceId) {

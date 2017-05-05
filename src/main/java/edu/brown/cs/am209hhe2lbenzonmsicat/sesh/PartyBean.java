@@ -18,6 +18,7 @@ import com.google.gson.JsonElement;
 
 /**
  * Models a party.
+ *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -37,6 +38,7 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -336,29 +338,29 @@ public class PartyBean extends Party {
 
   @Override
   public boolean playPlaylist(int index) {
-    playlist.play(index);
+    playlist.play(index, deviceId);
     return true;
   }
 
   @Override
   public boolean pause() {
     // TODO Auto-generated method stub
-    playlist.pause();
+    playlist.pause(deviceId);
     return true;
   }
 
-  @Override
-  public boolean nextSong() {
-    // TODO Auto-generated method stub
-    playlist.nextSong();
-    return true;
-  }
-
-  @Override
-  public boolean prevSong() {
-    // TODO Auto-generated method stub
-    playlist.prevSong();
-    return true;
-  }
+  // @Override
+  // public boolean nextSong() {
+  // // TODO Auto-generated method stub
+  // playlist.nextSong();
+  // return true;
+  // }
+  //
+  // @Override
+  // public boolean prevSong() {
+  // // TODO Auto-generated method stub
+  // playlist.prevSong();
+  // return true;
+  // }
 
 }
