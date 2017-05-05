@@ -1,6 +1,6 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
-import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Abstract class that models an object pool.
@@ -13,14 +13,14 @@ import java.util.Hashtable;
 public abstract class ObjectPool<T> {
   protected long expirationTime;
 
-  private Hashtable<T, Long> locked, unlocked;
+  private ConcurrentHashMap<T, Long> locked, unlocked;
 
   /**
    * Public constructor.
    */
   public ObjectPool() {
-    locked = new Hashtable<>();
-    unlocked = new Hashtable<>();
+    locked = new ConcurrentHashMap<>();
+    unlocked = new ConcurrentHashMap<>();
   }
 
   /**

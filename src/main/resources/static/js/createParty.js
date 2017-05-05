@@ -232,15 +232,17 @@ $(document).ready(() => {
 
     $("#ulPlaylist").dblclick(function() {
         $listItems = $("li"); 
-        playPlaylist(partyId, userId, $selected.index())
         $selected = $listItems.filter('.hover');
+        console.log("index :" + $selected.index());
+        playPlaylist(partyId, userId, $selected.index())
+        // alert("you double clicked on song with id " + $selected.index());
     });
 
     $("#ulRequest").dblclick(function() {
         $listItems = $("li"); 
         $selected = $listItems.filter('.hover');
         console.log($selected.attr("id"));
-        if ($selected.attr("id")!= undefined) {
+        if ($selected.attr("id")!== undefined) {
             moveRequestToQueue(partyId, userId, $selected.attr("id"), $("#ulPlaylist li").length);
         }
     });

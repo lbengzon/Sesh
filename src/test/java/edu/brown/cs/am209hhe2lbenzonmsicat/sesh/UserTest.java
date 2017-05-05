@@ -14,7 +14,7 @@ public class UserTest {
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "deviceId");
     UserProxy.clearCache();
     User l1 = User.of("lbengzon");
     assert l1.getSpotifyId().equals("lbengzon");
@@ -27,7 +27,7 @@ public class UserTest {
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "deviceId");
     UserProxy.clearCache();
 
     assert l.getEmail().equals("leandro.bengzon@gmail.com");
@@ -40,7 +40,7 @@ public class UserTest {
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "deviceId");
     UserProxy.clearCache();
     User l1 = User.of("lbengzon");
 
@@ -54,7 +54,7 @@ public class UserTest {
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "deviceId");
     UserProxy.clearCache();
     User l1 = User.of("lbengzon");
     assert l1.getLastName().equals("Bengzon");
@@ -67,7 +67,7 @@ public class UserTest {
     UserProxy.clearCache();
 
     User l = User.create("lbengzon", "leandro.bengzon@gmail.com",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "deviceId");
     UserProxy.clearCache();
     User l1 = User.of("lbengzon");
 
@@ -79,7 +79,8 @@ public class UserTest {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
     UserProxy.clearCache();
-    User.create("lbengzon", "leandro.bengzon@gmail.com", "Leandro Bengzon");
+    User.create("lbengzon", "leandro.bengzon@gmail.com", "Leandro Bengzon",
+        "deviceId");
     UserProxy.clearCache();
     User l = User.of("lbengzon");
     assert l.getSpotifyId().equals("lbengzon");
@@ -89,8 +90,7 @@ public class UserTest {
     assert l.getLastName().equals("Bengzon");
   }
 
-  @Test(
-      expected = RuntimeException.class)
+  @Test(expected = RuntimeException.class)
   public void testOfWithNoCreate() throws SQLException, FileNotFoundException {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -109,8 +109,8 @@ public class UserTest {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
     UserProxy.clearCache();
-    User l = User.of("lbengzon", "leandro.bengzon@gmail.com",
-        "Leandro Bengzon");
+    User l = User.of("lbengzon", "leandro.bengzon@gmail.com", "Leandro Bengzon",
+        "deviceId");
     assert l.getSpotifyId().equals("lbengzon");
     assert l.getFirstName().equals("Leandro");
     assert l.getEmail().equals("leandro.bengzon@gmail.com");

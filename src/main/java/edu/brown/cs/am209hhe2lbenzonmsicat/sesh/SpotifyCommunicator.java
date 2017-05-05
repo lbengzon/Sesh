@@ -27,6 +27,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
+ * 
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -139,6 +140,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
+   * 
    * @param code
    *          - code
    * @return a list of the user's info
@@ -207,6 +209,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
+   * 
    * @param userId
    *          user id
    * @param playlistId
@@ -356,6 +359,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
+   * 
    * @param userId
    *          the user id
    * @param playlistId
@@ -690,8 +694,7 @@ public class SpotifyCommunicator {
       sb2.append(accessToken);
       conn.setRequestProperty("Authorization", sb2.toString());
       conn.connect();
-      System.out.println(conn.getResponseCode());
-
+      conn.getResponseCode();
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         seek(userId, position_ms, deviceId, false);
