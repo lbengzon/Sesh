@@ -89,7 +89,6 @@ function setupWebsockets() {
           console.log("update after request transfer");
           clearAndPopulatePlaylist(data.payload.playlist, $playlist);
           clearAndPopulateRequests(data.payload.requestList, $requests);
-
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
