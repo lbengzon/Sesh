@@ -33,6 +33,7 @@ public class PartyBean extends Party {
   private String name;
   private LocalDateTime time;
   private Status status;
+  private String deviceId;
 
   /**
    * Constructor.
@@ -57,7 +58,7 @@ public class PartyBean extends Party {
    */
   public PartyBean(int partyId, String name, User host, Playlist playlist,
       Coordinate location, LocalDateTime time, Set<Request> requestedSongs,
-      Set<User> guests, Status status) {
+      Set<User> guests, Status status, String deviceId) {
     this.partyId = partyId;
     this.host = host;
     this.guests = guests;
@@ -77,6 +78,12 @@ public class PartyBean extends Party {
     this.name = name;
     this.time = time;
     this.status = status;
+    this.deviceId = deviceId;
+  }
+
+  @Override
+  public String getDeviceId() {
+    return deviceId;
   }
 
   @Override

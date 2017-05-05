@@ -23,6 +23,7 @@ public class PartyProxy extends Party implements Proxy {
   private String name;
   private LocalDateTime time;
   private Status status;
+  private String deviceId;
 
   // private Location location; Google api stuff?
 
@@ -44,7 +45,7 @@ public class PartyProxy extends Party implements Proxy {
    *          - status
    */
   public PartyProxy(int partyId, String name, String playlistId,
-      Coordinate location, LocalDateTime time, Status status) {
+      Coordinate location, LocalDateTime time, Status status, String deviceId) {
     this.partyId = partyId;
     this.name = name;
     this.playlistId = playlistId;
@@ -52,6 +53,12 @@ public class PartyProxy extends Party implements Proxy {
     this.location = location;
     this.time = time;
     this.status = status;
+    this.deviceId = deviceId;
+  }
+
+  @Override
+  public String getDeviceId() {
+    return deviceId;
   }
 
   /**
@@ -73,7 +80,7 @@ public class PartyProxy extends Party implements Proxy {
 
     try {
       partyBean = DbHandler.getFullParty(partyId, playlistId, name, location,
-          time, status);
+          time, status, deviceId);
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
     }

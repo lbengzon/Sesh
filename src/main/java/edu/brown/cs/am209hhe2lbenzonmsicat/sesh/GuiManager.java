@@ -230,7 +230,8 @@ public class GuiManager {
 
       try {
         User host = User.of(userId);
-        party = Party.create(partyName, host, coord, LocalDateTime.now());
+        party = Party.create(partyName, host, coord, LocalDateTime.now(),
+            "DEVICE_ID");
         partyId = party.getPartyId();
       } catch (SQLException e) {
         System.out.println("Failed to add party to database");

@@ -13,6 +13,7 @@ CREATE TABLE "Party"(
   "lon" REAL,
   "time" TEXT,
   "status" TEXT,
+  "deviceId" TEXT,
   PRIMARY KEY ("partyId")
 );
 
