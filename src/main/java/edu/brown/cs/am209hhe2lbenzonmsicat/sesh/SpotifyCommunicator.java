@@ -26,11 +26,7 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
 import com.wrapper.spotify.models.Track;
 
 /**
- * <<<<<<< HEAD Class that integrates Spotify API for Sesh.
- *
- * ======= Class that integrates Spotify API for Sesh. <<<<<<<
- * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
- * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+ * Class that integrates Spotify API for Sesh.
  *
  * @author HE23
  */
@@ -143,12 +139,8 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD Get access token.
-   *
-   * ======= Get access token. <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
-   * ======= >>>>>>> fixed device id issue >>>>>>>
-   * d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
-   *
+   * Get access token.
+   * 
    * @param code
    *          - code
    * @return a list of the user's info
@@ -216,11 +208,7 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD This method gets the playlist tracks.
-   *
-   * ======= This method gets the playlist tracks. <<<<<<<
-   * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
-   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * This method gets the playlist tracks.
    *
    * @param userId
    *          user id
@@ -370,12 +358,8 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD This method reorders tracks in the playlist.
-   *
-   * ======= This method reorders tracks in the playlist. <<<<<<<
-   * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
-   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
-   *
+   * This method reorders tracks in the playlist.
+   * 
    * @param userId
    *          the user id
    * @param playlistId
