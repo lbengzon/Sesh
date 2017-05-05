@@ -58,7 +58,7 @@ public class SpotifyCommunicatorTest {
   public void testSeek() {
     SpotifyCommunicator.setUpTestApi();
     SpotifyCommunicator.seek("22f3kk24xtzmkkuw477v3dntq", 10000,
-        "cd319d9b74e13b54f820921bfd125d6733c8efde", true);
+        "e38a34f0fb9fc1b3c406a6fba28fa7b61e255fbe", true);
   }
 
   @Test

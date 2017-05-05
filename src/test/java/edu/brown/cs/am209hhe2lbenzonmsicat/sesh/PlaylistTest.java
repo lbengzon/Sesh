@@ -52,13 +52,15 @@ public class PlaylistTest {
    */
   @Test
   public void testRemoveSong() throws SQLException, FileNotFoundException {
+    SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
-    User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
+    User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
+        "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now());
+        LocalDateTime.now(), "deviceId");
     Playlist playlist = p.getPlaylist();
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
@@ -92,9 +94,10 @@ public class PlaylistTest {
     DbHandler.clearAllTables();
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
-    User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
+    User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
+        "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now());
+        LocalDateTime.now(), "deviceId");
     Playlist playlist = p.getPlaylist();
     Request r = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), l);
     // Somewhere only we know - keane

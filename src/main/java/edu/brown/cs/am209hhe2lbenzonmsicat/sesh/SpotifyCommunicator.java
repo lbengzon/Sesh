@@ -689,7 +689,8 @@ public class SpotifyCommunicator {
       sb2.append(accessToken);
       conn.setRequestProperty("Authorization", sb2.toString());
       conn.connect();
-
+      conn.getResponseCode();
+      System.out.println(sb.toString());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         seek(userId, position_ms, deviceId, false);
