@@ -89,13 +89,11 @@ public class PlaylistProxy extends Playlist implements Proxy {
     // are
     List<Song> songs = SpotifyCommunicator
         .getPlaylistTracks(host.getSpotifyId(), this.spotifyId, true);
-    System.out.println("Songs from spotify = " + songs);
     Map<Song, Request> map = playlistBean.getQueuedRequests();
     for (Song s : songs) {
       Request r = map.get(s);
       results.add(r);
     }
-    System.out.println("results = " + results);
     return results;
   }
 
