@@ -48,4 +48,10 @@ public class SpotifyCommunicatorTest {
     SpotifyCommunicator.prevSong("22f3kk24xtzmkkuw477v3dntq", true);
   }
 
+  @Test
+  public void testDevices() {
+    SpotifyCommunicator.setUpTestApi();
+    SpotifyCommunicator.getDevices("22f3kk24xtzmkkuw477v3dntq", true);
+  }
+
 }
