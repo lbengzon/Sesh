@@ -26,7 +26,7 @@ final class SqlStatements {
    * Adds a new user into the user table.
    */
   public static final String ADD_NEW_USER = "INSERT INTO \"User\" "
-      + "(userId, email, name) VALUES (?, ?, ?);";
+      + "(userId, email, name, type) VALUES (?, ?, ?, ?);";
 
   /**
    * Adds a new song request into the song request table.

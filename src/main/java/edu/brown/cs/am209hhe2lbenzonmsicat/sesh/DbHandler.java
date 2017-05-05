@@ -206,8 +206,8 @@ public final class DbHandler {
    * @throws SQLException
    *           - exception
    */
-  public static User addUser(String userId, String email, String name)
-      throws SQLException {
+  public static User addUser(String userId, String email, String name,
+      String type) throws SQLException {
     String query = SqlStatements.ADD_NEW_USER;
     try (Connection conn = getConnection()) {
       if (conn == null) {
@@ -219,12 +219,13 @@ public final class DbHandler {
       prep.setString(2, email);
       if (name == null) {
         name = userId;
-        prep.setString(3, name);
+        // prep.setString(3, name);
       }
       prep.setString(3, name);
+      prep.setString(4, type);
       int success = prep.executeUpdate();
       if (success >= 1) {
-        return User.of(userId, email, name);
+        return User.of(userId, email, name, type);
       } else {
         throw new SQLException(
             "ERROR: Could not insert the user with the query " + query);
@@ -790,7 +791,9 @@ public final class DbHandler {
         if (rs.next()) {
           String email = rs.getString(2);
           String name = rs.getString(3);
-          return new UserBean(spotifyId, email, name);
+          String type = rs.getString(4);
+
+          return new UserBean(spotifyId, email, name, type);
         }
 
         throw new SQLException("ERROR: No User With id of  " + spotifyId);
