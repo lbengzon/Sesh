@@ -644,17 +644,21 @@ public class SpotifyCommunicator {
         response.append(inputLine);
       }
       in.close();
-      JsonObject jsonObj = new JsonParser().parse(response.toString())
-          .getAsJsonObject();
-      System.out.println(jsonObj);
-      JsonArray deviceArray = jsonObj.get("devices").getAsJsonArray();
-      for (JsonElement el : deviceArray) {
-        JsonObject currDevice = el.getAsJsonObject();
-        String id = currDevice.get("id").getAsString();
-        boolean isActive = currDevice.get("is_active").getAsBoolean();
-        String name = currDevice.get("name").getAsString();
-        String type = currDevice.get("type").getAsString();
-        results.add(new Device(id, type, name, isActive));
+      try {
+        JsonObject jsonObj = new JsonParser().parse(response.toString())
+            .getAsJsonObject();
+        System.out.println(jsonObj);
+        JsonArray deviceArray = jsonObj.get("devices").getAsJsonArray();
+        for (JsonElement el : deviceArray) {
+          JsonObject currDevice = el.getAsJsonObject();
+          String id = currDevice.get("id").getAsString();
+          boolean isActive = currDevice.get("is_active").getAsBoolean();
+          String name = currDevice.get("name").getAsString();
+          String type = currDevice.get("type").getAsString();
+          results.add(new Device(id, type, name, isActive));
+        }
+      } catch (NullPointerException e) {
+        return results;
       }
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
