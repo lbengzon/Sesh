@@ -17,12 +17,14 @@
 <label class="radioLabel">Private</label><input type="radio" name="privacy_setting" value="private" id="private_sesh" required>
 <label class="radioLabel">Public</label><input type="radio" name="privacy_setting" value="public" id="public_sesh" required>
 </div>
-<ul id="deviceList">
-<label> Available Devices </label>
+<ul style="list-style-type:none" id="deviceList">
+<label> Select an Available Device </label>
+<p id="loadingDevices"> Loading... </p>
 </ul>
 
 <input type="text" id="lat" name="lat" style="display: none;">
 <input type="text" id="lon" name="lon" style="display: none;">
+<input type="text" id="deviceId" name="deviceId" style="display: none;">
 
 <input type="text" id="userId" name="userId" style="display: none;">
 <input type="button" value="Loading..." id="formSubmit">

@@ -1,8 +1,10 @@
-var pos;
-var global_lat = null;
-var global_lon = null;
+let pos;
+let global_lat = null;
+let global_lon = null;
+let global_device_id = null;
 
 $(document).ready(() => {
+	const $deviceList = $("#deviceList");
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(getLoc, errorCallBack);
 	}
@@ -13,12 +15,37 @@ $(document).ready(() => {
 	$.post("/devices", postParams, responseJSON => {
 		const responseObject = JSON.parse(responseJSON);
 		const devices = responseObject.devices;
-		for (let device in devices) {
-			console.log(device);
+		console.log(devices);
+		for (let key in devices) {
+			const deviceId = devices[key].id;
+			const deviceType = devices[key].type;
+			$("#loadingDevices").hide();
+			$deviceList.append("<li id=\"" + deviceId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + devices[key].name + "</li>");
 		}
 	});
+
+	$deviceList.on("click", event => {
+		$listItems = $("li");
+		$selected = $listItems.filter('.hover');
+		$selected.addClass("selected");
+		global_device_id = $selected.attr("id");
+		console.log("device id set: " + global_device_id);
+		$("#deviceId").val($selected.attr("id"));
+	});
+
+
+
+
 	
 });
+
+function hoverOn(x) {
+	x.className = 'hover';
+}
+
+function hoverOff(x) {
+	x.classList.remove('hover');
+}
 
 function post(path, params, method) {
 	method = method || "post"; // Set method to post by default if not specified.
@@ -71,7 +98,7 @@ function wait() {
 		console.log("LAT: " + $("#lat").val());
 		console.log("LON: " + $("#lon").val());
 
-		const postParameters = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), privacy_setting: $("input[name=privacy_settings]:checked").val(), lat: $("#lat").val(), lon: $("#lon").val()};
+		const postParameters = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), privacy_setting: $("input[name=privacy_settings]:checked").val(), lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
 		$.post("/getParty", postParameters, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);
 			const partyId = responseObject.partyId;
@@ -80,7 +107,7 @@ function wait() {
 			console.log("party id: " + partyId);
 			console.log("party name: " + partyName);
 			console.log("uId: " + uId);
-			const postParams = {userId: uId, partyId: partyId, partyName: partyName};
+			const postParams = {userId: uId, partyId: partyId, partyName: partyName, deviceId: global_device_id};
 			post("/create/party", postParams);
 
 		});
