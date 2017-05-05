@@ -36,6 +36,8 @@ public abstract class User implements Jsonable {
    */
   public abstract String getFullName();
 
+  public abstract String getType();
+
   /**
    * User of.
    * @param spotifyId
@@ -60,12 +62,13 @@ public abstract class User implements Jsonable {
    *          - name
    * @return User
    */
-  public static User of(String spotifyId, String email, String name) {
+  public static User of(String spotifyId, String email, String name,
+      String type) {
     if (spotifyId == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an mapnode from a null id");
     }
-    return new UserProxy(spotifyId, email, name);
+    return new UserProxy(spotifyId, email, name, type);
   }
 
   /**
@@ -80,13 +83,13 @@ public abstract class User implements Jsonable {
    * @throws SQLException
    *           - SQLException
    */
-  public static User create(String userId, String email, String name)
-      throws SQLException {
+  public static User create(String userId, String email, String name,
+      String type) throws SQLException {
     if (userId == null) {
       throw new NullPointerException(
           "ERROR: Trying to create a user from a null id");
     }
-    return DbHandler.addUser(userId, email, name);
+    return DbHandler.addUser(userId, email, name, type);
   }
 
   @Override

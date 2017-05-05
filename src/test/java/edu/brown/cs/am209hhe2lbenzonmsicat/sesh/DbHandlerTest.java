@@ -27,7 +27,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User user = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     assert user.getEmail().equals("leandro_bengzon@brown.edu");
     assert user.getFullName().equals("Leandro Bengzon");
     User same = DbHandler.getUserWithId("lbengzon");
@@ -49,9 +49,9 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User user = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     User user1 = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
   }
 
   /**
@@ -67,7 +67,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -94,7 +94,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -122,7 +122,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -141,7 +141,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("s3shteam32", "seshteam32@gmail.com",
-        "Ali Mir");
+        "Ali Mir", "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -156,12 +156,14 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
 
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Matt Sicat", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
@@ -191,12 +193,14 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
 
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Matt Sicat", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
@@ -233,8 +237,9 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -249,10 +254,12 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat");
+        "Leandro Bengzon", "premium");
+    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat",
+        "premium");
 
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -270,10 +277,10 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("s3shteam32", "seshteam32@gmail.com",
-        "Ali Mir");
+        "Ali Mir", "premium");
 
     User hannah = DbHandler.addUser("1185743437", "hannahhe97@yahoo.com.au",
-        "Hannah He");
+        "Hannah He", "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -290,10 +297,12 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat");
+        "Leandro Bengzon", "premium");
+    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat",
+        "premium");
 
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -310,10 +319,12 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat");
+        "Leandro Bengzon", "premium");
+    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat",
+        "premium");
 
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -331,10 +342,12 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat");
+        "Leandro Bengzon", "premium");
+    User matt = DbHandler.addUser("matt", "mattsicat@brown.edu", "Matt Sicat",
+        "premium");
 
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -357,8 +370,9 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
 
     LocalDateTime time = LocalDateTime.now();
 
@@ -392,8 +406,9 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
 
     LocalDateTime time = LocalDateTime.now();
 
@@ -444,8 +459,9 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
 
     LocalDateTime time = LocalDateTime.now();
 
@@ -510,19 +526,21 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
+        "Matt Sicat", "premium");
     User kobe = DbHandler.addUser("kbryant", "kobe_bryant@brown.edu",
-        "Kobe Bryant");
+        "Kobe Bryant", "premium");
 
     User kanye = DbHandler.addUser("kwest", "kanye_west@brown.edu",
-        "Kanye West");
+        "Kanye West", "premium");
 
     User frank = DbHandler.addUser("focean", "frank_ocean@brown.edu",
-        "Frank Ocean");
+        "Frank Ocean", "premium");
 
     LocalDateTime time = LocalDateTime.now();
 
@@ -562,19 +580,21 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
+        "Matt Sicat", "premium");
     User kobe = DbHandler.addUser("kbryant", "kobe_bryant@brown.edu",
-        "Kobe Bryant");
+        "Kobe Bryant", "premium");
 
     User kanye = DbHandler.addUser("kwest", "kanye_west@brown.edu",
-        "Kanye West");
+        "Kanye West", "premium");
 
     User frank = DbHandler.addUser("focean", "frank_ocean@brown.edu",
-        "Frank Ocean");
+        "Frank Ocean", "premium");
 
     LocalDateTime time = LocalDateTime.now();
 
@@ -636,8 +656,9 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
 
     LocalDateTime time = LocalDateTime.now();
 
@@ -659,12 +680,14 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
 
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Matt Sicat", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
@@ -699,7 +722,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
 
     List<Party> parties = DbHandler.getUsersParties(host);
 
@@ -713,12 +736,14 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
 
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Matt Sicat", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
@@ -742,12 +767,14 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
 
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Matt Sicat", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
 
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
@@ -777,12 +804,14 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
 
-    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He");
+    User hannah = DbHandler.addUser("hhe", "hannah_he@brown.edu", "Hannah He",
+        "premium");
     User matt = DbHandler.addUser("msicat", "matt_sicat@brown.edu",
-        "Matt Sicat");
-    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir");
+        "Matt Sicat", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
     LocalDateTime time = LocalDateTime.now();
 
     Party party2 = DbHandler.getPartyHostedByUser(host);
@@ -796,7 +825,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -814,7 +843,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     LocalDateTime time = LocalDateTime.now();
 
     Party partyFull = DbHandler.getPartyFromId(1);
@@ -829,7 +858,7 @@ public class DbHandlerTest {
     DbHandler.clearAllTables();
 
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
-        "Leandro Bengzon");
+        "Leandro Bengzon", "premium");
     LocalDateTime time = LocalDateTime.now();
     Party party = DbHandler.addParty("testPlaylistId", "My Party",
         new Coordinate(71.6, 41.8), time, host, "deviceId");
@@ -837,5 +866,18 @@ public class DbHandlerTest {
     Party partyFull = DbHandler.getPartyFromId(party.getPartyId());
 
     assert partyFull.getDeviceId().equals("deviceId");
+  }
+
+  @Test
+  public void testGetUserType() throws FileNotFoundException, SQLException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+
+    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
+        "Leandro Bengzon", "premium");
+    assert host.getType().equals("premium");
+    UserProxy.clearCache();
+    User h = User.of("lbengzon");
+    assert h.getType().equals("premium");
   }
 }

@@ -32,9 +32,9 @@ public class UserProxy extends User implements Proxy {
    * @param name
    *          their name
    */
-  public UserProxy(String spotifyId, String email, String name) {
+  public UserProxy(String spotifyId, String email, String name, String type) {
     this.spotifyId = spotifyId;
-    userBean = new UserBean(spotifyId, email, name);
+    userBean = new UserBean(spotifyId, email, name, type);
   }
 
   /**
@@ -148,6 +148,18 @@ public class UserProxy extends User implements Proxy {
       }
     }
     return userBean.toMap();
+  }
+
+  @Override
+  public String getType() {
+    if (userBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return userBean.getType();
   }
 
 }

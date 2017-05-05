@@ -22,7 +22,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- * 
  * @author HE23
  */
 public class GuiManager {
@@ -31,7 +30,6 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -90,8 +88,9 @@ public class GuiManager {
       String userId = userInfo.get(0);
       String userEmail = userInfo.get(1);
       String userName = userInfo.get(2);
+      String type = userInfo.get(3);
       try {
-        user = User.create(userId, userEmail, userName);
+        user = User.create(userId, userEmail, userName, type);
         ftlPage = "createJoin.ftl";
       } catch (SQLException e) {
         /* user already exists */
@@ -140,7 +139,6 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   * 
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -195,7 +193,6 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   * 
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -250,7 +247,6 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
    * @author HE23
    */
   private static class SearchHandler implements Route {
