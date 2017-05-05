@@ -27,7 +27,6 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
- *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -140,7 +139,6 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
-   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -209,7 +207,6 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
-   *
    * @param userId
    *          user id
    * @param playlistId
@@ -359,7 +356,6 @@ public class SpotifyCommunicator {
 
   /**
    * This method reorders tracks in the playlist.
-   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -668,10 +664,14 @@ public class SpotifyCommunicator {
     return results;
   }
 
-  public static void seek(String userId, int position_ms, String deviceId,
+  public static void seek(String userId, long position_ms, String deviceId,
       boolean shouldRefresh) {
     Api api = userToApi.get(userId);
     try {
+      System.out.println("IN SEEK METHOD OF SPOTIFY COMM");
+      System.out.println("Position" + position_ms);
+      System.out.println("deviceId" + deviceId);
+      System.out.println("userId" + userId);
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
       api.setAccessToken(accessToken);
@@ -682,6 +682,7 @@ public class SpotifyCommunicator {
       sb.append("device_id=");
       sb.append(deviceId);
       URL url = new URL(sb.toString());
+      System.out.println(sb.toString());
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
       conn.setRequestMethod("PUT");
       StringBuilder sb2 = new StringBuilder();
