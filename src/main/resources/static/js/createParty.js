@@ -161,7 +161,7 @@ $(document).ready(() => {
             if (ui.item.parent().attr("id") === "ulRequest") {
                 moveFromQueueToRequest(partyId, userId, ui.item.attr("id"));
             } else {
-                moveRequestToQueue (partyId, userId, ui.item.attr("id"), ui.item.index());
+                moveRequestToQueue(partyId, userId, ui.item.attr("id"), ui.item.index());
             }
         },
         update: function(event, ui) {
@@ -221,7 +221,6 @@ $(document).ready(() => {
     //     });
     // }
 
-    //setInterval(getCurrentSong, 500);
 
     setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
 
@@ -234,10 +233,11 @@ $(document).ready(() => {
 
     $("#ulRequest").dblclick(function() {
         $listItems = $("li"); 
-        playPlaylist(partyId, userId, $selected.index())
         $selected = $listItems.filter('.hover');
-        addToPlaylist(partyId, userId, $selected.attr("id"));
-        alert("you double clicked on song with id " + $selected.index());
+        console.log($selected.attr("id"));
+        if ($selected.attr("id")!= undefined) {
+            moveRequestToQueue(partyId, userId, $selected.attr("id"), $("#ulPlaylist li").length);
+        }
     });
 
 
