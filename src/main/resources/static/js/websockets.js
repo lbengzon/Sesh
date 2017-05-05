@@ -432,6 +432,22 @@ function seekSong (partyId, userId, position) {
   conn.send(JSON.stringify(message));
 }
 
+function resumeSong(partyId, userId, position){
+  index = getCurrentSongIndex();
+  //IF you should play the current song (i.e it was paused) if you dont go into his if statement it means 
+  //the host double clicked on a song to play it.
+  let message = {
+    type: MESSAGE_TYPE.RESUME_SONG, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      index: index,
+      seekPosition: position
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
 function updatePartyCurrentSong (partyId, userId) {
   let message = {
     type: MESSAGE_TYPE.SONG_MOVED_TO_NEXT, 
