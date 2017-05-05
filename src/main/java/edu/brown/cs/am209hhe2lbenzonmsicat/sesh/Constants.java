@@ -40,10 +40,9 @@ public final class Constants {
       + "paZKHyWVLx8296WusX5cuw-L7CTEaG3yV3AymDjtGQexSRuRhETk-DIRu"
       + "2F-Ui6is5KakAW-zkHlk85Mij_sPAV-Qbs";
 
-  public static final String LEANDRO_REFRESH = "AQB5NYUidFpG9I2N"
-      + "u_xcMmiUfaB2jp7nQsH9exjYF5hGR"
-      + "hZz7x90O9AplUcCIsjEJSqMEv4pbCPd4gBaDjI6tDT_nKv9b0"
-      + "MnNUmZslE2VQGJztRtVSOQrSEcp5UejNtl9tg";
+  public static final String LEANDRO_REFRESH = "AQDhaB6mfBhcm1Ny5nVuVu26bHp"
+      + "iorDGVqQqOjkxCFqJ61boNUYmjJOiyNvv8xJjKm9kD-arbznbW2jaf"
+      + "3sGOYiz7_5VQCHjM1g2QUGTykD2S1N3Xq0E0RwFcxn-TyWR4r8";
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;
