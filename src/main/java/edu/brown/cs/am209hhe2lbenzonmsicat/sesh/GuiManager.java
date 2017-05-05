@@ -272,8 +272,10 @@ public class GuiManager {
 
       try {
         User host = User.of(userId);
+        System.out.println("got the user");
         party = Party.create(partyName, host, coord, LocalDateTime.now(),
             deviceId);
+        System.out.println("created the party");
         partyId = party.getPartyId();
         variables = ImmutableMap.of("partyId", partyId, "partyName", partyName,
             "userId", userId);
