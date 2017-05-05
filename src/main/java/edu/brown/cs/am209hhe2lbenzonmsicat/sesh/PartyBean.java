@@ -348,6 +348,13 @@ public class PartyBean extends Party {
     return true;
   }
 
+  @Override
+  public boolean seekSong(long seekPosition) {
+    // TODO Auto-generated method stub
+    playlist.seek(seekPosition, deviceId);
+    return true;
+  }
+
   // @Override
   // public boolean nextSong() {
   // // TODO Auto-generated method stub
