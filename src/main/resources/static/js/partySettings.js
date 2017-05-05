@@ -8,6 +8,15 @@ $(document).ready(() => {
 	}
 	wait();
 	$("#userId").val(userId);
+
+	const postParams = {userId, userId};
+	$.post("/devices", postParams, responseJSON => {
+		const responseObject = JSON.parse(responseJSON);
+		const devices = responseObject.devices;
+		for (let device in devices) {
+			console.log(device);
+		}
+	});
 	
 });
 
