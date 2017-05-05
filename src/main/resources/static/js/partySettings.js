@@ -15,7 +15,7 @@ function getLoc(position) {
 	global_lon = position.coords.longitude;
 	$("#lat").val(global_lat);
 	$("#lon").val(global_lon);
-	}
+}
 
 function errorCallBack(error) {
 	console.log(error);

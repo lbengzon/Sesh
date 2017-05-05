@@ -1,9 +1,9 @@
 function hoverOn(x) {
-	x.className = 'selected';
+	x.className = 'hover';
 }
 
 function hoverOff(x) {
-	x.classList.remove('selected');
+	x.classList.remove('hover');
 }
 
 function showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper) {
@@ -93,7 +93,7 @@ $(document).ready(() => {
 	/* HANDLES ADDING A REQUEST FROM SEARCH */
 	$results.on("click", event => {
 		$listItems = $('li');
-		$selected = $listItems.filter('.selected');
+		$selected = $listItems.filter('.hover');
 		console.log($selected);
 		addRequest(partyId, userId, $selected.attr("id"));
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);

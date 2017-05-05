@@ -19,6 +19,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
 
   /**
    * Constructor.
+   * 
    * @param spotifyId
    *          - playlist id
    * @param partyId
@@ -129,6 +130,11 @@ public class PlaylistProxy extends Playlist implements Proxy {
   @Override
   public void prevSong() {
     SpotifyCommunicator.prevSong(host.getSpotifyId(), true);
+  }
+
+  @Override
+  public void seek(int position_ms, String deviceId) {
+    SpotifyCommunicator.seek(host.getSpotifyId(), position_ms, deviceId, true);
   }
 
   @Override

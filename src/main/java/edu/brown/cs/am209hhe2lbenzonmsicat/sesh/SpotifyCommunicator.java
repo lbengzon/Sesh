@@ -27,6 +27,7 @@ import com.wrapper.spotify.models.Track;
 
 /**
  * Class that integrates Spotify API for Sesh.
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -139,6 +140,7 @@ public class SpotifyCommunicator {
 
   /**
    * Get access token.
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -183,6 +185,7 @@ public class SpotifyCommunicator {
               results.add(u.getId());
               results.add(u.getEmail());
               results.add(u.getDisplayName());
+              results.add(u.getProduct().type);
             } catch (IOException | WebApiException e) {
               throw new RuntimeException(e.getMessage());
             }
@@ -206,6 +209,7 @@ public class SpotifyCommunicator {
 
   /**
    * This method gets the playlist tracks.
+   *
    * @param userId
    *          user id
    * @param playlistId
@@ -323,12 +327,39 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static void removePlaylist() {
-
+  public static void unfollowPlaylist(String userId, String playlistId,
+      boolean shouldRefresh) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/users/");
+      sb.append(userId);
+      sb.append("/playlists/");
+      sb.append(playlistId);
+      sb.append("/followers");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("DELETE");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      conn.connect();
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        unfollowPlaylist(userId, playlistId, false);
+        return;
+      }
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   /**
    * This method reorders tracks in the playlist.
+   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -401,12 +432,6 @@ public class SpotifyCommunicator {
         response.append(inputLine);
       }
       in.close();
-      // JsonParser p = new JsonParser();
-      // JsonObject jsonObject = p.parse(response.toString()).getAsJsonObject();
-      // System.out
-      // .println("jsonObj size : " + jsonObject.getAsJsonObject());
-      // JsonObject context = jsonObject.get("context").getAsJsonObject();
-      // JsonObject item = jsonObject.get("item").getAsJsonObject();
       JsonObject jsonObj = new JsonParser().parse(response.toString())
           .getAsJsonObject();
 
@@ -466,10 +491,6 @@ public class SpotifyCommunicator {
 
   }
 
-  public static void getDevices(String userId, boolean shouldRefresh) {
-
-  }
-
   public static void play(String userId, String playlistId, int offset,
       boolean shouldRefresh) {
     Api api = userToApi.get(userId);
@@ -502,8 +523,6 @@ public class SpotifyCommunicator {
       body.addProperty("context_uri", sb.toString());
       body.add("offset", offsetObject);
       OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-      // out.write(context_uri.toString());
-      // out.write(offset.toString());
       System.out.println(body.toString());
       out.write(body.toString());
       // out.write(offset);
@@ -595,6 +614,83 @@ public class SpotifyCommunicator {
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         prevSong(userId, false);
+        return;
+      }
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  public static List<Device> getDevices(String userId, boolean shouldRefresh) {
+    Api api = userToApi.get(userId);
+    List<Device> results = new ArrayList<Device>();
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/devices");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+      String inputLine;
+      StringBuilder response = new StringBuilder();
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
+      JsonObject jsonObj = new JsonParser().parse(response.toString())
+          .getAsJsonObject();
+      System.out.println(jsonObj);
+      // System.out.println(jsonObj.get("devices"));
+      JsonArray deviceArray = jsonObj.get("devices").getAsJsonArray();
+      for (JsonElement el : deviceArray) {
+        JsonObject currDevice = el.getAsJsonObject();
+        String id = currDevice.get("id").getAsString();
+        boolean isActive = currDevice.get("is_active").getAsBoolean();
+        String name = currDevice.get("name").getAsString();
+        String type = currDevice.get("type").getAsString();
+        results.add(new Device(id, type, name, isActive));
+      }
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        return getDevices(userId, false);
+      }
+      throw new RuntimeException(e.getMessage());
+    }
+    return results;
+  }
+
+  public static void seek(String userId, int position_ms, String deviceId,
+      boolean shouldRefresh) {
+    Api api = userToApi.get(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/player/seek?position_ms=");
+      sb.append(position_ms);
+      sb.append("&");
+      sb.append("device_id=");
+      sb.append(deviceId);
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("PUT");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      conn.connect();
+
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        seek(userId, position_ms, deviceId, false);
         return;
       }
       throw new RuntimeException(e.getMessage());
