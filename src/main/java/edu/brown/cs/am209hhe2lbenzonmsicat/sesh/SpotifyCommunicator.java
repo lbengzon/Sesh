@@ -26,14 +26,12 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
 import com.wrapper.spotify.models.Track;
 
 /**
-<<<<<<< HEAD
- * Class that integrates Spotify API for Sesh.
+ * <<<<<<< HEAD Class that integrates Spotify API for Sesh.
  *
-=======
- * Class that integrates Spotify API for Sesh. <<<<<<<
+ * ======= Class that integrates Spotify API for Sesh. <<<<<<<
  * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
- * issue
->>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+ * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+ * 
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -145,13 +143,12 @@ public class SpotifyCommunicator {
   }
 
   /**
-<<<<<<< HEAD
-   * Get access token.
+   * <<<<<<< HEAD Get access token.
    *
-=======
-   * Get access token. <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 =======
-   * >>>>>>> fixed device id issue
->>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * ======= Get access token. <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
+   * ======= >>>>>>> fixed device id issue >>>>>>>
+   * d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * 
    * @param code
    *          - code
    * @return a list of the user's info
@@ -219,14 +216,12 @@ public class SpotifyCommunicator {
   }
 
   /**
-<<<<<<< HEAD
-   * This method gets the playlist tracks.
+   * <<<<<<< HEAD This method gets the playlist tracks.
    *
-=======
-   * This method gets the playlist tracks. <<<<<<<
+   * ======= This method gets the playlist tracks. <<<<<<<
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
-   * issue
->>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * 
    * @param userId
    *          user id
    * @param playlistId
@@ -375,14 +370,12 @@ public class SpotifyCommunicator {
   }
 
   /**
-<<<<<<< HEAD
-   * This method reorders tracks in the playlist.
+   * <<<<<<< HEAD This method reorders tracks in the playlist.
    *
-=======
-   * This method reorders tracks in the playlist. <<<<<<<
+   * ======= This method reorders tracks in the playlist. <<<<<<<
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
-   * issue
->>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * 
    * @param userId
    *          the user id
    * @param playlistId
@@ -506,10 +499,11 @@ public class SpotifyCommunicator {
             result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
                 isPlaying);
           }
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException | ClassCastException e) {
           return result;
         }
-      } catch (NullPointerException | IllegalStateException e) {
+      } catch (NullPointerException | IllegalStateException
+          | ClassCastException e) {
         return result;
       }
       return result;
