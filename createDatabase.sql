@@ -15,6 +15,8 @@ CREATE TABLE "Party"(
   "time" TEXT,
   "status" TEXT,
   "deviceId" TEXT,
+  "accessType" TEXT,
+  "accessCode" TEXT,
   PRIMARY KEY ("partyId")
 );
 
@@ -57,7 +59,7 @@ CREATE TABLE "PartyAttendee"(
 CREATE TABLE "Favorites"(
   "userId" Text,
   "songId" TEXT,
-  PRIMARY KEY ("userId"),
+  PRIMARY KEY ("userId", "songId"),
   FOREIGN KEY ("userId") REFERENCES User(userId)
     ON DELETE CASCADE ON UPDATE CASCADE
 );

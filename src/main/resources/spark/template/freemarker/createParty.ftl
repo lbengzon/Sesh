@@ -6,6 +6,7 @@
 	let showPlayed = false;
 	let isPaused = true;
 	let timePassed;
+	const isHost = true;
 </script>
 <script src="/js/createParty.js"></script>
 <script>
@@ -40,6 +41,13 @@
 </div>
 
 <div class="tabContentPlaylist" id="request-list">
+<div class="switchDiv">
+	<label id="switchLabel">Show My Requests</label>
+	<label class="switch">
+		<input type="checkbox">
+		<div class="slider round"></div>
+	</label>
+</div>
 <ul style="list-style-type:none" class="sortable" id="ulRequest">
 </ul>
 </div>
@@ -59,11 +67,7 @@
 </div>
 
 <div class="tabContentOptions">
-	<form method="GET" action="/endparty">
-	<input type="text" id="partyId" name="partyId" style="display: none;">
-	<input type="text" id="userId" name="userId" style="display: none;">
-	<input type="submit" id="endSubmitButton" value="End Party">
-	</form>
+	<input type="button" id="endButton" value="End Party">
 </div>
 
 </div>

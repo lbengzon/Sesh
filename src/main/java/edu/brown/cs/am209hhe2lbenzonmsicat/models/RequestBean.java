@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -180,6 +180,7 @@ public class RequestBean extends Request {
     Set<String> downvoteIds = new HashSet<>();
     downvotes.forEach((downvote) -> downvoteIds.add(downvote.getSpotifyId()));
     rMap.put("upvotes", upvoteIds);
+    rMap.put("userRequestId", userRequestedBy.getSpotifyId());
     rMap.put("downvotes", downvoteIds);
     rMap.put("score", getVotes());
     rMap.put("time", requestTime);

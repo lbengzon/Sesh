@@ -1,9 +1,11 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.objectpool;
 
 import java.io.IOException;
 
 import com.wrapper.spotify.Api;
 import com.wrapper.spotify.exceptions.WebApiException;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 
 /**
  * Models a pool of API objects.

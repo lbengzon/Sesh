@@ -130,9 +130,10 @@ $(document).ready(() => {
     const $nextButton = $("#nextButton");
     const $progressBar = $("#progressbar");
 
-    /*setting invisible form */
-    $("#userId").val(userId);
-    $("#partyId").val(partyId);
+
+    //end button
+    const $endButton = $("#endButton");
+
 
 
     let startPlaylistIndex;
@@ -213,6 +214,26 @@ $(document).ready(() => {
         });
     });
 
+  //   $(".favButton").click(function(x) {
+  //       console.log('HERE');
+  //       const postParams = {userId: userId, songId: x.currentTarget.id};
+  //       $.post("/addSongToFavorites", postParams, responseJSON => {
+  //         const responseObject = JSON.parse(responseJSON);
+  //         const favList = responseObject.favorites;
+  //         $("#request-list li").each(function(index, value) {
+  //           console.log($(this));
+  //         });
+          
+  //       });
+  // });
+
+    // $(".favButton").click(function(x) {
+    //     console.log("HEREEE");
+    // });
+// console.log($(".favButton button"));
+
+    
+
     // function getCurrentSong() {
     //     const postParameters = {partyId: partyId};
     //     $.post("/currentSong", postParameters, responseJSON => {
@@ -222,17 +243,48 @@ $(document).ready(() => {
     //             currSongId = responseObject.currentSong;
     //         }
 
-    //         for (let i = 0; i < $("#ulPlaylist li").length; i++) {
-    //             console.log("current playing song is at index: " + $("#ulPlaylist").find("#" + currSongId).index());
-    //             if ($("#ulPlaylist").find("#" + currSongId).index() > i) {
-    //                 $("#ulPlaylist li").eq(i).hide();
-    //             }
-    //         }
-    //     });
-    // }
-
-
     setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
+
+
+    // $(".switch input").click(function() {
+    //     if ($(".switch input").is(":checked")) {
+    //         if (userRequests.length > 0) {
+    //             $("#request-list ul").find("li").hide();
+    //             $("#request-list li").each(function(idx, li) {
+    //                 let id = userRequests[idx].requestId;
+    //                 $("#request-list ul").find("#" + id).show();
+    //             });
+    //             /* show only user requests */
+    //         } else {
+    //             /* show nothing */
+    //             $("#request-list ul").find("li").hide();
+    //         }
+
+    //     } else {
+    //         /* show all songs in request list */
+    //         $("#request-list ul").find("li").show();
+    //     }
+    // });
+    $(".switch input").click(function() {
+        console.log("USER REQUESTED " + userRequests.length + "SONGS");
+        if ($(".switch input").is(":checked")) {
+            if (userRequests.length > 0) {
+                $("#request-list ul").find("li").hide();
+                for (let i in userRequests) {
+                    let id = userRequests[i].requestId;
+                    $("#request-list ul").find("#" + id).show();
+                }
+                /* show only user requests */
+            } else {
+                /* show nothing */
+                $("#request-list ul").find("li").hide();
+            }
+
+        } else {
+            /* show all songs in request list */
+            $("#request-list ul").find("li").show();
+        }
+    });
 
 
     $("#ulPlaylist").dblclick(function() {
@@ -264,6 +316,21 @@ $(document).ready(() => {
     $tabContentSearch.hide();
     $tabContentOptions.hide();
     $tabContentFavorites.hide();
+
+    $endButton.click(function() {
+        var v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
+        var deleteBool;
+        if (v === true) {
+            deleteBool = false;
+            console.log("playlist saved");
+        } else {
+            deleteBool = true;
+            console.log("playlist deleted");
+        }
+        endParty(partyId, userId, deleteBool);
+        const params = {userId: userId};
+        post("/createjoin", params, "get");
+    });
 
 
     $search.click(function() {

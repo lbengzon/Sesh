@@ -1,8 +1,9 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,14 @@ import com.google.gson.Gson;
 import com.wrapper.spotify.models.SimpleArtist;
 import com.wrapper.spotify.models.Track;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Device;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AccessType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -21,8 +30,10 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * Gui Manager class. <<<<<<< HEAD ======= >>>>>>>
- * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+ * <<<<<<< HEAD Gui Manager class. ======= <<<<<<< HEAD Gui Manager class.
+ * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0 =======
+ * Gui Manager class. >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+ * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
  * @author HE23
  */
 public class GuiManager {
@@ -30,8 +41,11 @@ public class GuiManager {
   private static final Gson GSON = new Gson();
 
   /**
-   * Default constructor. <<<<<<< HEAD ======= >>>>>>>
-   * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * <<<<<<< HEAD Default constructor. ======= <<<<<<< HEAD Default constructor.
+   * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * ======= Default constructor. >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -56,7 +70,8 @@ public class GuiManager {
     // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
-    Spark.get("/endparty", new EndPartyHandler(), fme);
+    Spark.post("/addSongToFavorites", new AddFavoriteHandler());
+    Spark.get("/createjoin", new CreateJoinHandler(), fme);
   }
 
   private static class ErrorHandler implements TemplateViewRoute {
@@ -82,7 +97,8 @@ public class GuiManager {
   }
 
   /**
-   * Homepage end point, where user enters in their login credentials.
+   * Handles the homepage, where users enter their credentials.
+   * @author Matt
    */
   private class CallbackHandler implements TemplateViewRoute {
     @Override
@@ -99,41 +115,59 @@ public class GuiManager {
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
           userId);
       try {
-        ftlPage = "createJoin.ftl";
         user = User.create(userId, userEmail, userName, type);
       } catch (SQLException e) {
         /* user already exists */
         user = User.of(userId);
-        Party p = Party.getActivePartyOfUser(user);
+      }
 
-        /* user is not part of an active party */
-        if (p == null) {
-          ftlPage = "createJoin.ftl";
+      return new ModelAndView(variables, "callback.ftl");
+    }
+  }
+
+  /**
+   * Handles the create join page.
+   * @author Matt
+   */
+  private static class CreateJoinHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String ftlPage;
+      String userId = qm.value("userId");
+      User user = User.of(userId);
+      Party p = Party.getActivePartyOfUser(user);
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
+
+      /* user is not part of an active party */
+      if (p == null) {
+        ftlPage = "createJoin.ftl";
+      } else {
+        assert p != null;
+        /* user is host */
+        if (p.getHost().equals(user)) {
+          ftlPage = "createParty.ftl";
+          int partyId = p.getPartyId();
+          String partyName = p.getName();
+          variables = ImmutableMap.of("title", partyName, "userId", userId,
+              "partyId", partyId, "partyName", partyName);
         } else {
-          assert p != null;
-          /* user is host */
-          if (p.getHost().equals(user)) {
-            ftlPage = "createParty.ftl";
-            int partyId = p.getPartyId();
-            String partyName = p.getName();
-            variables = ImmutableMap.of("title", partyName, "userId", userId,
-                "partyId", partyId, "partyName", partyName);
-          } else {
-            assert p.getGuests().contains(user);
-            ftlPage = "joinParty.ftl";
-            int partyId = p.getPartyId();
-            String partyName = p.getName();
-            variables = ImmutableMap.of("title", partyName, "userId", userId,
-                "partyId", partyId, "partyName", partyName);
-          }
-
+          assert p.getGuests().contains(user);
+          ftlPage = "joinParty.ftl";
+          int partyId = p.getPartyId();
+          String partyName = p.getName();
+          variables = ImmutableMap.of("title", partyName, "userId", userId,
+              "partyId", partyId, "partyName", partyName);
         }
 
-        // ftlPage = "createJoin.ftl";
       }
 
       return new ModelAndView(variables, ftlPage);
+
     }
+
   }
 
   private static class JoinHandler2 implements Route {
@@ -168,7 +202,10 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to join a sesh page.
+   * <<<<<<< HEAD Handles request to join a sesh page. ======= Handles request
+   * to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -208,10 +245,11 @@ public class GuiManager {
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
       if (!party.getAttendees().contains(user)) {
-        party.addGuest(user);
+        party.addGuest(user, "TEST PASSWORD");
       }
 
-      // should probably get party name from previous page to display on guest's
+      // should probably get party name from previous page to display on
+      // guest's
       // party view
 
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
@@ -221,7 +259,10 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to create a sesh page.
+   * <<<<<<< HEAD Handles request to create a sesh page. ======= Handles request
+   * to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -238,7 +279,10 @@ public class GuiManager {
   }
 
   /**
-   * Creates party in the backend.
+   * <<<<<<< HEAD Creates party in the backend. ======= Creates party in the
+   * backend. <<<<<<< HEAD ======= >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -248,7 +292,8 @@ public class GuiManager {
       String userId = qm.value("userId");
       String partyName = qm.value("sesh_name"); // required
       String hostName = qm.value("host_name");
-      String privacyStatus = qm.value("privacy_setting"); // add to Party.create
+      String privacyStatus = qm.value("privacy_setting"); // add to
+                                                          // Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
       String deviceId = qm.value("deviceId");
@@ -265,7 +310,7 @@ public class GuiManager {
         User host = User.of(userId);
         System.out.println("got the user");
         party = Party.create(partyName, host, coord, LocalDateTime.now(),
-            deviceId);
+            deviceId, partyName, AccessType.PUBLIC, "");
         System.out.println("created the party");
         partyId = party.getPartyId();
         variables = ImmutableMap.of("partyId", partyId, "partyName", partyName,
@@ -275,7 +320,13 @@ public class GuiManager {
         System.out.println("Failed to add party to database");
       } catch (SpotifyUserApiException e) {
         // TODO SEND USER TO THE LOGIN PAGE
+        variables = ImmutableMap.of("Message",
+            "Your have been logged out! Please log back in again.");
         e.printStackTrace();
+      } catch (IllegalArgumentException e) {
+        // If the user
+        variables = ImmutableMap.of("Message",
+            "You must have a premium spotify account to host a party");
       }
 
       System.out.println("reached end!!!!!");
@@ -307,10 +358,9 @@ public class GuiManager {
   }
 
   /**
-   * Handles when a guest leaves a party.
-   *
+   * Handles when a guest leaves a party. <<<<<<< HEAD ======= >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author Matt
-   *
    */
   private class LeavePartyHandler implements TemplateViewRoute {
     @Override
@@ -318,9 +368,22 @@ public class GuiManager {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
+      Boolean deleteBool = Boolean.valueOf(qm.value("deleteBool"));
+      Boolean partyEndedBool = Boolean.valueOf(qm.value("partyEndedBool"));
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
-      party.removeGuest(user);
+      if (deleteBool) {
+        try {
+          party.deletePlaylist();
+        } catch (SpotifyUserApiException e) {
+          // TODO: Redirect to login page
+          e.printStackTrace();
+        }
+      }
+
+      if (!partyEndedBool) {
+        party.removeGuest(user);
+      }
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
           userId);
@@ -331,30 +394,8 @@ public class GuiManager {
   }
 
   /**
-   * Handles when a host ends a party.
-   *
-   * @author Matt
-   *
-   */
-  private class EndPartyHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String userId = qm.value("userId");
-      String partyId = qm.value("partyId");
-      Party party = Party.of(Integer.valueOf(partyId));
-      party.endParty();
-
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
-          userId);
-
-      return new ModelAndView(variables, "createJoin.ftl");
-    }
-
-  }
-
-  /**
-   * Handles displaying search results.
+   * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -390,8 +431,45 @@ public class GuiManager {
   }
 
   /**
+   * Handles displaying search results.
+   * @author HE23
+   */
+  private static class AddFavoriteHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      try {
+        QueryParamsMap qm = req.queryMap();
+        String userId = qm.value("userId");
+        String songId = qm.value("songId");
+        int partyId = Integer.parseInt(qm.value("partyId"));
+
+        boolean add = Boolean.parseBoolean(qm.value("add"));
+        if (add) {
+          DbHandler.AddSongToFavorites(userId, songId);
+        } else {
+          DbHandler.removeSongFromFavorites(userId, songId);
+        }
+        List<Song> favorites = DbHandler.GetUserFavoritedSongs(userId);
+        Map<String, Map<String, Object>> favoriteRequestIdToSongMaps = new HashMap<>();
+        for (Song song : favorites) {
+          String requestId = edu.brown.cs.am209hhe2lbenzonmsicat.models.Request
+              .getId(partyId, song.getSpotifyId());
+          favoriteRequestIdToSongMaps.put(requestId, song.toMap());
+        }
+        Map<String, Object> variables = ImmutableMap.of("favorites",
+            favoriteRequestIdToSongMaps);
+        return GSON.toJson(variables);
+      } catch (Exception c) {
+        c.printStackTrace();
+      }
+      Map<String, Object> variables = ImmutableMap.of("favorites",
+          new ArrayList<String>());
+      return GSON.toJson(variables);
+    }
+  }
+
+  /**
    * Handles devices.
-   *
    */
   private static class DevicesHandler implements Route {
     @Override
@@ -413,10 +491,11 @@ public class GuiManager {
   }
 
   /**
-   * Handles redirecting if user is already seshing.
-   *
+   * <<<<<<< HEAD Handles redirecting if user is already seshing. =======
+   * Handles redirecting if user is already seshing. <<<<<<< HEAD =======
+   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author Matt
-   *
    */
   private static class ActivePartyHandler implements Route {
     @Override
@@ -443,7 +522,8 @@ public class GuiManager {
   }
 
   // /**
-  // * Handles returning the current song being played at the party. Will return
+  // * Handles returning the current song being played at the party. Will
+  // return
   // * null if no current song is playing.
   // *
   // * @author HE23
