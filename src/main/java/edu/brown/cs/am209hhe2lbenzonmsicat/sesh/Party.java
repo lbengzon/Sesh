@@ -10,6 +10,8 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.User.Type;
+
 /**
  * Abstract party class.
  */
@@ -90,8 +92,10 @@ public abstract class Party implements Jsonable {
   /**
    * @return Returns the request list as a stringified JSON object that will be
    *         sent to the front end to display.
+   * @throws SpotifyUserApiException
    */
-  public abstract JsonElement getPlaylistQueueAsJson();
+  public abstract JsonElement getPlaylistQueueAsJson()
+      throws SpotifyUserApiException;
 
   /**
    * @return party status
@@ -132,38 +136,48 @@ public abstract class Party implements Jsonable {
    * @param req
    *          - request
    * @return boolean if successful
+   * @throws SpotifyUserApiException
    */
-  public abstract boolean approveSong(String requestId);
+  public abstract boolean approveSong(String requestId)
+      throws SpotifyUserApiException;
 
   /**
    * Approve song.
    * @param req
    *          - request
    * @return boolean if successful
+   * @throws SpotifyUserApiException
    */
-  public abstract boolean approveSong(String requestId, int index);
+  public abstract boolean approveSong(String requestId, int index)
+      throws SpotifyUserApiException;
 
   /**
    * Approve song.
    * @param req
    *          - request
    * @return boolean if successful
+   * @throws SpotifyUserApiException
    */
-  public abstract boolean reorderSong(int startIndex, int endIndex);
+  public abstract boolean reorderSong(int startIndex, int endIndex)
+      throws SpotifyUserApiException;
 
   /**
    * @return If a song is being played by the host, this will return the song
    *         being played. If not, this will return null.
+   * @throws SpotifyUserApiException
    */
-  public abstract CurrentSongPlaying getSongBeingCurrentlyPlayed();
+  public abstract CurrentSongPlaying getSongBeingCurrentlyPlayed()
+      throws SpotifyUserApiException;
 
   /**
    * Remove from playlist.
    * @param req
    *          - request
    * @return boolean if successful.
+   * @throws SpotifyUserApiException
    */
-  public abstract boolean removeFromPlaylist(String requestId);
+  public abstract boolean removeFromPlaylist(String requestId)
+      throws SpotifyUserApiException;
 
   /**
    * Request song.
@@ -210,11 +224,13 @@ public abstract class Party implements Jsonable {
    */
   public abstract double getDistance(Coordinate coordinate);
 
-  public abstract boolean playPlaylist(int index);
+  public abstract boolean playPlaylist(int index)
+      throws SpotifyUserApiException;
 
-  public abstract boolean pause();
+  public abstract boolean pause() throws SpotifyUserApiException;
 
-  public abstract boolean seekSong(long seekPosition);
+  public abstract boolean seekSong(long seekPosition)
+      throws SpotifyUserApiException;
 
   // public abstract boolean nextSong();
   //
@@ -315,13 +331,19 @@ public abstract class Party implements Jsonable {
    * @return party
    * @throws SQLException
    *           - exception
+   * @throws SpotifyUserApiException
    */
   // TODO: Modify parameters to take in Date object for time
   public static Party create(String name, User host, Coordinate location,
-      LocalDateTime time, String deviceId) throws SQLException {
+      LocalDateTime time, String deviceId)
+      throws SQLException, SpotifyUserApiException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an party from a null id");
+    }
+    if (!host.getType().equals(Type.premium)) {
+      throw new IllegalArgumentException(
+          "ERROR: Can't host a party if you're not premium!");
     }
     String newPlaylistId = Playlist.getNewPlaylistId(host);
     return DbHandler.addParty(newPlaylistId, name, location, time, host,

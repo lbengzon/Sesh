@@ -74,6 +74,7 @@ public class PartyWebsocket {
       // session
       partyIdToSessions.remove(partyId, session);
       sessionToPartyId.remove(session);
+      // Party p = Party.of(partyId);
       System.out.println("Closed Connection");
     }
   }
@@ -208,7 +209,14 @@ public class PartyWebsocket {
     try {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
-      CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
+      CurrentSongPlaying curr;
+      try {
+        curr = party.getSongBeingCurrentlyPlayed();
+      } catch (SpotifyUserApiException e) {
+        // TODO REDIRECT TO LOGIN PAGE
+        e.printStackTrace();
+        return;
+      }
 
       if (curr == null) {
         return;

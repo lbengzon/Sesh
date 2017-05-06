@@ -8,16 +8,16 @@ import java.util.List;
 import org.junit.Test;
 import org.sqlite.SQLiteException;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.User.Type;
+
 /**
  * This class tests the db handler class.
- *
  * @author Ali
  */
 public class DbHandlerTest {
 
   /**
    * This tests the add get user function.
-   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -40,7 +40,6 @@ public class DbHandlerTest {
 
   /**
    * This method tests the adding of the same user.
-   *
    * @throws FileNotFoundException
    *           if the db isn't there
    * @throws SQLException
@@ -59,7 +58,6 @@ public class DbHandlerTest {
 
   /**
    * This tests adding the same party.
-   *
    * @throws FileNotFoundException
    *           if db isn't there
    * @throws SQLException
@@ -876,13 +874,12 @@ public class DbHandlerTest {
   public void testGetUserType() throws FileNotFoundException, SQLException {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
-
     User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
         "Leandro Bengzon", "premium");
-    assert host.getType().equals("premium");
+    assert host.getType().equals(Type.premium);
     UserProxy.clearCache();
     User h = User.of("lbengzon");
-    assert h.getType().equals("premium");
+    assert h.getType().equals(Type.premium);
   }
 
   @Test
@@ -891,7 +888,7 @@ public class DbHandlerTest {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
     User host = User.of("s3shteam32", "seshteam32@gmail.com", "Sesh",
-        "premium");
+        Type.valueOf("premium"));
     Song s = Song.of("7AQAlklmptrrkBSeujkXsD");
     DbHandler.AddSongToFavorites("s3shteam32", s.getSpotifyId());
     List<Song> songs = DbHandler.GetUserFavoritedSongs("s3shteam32");
