@@ -29,6 +29,8 @@ let conn;
 let timeoutCheckForNewCurrSong;
 let myId = -1;
 
+let userRequests = [];
+
 function hoverOn(x) {
   x.className = 'selected';
 }
@@ -177,6 +179,15 @@ function getCurrentSongIndex(){
   return index;
 }
 
+function favorite() {
+  $(".favButton").click(function(x) {
+    const postParams = {userId: userId, songId: x.currentTarget.id};
+    $.post("/addSongToFavorites", postParams, responseJSON => {
+      const responseObject = JSON.parse(responseJSON);
+    });
+  });
+}
+
 function vote() {
   $(".upvote").click(function(x) {
     upvoteRequest(partyId, userId, x.currentTarget.id);
@@ -188,9 +199,14 @@ function vote() {
 }
 
 function appendToRequests($requests, data) {
-  console.log("request data" , data);
   $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
     + "id=\"" + data.payload.newRequest.requestId + "\" >"
+    + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + data.payload.newRequest.song.spotifyId + "\" type=\"button\"> " 
+          + "<i class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
     + "<div id=\"songtitle\">" + data.payload.newRequest.song.title 
     + "<div id=\"scorediv\">" + data.payload.newRequest.score + "</div>"
     + "<div id=\"vote\" > "
@@ -207,12 +223,23 @@ function appendToRequests($requests, data) {
     + "<div id=\"songartist\">" + data.payload.newRequest.song.artist 
     + "</div>"
     + "</li>");
+
+  if (data.payload.newRequest.userRequestId === userId) {
+    userRequests.push(data.payload.newRequest);
+  }
+
 }
 
 function updateRequestVotes($requests, key, requestList, upvote, downvote) {
   if (upvote === true) {
     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
+      + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + requestList[key].song.spotifyId + "\" type=\"button\"> " 
+          + "<i class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
       + "<div id=\"songtitle\">" + requestList[key].song.title 
       + "<div id=\"scorediv\">" + requestList[key].score + "</div>"
       + "<div id=\"vote\" > "
@@ -229,9 +256,19 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       + "<div id=\"songartist\">" + requestList[key].song.artist 
       + "</div>"
       + "</li>");
+
+      if (requestList[key].userRequestId === userId) {
+        userRequests.push(requestList[key]);
+      }
   } else if (downvote === true) {
     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
+      + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + requestList[key].song.spotifyId + "\" type=\"button\"> " 
+          + "<i class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
       + "<div id=\"songtitle\">" + requestList[key].song.title 
       + "<div id=\"scorediv\">" + requestList[key].score + "</div>"
       + "<div id=\"vote\" > "
@@ -248,9 +285,19 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       + "<div id=\"songartist\">" + requestList[key].song.artist 
       + "</div>"
       + "</li>");
+
+      if (requestList[key].userRequestId === userId) {
+        userRequests.push(requestList[key]);
+      }
   } else {
      $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
+      + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + requestList[key].song.spotifyId + "\" type=\"button\"> " 
+          + "<i class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
       + "<div id=\"songtitle\">" + requestList[key].song.title 
       + "<div id=\"scorediv\">" + requestList[key].score + "</div>"
       + "<div id=\"vote\" > "
@@ -266,28 +313,26 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       + "</div>"
       + "<div id=\"songartist\">" + requestList[key].song.artist 
       + "</div>"
-      + "</li>");   
-  }
+      + "</li>"); 
 
+      if (requestList[key].userRequestId === userId) {
+        userRequests.push(requestList[key]);
+      } 
+  }
 }
 
 function appendToPlaylist($playlist, newRequest, startShowing) {
   if (!startShowing) {
-    console.log("THIS SHOULD BE HIDDEN: " + newRequest.song.artist);
     $playlist.append("<li style=\"display:none;\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + newRequest.requestId + "\" >"
+      + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + newRequest.song.spotifyId + "\" type=\"button\"> " 
+          + "<i class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
       + "<div id=\"songtitle\">" + newRequest.song.title 
       + "<div id=\"scorediv\">" + newRequest.score + "</div>"
-      // + "<div id=\"vote\" > "
-      //   + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-      //     + "<i class=\"material-icons\">thumb_up</i>"
-      //   + "</button>"
-      //   + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-      //     + "<i class=\"material-icons\">thumb_down</i>"
-      //   + "</button>"
-      // //end of vote div
-      // + "</div>"
-      //end of song title div
       + "</div>"
       + "<div id=\"songartist\">" + newRequest.song.artist 
       + "</div>"
@@ -295,18 +340,14 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
   } else {
     $playlist.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + newRequest.requestId + "\" >"
+      + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + newRequest.song.spotifyId + "\" type=\"button\"> " 
+          + "<i class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
       + "<div id=\"songtitle\">" + newRequest.song.title 
       + "<div id=\"scorediv\">" + newRequest.score + "</div>"
-      // + "<div id=\"vote\" > "
-      //   + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-      //     + "<i class=\"material-icons\">thumb_up</i>"
-      //   + "</button>"
-      //   + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-      //     + "<i class=\"material-icons\">thumb_down</i>"
-      //   + "</button>"
-      // //end of vote div
-      // + "</div>"
-      //end of song title div
       + "</div>"
       + "<div id=\"songartist\">" + newRequest.song.artist 
       + "</div>"
@@ -320,7 +361,6 @@ function clearAndPopulateRequests(requests, $requests){
     let downvote = false;
     let upvote = false;
     if (requests.hasOwnProperty(key)) {
-      console.log(requests[key]);
       for (let i in requests[key].upvotes) {
         if (userId === requests[key].upvotes[i]) {
           upvote = true;
