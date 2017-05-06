@@ -257,7 +257,7 @@ public class GuiManager {
 
       Party party = null;
       int partyId = -1;
-      System.out.println("lat " + lat);
+      System.out.println("lat !!!!" + lat);
       System.out.println("lon " + lon);
 
       Coordinate coord = new Coordinate(Double.valueOf(lat),
@@ -265,7 +265,7 @@ public class GuiManager {
 
       Map<String, Object> variables = ImmutableMap.of("partyId", "",
           "partyName", partyName, "userId", userId);
-
+      System.out.println("going into try");
       try {
         User host = User.of(userId);
         System.out.println("got the user");
