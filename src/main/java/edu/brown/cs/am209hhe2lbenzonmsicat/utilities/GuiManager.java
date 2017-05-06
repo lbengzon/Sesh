@@ -29,7 +29,10 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * Gui Manager class.
+ * <<<<<<< HEAD Gui Manager class. ======= <<<<<<< HEAD Gui Manager class.
+ * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0 =======
+ * Gui Manager class. >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+ * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
  * @author HE23
  */
 public class GuiManager {
@@ -37,7 +40,11 @@ public class GuiManager {
   private static final Gson GSON = new Gson();
 
   /**
-   * Default constructor.
+   * <<<<<<< HEAD Default constructor. ======= <<<<<<< HEAD Default constructor.
+   * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * ======= Default constructor. >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -194,7 +201,10 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to join a sesh page.
+   * <<<<<<< HEAD Handles request to join a sesh page. ======= Handles request
+   * to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -248,7 +258,10 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to create a sesh page.
+   * <<<<<<< HEAD Handles request to create a sesh page. ======= Handles request
+   * to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -265,7 +278,10 @@ public class GuiManager {
   }
 
   /**
-   * Creates party in the backend.
+   * <<<<<<< HEAD Creates party in the backend. ======= Creates party in the
+   * backend. <<<<<<< HEAD ======= >>>>>>>
+   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -344,7 +360,8 @@ public class GuiManager {
   }
 
   /**
-   * Handles when a guest leaves a party.
+   * Handles when a guest leaves a party. <<<<<<< HEAD ======= >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -365,6 +382,7 @@ public class GuiManager {
           e.printStackTrace();
         }
       }
+
       if (!partyEndedBool) {
         party.removeGuest(user);
       }
@@ -378,7 +396,8 @@ public class GuiManager {
   }
 
   /**
-   * Handles displaying search results.
+   * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -470,7 +489,10 @@ public class GuiManager {
   }
 
   /**
-   * Handles redirecting if user is already seshing.
+   * <<<<<<< HEAD Handles redirecting if user is already seshing. =======
+   * Handles redirecting if user is already seshing. <<<<<<< HEAD =======
+   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {

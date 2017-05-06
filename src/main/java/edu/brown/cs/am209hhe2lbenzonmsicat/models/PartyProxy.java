@@ -17,6 +17,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ *
  * @author leandro
  */
 public class PartyProxy extends Party implements Proxy {
@@ -36,6 +37,7 @@ public class PartyProxy extends Party implements Proxy {
 
   /**
    * Constructor.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -476,7 +478,7 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     SpotifyCommunicator.unfollowPlaylist(partyBean.getHost().getSpotifyId(),
-        playlistId, true);
+        partyBean.getHost().getSpotifyId(), playlistId, true);
   }
 
   @Override

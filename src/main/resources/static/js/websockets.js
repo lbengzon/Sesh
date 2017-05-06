@@ -188,6 +188,8 @@ function favorite() {
     const postParams = {userId: userId, songId: x.currentTarget.id};
     $.post("/addSongToFavorites", postParams, responseJSON => {
       const responseObject = JSON.parse(responseJSON);
+      const favList = responseObject.favorites;
+      console.log("FAV LIST: " , favList);
     });
   });
 }

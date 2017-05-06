@@ -42,6 +42,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
  * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Class that
  * integrates Spotify API for Sesh. >>>>>>>
  * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+ *
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -163,6 +164,7 @@ public class SpotifyCommunicator {
    * <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed
    * device id issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e =======
    * Get access token. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -235,6 +237,7 @@ public class SpotifyCommunicator {
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * gets the playlist tracks. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   *
    * @param userId
    *          user id
    * @param playlistId
@@ -353,8 +356,8 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static void unfollowPlaylist(String userId, String playlistId,
-      boolean shouldRefresh) throws SpotifyUserApiException {
+  public static void unfollowPlaylist(String userId, String hostId,
+      String playlistId, boolean shouldRefresh) throws SpotifyUserApiException {
     Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -362,7 +365,7 @@ public class SpotifyCommunicator {
       api.setAccessToken(accessToken);
       StringBuilder sb = new StringBuilder();
       sb.append("https://api.spotify.com/v1/users/");
-      sb.append(userId);
+      sb.append(hostId);
       sb.append("/playlists/");
       sb.append(playlistId);
       sb.append("/followers");
@@ -374,9 +377,11 @@ public class SpotifyCommunicator {
       sb2.append(accessToken);
       conn.setRequestProperty("Authorization", sb2.toString());
       conn.connect();
+      System.out.println(conn.getResponseCode());
+      System.out.println(conn.getResponseMessage());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
-        unfollowPlaylist(userId, playlistId, false);
+        unfollowPlaylist(userId, hostId, playlistId, false);
         return;
       }
       throw new RuntimeException(e.getMessage());
@@ -390,6 +395,7 @@ public class SpotifyCommunicator {
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * reorders tracks in the playlist. >>>>>>>
    * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -734,5 +740,46 @@ public class SpotifyCommunicator {
       }
       throw new RuntimeException(e.getMessage());
     }
+  }
+
+  public static void followPlaylist(String userId, String hostId,
+      String playlistId, boolean shouldRefresh) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/users/");
+      sb.append(hostId);
+      sb.append("/playlists/");
+      sb.append(playlistId);
+      sb.append("/followers");
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("PUT");
+      conn.setDoOutput(true);
+      StringBuilder sb2 = new StringBuilder();
+      JsonObject body = new JsonObject();
+      body.addProperty("public", false);
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      conn.setRequestProperty("Content-Type", "application/json");
+      OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+      out.write(body.toString());
+      out.close();
+      System.out.println(body.toString());
+      conn.connect();
+      System.out.println(conn.getResponseCode());
+      System.out.println(conn.getResponseMessage());
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        followPlaylist(userId, hostId, playlistId, false);
+        return;
+      }
+      throw new RuntimeException(e.getMessage());
+    }
+
   }
 }
