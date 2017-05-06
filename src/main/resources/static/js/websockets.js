@@ -193,15 +193,24 @@ function vote() {
 }
 
 function favorite() {
+  $(".favButton").unbind("click");
   $(".favButton").click(function(x) {
     //check if yellow or grey and add boolean post param for add or remove
-    const postParams = {userId: userId, songId: x.currentTarget.id};
+    const postParams = {userId: userId, songId: x.currentTarget.id, add: true, partyId: partyId};
     $.post("/addSongToFavorites", postParams, responseJSON => {
       const responseObject = JSON.parse(responseJSON);
       const favList = responseObject.favorites;
-      $("#request-list li").each(function(index, value) {
-        console.log($(this));
-      });
+
+      // $("#request-list li").each(function(index, value) {
+      //   for (let key in favList) {
+
+      //   }
+      //   console.log($("#"+value.id));
+      // });
+
+      // $("#playlist-list li").each(function(index, value) {
+      //   console.log($("#"+value.id));
+      // });
   
     });
   });
@@ -386,9 +395,7 @@ function clearAndPopulateRequests(requests, $requests){
   }
 
   vote();
-  console.log("HERE REQUESTS");
   favorite();
-  console.log("OVER HERE REQUESTS");
 }
 
 
@@ -411,9 +418,7 @@ function clearAndPopulatePlaylist(playlist, $playlist, isHost){
         }
       }   
     }
-    console.log("HERE");
     favorite();
-    console.log("OVER HERE");
   }
 
 function setPartyId (partyId, userId) {
