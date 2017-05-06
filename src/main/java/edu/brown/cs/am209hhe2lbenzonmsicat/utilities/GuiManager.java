@@ -3,6 +3,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -443,6 +444,8 @@ public class GuiManager {
         QueryParamsMap qm = req.queryMap();
         String userId = qm.value("userId");
         String songId = qm.value("songId");
+        int partyId = Integer.parseInt(qm.value("partyId"));
+
         boolean add = Boolean.parseBoolean(qm.value("add"));
         if (add) {
           DbHandler.AddSongToFavorites(userId, songId);
@@ -450,12 +453,14 @@ public class GuiManager {
           DbHandler.removeSongFromFavorites(userId, songId);
         }
         List<Song> favorites = DbHandler.GetUserFavoritedSongs(userId);
-        List<Map<String, Object>> favoriteSongMaps = new ArrayList<>();
+        Map<String, Map<String, Object>> favoriteRequestIdToSongMaps = new HashMap<>();
         for (Song song : favorites) {
-          favoriteSongMaps.add(song.toMap());
+          String requestId = edu.brown.cs.am209hhe2lbenzonmsicat.models.Request
+              .getId(partyId, song.getSpotifyId());
+          favoriteRequestIdToSongMaps.put(requestId, song.toMap());
         }
         Map<String, Object> variables = ImmutableMap.of("favorites",
-            favoriteSongMaps);
+            favoriteRequestIdToSongMaps);
         return GSON.toJson(variables);
       } catch (Exception c) {
         c.printStackTrace();
