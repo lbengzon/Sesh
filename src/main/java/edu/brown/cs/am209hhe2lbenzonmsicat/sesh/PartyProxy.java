@@ -207,7 +207,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean approveSong(String requestId) {
+  public boolean approveSong(String requestId) throws SpotifyUserApiException {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -222,7 +222,8 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean removeFromPlaylist(String requestId) {
+  public boolean removeFromPlaylist(String requestId)
+      throws SpotifyUserApiException {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -335,7 +336,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public JsonElement getPlaylistQueueAsJson() {
+  public JsonElement getPlaylistQueueAsJson() throws SpotifyUserApiException {
     if (partyBean == null) {
       try {
         fill();
@@ -371,7 +372,8 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean approveSong(String requestId, int index) {
+  public boolean approveSong(String requestId, int index)
+      throws SpotifyUserApiException {
     if (partyBean == null) {
       try {
         fill();
@@ -383,7 +385,8 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean reorderSong(int startIndex, int endIndex) {
+  public boolean reorderSong(int startIndex, int endIndex)
+      throws SpotifyUserApiException {
     if (partyBean == null) {
       try {
         fill();
@@ -395,7 +398,8 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public CurrentSongPlaying getSongBeingCurrentlyPlayed() {
+  public CurrentSongPlaying getSongBeingCurrentlyPlayed()
+      throws SpotifyUserApiException {
     if (partyBean == null) {
       try {
         fill();
@@ -407,7 +411,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean playPlaylist(int index) {
+  public boolean playPlaylist(int index) throws SpotifyUserApiException {
     if (partyBean == null) {
       try {
         fill();
@@ -419,7 +423,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean pause() {
+  public boolean pause() throws SpotifyUserApiException {
     if (partyBean == null) {
       try {
         fill();
@@ -431,7 +435,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean seekSong(long seekPosition) {
+  public boolean seekSong(long seekPosition) throws SpotifyUserApiException {
     if (partyBean == null) {
       try {
         fill();

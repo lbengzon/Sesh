@@ -126,7 +126,7 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
-  public CurrentSongPlaying getCurrentSong() {
+  public CurrentSongPlaying getCurrentSong() throws SpotifyUserApiException {
     CurrentSongPlaying curr = SpotifyCommunicator
         .getCurrentSong(host.getSpotifyId(), id, true);
     if (curr != null && queuedRequests.containsKey(curr.getSong())) {

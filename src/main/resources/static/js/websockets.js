@@ -131,7 +131,6 @@ function updatePlayer(data){
       $("#progressbar").attr("max", data.payload.duration);
       $("#songTitle").html(data.payload.songTitle);
       $("#albumTitle").html(data.payload.albumTitle);
-      console.log(data.payload.artistName);
       $("#artistName").html(data.payload.artist);
   }
   console.log("isplaying", data.payload.isPlaying)

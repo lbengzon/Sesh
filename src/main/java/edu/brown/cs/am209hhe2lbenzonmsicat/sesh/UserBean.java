@@ -13,7 +13,7 @@ public class UserBean extends User {
   private String email;
   private String firstName;
   private String lastName;
-  private String type;
+  private Type type;
 
   /**
    * This is the constructor for the User class.
@@ -24,7 +24,7 @@ public class UserBean extends User {
    * @param name
    *          - user's first name
    */
-  public UserBean(String spotifyId, String email, String name, String t) {
+  public UserBean(String spotifyId, String email, String name, Type t) {
     this.spotifyId = spotifyId;
     this.email = email;
     this.type = t;
@@ -109,12 +109,12 @@ public class UserBean extends User {
   }
 
   @Override
-  public String getType() {
+  public Type getType() {
     return type;
   }
 
   @Override
-  public List<Device> getDevices() {
+  public List<Device> getDevices() throws SpotifyUserApiException {
     assert false : "should never really get here";
     return SpotifyCommunicator.getDevices(spotifyId, true);
   }
