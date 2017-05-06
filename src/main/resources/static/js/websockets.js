@@ -42,7 +42,7 @@ function setupWebsockets() {
   const $playlist = $("#playlist-list ul");
   const $player = $("#playback");
   // TODO Create the WebSocket connection and assign it to `conn`
-  conn = new WebSocket("ws://localhost:4567/update");
+  conn = new WebSocket("ws://http://35.185.92.16/update");
 
   conn.onclose = function(){
     setTimeout(setupWebsockets, 1000)
