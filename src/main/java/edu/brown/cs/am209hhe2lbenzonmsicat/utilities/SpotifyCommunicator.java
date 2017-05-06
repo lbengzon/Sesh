@@ -752,7 +752,7 @@ public class SpotifyCommunicator {
       StringBuilder sb = new StringBuilder();
       sb.append("https://api.spotify.com/v1/users/");
       sb.append(hostId);
-      sb.append("/playlist/");
+      sb.append("/playlists/");
       sb.append(playlistId);
       sb.append("/followers");
       URL url = new URL(sb.toString());
