@@ -30,7 +30,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * Gui Manager class.
- * 
  * @author HE23
  */
 public class GuiManager {
@@ -39,7 +38,6 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -92,9 +90,7 @@ public class GuiManager {
 
   /**
    * Handles the homepage, where users enter their credentials.
-   *
    * @author Matt
-   *
    */
   private class CallbackHandler implements TemplateViewRoute {
     @Override
@@ -123,9 +119,7 @@ public class GuiManager {
 
   /**
    * Handles the create join page.
-   *
    * @author Matt
-   *
    */
   private static class CreateJoinHandler implements TemplateViewRoute {
     @Override
@@ -201,7 +195,6 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   * 
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -256,7 +249,6 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   * 
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -274,7 +266,6 @@ public class GuiManager {
 
   /**
    * Creates party in the backend.
-   * 
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -315,7 +306,13 @@ public class GuiManager {
         System.out.println("Failed to add party to database");
       } catch (SpotifyUserApiException e) {
         // TODO SEND USER TO THE LOGIN PAGE
+        variables = ImmutableMap.of("Message",
+            "Your have been logged out! Please log back in again.");
         e.printStackTrace();
+      } catch (IllegalArgumentException e) {
+        // If the user
+        variables = ImmutableMap.of("Message",
+            "You must have a premium spotify account to host a party");
       }
 
       System.out.println("reached end!!!!!");
@@ -348,7 +345,6 @@ public class GuiManager {
 
   /**
    * Handles when a guest leaves a party.
-   * 
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -383,7 +379,6 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -420,7 +415,6 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -430,16 +424,19 @@ public class GuiManager {
         QueryParamsMap qm = req.queryMap();
         String userId = qm.value("userId");
         String songId = qm.value("songId");
-
-        DbHandler.AddSongToFavorites(userId, songId);
-        List<Song> favorites = DbHandler.GetUserFavoritedSongs(userId);
-        List<String> favoriteIds = new ArrayList<>();
-        for (Song song : favorites) {
-          favoriteIds.add(song.getSpotifyId());
+        boolean add = Boolean.parseBoolean(qm.value("add"));
+        if (add) {
+          DbHandler.AddSongToFavorites(userId, songId);
+        } else {
+          DbHandler.removeSongFromFavorites(userId, songId);
         }
-
+        List<Song> favorites = DbHandler.GetUserFavoritedSongs(userId);
+        List<Map<String, Object>> favoriteSongMaps = new ArrayList<>();
+        for (Song song : favorites) {
+          favoriteSongMaps.add(song.toMap());
+        }
         Map<String, Object> variables = ImmutableMap.of("favorites",
-            favoriteIds);
+            favoriteSongMaps);
         return GSON.toJson(variables);
       } catch (Exception c) {
         c.printStackTrace();
@@ -474,7 +471,6 @@ public class GuiManager {
 
   /**
    * Handles redirecting if user is already seshing.
-   * 
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {
