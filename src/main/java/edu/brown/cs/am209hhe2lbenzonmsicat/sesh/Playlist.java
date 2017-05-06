@@ -22,8 +22,9 @@ public abstract class Playlist {
 
   /**
    * @return ordered list of requested songs
+   * @throws SpotifyUserApiException
    */
-  public abstract List<Request> getSongs();
+  public abstract List<Request> getSongs() throws SpotifyUserApiException;
 
   /**
    * @return the set of songs
@@ -34,33 +35,42 @@ public abstract class Playlist {
    * @param request
    *          - to remove
    * @return boolean if successful
+   * @throws SpotifyUserApiException
    */
-  public abstract Request removeSong(String requestId);
+  public abstract Request removeSong(String requestId)
+      throws SpotifyUserApiException;
 
   public abstract Request getRequest(String requestId);
 
-  public abstract CurrentSongPlaying getCurrentSong();
+  public abstract CurrentSongPlaying getCurrentSong()
+      throws SpotifyUserApiException;
 
-  public abstract void play(int offset, String deviceId);
+  public abstract void play(int offset, String deviceId)
+      throws SpotifyUserApiException;
 
-  public abstract void pause(String deviceId);
+  public abstract void pause(String deviceId) throws SpotifyUserApiException;
 
   // public abstract void nextSong(String deviceId);
   //
   // public abstract void prevSong(String deviceId);
 
-  public abstract void seek(long position_ms, String deviceId);
+  public abstract void seek(long position_ms, String deviceId)
+      throws SpotifyUserApiException;
 
   /**
    * @param request
    *          - to add
    * @return boolean if successful
+   * @throws SpotifyUserApiException
    */
-  public abstract boolean addSong(Request request);
+  public abstract boolean addSong(Request request)
+      throws SpotifyUserApiException;
 
-  public abstract boolean addSongInPosition(Request request, int pos);
+  public abstract boolean addSongInPosition(Request request, int pos)
+      throws SpotifyUserApiException;
 
-  public abstract void reorderPlaylist(int rangeStart, int insertBefore);
+  public abstract void reorderPlaylist(int rangeStart, int insertBefore)
+      throws SpotifyUserApiException;
 
   /**
    * This should only be used for testing!
@@ -90,7 +100,8 @@ public abstract class Playlist {
     return new PlaylistProxy(spotifyId, partyId, user);
   }
 
-  public static String getNewPlaylistId(User user) {
+  public static String getNewPlaylistId(User user)
+      throws SpotifyUserApiException {
     // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
     // get the spotify id
     String id = SpotifyCommunicator.createPlaylist(user.getSpotifyId(),

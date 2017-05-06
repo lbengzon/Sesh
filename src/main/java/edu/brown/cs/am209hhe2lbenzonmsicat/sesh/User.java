@@ -10,6 +10,13 @@ import java.util.Objects;
  */
 public abstract class User implements Jsonable {
 
+  public static enum Type {
+    daypass,
+    free,
+    open,
+    premium
+  }
+
   /**
    * @return spotify id.
    */
@@ -37,9 +44,9 @@ public abstract class User implements Jsonable {
    */
   public abstract String getFullName();
 
-  public abstract String getType();
+  public abstract Type getType();
 
-  public abstract List<Device> getDevices();
+  public abstract List<Device> getDevices() throws SpotifyUserApiException;
 
   /**
    * User of.
@@ -66,7 +73,7 @@ public abstract class User implements Jsonable {
    * @return User
    */
   public static User of(String spotifyId, String email, String name,
-      String type) {
+      Type type) {
     if (spotifyId == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an mapnode from a null id");

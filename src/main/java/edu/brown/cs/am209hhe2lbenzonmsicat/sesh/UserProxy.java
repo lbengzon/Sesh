@@ -33,7 +33,7 @@ public class UserProxy extends User implements Proxy {
    * @param name
    *          their name
    */
-  public UserProxy(String spotifyId, String email, String name, String type) {
+  public UserProxy(String spotifyId, String email, String name, Type type) {
     this.spotifyId = spotifyId;
     userBean = new UserBean(spotifyId, email, name, type);
   }
@@ -152,7 +152,7 @@ public class UserProxy extends User implements Proxy {
   }
 
   @Override
-  public String getType() {
+  public Type getType() {
     if (userBean == null) {
       try {
         fill();
@@ -164,7 +164,7 @@ public class UserProxy extends User implements Proxy {
   }
 
   @Override
-  public List<Device> getDevices() {
+  public List<Device> getDevices() throws SpotifyUserApiException {
     return SpotifyCommunicator.getDevices(spotifyId, true);
   }
 

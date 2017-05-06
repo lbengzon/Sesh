@@ -122,7 +122,7 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean approveSong(String requestId) {
+  public boolean approveSong(String requestId) throws SpotifyUserApiException {
     assert isActive() == true;
     Request request = requestIdToRequest.get(requestId);
     if (request == null) {
@@ -135,7 +135,8 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean removeFromPlaylist(String requestId) {
+  public boolean removeFromPlaylist(String requestId)
+      throws SpotifyUserApiException {
     assert isActive() == true;
 
     Request req = playlist.removeSong(requestId);
@@ -278,7 +279,7 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public JsonElement getPlaylistQueueAsJson() {
+  public JsonElement getPlaylistQueueAsJson() throws SpotifyUserApiException {
     Map<String, Object> requestsMap = new LinkedHashMap<>();
     List<Request> songs = playlist.getSongs();
     for (Request r : songs) {
@@ -291,7 +292,12 @@ public class PartyBean extends Party {
   public Map<String, Object> toMap() {
     Map<String, Object> partyMap = new HashMap<>();
     partyMap.put("partyId", partyId);
-    partyMap.put("playlist", getPlaylistQueueAsJson());
+    try {
+      partyMap.put("playlist", getPlaylistQueueAsJson());
+    } catch (SpotifyUserApiException e) {
+      // TODO Auto-generated catch block
+      throw new RuntimeException(e.getMessage());
+    }
     partyMap.put("requests", getRequestsAsJson());
     partyMap.put("playlistUrl", playlist.getUrl());
     partyMap.put("host", host.toJson());
@@ -308,7 +314,8 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean approveSong(String requestId, int index) {
+  public boolean approveSong(String requestId, int index)
+      throws SpotifyUserApiException {
     assert isActive() == true;
     Request request = requestIdToRequest.get(requestId);
     if (request == null) {
@@ -321,7 +328,8 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean reorderSong(int startIndex, int endIndex) {
+  public boolean reorderSong(int startIndex, int endIndex)
+      throws SpotifyUserApiException {
     // TODO Auto-generated method stub
     assert isActive() == true;
     playlist.reorderPlaylist(startIndex, endIndex);
@@ -329,25 +337,26 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public CurrentSongPlaying getSongBeingCurrentlyPlayed() {
+  public CurrentSongPlaying getSongBeingCurrentlyPlayed()
+      throws SpotifyUserApiException {
     return playlist.getCurrentSong();
   }
 
   @Override
-  public boolean playPlaylist(int index) {
+  public boolean playPlaylist(int index) throws SpotifyUserApiException {
     playlist.play(index, deviceId);
     return true;
   }
 
   @Override
-  public boolean pause() {
+  public boolean pause() throws SpotifyUserApiException {
     // TODO Auto-generated method stub
     playlist.pause(deviceId);
     return true;
   }
 
   @Override
-  public boolean seekSong(long seekPosition) {
+  public boolean seekSong(long seekPosition) throws SpotifyUserApiException {
     // TODO Auto-generated method stub
     playlist.seek(seekPosition, deviceId);
     return true;

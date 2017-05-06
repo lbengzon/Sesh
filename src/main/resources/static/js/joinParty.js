@@ -90,6 +90,10 @@ $(document).ready(() => {
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
 	const $requests = $(".tabContentRequestGuest ul");
+	
+	/*setting invisible form */
+	$("#userId").val(userId);
+	$("#partyId").val(partyId);
 
 	$userInput.keyup(function() {
 		console.log("userId" + userId);
@@ -128,6 +132,7 @@ $(document).ready(() => {
 	const $playlistTitle = $("#playlist-title");
 	const $requestTitle = $("#request-title");
 	const $listWrapper = $('.list-wrapper');
+	// const $leavebutton = $("#leaveButton");
 
 
 	//guest tabs
