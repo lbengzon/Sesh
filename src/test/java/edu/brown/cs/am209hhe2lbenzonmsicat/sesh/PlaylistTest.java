@@ -62,7 +62,8 @@ public class PlaylistTest {
    *           if db doesn't exist
    */
   @Test
-  public void testRemoveSong() throws SQLException, FileNotFoundException {
+  public void testRemoveSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -99,7 +100,8 @@ public class PlaylistTest {
    *           if the db doesn't exist.
    */
   @Test
-  public void testAddSong() throws SQLException, FileNotFoundException {
+  public void testAddSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -172,24 +174,25 @@ public class PlaylistTest {
   }
 
   @Test
-  public void testGetCurrentSong()
-      throws MalformedURLException, IOException, SQLException {
+  public void testGetCurrentSong() throws MalformedURLException, IOException,
+      SQLException, SpotifyUserApiException {
     // SpotifyCommunicator.setUpTestApi();
     // DbHandler.setFromUrl("test.db");
     // DbHandler.clearAllTables();
     // PartyProxy.clearCache();
     // PlaylistProxy.clearCache();
-    // User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir");
+    // User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
+    // "deviceId");
     //
     // Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-    // LocalDateTime.now());
+    // LocalDateTime.now(), "deviceId");
     // Playlist playlist = p.getPlaylist();
     // Request r = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), l);
     //
     // // Somewhere only we know - keane
     // playlist.addSong(r);
     // assert playlist.getSongs().contains(r);
-    // Song s = playlist.getCurrentSong();
+    // CurrentSongPlaying s = playlist.getCurrentSong();
     // System.out.println(s);
   }
 

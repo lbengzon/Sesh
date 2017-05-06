@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.junit.Test;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User.Type;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.UserProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 
@@ -109,12 +110,12 @@ public class UserTest {
 
   @Test
   public void testOfStringStringString()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
     UserProxy.clearCache();
     User l = User.of("lbengzon", "leandro.bengzon@gmail.com", "Leandro Bengzon",
-        "deviceId");
+        Type.premium);
     assert l.getSpotifyId().equals("lbengzon");
     assert l.getFirstName().equals("Leandro");
     assert l.getEmail().equals("leandro.bengzon@gmail.com");
