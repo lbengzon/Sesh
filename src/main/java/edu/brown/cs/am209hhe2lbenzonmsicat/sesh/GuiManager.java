@@ -23,7 +23,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 /**
  * Gui Manager class. <<<<<<< HEAD ======= >>>>>>>
  * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
- *
  * @author HE23
  */
 public class GuiManager {
@@ -33,7 +32,6 @@ public class GuiManager {
   /**
    * Default constructor. <<<<<<< HEAD ======= >>>>>>>
    * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
-   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -54,8 +52,11 @@ public class GuiManager {
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
     Spark.post("/devices", new DevicesHandler());
+    Spark.post("/getactiveparty", new ActivePartyHandler());
     // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
+    Spark.get("/leaveparty", new LeavePartyHandler(), fme);
+    Spark.get("/endparty", new EndPartyHandler(), fme);
   }
 
   private static class ErrorHandler implements TemplateViewRoute {
@@ -168,12 +169,12 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      String ftlPage = "join.ftl";
       try {
         QueryParamsMap qm = req.queryMap();
         String userId = qm.value("joinUserId");
@@ -185,9 +186,7 @@ public class GuiManager {
         }
 
         return new ModelAndView(variables, "join.ftl");
-      } catch (
-
-      Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
         return null;
       }
@@ -223,12 +222,12 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      String ftlPage;
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("createUserId");
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
@@ -240,7 +239,6 @@ public class GuiManager {
 
   /**
    * Creates party in the backend.
-   *
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -275,6 +273,9 @@ public class GuiManager {
         System.out.println("successfully created party in backend");
       } catch (SQLException e) {
         System.out.println("Failed to add party to database");
+      } catch (SpotifyUserApiException e) {
+        // TODO SEND USER TO THE LOGIN PAGE
+        e.printStackTrace();
       }
 
       System.out.println("reached end!!!!!");
@@ -299,14 +300,61 @@ public class GuiManager {
       System.out.println("partyName: " + partyName);
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
           "partyId", partyId, "partyName", partyName, "userId", userId);
+
       return new ModelAndView(variables, "createParty.ftl");
     }
 
   }
 
   /**
-   * Handles displaying search results.
+   * Handles when a guest leaves a party.
    *
+   * @author Matt
+   *
+   */
+  private class LeavePartyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      String partyId = qm.value("partyId");
+      User user = User.of(userId);
+      Party party = Party.of(Integer.valueOf(partyId));
+      party.removeGuest(user);
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
+
+      return new ModelAndView(variables, "createJoin.ftl");
+    }
+
+  }
+
+  /**
+   * Handles when a host ends a party.
+   *
+   * @author Matt
+   *
+   */
+  private class EndPartyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      String partyId = qm.value("partyId");
+      Party party = Party.of(Integer.valueOf(partyId));
+      party.endParty();
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
+
+      return new ModelAndView(variables, "createJoin.ftl");
+    }
+
+  }
+
+  /**
+   * Handles displaying search results.
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -341,6 +389,10 @@ public class GuiManager {
     }
   }
 
+  /**
+   * Handles devices.
+   *
+   */
   private static class DevicesHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
@@ -357,6 +409,36 @@ public class GuiManager {
             "message", c.getMessage());
         return GSON.toJson(variables);
       }
+    }
+  }
+
+  /**
+   * Handles redirecting if user is already seshing.
+   *
+   * @author Matt
+   *
+   */
+  private static class ActivePartyHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      String ftlPage;
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      User user = User.of(userId);
+      Party p = Party.getActivePartyOfUser(user);
+      if (p != null) {
+        if (user.equals(p.getHost())) {
+          ftlPage = "/create/party";
+        } else {
+          ftlPage = "/join/party";
+        }
+      } else {
+        ftlPage = null;
+      }
+      Map<String, Object> variables = ImmutableMap.of("userId", userId,
+          "partyId", p.getPartyId(), "partyName", p.getName(), "redirectPage",
+          ftlPage);
+      return GSON.toJson(variables);
     }
   }
 

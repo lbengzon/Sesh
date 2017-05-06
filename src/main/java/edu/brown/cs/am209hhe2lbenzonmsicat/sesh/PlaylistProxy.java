@@ -74,7 +74,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public List<Request> getSongs() {
+  public List<Request> getSongs() throws SpotifyUserApiException {
     List<Request> results = new ArrayList<Request>();
     if (playlistBean == null) {
       try {
@@ -98,7 +98,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public CurrentSongPlaying getCurrentSong() {
+  public CurrentSongPlaying getCurrentSong() throws SpotifyUserApiException {
     if (playlistBean == null) {
       try {
         fill();
@@ -110,13 +110,13 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public void play(int offset, String deviceId) {
+  public void play(int offset, String deviceId) throws SpotifyUserApiException {
     SpotifyCommunicator.play(host.getSpotifyId(), this.spotifyId, offset, true,
         deviceId);
   }
 
   @Override
-  public void pause(String deviceId) {
+  public void pause(String deviceId) throws SpotifyUserApiException {
     SpotifyCommunicator.pause(host.getSpotifyId(), true, deviceId);
   }
 
@@ -131,12 +131,13 @@ public class PlaylistProxy extends Playlist implements Proxy {
   // }
 
   @Override
-  public void seek(long position_ms, String deviceId) {
+  public void seek(long position_ms, String deviceId)
+      throws SpotifyUserApiException {
     SpotifyCommunicator.seek(host.getSpotifyId(), position_ms, deviceId, true);
   }
 
   @Override
-  public Request removeSong(String requestId) {
+  public Request removeSong(String requestId) throws SpotifyUserApiException {
     if (playlistBean == null) {
       try {
         fill();
@@ -173,7 +174,7 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public boolean addSong(Request request) {
+  public boolean addSong(Request request) throws SpotifyUserApiException {
     if (playlistBean == null) {
       try {
         fill();
@@ -194,7 +195,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public boolean addSongInPosition(Request request, int pos) {
+  public boolean addSongInPosition(Request request, int pos)
+      throws SpotifyUserApiException {
     if (playlistBean == null) {
       try {
         fill();
@@ -216,7 +218,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public void reorderPlaylist(int rangeStart, int insertBefore) {
+  public void reorderPlaylist(int rangeStart, int insertBefore)
+      throws SpotifyUserApiException {
     SpotifyCommunicator.reorderPlaylist(host.getSpotifyId(), this.spotifyId,
         rangeStart, insertBefore, true);
   }

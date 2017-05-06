@@ -9,8 +9,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.SettableFuture;
@@ -43,7 +45,8 @@ public class SpotifyCommunicator {
   // .build();
   private static Api testApi;
   private List<String> results;
-  private static ConcurrentHashMap<String, Api> userToApi = new ConcurrentHashMap<String, Api>();
+  private static Cache<String, Api> userToApi = CacheBuilder.newBuilder()
+      .maximumSize(10000).expireAfterWrite(4, TimeUnit.HOURS).build();
   private static ApiPool apiPool;
 
   /**
@@ -56,8 +59,13 @@ public class SpotifyCommunicator {
     apiPool = new ApiPool();
   }
 
-  public static void removeApi(String userId) {
-    userToApi.remove(userId);
+  private static Api getUserApi(String userId) throws SpotifyUserApiException {
+    Api api = userToApi.getIfPresent(userId);
+    if (api == null) {
+      throw new SpotifyUserApiException(
+          "The user does not have an api, have them re login");
+    }
+    return api;
   }
 
   public static void setUpTestApi() {
@@ -227,10 +235,11 @@ public class SpotifyCommunicator {
    * @param playlistId
    *          playlist id
    * @return list of all the playlist songs
+   * @throws SpotifyUserApiException
    */
   public static List<Song> getPlaylistTracks(String userId, String playlistId,
-      boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      boolean shouldRefresh) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     List<Song> res = new ArrayList<Song>();
     try {
       List<PlaylistTrack> plist = api.getPlaylistTracks(userId, playlistId)
@@ -281,7 +290,7 @@ public class SpotifyCommunicator {
   }
 
   public static void removeTrack(String userId, String playlistId,
-      Request request, boolean shouldRefresh) {
+      Request request, boolean shouldRefresh) throws SpotifyUserApiException {
     StringBuilder sb = new StringBuilder();
     sb.append("spotify:track:");
     sb.append(request.getSong().getSpotifyId());
@@ -289,7 +298,7 @@ public class SpotifyCommunicator {
     List<PlaylistTrackPosition> listOfTrackPositions = new ArrayList<PlaylistTrackPosition>();
     listOfTrackPositions.add(ptp);
     try {
-      Api api = userToApi.get(userId);
+      Api api = getUserApi(userId);
       api.removeTrackFromPlaylist(userId, playlistId, listOfTrackPositions)
           .build().get();
 
@@ -303,8 +312,8 @@ public class SpotifyCommunicator {
   }
 
   public static void addTrack(String userId, String playlistId, Request request,
-      boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      boolean shouldRefresh) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     StringBuilder sb = new StringBuilder();
     sb.append("spotify:track:");
     sb.append(request.getSong().getSpotifyId());
@@ -325,8 +334,8 @@ public class SpotifyCommunicator {
   }
 
   public static String createPlaylist(String userId, String title,
-      boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      boolean shouldRefresh) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       String id = api.createPlaylist(userId, title).build().get().getId();
       return id;
@@ -340,8 +349,8 @@ public class SpotifyCommunicator {
   }
 
   public static void unfollowPlaylist(String userId, String playlistId,
-      boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      boolean shouldRefresh) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
@@ -386,10 +395,12 @@ public class SpotifyCommunicator {
    *          the first track to be reordered)
    * @param insertBefore
    *          the new position of the track
+   * @throws SpotifyUserApiException
    */
   public static void reorderPlaylist(String userId, String playlistId,
-      int rangeStart, int insertBefore, boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      int rangeStart, int insertBefore, boolean shouldRefresh)
+      throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       api.reorderTracksInPlaylist(userId, playlistId, rangeStart, insertBefore)
           .build().get();
@@ -403,8 +414,9 @@ public class SpotifyCommunicator {
   }
 
   public static void addTrackInPosition(String userId, String playlistId,
-      Request request, int pos, boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      Request request, int pos, boolean shouldRefresh)
+      throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     StringBuilder sb = new StringBuilder();
     sb.append("spotify:track:");
     sb.append(request.getSong().getSpotifyId());
@@ -424,8 +436,8 @@ public class SpotifyCommunicator {
   }
 
   public static CurrentSongPlaying getCurrentSong(String userId,
-      String playlistId, boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      String playlistId, boolean shouldRefresh) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     CurrentSongPlaying result = null;
     try {
 
@@ -514,8 +526,8 @@ public class SpotifyCommunicator {
   }
 
   public static void play(String userId, String playlistId, int offset,
-      boolean shouldRefresh, String deviceId) {
-    Api api = userToApi.get(userId);
+      boolean shouldRefresh, String deviceId) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
@@ -557,8 +569,8 @@ public class SpotifyCommunicator {
   }
 
   public static void pause(String userId, boolean shouldRefresh,
-      String deviceId) {
-    Api api = userToApi.get(userId);
+      String deviceId) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
@@ -584,8 +596,9 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static void nextSong(String userId, boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+  public static void nextSong(String userId, boolean shouldRefresh)
+      throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
@@ -610,8 +623,9 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static void prevSong(String userId, boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+  public static void prevSong(String userId, boolean shouldRefresh)
+      throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
@@ -636,8 +650,9 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static List<Device> getDevices(String userId, boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+  public static List<Device> getDevices(String userId, boolean shouldRefresh)
+      throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     List<Device> results = new ArrayList<Device>();
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -687,8 +702,8 @@ public class SpotifyCommunicator {
   }
 
   public static void seek(String userId, long position_ms, String deviceId,
-      boolean shouldRefresh) {
-    Api api = userToApi.get(userId);
+      boolean shouldRefresh) throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
           .getAccessToken();
