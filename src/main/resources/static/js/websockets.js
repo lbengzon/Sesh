@@ -124,7 +124,9 @@ function setupWebsockets() {
       }
     } else{
       if (data.type === MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST) {
-        console.log("duplicate song added");
+        alert("You cannot add a duplicate song to the playlist!");
+      } else if (data.type === MESSAGE_TYPE.ADD_REQUEST) {
+        alert("Someone has already requested this song!");
       }
       console.log("SERVER SIDE WEBSOCKET ERROR MESSAGE: " + data.message);
     }
@@ -186,6 +188,7 @@ function vote() {
 }
 
 function appendToRequests($requests, data) {
+  console.log("request data" , data);
   $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
     + "id=\"" + data.payload.newRequest.requestId + "\" >"
     + "<div id=\"songtitle\">" + data.payload.newRequest.song.title 

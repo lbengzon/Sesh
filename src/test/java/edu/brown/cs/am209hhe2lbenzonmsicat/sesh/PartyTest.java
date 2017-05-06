@@ -9,20 +9,21 @@ import org.junit.Test;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.RequestProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
-import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
 public class PartyTest {
 
   @Test
-  public void testGetHost() throws SQLException, FileNotFoundException {
+  public void testGetHost() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -32,7 +33,7 @@ public class PartyTest {
         "deviceId");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.getHost().equals(l);
 
     RequestProxy.clearCache();
@@ -44,7 +45,8 @@ public class PartyTest {
 
   //
   @Test
-  public void testGetName() throws SQLException, FileNotFoundException {
+  public void testGetName() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -54,7 +56,7 @@ public class PartyTest {
         "deviceId");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.getName().equals("Dope Party");
 
     RequestProxy.clearCache();
@@ -65,7 +67,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetTime() throws SQLException, FileNotFoundException {
+  public void testGetTime() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -75,7 +78,7 @@ public class PartyTest {
         "deviceId");
     LocalDateTime now = LocalDateTime.now();
     Party p = Party.create("Dope Party", l, new Coordinate(1, 2), now,
-        "deviceId");
+        "deviceId", "testTitle");
     assert p.getTime().equals(now);
 
     RequestProxy.clearCache();
@@ -86,7 +89,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetLocation() throws SQLException, FileNotFoundException {
+  public void testGetLocation() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -96,7 +100,7 @@ public class PartyTest {
         "deviceId");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.getLocation().getLat() == 1;
     assert p.getLocation().getLon() == 2;
 
@@ -109,7 +113,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetStatus() throws SQLException, FileNotFoundException {
+  public void testGetStatus() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -119,7 +124,7 @@ public class PartyTest {
         "deviceId");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.getStatus() == Status.ongoing;
 
     RequestProxy.clearCache();
@@ -130,7 +135,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testEndParty() throws SQLException, FileNotFoundException {
+  public void testEndParty()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -140,7 +146,7 @@ public class PartyTest {
         "deviceId");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.endParty();
     assert p.getStatus() == Status.stopped;
 
@@ -152,7 +158,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testEndPartyTwice() throws SQLException, FileNotFoundException {
+  public void testEndPartyTwice()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -162,7 +169,7 @@ public class PartyTest {
         "deviceId");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.endParty();
     p.endParty();
     assert p.getStatus() == Status.stopped;
@@ -176,7 +183,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteDownvoteSongBySameUser()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -190,7 +197,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -218,7 +225,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testUpvoteSong() throws SQLException, FileNotFoundException {
+  public void testUpvoteSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -232,7 +240,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -260,7 +268,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongSameUser()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -274,7 +282,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -293,7 +301,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongByNonGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -305,7 +313,7 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.upvoteSong(a, r1.getId()) == false;
@@ -321,7 +329,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongAfterTransfer()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -333,7 +341,7 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
@@ -349,7 +357,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -361,7 +369,7 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.endParty();
@@ -381,7 +389,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testDownvoteSong() throws SQLException, FileNotFoundException {
+  public void testDownvoteSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -395,7 +404,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -423,7 +432,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongSameUser()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -437,7 +446,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
@@ -456,7 +465,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongByNonGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -468,7 +477,7 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.downvoteSong(a, r1.getId()) == false;
@@ -484,7 +493,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongAfterTransfer()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -496,7 +505,7 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
@@ -512,7 +521,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -524,7 +533,7 @@ public class PartyTest {
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.endParty();
@@ -545,7 +554,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveFromPlaylist()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -556,7 +565,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
@@ -574,7 +583,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveFromPlaylistPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -585,7 +594,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
@@ -609,7 +618,7 @@ public class PartyTest {
 
   @Test
   public void testRemovePlaylistButInRequest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -620,7 +629,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.removeFromPlaylist(r1.getId()) == false;
@@ -636,7 +645,7 @@ public class PartyTest {
 
   @Test
   public void testRemovePlaylistButNonExistentRequest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -651,11 +660,11 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(m);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), m);
     Party p1 = Party.create("Dope Party1", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p1.getRequestedSongs().size() == 0;
     assert p1.removeFromPlaylist(r1.getId()) == false;
     assert p.getRequestedSongs().contains(r1);
@@ -672,7 +681,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testRequestSong() throws SQLException, FileNotFoundException {
+  public void testRequestSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -686,7 +696,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     p.addGuest(m);
     p.addGuest(a);
@@ -708,7 +718,7 @@ public class PartyTest {
 
   @Test
   public void testRequestSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -719,7 +729,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     p.endParty();
     try {
@@ -737,7 +747,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testRequestSongByNonGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -748,12 +758,13 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
   }
 
   @Test(expected = RuntimeException.class)
-  public void testRequestSameSong() throws SQLException, FileNotFoundException {
+  public void testRequestSameSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -766,13 +777,14 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), m);
   }
 
   @Test
-  public void testApproveSong() throws SQLException, FileNotFoundException {
+  public void testApproveSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -783,7 +795,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
@@ -798,7 +810,7 @@ public class PartyTest {
 
   @Test
   public void testApproveSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -810,7 +822,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.endParty();
@@ -834,7 +846,7 @@ public class PartyTest {
 
   @Test(expected = RuntimeException.class)
   public void testApproveReRequestSong()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -847,14 +859,15 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), m);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testAddHostAsGuest() throws SQLException, FileNotFoundException {
+  public void testAddHostAsGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -864,13 +877,14 @@ public class PartyTest {
         "deviceId");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
 
     assert p.addGuest(l) == false;
   }
 
   @Test
-  public void testAddGuest() throws SQLException, FileNotFoundException {
+  public void testAddGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -884,7 +898,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
 
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
@@ -902,7 +916,7 @@ public class PartyTest {
 
   @Test
   public void testAddGuestPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -913,7 +927,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.endParty();
     try {
       p.addGuest(h);
@@ -929,7 +943,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testRemoveGuest() throws SQLException, FileNotFoundException {
+  public void testRemoveGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -943,7 +958,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
 
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
@@ -962,7 +977,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveGuestPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -973,7 +988,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     p.endParty();
     try {
@@ -993,7 +1008,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveNonExistentGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1007,7 +1022,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
 
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
@@ -1025,7 +1040,8 @@ public class PartyTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testAddSameGuest() throws SQLException, FileNotFoundException {
+  public void testAddSameGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1039,7 +1055,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(h) == true;
     assert p.addGuest(a) == true;
     assert p.addGuest(m) == true;
@@ -1051,7 +1067,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testAddGuestOfAlreadyActiveParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1064,16 +1080,16 @@ public class PartyTest {
         "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(a) == true;
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p1.addGuest(a);
   }
 
   @Test
   public void testAddGuestOfAlreadyActivePartyEndParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1086,11 +1102,11 @@ public class PartyTest {
         "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(a) == true;
     p.endParty();
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p1.addGuest(a);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
@@ -1102,7 +1118,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testAddGuestOfButAlreadyHostOfActiveParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1115,16 +1131,16 @@ public class PartyTest {
         "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(a) == true;
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p1.addGuest(l);
   }
 
   @Test
   public void testAddGuestOfButAlreadyHostOfActivePartyEndParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1137,10 +1153,10 @@ public class PartyTest {
         "deviceId");
     User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(a) == true;
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.endParty();
     p1.addGuest(l);
     RequestProxy.clearCache();
@@ -1153,7 +1169,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testAddHostButAlreadyActiveGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1164,15 +1180,15 @@ public class PartyTest {
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(h) == true;
     Party.create("Dope Party", h, new Coordinate(1, 1), LocalDateTime.now(),
-        "deviceId");
+        "deviceId", "testTitle");
   }
 
   @Test
   public void testAddHostButAlreadyActiveGuestEndParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1184,15 +1200,16 @@ public class PartyTest {
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(h) == true;
     p.endParty();
     Party.create("Dope Party", h, new Coordinate(1, 1), LocalDateTime.now(),
-        "deviceId");
+        "deviceId", "testTitle");
   }
 
   @Test
-  public void testGetActiveParty() throws SQLException, FileNotFoundException {
+  public void testGetActiveParty()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1203,11 +1220,11 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(h) == true;
     p.endParty();
     Party p1 = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p1.addGuest(h);
     Party active = Party.getActivePartyOfUser(h);
     assert active.equals(p1);
@@ -1220,7 +1237,7 @@ public class PartyTest {
 
   @Test
   public void testGetActivePartyNone()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1231,7 +1248,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(h) == true;
     p.endParty();
     Party active = Party.getActivePartyOfUser(h);
@@ -1239,7 +1256,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetAllParties() throws SQLException, FileNotFoundException {
+  public void testGetAllParties()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1250,7 +1268,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(h) == true;
     p.endParty();
     List<Party> parties = Party.getAllPartiesOfUser(h);
@@ -1261,7 +1279,7 @@ public class PartyTest {
 
   @Test
   public void testGetAllPartiesMultipleParties()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1272,21 +1290,21 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     assert p.addGuest(h) == true;
     p.endParty();
     Party p1 = Party.create("Dope Party1", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p1.addGuest(h);
     p1.endParty();
 
     Party p2 = Party.create("Dope Party1", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p2.addGuest(h);
     p2.endParty();
 
     Party p3 = Party.create("Dope Party1", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p3.addGuest(h);
     List<Party> parties = Party.getAllPartiesOfUser(h);
     assert parties.size() == 4;
@@ -1298,7 +1316,7 @@ public class PartyTest {
 
   @Test
   public void testGetAllPartiesNoParties()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1309,14 +1327,15 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
 
     List<Party> parties = Party.getAllPartiesOfUser(h);
     assert parties.size() == 0;
   }
 
   @Test
-  public void testGetPartyOfId() throws SQLException, FileNotFoundException {
+  public void testGetPartyOfId()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1327,7 +1346,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
@@ -1341,7 +1360,7 @@ public class PartyTest {
 
   @Test
   public void testGetPartyOfInvalidId()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1352,7 +1371,7 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(h);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
@@ -1362,7 +1381,7 @@ public class PartyTest {
 
   @Test
   public void testGetPartyDistanceFrom()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1373,15 +1392,15 @@ public class PartyTest {
 
     User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
     Party p = Party.create("Dope Party", l,
-        new Coordinate(35.967962, -112.124322), LocalDateTime.now(),
-        "deviceId");
+        new Coordinate(35.967962, -112.124322), LocalDateTime.now(), "deviceId",
+        "testTitle");
     Coordinate c = new Coordinate(35.968544, -112.122230);
     assert p.getDistance(c) < 200;
   }
 
   @Test
   public void testGetPartiesWithinDistance()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1395,11 +1414,11 @@ public class PartyTest {
     User m = User.create("mattsicat", "ms@brown.edu", "Matt Sicat", "deviceId");
 
     Party p = Party.create("Dope Party", l,
-        new Coordinate(35.967962, -112.124322), LocalDateTime.now(),
-        "deviceId");
+        new Coordinate(35.967962, -112.124322), LocalDateTime.now(), "deviceId",
+        "testTitle");
     Party p1 = Party.create("Dope Party", h,
-        new Coordinate(35.968726, -112.121458), LocalDateTime.now(),
-        "deviceId");
+        new Coordinate(35.968726, -112.121458), LocalDateTime.now(), "deviceId",
+        "testTitle");
 
     Coordinate c = new Coordinate(35.968544, -112.122230);
     List<Party> parties = Party.getActivePartiesWithinDistance(c, 200);
@@ -1409,7 +1428,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testRequestJson() throws SQLException, FileNotFoundException {
+  public void testRequestJson()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1424,7 +1444,7 @@ public class PartyTest {
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     p.addGuest(a);
     p.addGuest(m);
     p.addGuest(h);
