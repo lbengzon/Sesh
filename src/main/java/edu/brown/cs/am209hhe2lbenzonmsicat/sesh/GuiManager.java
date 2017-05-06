@@ -52,6 +52,7 @@ public class GuiManager {
     Spark.post("/join/party", new JoinPartyHandler(), fme);
     Spark.post("/search", new SearchHandler());
     Spark.post("/devices", new DevicesHandler());
+    Spark.post("/getactiveparty", new ActivePartyHandler());
     // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
   }
@@ -171,6 +172,7 @@ public class GuiManager {
   private static class JoinHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      String ftlPage = "join.ftl";
       try {
         QueryParamsMap qm = req.queryMap();
         String userId = qm.value("joinUserId");
@@ -182,9 +184,7 @@ public class GuiManager {
         }
 
         return new ModelAndView(variables, "join.ftl");
-      } catch (
-
-      Exception e) {
+      } catch (Exception e) {
         e.printStackTrace();
         return null;
       }
@@ -225,6 +225,7 @@ public class GuiManager {
   private static class PartySettingsHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      String ftlPage;
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("createUserId");
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
@@ -300,6 +301,7 @@ public class GuiManager {
       System.out.println("partyName: " + partyName);
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
           "partyId", partyId, "partyName", partyName, "userId", userId);
+
       return new ModelAndView(variables, "createParty.ftl");
     }
 
@@ -358,6 +360,31 @@ public class GuiManager {
         return GSON.toJson(variables);
       }
     }
+  }
+
+  private static class ActivePartyHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      String ftlPage;
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      User user = User.of(userId);
+      Party p = Party.getActivePartyOfUser(user);
+      if (p != null) {
+        if (user.equals(p.getHost())) {
+          ftlPage = "/create/party";
+        } else {
+          ftlPage = "/join/party";
+        }
+      } else {
+        ftlPage = null;
+      }
+      Map<String, Object> variables = ImmutableMap.of("userId", userId,
+          "partyId", p.getPartyId(), "partyName", p.getName(), "redirectPage",
+          ftlPage);
+      return GSON.toJson(variables);
+    }
+
   }
 
   // /**

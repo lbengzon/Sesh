@@ -27,11 +27,25 @@ function wait() {
 
 
 $(document).ready(() => {
+	$("#userId").val(userId);
+
+	const postParameters = {userId: userId};
+    $.post("/getactiveparty", postParameters, responseJSON => {
+        const responseObject = JSON.parse(responseJSON);
+        const redirectPage = responseObject.redirectPage;
+        console.log("HERE nig");
+
+        if (redirectPage !== null || redirectPage !== undefined) {
+        	const params = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
+        	post(redirectPage, params);
+        }
+    });
+
 	wait();
 
 	const $partyList = $("#party-list ul");
 
-	$("#userId").val(userId);
+	
 	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {

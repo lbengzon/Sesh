@@ -226,10 +226,18 @@ input#private_sesh, input#public_sesh {
 	margin-left: -4%;
 	color: black;
 	width: 102%;
-	height: 40px;
+	height: 17%;
 	border-top: 3px solid #81c1db;
 	padding-left: 1%;
 	padding-top: 1%;
+}
+
+#songartist {
+	font-size: 85%;
+}
+
+#songtitle {
+	font-size: 97%;
 }
 
 .sortable-placeholder {
@@ -304,9 +312,15 @@ input#private_sesh, input#public_sesh {
 	justify-content: space-between;
 }
 
+#scorediv {
+	float:right;
+	padding-right: 1.5%;
+}
+
 .upvote, .downvote {
 	background: none;
 	border: none;
+	float:right;
 }
 
 .upvote:focus, .downvote:focus {
@@ -388,6 +402,14 @@ input#private_sesh, input#public_sesh {
   left: 25px;
   background: #555;
 }
+
+/*.upvoteSelected {
+	color: green !important;
+}
+
+.downvoteSelected {
+	color: red;
+}*/
 
 
 
