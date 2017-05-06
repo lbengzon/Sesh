@@ -20,7 +20,9 @@ UPDATE_PLAYER: 17,
 SONG_MOVED_TO_NEXT: 18,
 UPDATE_NEXT_CURR_SONG_REQUEST: 19,
 SEEK_SONG: 20,
-RESUME_SONG: 21
+RESUME_SONG: 21,
+END_PARTY: 22,
+UPDATE_GUESTS_END_PARTY: 23
 };
 
 let conn;
@@ -53,8 +55,8 @@ function setupWebsockets() {
   };
 
   conn.onmessage = msg => {
-    const data = JSON.parse(msg.data);
-    // console.log("DATA TYPE: " , data.type)
+    const data = JSON.parse(msg.data); 
+    console.log("DATA TYPE: " , data.type)
     // console.log("DATA OBJECT: " , data);
     if(data.success){
       switch (data.type) {
@@ -115,9 +117,17 @@ function setupWebsockets() {
           //console.log("got update next curr song request")
           updatePlayer(data);
           break;
+        case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
+          console.log("implement the end party update message for guests");
+          break;
 
       }
     } else{
+      if (data.type === MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST) {
+        alert("You cannot add a duplicate song to the playlist!");
+      } else if (data.type === MESSAGE_TYPE.ADD_REQUEST) {
+        alert("Someone has already requested this song!");
+      }
       console.log("SERVER SIDE WEBSOCKET ERROR MESSAGE: " + data.message);
     }
     
@@ -178,6 +188,7 @@ function vote() {
 }
 
 function appendToRequests($requests, data) {
+  console.log("request data" , data);
   $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
     + "id=\"" + data.payload.newRequest.requestId + "\" >"
     + "<div id=\"songtitle\">" + data.payload.newRequest.song.title 
