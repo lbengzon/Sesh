@@ -55,8 +55,8 @@ function setupWebsockets() {
   };
 
   conn.onmessage = msg => {
-    const data = JSON.parse(msg.data);
-    // console.log("DATA TYPE: " , data.type)
+    const data = JSON.parse(msg.data); 
+    console.log("DATA TYPE: " , data.type)
     // console.log("DATA OBJECT: " , data);
     if(data.success){
       switch (data.type) {
@@ -123,6 +123,9 @@ function setupWebsockets() {
 
       }
     } else{
+      if (data.type === MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST) {
+        console.log("duplicate song added");
+      }
       console.log("SERVER SIDE WEBSOCKET ERROR MESSAGE: " + data.message);
     }
     
