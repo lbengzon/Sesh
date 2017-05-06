@@ -369,9 +369,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles when a guest leaves a party. <<<<<<< HEAD
-   *
-   * =======
+   * Handles when a guest leaves a party.
    *
    * @author Matt
    */
@@ -407,9 +405,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles displaying search results. <<<<<<< HEAD
-   *
-   * =======
+   * Handles displaying search results.
    *
    *
    * @author HE23
