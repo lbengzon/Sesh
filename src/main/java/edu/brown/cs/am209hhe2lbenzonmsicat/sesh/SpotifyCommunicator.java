@@ -32,13 +32,14 @@ import com.wrapper.spotify.models.Track;
  * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Class that
  * integrates Spotify API for Sesh. >>>>>>>
  * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+ * 
  * @author HE23
  */
 public class SpotifyCommunicator {
 
-  // private final Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
+  // private final Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
   // .clientSecret(Consta
-  // nts.LEANDRO_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
+  // nts.ALI_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL_ONLINE)
   // .build();
   private static Api testApi;
   private List<String> results;
@@ -60,9 +61,9 @@ public class SpotifyCommunicator {
   }
 
   public static void setUpTestApi() {
-    testApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
-        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL).build();
+    testApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     testApi.setRefreshToken(Constants.SESH_REFRESH);
     apiPool = new ApiPool();
     String aT2;
@@ -73,9 +74,9 @@ public class SpotifyCommunicator {
       throw new RuntimeException(e.getMessage());
     }
     userToApi.put("s3shteam32", testApi);
-    Api hannahApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
-        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL).build();
+    Api hannahApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     hannahApi.setRefreshToken(Constants.HANNAH_REFRESH);
     String aT;
     try {
@@ -86,9 +87,9 @@ public class SpotifyCommunicator {
     }
     userToApi.put("1185743437", hannahApi);
     userToApi.put("hhe", testApi);
-    Api aliApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
-        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL).build();
+    Api aliApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     aliApi.setRefreshToken(Constants.ALI_REFRESH);
     String aT3;
     try {
@@ -98,9 +99,9 @@ public class SpotifyCommunicator {
       throw new RuntimeException(e.getMessage());
     }
     userToApi.put("alimiraculous", aliApi);
-    Api leandroApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
-        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL).build();
+    Api leandroApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     leandroApi.setRefreshToken(Constants.LEANDRO_REFRESH);
     String aT4;
     try {
@@ -127,9 +128,9 @@ public class SpotifyCommunicator {
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
-    Api newApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
-        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL).build();
+    Api newApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     String authorizeURL = newApi.createAuthorizeURL(scopes, state);
 
     /*
@@ -147,6 +148,7 @@ public class SpotifyCommunicator {
    * <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed
    * device id issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e =======
    * Get access token. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * 
    * @param code
    *          - code
    * @return a list of the user's info
@@ -157,9 +159,9 @@ public class SpotifyCommunicator {
      * method and synchronous requests are made with the .get method. This holds
      * for all type of requests.
      */
-    Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
-        .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
-        .redirectURI(Constants.REDIRECT_URL).build();
+    Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+        .clientSecret(Constants.ALI_CLIENT_SECRET)
+        .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
 
@@ -219,6 +221,7 @@ public class SpotifyCommunicator {
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * gets the playlist tracks. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * 
    * @param userId
    *          user id
    * @param playlistId
@@ -373,6 +376,7 @@ public class SpotifyCommunicator {
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * reorders tracks in the playlist. >>>>>>>
    * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * 
    * @param userId
    *          the user id
    * @param playlistId
