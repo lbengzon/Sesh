@@ -12,10 +12,12 @@ import com.google.gson.JsonElement;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ *
  * @author leandro
  */
 public class PartyProxy extends Party implements Proxy {
@@ -33,6 +35,7 @@ public class PartyProxy extends Party implements Proxy {
 
   /**
    * Constructor.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -448,6 +451,19 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     return partyBean.seekSong(seekPosition);
+  }
+
+  @Override
+  public void deletePlaylist() throws SpotifyUserApiException {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    SpotifyCommunicator.unfollowPlaylist(partyBean.getHost().getSpotifyId(),
+        playlistId, true);
   }
 
   // @Override
