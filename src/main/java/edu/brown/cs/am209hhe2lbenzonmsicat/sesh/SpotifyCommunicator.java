@@ -26,10 +26,12 @@ import com.wrapper.spotify.models.PlaylistTrackPosition;
 import com.wrapper.spotify.models.Track;
 
 /**
- * <<<<<<< HEAD Class that integrates Spotify API for Sesh. ======= Class that
- * integrates Spotify API for Sesh. <<<<<<<
+ * <<<<<<< HEAD <<<<<<< HEAD Class that integrates Spotify API for Sesh. =======
+ * Class that integrates Spotify API for Sesh. <<<<<<<
  * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
- * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+ * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Class that
+ * integrates Spotify API for Sesh. >>>>>>>
+ * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
  * @author HE23
  */
 public class SpotifyCommunicator {
@@ -141,9 +143,10 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD Get access token. ======= Get access token. <<<<<<<
-   * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
-   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * <<<<<<< HEAD <<<<<<< HEAD Get access token. ======= Get access token.
+   * <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed
+   * device id issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e =======
+   * Get access token. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
    * @param code
    *          - code
    * @return a list of the user's info
@@ -211,10 +214,11 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD This method gets the playlist tracks. ======= This method gets
-   * the playlist tracks. <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003
-   * ======= >>>>>>> fixed device id issue >>>>>>>
-   * d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * <<<<<<< HEAD <<<<<<< HEAD This method gets the playlist tracks. =======
+   * This method gets the playlist tracks. <<<<<<<
+   * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
+   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
+   * gets the playlist tracks. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
    * @param userId
    *          user id
    * @param playlistId
@@ -363,10 +367,12 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD This method reorders tracks in the playlist. ======= This
-   * method reorders tracks in the playlist. <<<<<<<
+   * <<<<<<< HEAD <<<<<<< HEAD This method reorders tracks in the playlist.
+   * ======= This method reorders tracks in the playlist. <<<<<<<
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
-   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
+   * reorders tracks in the playlist. >>>>>>>
+   * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
    * @param userId
    *          the user id
    * @param playlistId
@@ -439,71 +445,66 @@ public class SpotifyCommunicator {
         response.append(inputLine);
       }
       in.close();
+      JsonObject jsonObj = new JsonParser().parse(response.toString())
+          .getAsJsonObject();
+
+      JsonObject context = null;
       try {
-        JsonObject jsonObj = new JsonParser().parse(response.toString())
-            .getAsJsonObject();
+        context = jsonObj.get("context").getAsJsonObject();
 
-        JsonObject context = null;
-        try {
-          context = jsonObj.get("context").getAsJsonObject();
-
-        } catch (IllegalStateException e) {
-          // THUS context doesn't exist"
-        }
-
-        if (context != null) {
-          String type = context.get("type").toString();
-          if (!type.equals("\"playlist\"")) {
-            return null;
-          }
-          String uri = context.get("uri").toString();
-          sb = new StringBuilder();
-          sb.append("\"spotify:user:");
-          sb.append(userId);
-          sb.append(":playlist:");
-          sb.append(playlistId);
-          sb.append("\"");
-          if (!uri.equals(sb.toString())) {
-            return null;
-          }
-        }
-        try {
-          JsonObject item = jsonObj.getAsJsonObject("item");
-          if (item != null) {
-            boolean isPlaying = jsonObj.get("is_playing").getAsBoolean();
-            JsonElement progEl = jsonObj.get("progress_ms");
-            long progress_ms = progEl.getAsLong();
-            JsonObject album = item.get("album").getAsJsonObject();
-            String albumName = album.get("name").getAsString();
-            JsonArray artist = item.get("artists").getAsJsonArray();
-            String artistName = artist.get(0).getAsJsonObject().get("name")
-                .getAsString();
-            JsonArray images = album.get("images").getAsJsonArray();
-            JsonObject desiredImage = images.get(1).getAsJsonObject();
-            String imgLink = desiredImage.get("url").getAsString();
-            String spotifyId = item.get("id").getAsString();
-
-            long duration = item.get("duration_ms").getAsLong();
-            String title = item.get("name").getAsString();
-            System.out.println("artistName = " + artistName);
-            System.out.println("albumName = " + albumName);
-
-            Song s = Song.of(spotifyId, title, albumName, artistName, duration);
-            result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
-                isPlaying);
-          }
-        } catch (IllegalStateException e) {
-          return result;
-        }
-      } catch (NullPointerException | IllegalStateException e) {
-        return result;
+      } catch (IllegalStateException e) {
+        // THUS context doesn't exist, so context will be null
       }
+
+      if (context != null) {
+        String type = context.get("type").toString();
+        if (!type.equals("\"playlist\"")) {
+          return null;
+        }
+        String uri = context.get("uri").toString();
+        sb = new StringBuilder();
+        sb.append("\"spotify:user:");
+        sb.append(userId);
+        sb.append(":playlist:");
+        sb.append(playlistId);
+        sb.append("\"");
+        if (!uri.equals(sb.toString())) {
+          return null;
+        }
+      }
+
+      JsonObject item = jsonObj.getAsJsonObject("item");
+      if (item != null) {
+        boolean isPlaying = jsonObj.get("is_playing").getAsBoolean();
+        JsonElement progEl = jsonObj.get("progress_ms");
+        long progress_ms = progEl.getAsLong();
+        JsonObject album = item.get("album").getAsJsonObject();
+        String albumName = album.get("name").getAsString();
+        JsonArray artist = item.get("artists").getAsJsonArray();
+        String artistName = artist.get(0).getAsJsonObject().get("name")
+            .getAsString();
+        JsonArray images = album.get("images").getAsJsonArray();
+        JsonObject desiredImage = images.get(1).getAsJsonObject();
+        String imgLink = desiredImage.get("url").getAsString();
+        String spotifyId = item.get("id").getAsString();
+
+        long duration = item.get("duration_ms").getAsLong();
+        String title = item.get("name").getAsString();
+
+        Song s = Song.of(spotifyId, title, albumName, artistName, duration);
+        result = new CurrentSongPlaying(s, duration, progress_ms, imgLink,
+            isPlaying);
+      }
+
       return result;
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         return getCurrentSong(userId, playlistId, false);
       }
       throw new RuntimeException(e.getMessage());
+    } catch (NullPointerException | IllegalStateException
+        | ClassCastException e) {
+      return result;
     }
 
   }

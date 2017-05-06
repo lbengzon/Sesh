@@ -22,23 +22,40 @@ $(document).ready(() => {
 			const deviceType = devices[key].type;
 			console.log(devices[key].name);
 			$("#loadingDevices").hide();
-			$deviceList.append("<li id=\"" + deviceId + "\">" + devices[key].name + "</li>");
+			$deviceList.append("<li id=\"" + deviceId + "\" style=\"cursor:pointer\">" + devices[key].name + "</li>");
 		}
 	});
 
-	//FIX THIS!!!!!!!
-	$deviceList.on("click", event => {
-		$listItems = $("li");
-		$listItems.addClass("selected");
-		$selected = $listItems.filter(".selected");
+	$("#deviceList").on("click", "li", function() {
+		$("#deviceList li").removeClass("selected");
+		$selected = $(this);
+		$selected.addClass("selected");
 		global_device_id = $selected.attr("id");
 		console.log("device id set: " + global_device_id);
 		$("#deviceId").val($selected.attr("id"));
 	});
 
+	$("#refresh").click(function() {
+		console.log("here");
+		$deviceList.empty();
+		const postParams = {userId, userId};
+		$.post("/devices", postParams, responseJSON => {
+			const responseObject = JSON.parse(responseJSON);
+			const devices = responseObject.devices;
+			for (let key in devices) {
+				const deviceId = devices[key].id;
+				const deviceType = devices[key].type;
+				console.log(devices[key].name);
+				$("#loadingDevices").hide();
+				$deviceList.append("<li id=\"" + deviceId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + devices[key].name + "</li>");
+			}
+		});
+	});
+
 	$("#formSubmit").click(function() {
 		if (global_device_id === null) {
 			alert("You must select a device to play from first!");
+			return;
 		} 
 
 		if ($("#sesh_name").val() !== "" && $("#host_name").val() !== "") {
