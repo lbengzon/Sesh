@@ -47,7 +47,7 @@ function setupWebsockets() {
   const $player = $("#playback");
   // TODO Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("wss://https://sesh.cloud/update", {
-    rejectUnauthorized: false;
+    rejectUnauthorized: false
   });
 
   conn.onclose = function(){
