@@ -137,6 +137,7 @@ $(document).ready(() => {
     $(".sortable").sortable({
         dropOnEmpty: true,
         connectWith: ".sortable",
+        containment: $(".list-wrapper"),
         start: function(event, ui) {
             // console.log("start playlist index: " + ui.item.index());
             // console.log("the song started in list: " + ui.item.parent().attr("id"));
