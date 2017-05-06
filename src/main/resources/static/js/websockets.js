@@ -267,15 +267,15 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
       + "id=\"" + newRequest.requestId + "\" >"
       + "<div id=\"songtitle\">" + newRequest.song.title 
       + "<div id=\"scorediv\">" + newRequest.score + "</div>"
-      + "<div id=\"vote\" > "
-        + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-          + "<i class=\"material-icons\">thumb_up</i>"
-        + "</button>"
-        + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-          + "<i class=\"material-icons\">thumb_down</i>"
-        + "</button>"
-      //end of vote div
-      + "</div>"
+      // + "<div id=\"vote\" > "
+      //   + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+      //     + "<i class=\"material-icons\">thumb_up</i>"
+      //   + "</button>"
+      //   + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+      //     + "<i class=\"material-icons\">thumb_down</i>"
+      //   + "</button>"
+      // //end of vote div
+      // + "</div>"
       //end of song title div
       + "</div>"
       + "<div id=\"songartist\">" + newRequest.song.artist 
@@ -286,15 +286,15 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
       + "id=\"" + newRequest.requestId + "\" >"
       + "<div id=\"songtitle\">" + newRequest.song.title 
       + "<div id=\"scorediv\">" + newRequest.score + "</div>"
-      + "<div id=\"vote\" > "
-        + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-          + "<i class=\"material-icons\">thumb_up</i>"
-        + "</button>"
-        + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
-          + "<i class=\"material-icons\">thumb_down</i>"
-        + "</button>"
-      //end of vote div
-      + "</div>"
+      // + "<div id=\"vote\" > "
+      //   + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+      //     + "<i class=\"material-icons\">thumb_up</i>"
+      //   + "</button>"
+      //   + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+      //     + "<i class=\"material-icons\">thumb_down</i>"
+      //   + "</button>"
+      // //end of vote div
+      // + "</div>"
       //end of song title div
       + "</div>"
       + "<div id=\"songartist\">" + newRequest.song.artist 
@@ -302,24 +302,6 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
       + "</li>");
   }
 }
-
-// if (requests !== undefined) {
-//   let contained = false;
-//   for (let key in requests[x.currentTarget.id].upvotes) {
-//     if (requests[x.currentTarget.id].upvotes[key] === userId) {
-//       contained = true;
-//     }
-//   }
-
-//   if (contained) {
-//     console.log($("#" + x.currentTarget.id).find(".upvote i"));
-//     //$("#" + x.currentTarget.id).find(".upvote i").css("background-color", "green");
-//   } else {
-//     $("#" + x.currentTarget.id).find(".upvote i").css("background-color", "green");
-//     // console.log($("#" + x.currentTarget.id).find(".upvote i"));
-//     // $("#" + x.currentTarget.id).find(".upvote i").removeClass("upvoteSelected");
-//   }
-// }
 
 function clearAndPopulateRequests(requests, $requests){
   $requests.empty();
