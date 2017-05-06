@@ -356,8 +356,8 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static void unfollowPlaylist(String userId, String playlistId,
-      boolean shouldRefresh) throws SpotifyUserApiException {
+  public static void unfollowPlaylist(String userId, String hostId,
+      String playlistId, boolean shouldRefresh) throws SpotifyUserApiException {
     Api api = getUserApi(userId);
     try {
       String accessToken = api.refreshAccessToken().build().get()
@@ -365,7 +365,7 @@ public class SpotifyCommunicator {
       api.setAccessToken(accessToken);
       StringBuilder sb = new StringBuilder();
       sb.append("https://api.spotify.com/v1/users/");
-      sb.append(userId);
+      sb.append(hostId);
       sb.append("/playlists/");
       sb.append(playlistId);
       sb.append("/followers");
@@ -377,10 +377,11 @@ public class SpotifyCommunicator {
       sb2.append(accessToken);
       conn.setRequestProperty("Authorization", sb2.toString());
       conn.connect();
-      conn.getResponseCode();
+      System.out.println(conn.getResponseCode());
+      System.out.println(conn.getResponseMessage());
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
-        unfollowPlaylist(userId, playlistId, false);
+        unfollowPlaylist(userId, hostId, playlistId, false);
         return;
       }
       throw new RuntimeException(e.getMessage());

@@ -82,6 +82,8 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 }
 
 
+
+
 $(document).ready(() => {
 
 
@@ -167,17 +169,7 @@ $(document).ready(() => {
 	$playlistTitle.hide();
 
 	$leaveButton.click(function() {
-		var v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
-		var deleteBool;
-        if (v === true) {
-            deleteBool = false;
-            console.log("playlist saved");
-        } else {
-            deleteBool = true;
-            console.log("playlist deleted");
-        }
-        const params = {userId: userId, partyId: partyId, deleteBool: deleteBool};
-       	post("/leaveparty",params, "get");
+		guestLeaveParty(false);
     });
 
 

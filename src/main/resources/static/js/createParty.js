@@ -310,8 +310,9 @@ $(document).ready(() => {
             deleteBool = true;
             console.log("playlist deleted");
         }
-        const params = {userId: userId, partyId: partyId, deleteBool: deleteBool};
-        post("/endparty",params, "get");
+        endParty(partyId, userId, deleteBool);
+        const params = {userId: userId};
+        post("/createjoin", params, "get");
     });
 
 
