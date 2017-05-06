@@ -35,10 +35,9 @@ public final class Constants {
       + "5wFbXxrcrVEIzJ14SYSw2ziHHIT_IVFQ8sAuwA_Er9LSaM9Xlbh4ZivmMBW9G"
       + "D4QxR-pXZfcSEGW0";
 
-  public static final String ALI_REFRESH = "AQCT3rEraLINz85pd3iHY8c_Ej"
-      + "wbdqtYQ7eysxfa"
-      + "paZKHyWVLx8296WusX5cuw-L7CTEaG3yV3AymDjtGQexSRuRhETk-DIRu"
-      + "2F-Ui6is5KakAW-zkHlk85Mij_sPAV-Qbs";
+  public static final String ALI_REFRESH = "AQClclv4oS4tjAvwzXSH4"
+      + "Bsdxcp2DJ-fPiyLnNtnjnE1WMXwE8C"
+      + "hOcq83sHKbz5moTf6RFlPG0FK5LE3p1D9FA1GIcXJmrZVH8ynf3Mzqp7L4uWfrn9Gyk1TvSP61XtfFEc";
 
   public static final String LEANDRO_REFRESH = "AQCRgDCx87DijxfUQ9Npxt7PTtzJz-XlFdCHska1Zt3I"
       + "uBA94jTP1m7UNTebbJE0u_6-mCZ3UzV2FIxgM0je-dbJFNrzNlm"
