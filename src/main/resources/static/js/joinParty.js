@@ -117,8 +117,26 @@ $(document).ready(() => {
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
-	setupWebsockets();
+    $(".switch input").click(function() {
+        console.log("USER REQUESTED " + userRequests.length + "SONGS");
+        if ($(".switch input").is(":checked")) {
+            if (userRequests.length > 0) {
+                $("#request-list ul").find("li").hide();
+                for (let i in userRequests) {
+                    let id = userRequests[i].requestId;
+                    $("#request-list ul").find("#" + id).show();
+                }
+                /* show only user requests */
+            } else {
+                /* show nothing */
+                $("#request-list ul").find("li").hide();
+            }
 
+        } else {
+            /* show all songs in request list */
+            $("#request-list ul").find("li").show();
+        }
+    });
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");
@@ -182,6 +200,8 @@ $(document).ready(() => {
 	$favoritesGuest.click(function(){
     	showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
     });
+
+    setupWebsockets();
 
 
 });

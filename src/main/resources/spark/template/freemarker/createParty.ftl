@@ -41,6 +41,13 @@
 </div>
 
 <div class="tabContentPlaylist" id="request-list">
+<div class="switchDiv">
+	<label id="switchLabel">Show My Requests</label>
+	<label class="switch">
+		<input type="checkbox">
+		<div class="slider round"></div>
+	</label>
+</div>
 <ul style="list-style-type:none" class="sortable" id="ulRequest">
 </ul>
 </div>

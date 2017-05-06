@@ -27,6 +27,13 @@
 </div>
 <div class="list-wrapper">
 <div class="tabContentRequestGuest" id="request-list">
+<div class="switchDiv">
+	<label id="switchLabel">Show My Requests</label>
+	<label class="switch">
+		<input type="checkbox">
+		<div class="slider round"></div>
+	</label>
+</div>
 <ul style="list-style-type:none"></ul>
 </div>
 
