@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -8,6 +8,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.JsonElement;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the

@@ -1,8 +1,12 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Jsonable;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 
 /**
  * User abstract class.

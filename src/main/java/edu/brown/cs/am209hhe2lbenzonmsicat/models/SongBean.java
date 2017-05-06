@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.util.HashMap;
 import java.util.Map;

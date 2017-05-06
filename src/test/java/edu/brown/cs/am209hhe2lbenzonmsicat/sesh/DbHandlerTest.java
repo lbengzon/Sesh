@@ -8,7 +8,16 @@ import java.util.List;
 import org.junit.Test;
 import org.sqlite.SQLiteException;
 
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistBean;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.RequestBean;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.UserProxy;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 
 /**
  * This class tests the db handler class.

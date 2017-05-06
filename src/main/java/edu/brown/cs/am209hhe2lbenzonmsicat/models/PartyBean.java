@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -15,6 +15,8 @@ import java.util.Set;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.gson.JsonElement;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 /**
  * Models a party.

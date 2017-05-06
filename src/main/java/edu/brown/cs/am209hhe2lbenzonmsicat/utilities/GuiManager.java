@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -11,6 +11,12 @@ import com.google.gson.Gson;
 import com.wrapper.spotify.models.SimpleArtist;
 import com.wrapper.spotify.models.Track;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Device;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
