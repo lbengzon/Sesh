@@ -15,6 +15,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Device;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AccessType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
@@ -64,6 +65,8 @@ public class GuiManager {
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
     Spark.get("/endparty", new EndPartyHandler(), fme);
+    Spark.post("/addSongToFavorites", new AddFavoriteHandler());
+
   }
 
   private static class ErrorHandler implements TemplateViewRoute {
@@ -400,6 +403,37 @@ public class GuiManager {
       }
       Map<String, Object> variables = ImmutableMap.of("results",
           new ArrayList<String>(), "songIds", new ArrayList<String>());
+      return GSON.toJson(variables);
+    }
+  }
+
+  /**
+   * Handles displaying search results.
+   * @author HE23
+   */
+  private static class AddFavoriteHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      try {
+        QueryParamsMap qm = req.queryMap();
+        String userId = qm.value("userId");
+        String songId = qm.value("songId");
+
+        DbHandler.AddSongToFavorites(userId, songId);
+        List<Song> favorites = DbHandler.GetUserFavoritedSongs(userId);
+        List<String> favoriteIds = new ArrayList<>();
+        for (Song song : favorites) {
+          favoriteIds.add(song.getSpotifyId());
+        }
+
+        Map<String, Object> variables = ImmutableMap.of("favorites",
+            favoriteIds);
+        return GSON.toJson(variables);
+      } catch (Exception c) {
+        c.printStackTrace();
+      }
+      Map<String, Object> variables = ImmutableMap.of("favorites",
+          new ArrayList<String>());
       return GSON.toJson(variables);
     }
   }
