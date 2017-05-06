@@ -104,7 +104,6 @@ function showFavorites($search, $listview, $options, $tabContentSearch, $tabCont
 
 $(document).ready(() => {
 
-
     //dj tab content
     const $tabContentPlaylist = $(".tabContentPlaylist");
     const $tabContentSearch = $(".tabContentSearch");
@@ -130,6 +129,10 @@ $(document).ready(() => {
     const $pauseButton = $("#pauseButton");
     const $nextButton = $("#nextButton");
     const $progressBar = $("#progressbar");
+
+    /*setting invisible form */
+    $("#userId").val(userId);
+    $("#partyId").val(partyId);
 
 
     let startPlaylistIndex;
