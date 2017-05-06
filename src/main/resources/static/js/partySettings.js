@@ -108,6 +108,13 @@ function post(path, params, method) {
 function getLoc(position) {
 	global_lat = position.coords.latitude, 
 	global_lon = position.coords.longitude;
+	//MAKE SURE TO DELETE
+	//==================================================================
+
+
+	global_lat = 41.8240;
+	global_lon = 71.4128;
+	// ==================================================================
 	$("#lat").val(global_lat);
 	$("#lon").val(global_lon);
 }
