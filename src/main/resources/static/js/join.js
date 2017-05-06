@@ -57,7 +57,12 @@ $(document).ready(() => {
 					$("#partySubmit").attr("disabled", false);
 					//console.log("SELECTED: " , $("#party-list li").filter(".selected").attr("id"));
 				});
+				//MAKE SURE TO DELETE
+				//==================
 
+
+				lat = 41.8240;
+				lon = 71.4128;
 				console.log("parties should be received if you are here!");
 			});
 		}, errorCallBack);
