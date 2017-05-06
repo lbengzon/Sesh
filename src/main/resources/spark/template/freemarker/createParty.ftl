@@ -6,6 +6,7 @@
 	let showPlayed = false;
 	let isPaused = true;
 	let timePassed;
+	const isHost = true;
 </script>
 <script src="/js/createParty.js"></script>
 <script>

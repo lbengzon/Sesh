@@ -82,18 +82,18 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           console.log("update rearrange playlist");
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
           clearAndPopulateRequests(data.payload.requestList, $requests);
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist);
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
 
 
           $playlist.sortable("refresh");
@@ -102,18 +102,18 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
           console.log("updating whole party");
-          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist);
+          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist, isHost);
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
           $player.attr("src", data.payload.party.playlistUrl);
           break;
         case MESSAGE_TYPE.UPDATE_PLAYER:
           //console.log("Got update player")
-          updatePlayer(data)
+          updatePlayer(data);
           break;
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
           //console.log("got update next curr song request")
-          updatePlayer(data)
+          updatePlayer(data);
           break;
 
       }
@@ -347,7 +347,7 @@ vote();
 }
 
 
-function clearAndPopulatePlaylist(playlist, $playlist){
+function clearAndPopulatePlaylist(playlist, $playlist, isHost){
   console.log("curr song id: " + currSongId);
   let startShowing = false
 
@@ -360,8 +360,10 @@ function clearAndPopulatePlaylist(playlist, $playlist){
         }//If a song is not playing, and you just added the first song. Play that song 
         else if ((currSongId === -1 || currSongId === undefined) && startShowing == false){
           startShowing = true;
-          playPlaylist(partyId, userId)
-          pauseSong(partyId, userId);
+          if(isHost){
+            playPlaylist(partyId, userId)
+            pauseSong(partyId, userId);
+          }
         }
       }   
     }

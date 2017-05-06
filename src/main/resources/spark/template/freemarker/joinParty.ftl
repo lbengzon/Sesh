@@ -5,6 +5,7 @@
 	let currSongId;
 	let showPlayed = false;
 	let isPaused = true;
+	const isHost = false;
 </script>
 <script src="/js/joinParty.js"></script>
 <script>
