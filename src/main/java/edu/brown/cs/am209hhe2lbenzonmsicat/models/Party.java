@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -10,7 +10,10 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Jsonable;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 
 /**
  * Abstract party class.

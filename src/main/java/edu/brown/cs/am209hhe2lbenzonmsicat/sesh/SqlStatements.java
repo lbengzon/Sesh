@@ -5,7 +5,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
  *
  * @author leandro
  */
-final class SqlStatements {
+public final class SqlStatements {
   private SqlStatements() {
 
   }

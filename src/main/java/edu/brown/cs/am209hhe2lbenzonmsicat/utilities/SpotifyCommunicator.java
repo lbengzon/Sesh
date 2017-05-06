@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +26,14 @@ import com.wrapper.spotify.models.AuthorizationCodeCredentials;
 import com.wrapper.spotify.models.PlaylistTrack;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
 import com.wrapper.spotify.models.Track;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.CurrentSongPlaying;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Device;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
+import edu.brown.cs.am209hhe2lbenzonmsicat.objectpool.ApiPool;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 /**
  * <<<<<<< HEAD <<<<<<< HEAD Class that integrates Spotify API for Sesh. =======

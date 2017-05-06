@@ -5,6 +5,10 @@ import java.sql.SQLException;
 
 import org.junit.Test;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.UserProxy;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
+
 public class UserTest {
 
   @Test
