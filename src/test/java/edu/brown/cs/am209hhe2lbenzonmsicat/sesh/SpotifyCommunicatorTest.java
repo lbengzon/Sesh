@@ -48,8 +48,13 @@ public class SpotifyCommunicatorTest {
 
   @Test
   public void testDevices() {
-    // SpotifyCommunicator.setUpTestApi();
-    // SpotifyCommunicator.getDevices("22f3kk24xtzmkkuw477v3dntq", true);
+    SpotifyCommunicator.setUpTestApi();
+    try {
+      SpotifyCommunicator.getDevices("alimiraculous", true);
+    } catch (SpotifyUserApiException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   @Test
@@ -61,9 +66,16 @@ public class SpotifyCommunicatorTest {
 
   @Test
   public void testUnfollow() {
-    // SpotifyCommunicator.setUpTestApi();
-    // SpotifyCommunicator.unfollowPlaylist("22f3kk24xtzmkkuw477v3dntq",
-    // "5DnDsEbL6Gppqg9wSFTX8I", true);
+    SpotifyCommunicator.setUpTestApi();
+    // spotify:user:spotify:playlist:37i9dQZF1DWTJNOeepZTGy
+    // spotify:user:spotify:playlist:37i9dQZF1DWTJNOeepZTGy
+    try {
+      SpotifyCommunicator.unfollowPlaylist("22f3kk24xtzmkkuw477v3dntq",
+          "spotify", "37i9dQZF1DWTJNOeepZTGy", true);
+    } catch (SpotifyUserApiException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   @Test
