@@ -55,6 +55,8 @@ public class GuiManager {
     Spark.post("/getactiveparty", new ActivePartyHandler());
     // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
+    Spark.get("/leaveparty", new LeavePartyHandler(), fme);
+    Spark.get("/endparty", new EndPartyHandler(), fme);
   }
 
   private static class ErrorHandler implements TemplateViewRoute {
@@ -308,6 +310,53 @@ public class GuiManager {
   }
 
   /**
+   * Handles when a guest leaves a party.
+   *
+   * @author Matt
+   *
+   */
+  private class LeavePartyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      String partyId = qm.value("partyId");
+      User user = User.of(userId);
+      Party party = Party.of(Integer.valueOf(partyId));
+      party.removeGuest(user);
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
+
+      return new ModelAndView(variables, "createJoin.ftl");
+    }
+
+  }
+
+  /**
+   * Handles when a host ends a party.
+   *
+   * @author Matt
+   *
+   */
+  private class EndPartyHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      String partyId = qm.value("partyId");
+      Party party = Party.of(Integer.valueOf(partyId));
+      party.endParty();
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
+
+      return new ModelAndView(variables, "createJoin.ftl");
+    }
+
+  }
+
+  /**
    * Handles displaying search results.
    * @author HE23
    */
@@ -343,6 +392,10 @@ public class GuiManager {
     }
   }
 
+  /**
+   * Handles devices.
+   *
+   */
   private static class DevicesHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
@@ -362,6 +415,12 @@ public class GuiManager {
     }
   }
 
+  /**
+   * Handles redirecting if user is already seshing.
+   *
+   * @author Matt
+   *
+   */
   private static class ActivePartyHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
@@ -384,7 +443,6 @@ public class GuiManager {
           ftlPage);
       return GSON.toJson(variables);
     }
-
   }
 
   // /**

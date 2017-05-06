@@ -33,7 +33,6 @@ $(document).ready(() => {
     $.post("/getactiveparty", postParameters, responseJSON => {
         const responseObject = JSON.parse(responseJSON);
         const redirectPage = responseObject.redirectPage;
-        console.log("HERE nig");
 
         if (redirectPage !== null || redirectPage !== undefined) {
         	const params = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
