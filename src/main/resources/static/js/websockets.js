@@ -128,10 +128,11 @@ function updatePlayer(data){
   if (currSongId !== data.payload.currentSongId) {
       currSongId = data.payload.currentSongId;
       $("#songArt").attr("src", data.payload.imageUrl);
-      $("#progressbar").attr("max", data.payload.duration)
-      $("#songTitle").html(data.payload.songTitle)
-      $("#albumTitle").html(data.payload.albumTitle)
-      $("#artistName").html(data.payload.artistName)
+      $("#progressbar").attr("max", data.payload.duration);
+      $("#songTitle").html(data.payload.songTitle);
+      $("#albumTitle").html(data.payload.albumTitle);
+      console.log(data.payload.artistName);
+      $("#artistName").html(data.payload.artist);
   }
   console.log("isplaying", data.payload.isPlaying)
   if(data.payload.isPlaying === true){
