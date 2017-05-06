@@ -19,18 +19,19 @@ import org.apache.commons.dbcp2.BasicDataSource;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AccessType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AttendeeType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyBean;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Playlist;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistBean;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.RequestBean;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
-import edu.brown.cs.am209hhe2lbenzonmsicat.models.UserBean;
-import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AttendeeType;
-import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
-import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.UserBean;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SqlStatements;
 
 /**
@@ -121,6 +122,7 @@ public final class DbHandler {
     clearPartyAttendeeTable();
     clearRequestVotesTable();
     clearSongRequestTable();
+    clearFavoritesTable();
   }
 
   /**
@@ -130,6 +132,23 @@ public final class DbHandler {
    */
   public static void clearUserTable() throws SQLException {
     String query = SqlStatements.CLEAR_USER_TABLE;
+    try (Connection conn = getConnection()) {
+      if (conn == null) {
+        throw new SQLException("ERROR: No database has been set.");
+      }
+      PreparedStatement prep = conn.prepareStatement(query);
+
+      int success = prep.executeUpdate();
+    }
+  }
+
+  /**
+   * Clear user table.
+   * @throws SQLException
+   *           - exception
+   */
+  public static void clearFavoritesTable() throws SQLException {
+    String query = SqlStatements.CLEAR_FAVORITE_TABLE;
     try (Connection conn = getConnection()) {
       if (conn == null) {
         throw new SQLException("ERROR: No database has been set.");
@@ -303,8 +322,8 @@ public final class DbHandler {
    *           - exception
    */
   public static Party addParty(String playlistId, String name,
-      Coordinate coordinate, LocalDateTime time, User host, String deviceId)
-      throws SQLException {
+      Coordinate coordinate, LocalDateTime time, User host, String deviceId,
+      AccessType accessType, String accessCode) throws SQLException {
     if (getActivePartyOfUser(host) != null) {
       throw new IllegalArgumentException(
           "ERROR: Host is already a host of another active party");
@@ -322,6 +341,8 @@ public final class DbHandler {
       prep.setDouble(4, coordinate.getLon());
       prep.setString(5, time.toString());
       prep.setString(6, deviceId);
+      prep.setString(7, accessType.toString());
+      prep.setString(8, accessCode);
 
       int success = prep.executeUpdate();
       if (success >= 1) {
@@ -332,7 +353,7 @@ public final class DbHandler {
             addHost(partyId, host);
 
             return Party.of(partyId, name, playlistId, coordinate, time,
-                Status.ongoing, deviceId);
+                Status.ongoing, deviceId, accessType, accessCode);
           } else {
             throw new SQLException("Add PartyBean failed, no ID obtained.");
           }
@@ -718,7 +739,8 @@ public final class DbHandler {
    */
   public static PartyBean getFullParty(int partyId, String playlistId,
       String name, Coordinate location, LocalDateTime time, Status status,
-      String deviceId) throws SQLException {
+      String deviceId, AccessType accessType, String accessCode)
+      throws SQLException {
     List<Request> requests = getPartySongRequests(partyId);
     List<List<User>> attendees = getPartyHostsAndGuests(partyId);
     assert attendees.size() == 2;
@@ -726,7 +748,7 @@ public final class DbHandler {
     return new PartyBean(partyId, name, host,
         Playlist.of(playlistId, partyId, host), location, time,
         new HashSet<>(requests), new HashSet<>(attendees.get(1)), status,
-        deviceId);
+        deviceId, accessType, accessCode);
 
   }
 
@@ -844,10 +866,13 @@ public final class DbHandler {
           String time = rs.getString(6);
           String status = rs.getString(7);
           String deviceId = rs.getString(8);
+          String accessTypeString = rs.getString(9);
+          String accessCode = rs.getString(10);
 
           Party p = Party.of(partyId, name, spotifyPlaylistId,
               new Coordinate(lat, lon), LocalDateTime.parse(time),
-              Status.valueOf(status), deviceId);
+              Status.valueOf(status), deviceId,
+              AccessType.valueOf(accessTypeString), accessCode);
           parties.add(p);
         }
         return parties;
@@ -876,9 +901,12 @@ public final class DbHandler {
           String time = rs.getString(6);
           String status = rs.getString(7);
           String deviceId = rs.getString(8);
+          String accessTypeString = rs.getString(9);
+          String accessCode = rs.getString(10);
           Party p = Party.of(partyId, name, spotifyPlaylistId,
               new Coordinate(lat, lon), LocalDateTime.parse(time),
-              Status.valueOf(status), deviceId);
+              Status.valueOf(status), deviceId,
+              AccessType.valueOf(accessTypeString), accessCode);
           parties.add(p);
         }
         return parties;
@@ -914,9 +942,12 @@ public final class DbHandler {
           String time = rs.getString(6);
           String status = rs.getString(7);
           String deviceId = rs.getString(8);
+          String accessTypeString = rs.getString(9);
+          String accessCode = rs.getString(10);
           Party p = Party.of(partyId, name, spotifyPlaylistId,
               new Coordinate(lat, lon), LocalDateTime.parse(time),
-              Status.valueOf(status), deviceId);
+              Status.valueOf(status), deviceId,
+              AccessType.valueOf(accessTypeString), accessCode);
           return p;
         }
         return null;
@@ -944,10 +975,13 @@ public final class DbHandler {
           String time = rs.getString(6);
           String status = rs.getString(7);
           String deviceId = rs.getString(8);
+          String accessTypeString = rs.getString(9);
+          String accessCode = rs.getString(10);
 
           Party p = Party.of(partyId, name, spotifyPlaylistId,
               new Coordinate(lat, lon), LocalDateTime.parse(time),
-              Status.valueOf(status), deviceId);
+              Status.valueOf(status), deviceId,
+              AccessType.valueOf(accessTypeString), accessCode);
           assert rs.next() == false;
           return p;
         }
@@ -984,9 +1018,13 @@ public final class DbHandler {
           String time = rs.getString(6);
           String status = rs.getString(7);
           String deviceId = rs.getString(8);
+          String accessTypeString = rs.getString(9);
+          String accessCode = rs.getString(10);
+
           Party p = Party.of(partyId, name, spotifyPlaylistId,
               new Coordinate(lat, lon), LocalDateTime.parse(time),
-              Status.valueOf(status), deviceId);
+              Status.valueOf(status), deviceId,
+              AccessType.valueOf(accessTypeString), accessCode);
           assert rs.next() == false;
           return p;
         }
@@ -1030,7 +1068,6 @@ public final class DbHandler {
         return new PlaylistBean(playlistId, partyId, queue, host);
       }
     }
-
   }
 
   public static void AddSongToFavorites(String userId, String songId)
@@ -1050,7 +1087,6 @@ public final class DbHandler {
             "ERROR: Could not upvote request with the query " + query);
       }
     }
-
   }
 
   public static List<Song> GetUserFavoritedSongs(String userId)
