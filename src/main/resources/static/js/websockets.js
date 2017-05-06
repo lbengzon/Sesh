@@ -121,6 +121,8 @@ function setupWebsockets() {
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
           console.log("implement the end party update message for guests. Only guests will recieve this message");
+          alert("The user has ended the party.");
+          guestLeaveParty(true);
           break;
 
       }
@@ -135,6 +137,8 @@ function setupWebsockets() {
     
   };
 }
+
+
 
 function updatePlayer(data){
   if (currSongId !== data.payload.currentSongId) {
@@ -646,4 +650,16 @@ function endParty(partyId, userId, shouldUnfollow) {
     }
   }
   conn.send(JSON.stringify(message));
+}
+
+function guestLeaveParty(partyEndedBool) {
+  var v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
+    var deleteBool;
+        if (v === true) {
+            deleteBool = false;
+        } else {
+            deleteBool = true;
+        }
+        const params = {userId: userId, partyId: partyId, deleteBool: deleteBool, partyEndedBool: partyEndedBool};
+        post("/leaveparty",params, "get");
 }

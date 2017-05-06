@@ -29,8 +29,8 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * Gui Manager class. <<<<<<< HEAD ======= >>>>>>>
- * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+ * Gui Manager class.
+ * 
  * @author HE23
  */
 public class GuiManager {
@@ -38,8 +38,8 @@ public class GuiManager {
   private static final Gson GSON = new Gson();
 
   /**
-   * Default constructor. <<<<<<< HEAD ======= >>>>>>>
-   * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * Default constructor.
+   * 
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -64,9 +64,8 @@ public class GuiManager {
     // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
-    Spark.get("/endparty", new EndPartyHandler(), fme);
     Spark.post("/addSongToFavorites", new AddFavoriteHandler());
-
+    Spark.get("/createjoin", new CreateJoinHandler(), fme);
   }
 
   private static class ErrorHandler implements TemplateViewRoute {
@@ -92,7 +91,10 @@ public class GuiManager {
   }
 
   /**
-   * Homepage end point, where user enters in their login credentials.
+   * Handles the homepage, where users enter their credentials.
+   *
+   * @author Matt
+   *
    */
   private class CallbackHandler implements TemplateViewRoute {
     @Override
@@ -109,41 +111,61 @@ public class GuiManager {
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
           userId);
       try {
-        ftlPage = "createJoin.ftl";
         user = User.create(userId, userEmail, userName, type);
       } catch (SQLException e) {
         /* user already exists */
         user = User.of(userId);
-        Party p = Party.getActivePartyOfUser(user);
+      }
 
-        /* user is not part of an active party */
-        if (p == null) {
-          ftlPage = "createJoin.ftl";
+      return new ModelAndView(variables, "callback.ftl");
+    }
+  }
+
+  /**
+   * Handles the create join page.
+   *
+   * @author Matt
+   *
+   */
+  private static class CreateJoinHandler implements TemplateViewRoute {
+    @Override
+    public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String ftlPage;
+      String userId = qm.value("userId");
+      User user = User.of(userId);
+      Party p = Party.getActivePartyOfUser(user);
+
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
+
+      /* user is not part of an active party */
+      if (p == null) {
+        ftlPage = "createJoin.ftl";
+      } else {
+        assert p != null;
+        /* user is host */
+        if (p.getHost().equals(user)) {
+          ftlPage = "createParty.ftl";
+          int partyId = p.getPartyId();
+          String partyName = p.getName();
+          variables = ImmutableMap.of("title", partyName, "userId", userId,
+              "partyId", partyId, "partyName", partyName);
         } else {
-          assert p != null;
-          /* user is host */
-          if (p.getHost().equals(user)) {
-            ftlPage = "createParty.ftl";
-            int partyId = p.getPartyId();
-            String partyName = p.getName();
-            variables = ImmutableMap.of("title", partyName, "userId", userId,
-                "partyId", partyId, "partyName", partyName);
-          } else {
-            assert p.getGuests().contains(user);
-            ftlPage = "joinParty.ftl";
-            int partyId = p.getPartyId();
-            String partyName = p.getName();
-            variables = ImmutableMap.of("title", partyName, "userId", userId,
-                "partyId", partyId, "partyName", partyName);
-          }
-
+          assert p.getGuests().contains(user);
+          ftlPage = "joinParty.ftl";
+          int partyId = p.getPartyId();
+          String partyName = p.getName();
+          variables = ImmutableMap.of("title", partyName, "userId", userId,
+              "partyId", partyId, "partyName", partyName);
         }
 
-        // ftlPage = "createJoin.ftl";
       }
 
       return new ModelAndView(variables, ftlPage);
+
     }
+
   }
 
   private static class JoinHandler2 implements Route {
@@ -179,6 +201,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
+   * 
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -221,7 +244,8 @@ public class GuiManager {
         party.addGuest(user, "TEST PASSWORD");
       }
 
-      // should probably get party name from previous page to display on guest's
+      // should probably get party name from previous page to display on
+      // guest's
       // party view
 
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
@@ -232,6 +256,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
+   * 
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -249,6 +274,7 @@ public class GuiManager {
 
   /**
    * Creates party in the backend.
+   * 
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -258,7 +284,8 @@ public class GuiManager {
       String userId = qm.value("userId");
       String partyName = qm.value("sesh_name"); // required
       String hostName = qm.value("host_name");
-      String privacyStatus = qm.value("privacy_setting"); // add to Party.create
+      String privacyStatus = qm.value("privacy_setting"); // add to
+                                                          // Party.create
       String lat = qm.value("lat");
       String lon = qm.value("lon");
       String deviceId = qm.value("deviceId");
@@ -321,6 +348,7 @@ public class GuiManager {
 
   /**
    * Handles when a guest leaves a party.
+   * 
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -330,38 +358,20 @@ public class GuiManager {
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
       Boolean deleteBool = Boolean.valueOf(qm.value("deleteBool"));
+      Boolean partyEndedBool = Boolean.valueOf(qm.value("partyEndedBool"));
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
       if (deleteBool) {
-        party.deletePlaylist();
+        try {
+          party.deletePlaylist();
+        } catch (SpotifyUserApiException e) {
+          // TODO: Redirect to login page
+          e.printStackTrace();
+        }
       }
-      party.removeGuest(user);
-
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
-          userId);
-
-      return new ModelAndView(variables, "createJoin.ftl");
-    }
-
-  }
-
-  /**
-   * Handles when a host ends a party.
-   * @author Matt
-   */
-  private class EndPartyHandler implements TemplateViewRoute {
-    @Override
-    public ModelAndView handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String userId = qm.value("userId");
-      String partyId = qm.value("partyId");
-      Boolean deleteBool = Boolean.valueOf(qm.value("deleteBool"));
-      Party party = Party.of(Integer.valueOf(partyId));
-
-      if (deleteBool) {
-        party.deletePlaylist();
+      if (!partyEndedBool) {
+        party.removeGuest(user);
       }
-      party.endParty();
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
           userId);
@@ -373,6 +383,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
+   * 
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -409,6 +420,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
+   * 
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -462,6 +474,7 @@ public class GuiManager {
 
   /**
    * Handles redirecting if user is already seshing.
+   * 
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {
@@ -489,7 +502,8 @@ public class GuiManager {
   }
 
   // /**
-  // * Handles returning the current song being played at the party. Will return
+  // * Handles returning the current song being played at the party. Will
+  // return
   // * null if no current song is playing.
   // *
   // * @author HE23
