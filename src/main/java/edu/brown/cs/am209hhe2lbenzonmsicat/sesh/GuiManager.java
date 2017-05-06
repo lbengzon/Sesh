@@ -167,8 +167,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
-   * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * Handles request to join a sesh page.
    *
    * @author HE23
    */
@@ -223,8 +222,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles request to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
-   * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * Handles request to create a sesh page.
    *
    * @author HE23
    */
@@ -233,7 +231,6 @@ public class GuiManager {
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("createUserId");
-      User user = User.of(userId);
       Map<String, Object> variables = ImmutableMap.of("title", "Create a Sesh",
           "userId", userId);
 
@@ -249,7 +246,6 @@ public class GuiManager {
   private class GetPartyHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
-      System.out.println("HERE");
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
       String partyName = qm.value("sesh_name"); // required
