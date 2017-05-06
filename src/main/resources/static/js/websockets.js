@@ -58,7 +58,7 @@ function setupWebsockets() {
 
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data); 
-    console.log("DATA TYPE: " , data.type)
+    //console.log("DATA TYPE: " , data.type)
     // console.log("DATA OBJECT: " , data);
     if(data.success){
       switch (data.type) {
@@ -74,9 +74,8 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
           console.log("adding new request");
           appendToRequests($requests, data);
-          vote();
-
           $requests.sortable("refresh");
+          vote();
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
@@ -98,10 +97,8 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
-
-
           $playlist.sortable("refresh");
-          $player.attr("src", $player.attr("src"));
+          //$player.attr("src", $player.attr("src"));
           break;
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
@@ -109,7 +106,7 @@ function setupWebsockets() {
           clearAndPopulatePlaylist(data.payload.party.playlist, $playlist, isHost);
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
-          $player.attr("src", data.payload.party.playlistUrl);
+          //$player.attr("src", data.payload.party.playlistUrl);
           break;
         case MESSAGE_TYPE.UPDATE_PLAYER:
           //console.log("Got update player")
@@ -165,7 +162,7 @@ function updatePlayer(data){
 
 function hideSongsNotPlaying(){
   currSongIndex = getCurrentSongIndex()
-  console.log("current playing song is at index: " + currSongIndex)
+  //console.log("current playing song is at index: " + currSongIndex)
   for (let i = 0; i < $("#ulPlaylist li").length; i++) {
       $("#ulPlaylist li").eq(i).show();
       if (currSongIndex >= i) {
@@ -183,24 +180,30 @@ function getCurrentSongIndex(){
   return index;
 }
 
-function favorite() {
-  $(".favButton").click(function(x) {
-    const postParams = {userId: userId, songId: x.currentTarget.id};
-    $.post("/addSongToFavorites", postParams, responseJSON => {
-      const responseObject = JSON.parse(responseJSON);
-      const favList = responseObject.favorites;
-      console.log("FAV LIST: " , favList);
-    });
-  });
-}
 
 function vote() {
+  //unbind TODO
   $(".upvote").click(function(x) {
     upvoteRequest(partyId, userId, x.currentTarget.id);
   });
 
   $(".downvote").click(function(x) {
     downvoteRequest(partyId, userId, x.currentTarget.id);
+  });
+}
+
+function favorite() {
+  $(".favButton").click(function(x) {
+    //check if yellow or grey and add boolean post param for add or remove
+    const postParams = {userId: userId, songId: x.currentTarget.id};
+    $.post("/addSongToFavorites", postParams, responseJSON => {
+      const responseObject = JSON.parse(responseJSON);
+      const favList = responseObject.favorites;
+      $("#request-list li").each(function(index, value) {
+        console.log($(this));
+      });
+  
+    });
   });
 }
 
@@ -382,12 +385,14 @@ function clearAndPopulateRequests(requests, $requests){
     }
   }
 
-vote();
+  vote();
+  console.log("HERE REQUESTS");
+  favorite();
+  console.log("OVER HERE REQUESTS");
 }
 
 
 function clearAndPopulatePlaylist(playlist, $playlist, isHost){
-  console.log("curr song id: " + currSongId);
   let startShowing = false
 
   $playlist.empty();
@@ -406,6 +411,9 @@ function clearAndPopulatePlaylist(playlist, $playlist, isHost){
         }
       }   
     }
+    console.log("HERE");
+    favorite();
+    console.log("OVER HERE");
   }
 
 function setPartyId (partyId, userId) {
