@@ -29,6 +29,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 /**
  * Gui Manager class. <<<<<<< HEAD ======= >>>>>>>
  * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+ * 
  * @author HE23
  */
 public class GuiManager {
@@ -38,6 +39,7 @@ public class GuiManager {
   /**
    * Default constructor. <<<<<<< HEAD ======= >>>>>>>
    * 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
+   * 
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -175,6 +177,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
+   * 
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -228,6 +231,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
+   * 
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -245,6 +249,7 @@ public class GuiManager {
 
   /**
    * Creates party in the backend.
+   * 
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -274,7 +279,7 @@ public class GuiManager {
         User host = User.of(userId);
         System.out.println("got the user");
         party = Party.create(partyName, host, coord, LocalDateTime.now(),
-            deviceId);
+            deviceId, partyName);
         System.out.println("created the party");
         partyId = party.getPartyId();
         variables = ImmutableMap.of("partyId", partyId, "partyName", partyName,
@@ -364,6 +369,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
+   * 
    * @author HE23
    */
   private static class SearchHandler implements Route {
