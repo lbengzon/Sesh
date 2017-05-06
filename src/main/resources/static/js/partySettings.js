@@ -1,6 +1,8 @@
 let pos;
-let global_lat = 41.8240;
-let global_lon = 71.4128;
+// let global_lat = 41.8240;
+// let global_lon = 71.4128;
+let global_lat = null;
+let global_lon = null;
 let global_device_id = null;
 
 $(document).ready(() => {
@@ -19,9 +21,9 @@ $(document).ready(() => {
 
 
 	const $deviceList = $("#deviceList");
-	// if (navigator.geolocation) {
-	// 	navigator.geolocation.getCurrentPosition(getLoc, errorCallBack);
-	// }
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(getLoc, errorCallBack);
+	}
 
 	wait();
 
