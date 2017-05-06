@@ -22,20 +22,14 @@ $(document).ready(() => {
 			const deviceType = devices[key].type;
 			console.log(devices[key].name);
 			$("#loadingDevices").hide();
-			$deviceList.append("<li id=\"" + deviceId + "\">" + devices[key].name + "</li>");
+			$deviceList.append("<li id=\"" + deviceId + "\" style=\"cursor:pointer\">" + devices[key].name + "</li>");
 		}
 	});
 
-	//FIX THIS!!!!!!!
-
-
-	$deviceList.on("click", event => {
-		$listItems = $("li");
-		$listItems.each(function(idx, li) {
-			console.log(li.class);
-		});
-		$listItems.addClass("selected");
-		$selected = $listItems.filter(".selected");
+	$("#deviceList").on("click", "li", function() {
+		$("#deviceList li").removeClass("selected");
+		$selected = $(this);
+		$selected.addClass("selected");
 		global_device_id = $selected.attr("id");
 		console.log("device id set: " + global_device_id);
 		$("#deviceId").val($selected.attr("id"));
@@ -53,7 +47,7 @@ $(document).ready(() => {
 				const deviceType = devices[key].type;
 				console.log(devices[key].name);
 				$("#loadingDevices").hide();
-				$deviceList.append("<li id=\"" + deviceId + "\">" + devices[key].name + "</li>");
+				$deviceList.append("<li id=\"" + deviceId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + devices[key].name + "</li>");
 			}
 		});
 	});
@@ -61,6 +55,7 @@ $(document).ready(() => {
 	$("#formSubmit").click(function() {
 		if (global_device_id === null) {
 			alert("You must select a device to play from first!");
+			return;
 		} 
 
 		if ($("#sesh_name").val() !== "" && $("#host_name").val() !== "") {
