@@ -15,6 +15,8 @@ CREATE TABLE "Party"(
   "time" TEXT,
   "status" TEXT,
   "deviceId" TEXT,
+  "accessType" TEXT,
+  "accessCode" TEXT,
   PRIMARY KEY ("partyId")
 );
 
