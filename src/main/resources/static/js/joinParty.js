@@ -83,8 +83,6 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 
 
 $(document).ready(() => {
-	setupWebsockets();
-	//make post request to get party lists
 
 
 	const $userInput = $(".search");
@@ -121,6 +119,8 @@ $(document).ready(() => {
 		addRequest(partyId, userId, $selected.attr("id"));
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
+
+	setupWebsockets();
 
 
 	//guest tab content
