@@ -44,7 +44,7 @@ public class GuiManager {
 
   private void installRoutes(FreeMarkerEngine fme) {
     Spark.webSocket("/update", PartyWebsocket.class);
-    Spark.get("/login", new LoginHandler(), fme);
+    Spark.get("/", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
