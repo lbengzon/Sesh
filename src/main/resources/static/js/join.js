@@ -33,10 +33,12 @@ $(document).ready(() => {
 
 	$("#userId").val(userId);
 	
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			const lat = position.coords.latitude;
-			const lon = position.coords.longitude;
+	// if (navigator.geolocation) {
+		// navigator.geolocation.getCurrentPosition(function(position) {
+			// const lat = position.coords.latitude;
+			// const lon = position.coords.longitude;
+			const lat = 41.8240;
+			const lon = 71.4128;
 			const postParameters = {latitude: lat, longitude: lon};
 			$.post("/join2", postParameters, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);
@@ -61,11 +63,10 @@ $(document).ready(() => {
 				//==================
 
 
-				lat = 41.8240;
-				lon = 71.4128;
+
 				console.log("parties should be received if you are here!");
 			});
-		}, errorCallBack);
-	}
+		// }, errorCallBack);
+	// }
 });
 
