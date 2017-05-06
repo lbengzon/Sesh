@@ -130,9 +130,8 @@ $(document).ready(() => {
     const $nextButton = $("#nextButton");
     const $progressBar = $("#progressbar");
 
-    /*setting invisible form */
-    $("#userId").val(userId);
-    $("#partyId").val(partyId);
+    //end button
+    const $endButton = $("#endButton");
 
 
     let startPlaylistIndex;
@@ -213,6 +212,8 @@ $(document).ready(() => {
         });
     });
 
+    
+
     // function getCurrentSong() {
     //     const postParameters = {partyId: partyId};
     //     $.post("/currentSong", postParameters, responseJSON => {
@@ -264,6 +265,20 @@ $(document).ready(() => {
     $tabContentSearch.hide();
     $tabContentOptions.hide();
     $tabContentFavorites.hide();
+
+    $endButton.click(function() {
+        var v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
+        var deleteBool;
+        if (v === true) {
+            deleteBool = false;
+            console.log("playlist saved");
+        } else {
+            deleteBool = true;
+            console.log("playlist deleted");
+        }
+        const params = {userId: userId, partyId: partyId, deleteBool: deleteBool};
+        post("/endparty",params, "get");
+    });
 
 
     $search.click(function() {

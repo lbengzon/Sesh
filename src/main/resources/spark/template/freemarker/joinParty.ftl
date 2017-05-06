@@ -49,11 +49,8 @@
 </div>
 
 <div class="tabContentOptionsGuest">
-	<form method="GET" action="/leaveparty">
-	<input type="text" id="partyId" name="partyId" style="display: none;">
-	<input type="text" id="userId" name="userId" style="display: none;">
-	<input type="submit" id="leaveSubmitButton" value="Leave Party">
-	</form>
+
+	<input type="button" id="leaveButton" value="Leave Party">
 
 </div>
 </div>
