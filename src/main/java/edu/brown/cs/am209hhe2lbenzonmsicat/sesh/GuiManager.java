@@ -259,7 +259,11 @@ public class GuiManager {
       int partyId = -1;
       System.out.println("lat !!!!" + lat);
       System.out.println("lon " + lon);
-
+      System.out.println("userId : " + userId);
+      System.out.println("partyname : " + partyName);
+      System.out.println("hostName : " + hostName);
+      System.out.println("privacyStatus : " + privacyStatus);
+      System.out.println("deviceId : " + deviceId);
       Coordinate coord = new Coordinate(Double.valueOf(lat),
           Double.valueOf(lon));
 
