@@ -20,7 +20,9 @@ UPDATE_PLAYER: 17,
 SONG_MOVED_TO_NEXT: 18,
 UPDATE_NEXT_CURR_SONG_REQUEST: 19,
 SEEK_SONG: 20,
-RESUME_SONG: 21
+RESUME_SONG: 21,
+END_PARTY: 22,
+UPDATE_GUESTS_END_PARTY: 23
 };
 
 let conn;
@@ -114,6 +116,9 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
           //console.log("got update next curr song request")
           updatePlayer(data);
+          break;
+        case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
+          console.log("implement the end party update message for guests");
           break;
 
       }

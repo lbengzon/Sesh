@@ -18,9 +18,9 @@ import com.google.gson.JsonObject;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.CurrentSongPlaying;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
-import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 @WebSocket
@@ -58,6 +58,8 @@ public class PartyWebsocket {
     UPDATE_NEXT_CURR_SONG_REQUEST,
     SEEK_SONG,
     RESUME_SONG,
+    END_PARTY,
+    UPDATE_GUESTS_END_PARTY
   }
 
   @OnWebSocketConnect
@@ -152,11 +154,33 @@ public class PartyWebsocket {
           updatePartiesCurrentSong(party, session,
               MESSAGE_TYPE.SONG_MOVED_TO_NEXT);
           break;
+        case UPDATE_GUESTS_END_PARTY:
+          endPartyUpdateGuests(payload, user, party, session,
+              MESSAGE_TYPE.END_PARTY);
+          ;
+          break;
         default:
           assert false : "you should never get here!!!";
       }
     } catch (Exception e) {
       e.printStackTrace();
+    }
+  }
+
+  private void endPartyUpdateGuests(JsonObject payload, User user, Party party,
+      Session session, MESSAGE_TYPE messageType) throws IOException {
+    try {
+      boolean shouldUnfollow = payload.get("unfollow").getAsBoolean();
+
+      party.endParty();
+      // if(shouldUnfollow)
+      // updatePartiesCurrentSong(party, session);
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
+      session.getRemote().sendString(updateMessage.toString());
     }
   }
 
