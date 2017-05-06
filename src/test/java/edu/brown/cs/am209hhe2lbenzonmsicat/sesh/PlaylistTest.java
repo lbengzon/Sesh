@@ -72,7 +72,7 @@ public class PlaylistTest {
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     Playlist playlist = p.getPlaylist();
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
@@ -110,7 +110,7 @@ public class PlaylistTest {
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
         "deviceId");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId");
+        LocalDateTime.now(), "deviceId", "testTitle");
     Playlist playlist = p.getPlaylist();
     Request r = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), l);
     // Somewhere only we know - keane
