@@ -118,7 +118,7 @@ function setupWebsockets() {
           updatePlayer(data);
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
-          console.log("implement the end party update message for guests");
+          console.log("implement the end party update message for guests. Only guests will recieve this message");
           break;
 
       }
@@ -588,6 +588,18 @@ function updatePartyCurrentSong (partyId, userId) {
     payload:{
       userId: userId,
       partyId: partyId,
+    }
+  }
+  conn.send(JSON.stringify(message));
+}
+
+function endParty(partyId, userId, shouldUnfollow) {
+  let message = {
+    type: MESSAGE_TYPE.END_PARTY, 
+    payload:{
+      userId: userId,
+      partyId: partyId,
+      unfollow: shouldUnfollow
     }
   }
   conn.send(JSON.stringify(message));

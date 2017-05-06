@@ -154,7 +154,7 @@ public class PartyWebsocket {
           updatePartiesCurrentSong(party, session,
               MESSAGE_TYPE.SONG_MOVED_TO_NEXT);
           break;
-        case UPDATE_GUESTS_END_PARTY:
+        case END_PARTY:
           endPartyUpdateGuests(payload, user, party, session,
               MESSAGE_TYPE.END_PARTY);
           ;
@@ -173,8 +173,15 @@ public class PartyWebsocket {
       boolean shouldUnfollow = payload.get("unfollow").getAsBoolean();
 
       party.endParty();
-      // if(shouldUnfollow)
-      // updatePartiesCurrentSong(party, session);
+      // MATT DO THE UNFOLLOW THING
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY.ordinal());
+      updateMessage.addProperty("success", true);
+
+      sendUpdateToEntirePartyExceptSender(session, updateMessage,
+          party.getPartyId());
+
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -278,21 +285,55 @@ public class PartyWebsocket {
       updateMessage.add("payload", updatePayload);
       updateMessage.addProperty("type", MESSAGE_TYPE.UPDATE_PLAYER.ordinal());
       updateMessage.addProperty("success", true);
-      for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
-        if (sesh.equals(sender)) {
-          JsonObject senderUpdateMessage = new JsonObject();
-          senderUpdateMessage.add("payload", updatePayload);
-          senderUpdateMessage.addProperty("type",
-              MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST.ordinal());
-          senderUpdateMessage.addProperty("success", true);
-          sesh.getRemote().sendString(senderUpdateMessage.toString());
-        } else {
-          sesh.getRemote().sendString(updateMessage.toString());
-        }
-      }
+
+      JsonObject senderUpdateMessage = new JsonObject();
+      senderUpdateMessage.add("payload", updatePayload);
+      senderUpdateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST.ordinal());
+      senderUpdateMessage.addProperty("success", true);
+      sendUpdateToEntireParty(sender, updateMessage, senderUpdateMessage,
+          party.getPartyId());
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  /**
+   * Sends the updatemessage to everyone in the party except the sender. Sends
+   * the sender the senderUpdateMessage
+   * @param sender
+   * @param updateMessage
+   * @param senderUpdateMessage
+   * @param partyId
+   * @throws IOException
+   */
+  private void sendUpdateToEntireParty(Session sender, JsonObject updateMessage,
+      JsonObject senderUpdateMessage, int partyId) throws IOException {
+    for (Session sesh : partyIdToSessions.get(partyId)) {
+      if (sesh.equals(sender)) {
+        sesh.getRemote().sendString(senderUpdateMessage.toString());
+      } else {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
+    }
+  }
+
+  /**
+   * Sends the updatemessage to everyone in the party except the sender. Sends
+   * the sender the senderUpdateMessage
+   * @param sender
+   * @param updateMessage
+   * @param senderUpdateMessage
+   * @param partyId
+   * @throws IOException
+   */
+  private void sendUpdateToEntirePartyExceptSender(Session sender,
+      JsonObject updateMessage, int partyId) throws IOException {
+    for (Session sesh : partyIdToSessions.get(partyId)) {
+      if (!sesh.equals(sender)) {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
     }
   }
 
