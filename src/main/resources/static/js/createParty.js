@@ -130,12 +130,11 @@ $(document).ready(() => {
     const $nextButton = $("#nextButton");
     const $progressBar = $("#progressbar");
 
-<<<<<<< 750eac22827488ff27dcca72405d1e079ade7ca6
+
     //end button
     const $endButton = $("#endButton");
 
-=======
->>>>>>> finished filtering requests, starting favorites
+
 
     let startPlaylistIndex;
     let startList;
@@ -214,6 +213,24 @@ $(document).ready(() => {
             }
         });
     });
+
+  //   $(".favButton").click(function(x) {
+  //       console.log('HERE');
+  //       const postParams = {userId: userId, songId: x.currentTarget.id};
+  //       $.post("/addSongToFavorites", postParams, responseJSON => {
+  //         const responseObject = JSON.parse(responseJSON);
+  //         const favList = responseObject.favorites;
+  //         $("#request-list li").each(function(index, value) {
+  //           console.log($(this));
+  //         });
+          
+  //       });
+  // });
+
+    // $(".favButton").click(function(x) {
+    //     console.log("HEREEE");
+    // });
+// console.log($(".favButton button"));
 
     
 
