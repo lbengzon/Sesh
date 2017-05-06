@@ -104,6 +104,7 @@ function showFavorites($search, $listview, $options, $tabContentSearch, $tabCont
 
 $(document).ready(() => {
 
+
     //dj tab content
     const $tabContentPlaylist = $(".tabContentPlaylist");
     const $tabContentSearch = $(".tabContentSearch");
