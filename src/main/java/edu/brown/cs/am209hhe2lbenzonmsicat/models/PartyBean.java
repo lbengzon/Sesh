@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -15,6 +15,8 @@ import java.util.Set;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.gson.JsonElement;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 /**
  * Models a party.
@@ -34,6 +36,8 @@ public class PartyBean extends Party {
   private LocalDateTime time;
   private Status status;
   private String deviceId;
+  private AccessType accessType;
+  private String accessCode;
 
   /**
    * Constructor.
@@ -58,7 +62,8 @@ public class PartyBean extends Party {
    */
   public PartyBean(int partyId, String name, User host, Playlist playlist,
       Coordinate location, LocalDateTime time, Set<Request> requestedSongs,
-      Set<User> guests, Status status, String deviceId) {
+      Set<User> guests, Status status, String deviceId, AccessType accessType,
+      String accessCode) {
     this.partyId = partyId;
     this.host = host;
     this.guests = guests;
@@ -79,6 +84,8 @@ public class PartyBean extends Party {
     this.time = time;
     this.status = status;
     this.deviceId = deviceId;
+    this.accessType = accessType;
+    this.accessCode = accessCode;
   }
 
   @Override
@@ -237,7 +244,7 @@ public class PartyBean extends Party {
   }
 
   @Override
-  public boolean addGuest(User guest) {
+  public boolean addGuest(User guest, String accessCode) {
     assert isActive() == true;
 
     if (host.equals(guest)) {
@@ -360,6 +367,21 @@ public class PartyBean extends Party {
     // TODO Auto-generated method stub
     playlist.seek(seekPosition, deviceId);
     return true;
+  }
+
+  @Override
+  public void deletePlaylist() {
+
+  }
+
+  @Override
+  public boolean checkAccessCode(String accessCodeAttempt) {
+    return accessCode.equals(accessCodeAttempt);
+  }
+
+  @Override
+  public AccessType getAccessType() {
+    return accessType;
   }
 
   // @Override

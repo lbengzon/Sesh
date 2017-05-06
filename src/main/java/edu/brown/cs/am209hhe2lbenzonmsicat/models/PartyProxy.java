@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -9,9 +9,15 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.JsonElement;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
+
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ *
  * @author leandro
  */
 public class PartyProxy extends Party implements Proxy {
@@ -24,11 +30,14 @@ public class PartyProxy extends Party implements Proxy {
   private LocalDateTime time;
   private Status status;
   private String deviceId;
+  private AccessType accessType;
+  private String accessCode;
 
   // private Location location; Google api stuff?
 
   /**
    * Constructor.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -45,7 +54,8 @@ public class PartyProxy extends Party implements Proxy {
    *          - status
    */
   public PartyProxy(int partyId, String name, String playlistId,
-      Coordinate location, LocalDateTime time, Status status, String deviceId) {
+      Coordinate location, LocalDateTime time, Status status, String deviceId,
+      AccessType accessType, String accessCode) {
     this.partyId = partyId;
     this.name = name;
     this.playlistId = playlistId;
@@ -54,6 +64,8 @@ public class PartyProxy extends Party implements Proxy {
     this.time = time;
     this.status = status;
     this.deviceId = deviceId;
+    this.accessType = accessType;
+    this.accessCode = accessCode;
   }
 
   @Override
@@ -80,7 +92,7 @@ public class PartyProxy extends Party implements Proxy {
 
     try {
       partyBean = DbHandler.getFullParty(partyId, playlistId, name, location,
-          time, status, deviceId);
+          time, status, deviceId, accessType, accessCode);
     } catch (SQLException e) {
       throw new RuntimeException(e.getMessage());
     }
@@ -253,7 +265,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean addGuest(User guest) {
+  public boolean addGuest(User guest, String accessCode) {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -265,8 +277,18 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     try {
-      DbHandler.addPartyGuest(partyId, guest);
-      return partyBean.addGuest(guest);
+      // If its a private party, check the accesscode
+      if (getAccessType().equals(AccessType.PRIVATE)) {
+        if (checkAccessCode(accessCode)) {
+          DbHandler.addPartyGuest(partyId, guest);
+          return partyBean.addGuest(guest, accessCode);
+        }
+        return false;
+      } else {
+        assert getAccessType().equals(AccessType.PUBLIC);
+        DbHandler.addPartyGuest(partyId, guest);
+        return partyBean.addGuest(guest, accessCode);
+      }
 
     } catch (SQLException e) {
       return false;
@@ -444,6 +466,29 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     return partyBean.seekSong(seekPosition);
+  }
+
+  @Override
+  public void deletePlaylist() throws SpotifyUserApiException {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    SpotifyCommunicator.unfollowPlaylist(partyBean.getHost().getSpotifyId(),
+        partyBean.getHost().getSpotifyId(), playlistId, true);
+  }
+
+  @Override
+  public boolean checkAccessCode(String accessCodeAttempt) {
+    return accessCode.equals(accessCodeAttempt);
+  }
+
+  @Override
+  public AccessType getAccessType() {
+    return accessType;
   }
 
   // @Override

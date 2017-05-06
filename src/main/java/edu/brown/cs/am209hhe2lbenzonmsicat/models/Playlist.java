@@ -1,11 +1,15 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
+
 /**
  * Abstract playlist class.
+ * 
  * @author HE23
  */
 public abstract class Playlist {
@@ -74,6 +78,7 @@ public abstract class Playlist {
 
   /**
    * This should only be used for testing!
+   * 
    * @param spotifyId
    *          - spotify id
    * @param partyId
@@ -88,6 +93,7 @@ public abstract class Playlist {
 
   /**
    * Add playlist to database.
+   * 
    * @param user
    *          - user
    * @return playlist
@@ -100,12 +106,12 @@ public abstract class Playlist {
     return new PlaylistProxy(spotifyId, partyId, user);
   }
 
-  public static String getNewPlaylistId(User user)
+  public static String getNewPlaylistId(User user, String seshName)
       throws SpotifyUserApiException {
     // TODO MAKE API CALL TO CREATE NEW PLAYLIST and
     // get the spotify id
     String id = SpotifyCommunicator.createPlaylist(user.getSpotifyId(),
-        "testTitle", true);
+        seshName, true);
     return id;
   }
 

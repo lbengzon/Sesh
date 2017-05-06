@@ -2,15 +2,16 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 /**
  * A class that holds useful sql statements.
- *
  * @author leandro
  */
-final class SqlStatements {
+public final class SqlStatements {
   private SqlStatements() {
 
   }
 
   public static final String CLEAR_USER_TABLE = "DELETE FROM User;";
+
+  public static final String CLEAR_FAVORITE_TABLE = "DELETE FROM FAVORITES;";
 
   public static final String CLEAR_PARTY_TABLE = "DELETE FROM Party;";
 
@@ -40,8 +41,8 @@ final class SqlStatements {
    * Adds a new party to the party table with the status of "ongoing".
    */
   public static final String ADD_NEW_PARTY = "INSERT INTO Party "
-      + "(spotifyPlaylistId, name, lat, lon, time, deviceId, status) "
-      + "VALUES (?, ?, ?, ?, ?, ?, 'ongoing');";
+      + "(spotifyPlaylistId, name, lat, lon, time, deviceId, accessType, accessCode, status) "
+      + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ongoing');";
 
   public static final String END_PARTY = "UPDATE "
       + "PARTY SET status='stopped' WHERE partyId = ?;";
@@ -147,21 +148,25 @@ final class SqlStatements {
    */
   public static final String GET_USER_PARTY = "SELECT Party.PartyId, "
       + "spotifyPlaylistId, "
-      + "name, lat, lon, time, status, deviceId FROM PartyAttendee JOIN Party"
+      + "name, lat, lon, time, status, deviceId, accessType, accessCode FROM PartyAttendee JOIN Party"
       + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=?;";
 
   public static final String GET_PARTY_HOSTED_BY_USER = "SELECT "
       + "Party.PartyId, spotifyPlaylistId, name, lat, lon, time, "
-      + "status, deviceId FROM PartyAttendee JOIN Party"
+      + "status, deviceId, accessType, accessCode FROM PartyAttendee JOIN Party"
       + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=? "
       + "AND PartyAttendee.type='host' AND Party.status='ongoing';";
 
   public static final String GET_ACTIVE_PARTY_OF_USER = "SELECT "
       + "Party.PartyId, spotifyPlaylistId, name, lat, lon, time, "
-      + "status, deviceId FROM PartyAttendee JOIN Party"
+      + "status, deviceId, accessType, accessCode FROM PartyAttendee JOIN Party"
       + " ON PartyAttendee.partyId=Party.partyId WHERE PartyAttendee.userId=? "
       + "AND Party.status='ongoing';";
 
   public static final String ADD_SONG_TO_FAVORITES = "INSERT INTO Favorites (userId, songId) VALUES (?, ?);";
+
+  public static final String REMOVE_SONG_FROM_FAVORITES = "DELETE "
+      + "FROM Favorites" + " WHERE userId=? AND songId=?;";
+
   public static final String GET_USER_FAVORITES = "SELECT songId FROM Favorites where userId = ?;";
 }

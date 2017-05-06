@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -10,7 +10,10 @@ import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Jsonable;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 
 /**
  * Abstract party class.
@@ -21,16 +24,18 @@ public abstract class Party implements Jsonable {
    * Models party status.
    */
   public enum Status {
-    ongoing,
-    stopped
+    ongoing, stopped
   }
 
   /**
    * Models attendee type.
    */
   public enum AttendeeType {
-    host,
-    guest
+    host, guest
+  }
+
+  public static enum AccessType {
+    PRIVATE, PUBLIC
   }
 
   /**
@@ -102,11 +107,16 @@ public abstract class Party implements Jsonable {
    */
   public abstract Status getStatus();
 
+  public abstract void deletePlaylist() throws SpotifyUserApiException;
+
   /**
-   * Upvote song. <<<<<<< HEAD ======= >>>>>>>
-   * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
+   * <<<<<<< 32cd13dff327048ed71599f2610af13c009ef9d8 Upvote song. <<<<<<< HEAD
+   * ======= >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
    * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * to moving request from playlist to request list ======= Upvote song.
+   *
+   * >>>>>>> added leaving and ending party functionality
+   * 
    * @param user
    *          - to upvote
    * @param req
@@ -116,10 +126,8 @@ public abstract class Party implements Jsonable {
   public abstract boolean upvoteSong(User user, String requestId);
 
   /**
-   * Downvote song. <<<<<<< HEAD ======= >>>>>>>
-   * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Downvote song.
+   * 
    * @param user
    *          - to downvote
    * @param req
@@ -129,10 +137,8 @@ public abstract class Party implements Jsonable {
   public abstract boolean downvoteSong(User user, String requestId);
 
   /**
-   * Approve song. <<<<<<< HEAD ======= >>>>>>>
-   * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Approve song.
+   * 
    * @param req
    *          - request
    * @return boolean if successful
@@ -143,6 +149,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Approve song.
+   * 
    * @param req
    *          - request
    * @return boolean if successful
@@ -153,6 +160,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Approve song.
+   * 
    * @param req
    *          - request
    * @return boolean if successful
@@ -171,6 +179,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Remove from playlist.
+   * 
    * @param req
    *          - request
    * @return boolean if successful.
@@ -181,6 +190,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Request song.
+   * 
    * @param song
    *          - request
    * @param user
@@ -190,23 +200,21 @@ public abstract class Party implements Jsonable {
   public abstract Request requestSong(Song song, User user);
 
   /**
-   * Add a guest to party. <<<<<<< HEAD ======= >>>>>>>
-   * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Attempts to add the guest to the party.
+   * 
    * @param guest
-   *          - guest to add
-   * @return boolean if successful.
+   *          The guest to add to the party.
+   * @param accessCode
+   *          The access code to the party. Ignored of the party is public
+   * @return Whether or not the add guest was successful.
    */
-  public abstract boolean addGuest(User guest);
+  public abstract boolean addGuest(User guest, String accessCode);
 
   public abstract String getDeviceId();
 
   /**
-   * Removes a guest from the party <<<<<<< HEAD ======= >>>>>>>
-   * d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Removes a guest from the party.
+   * 
    * @param guest
    *          -Guest to remove
    * @return boolean if successful
@@ -214,10 +222,8 @@ public abstract class Party implements Jsonable {
   public abstract boolean removeGuest(User guest);
 
   /**
-   * Gets the distance from the party to the coordinate. <<<<<<< HEAD =======
-   * >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Gets the distance from the party to the coordinate.
+   * 
    * @param coordinate
    *          The coordinate to get the distance from.
    * @return The distance from the coordinate.
@@ -232,9 +238,9 @@ public abstract class Party implements Jsonable {
   public abstract boolean seekSong(long seekPosition)
       throws SpotifyUserApiException;
 
-  // public abstract boolean nextSong();
-  //
-  // public abstract boolean prevSong();
+  public abstract boolean checkAccessCode(String accessCodeAttempt);
+
+  public abstract AccessType getAccessType();
 
   /**
    * Ends the party
@@ -246,9 +252,8 @@ public abstract class Party implements Jsonable {
   }
 
   /**
-   * Retrieve party data. <<<<<<< e41b659867a347536c9fbd24f352ea417f562c49
-   * ======= >>>>>>> fixed bug related to moving request from playlist to
-   * request list
+   * Retrieve party data.
+   * 
    * @param partyId
    *          - id
    * @param name
@@ -266,18 +271,20 @@ public abstract class Party implements Jsonable {
    * @return party
    */
   public static Party of(int partyId, String name, String playlistId,
-      Coordinate location, LocalDateTime time, Status status, String deviceId) {
+      Coordinate location, LocalDateTime time, Status status, String deviceId,
+      AccessType accessType, String accessCode) {
     if (name == null || playlistId == null || location == null || time == null
         || status == null) {
       throw new NullPointerException(
           "ERROR: Trying to create an part from a null id");
     }
     return new PartyProxy(partyId, name, playlistId, location, time, status,
-        deviceId);
+        deviceId, accessType, accessCode);
   }
 
   /**
    * Gets the party object with the party id passed in.
+   * 
    * @param partyId
    *          The id of the party
    * @return The party object representing the party.
@@ -291,9 +298,8 @@ public abstract class Party implements Jsonable {
   }
 
   /**
-   * Gets the parties within the distance. <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Gets the parties within the distance.
+   * 
    * @param location
    *          The location of the user.
    * @param distance
@@ -320,6 +326,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Create a party and add to db.
+   * 
    * @param name
    *          - name
    * @param host
@@ -335,7 +342,8 @@ public abstract class Party implements Jsonable {
    */
   // TODO: Modify parameters to take in Date object for time
   public static Party create(String name, User host, Coordinate location,
-      LocalDateTime time, String deviceId)
+      LocalDateTime time, String deviceId, String seshName,
+      AccessType accessType, String accessCode)
       throws SQLException, SpotifyUserApiException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
@@ -345,15 +353,19 @@ public abstract class Party implements Jsonable {
       throw new IllegalArgumentException(
           "ERROR: Can't host a party if you're not premium!");
     }
-    String newPlaylistId = Playlist.getNewPlaylistId(host);
+    String newPlaylistId = Playlist.getNewPlaylistId(host, seshName);
+    if (accessType.equals(AccessType.PRIVATE)) {
+      accessCode = "";
+    } else {
+      assert accessCode != null : "cant have a null access code for a private party";
+    }
     return DbHandler.addParty(newPlaylistId, name, location, time, host,
-        deviceId);
+        deviceId, accessType, accessCode);
   }
 
   /**
-   * Returns the active party of the user if he has any. <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Returns the active party of the user if he has any.
+   * 
    * @param user
    *          The user you want to get the active party of
    * @return The active party of the user or null if there is no active party.
@@ -367,10 +379,8 @@ public abstract class Party implements Jsonable {
   }
 
   /**
-   * Gets all (active and stopped) parties of a user. <<<<<<< HEAD =======
-   * >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list
+   * Gets all (active and stopped) parties of a user.
+   * 
    * @param user
    *          The user you want to get the parties of.
    * @return The parties of a user.

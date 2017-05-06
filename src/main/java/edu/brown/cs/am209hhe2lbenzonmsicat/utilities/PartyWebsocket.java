@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,7 +15,13 @@ import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request.VoteType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.CurrentSongPlaying;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 @WebSocket
 public class PartyWebsocket {
@@ -25,33 +31,11 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST,
-    PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT,
-    SET_PARTY_ID,
-    ADD_REQUEST,
-    UPVOTE_REQUEST,
-    DOWNVOTE_REQUEST,
-    MOVE_REQUEST_TO_QUEUE,
-    MOVE_FROM_QUEUE_TO_REQUEST,
-    ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_ADD_REQUEST,
-    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_VOTE_REQUESTS,
-    UPDATE_AFTER_REQUEST_TRANSFER,
-    UPDATE_ENTIRE_PARTY,
-    UPDATE_REARRANGE_PLAYLIST,
-    REORDER_PLAYLIST_TRACK,
-    PLAY_PLAYLIST,
-    PAUSE_SONG,
-    UPDATE_PLAYER,
-    SONG_MOVED_TO_NEXT,
-    UPDATE_NEXT_CURR_SONG_REQUEST,
-    SEEK_SONG,
-    RESUME_SONG,
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST, SEEK_SONG, RESUME_SONG, END_PARTY, UPDATE_GUESTS_END_PARTY
   }
 
   @OnWebSocketConnect
@@ -94,49 +78,62 @@ public class PartyWebsocket {
       User user = User.of(userId);
       switch (messageType) {
         case SET_PARTY_ID:
-          sendUpdateEntireParty(partyId, session);
+          sendUpdateEntireParty(partyId, session, MESSAGE_TYPE.SET_PARTY_ID);
           break;
         case ADD_REQUEST:
-          sendAddRequestUpdate(payload, user, party, session);
+          sendAddRequestUpdate(payload, user, party, session,
+              MESSAGE_TYPE.ADD_REQUEST);
           break;
         case UPVOTE_REQUEST:
           sendVoteRequestUpdate(payload, user, party, session,
-              Request.VoteType.upvote);
+              Request.VoteType.upvote, MESSAGE_TYPE.UPVOTE_REQUEST);
           break;
         case DOWNVOTE_REQUEST:
           sendVoteRequestUpdate(payload, user, party, session,
-              Request.VoteType.downvote);
+              Request.VoteType.downvote, MESSAGE_TYPE.DOWNVOTE_REQUEST);
           break;
         case MOVE_REQUEST_TO_QUEUE:
           sendAfterRequestTransferUpdate(payload, user, party, session,
-              TRANSFER_TYPE.REQUEST_TO_PLAYLIST);
+              TRANSFER_TYPE.REQUEST_TO_PLAYLIST,
+              MESSAGE_TYPE.MOVE_REQUEST_TO_QUEUE);
           break;
         case MOVE_FROM_QUEUE_TO_REQUEST:
           sendAfterRequestTransferUpdate(payload, user, party, session,
-              TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
+              TRANSFER_TYPE.PLAYLIST_TO_REQUEST,
+              MESSAGE_TYPE.MOVE_FROM_QUEUE_TO_REQUEST);
           break;
         case ADD_SONG_DIRECTLY_TO_PLAYLIST:
-          sendAddSongDirectlyToPlaylistUpdate(payload, user, party, session);
+          sendAddSongDirectlyToPlaylistUpdate(payload, user, party, session,
+              MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST);
           break;
         case REORDER_PLAYLIST_TRACK:
-          sendReorderPlaylistTrackUpdate(payload, user, party, session);
+          sendReorderPlaylistTrackUpdate(payload, user, party, session,
+              MESSAGE_TYPE.REORDER_PLAYLIST_TRACK);
           break;
         case PLAY_PLAYLIST:
-          playPlaylistAndUpdate(payload, user, party, session);
+          playPlaylistAndUpdate(payload, user, party, session,
+              MESSAGE_TYPE.PLAY_PLAYLIST);
           break;
         case PAUSE_SONG:
-          pauseSongAndUpdate(payload, user, party, session);
+          pauseSongAndUpdate(payload, user, party, session,
+              MESSAGE_TYPE.PAUSE_SONG);
           break;
         case SEEK_SONG:
-          seekSong(payload, user, party, session);
+          seekSong(payload, user, party, session, MESSAGE_TYPE.SEEK_SONG);
           // nextSongAndUpdate(payload, user, party, session);
           break;
         case RESUME_SONG:
-          resumeSong(payload, user, party, session);
+          resumeSong(payload, user, party, session, MESSAGE_TYPE.RESUME_SONG);
           // previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
-          updatePartiesCurrentSong(party, session);
+          updatePartiesCurrentSong(party, session,
+              MESSAGE_TYPE.SONG_MOVED_TO_NEXT);
+          break;
+        case END_PARTY:
+          endPartyUpdateGuests(payload, user, party, session,
+              MESSAGE_TYPE.END_PARTY);
+          ;
           break;
         default:
           assert false : "you should never get here!!!";
@@ -146,8 +143,34 @@ public class PartyWebsocket {
     }
   }
 
+  private void endPartyUpdateGuests(JsonObject payload, User user, Party party,
+      Session session, MESSAGE_TYPE messageType) throws IOException {
+    try {
+      boolean shouldUnfollow = payload.get("unfollow").getAsBoolean();
+
+      party.endParty();
+      if (shouldUnfollow) {
+        party.deletePlaylist();
+      }
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY.ordinal());
+      updateMessage.addProperty("success", true);
+
+      sendUpdateToEntirePartyExceptSender(session, updateMessage,
+          party.getPartyId());
+
+    } catch (Exception e) {
+      JsonObject updateMessage = new JsonObject();
+      updateMessage.addProperty("success", false);
+      updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
+      session.getRemote().sendString(updateMessage.toString());
+    }
+  }
+
   private void resumeSong(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
+      Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
       int index = payload.get("index").getAsInt();
       long seekPosition = payload.get("seekPosition").getAsLong();
@@ -158,12 +181,13 @@ public class PartyWebsocket {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
   private void seekSong(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
+      Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
 
       long position = payload.get("seekPosition").getAsLong();
@@ -174,12 +198,13 @@ public class PartyWebsocket {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
   private void pauseSongAndUpdate(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
+      Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
       party.pause();
       // updatePartiesCurrentSong(party, session);
@@ -187,12 +212,13 @@ public class PartyWebsocket {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
   private void playPlaylistAndUpdate(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
+      Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
       int index = payload.get("index").getAsInt();
       party.playPlaylist(index);
@@ -201,11 +227,13 @@ public class PartyWebsocket {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
-  private void updatePartiesCurrentSong(Party party, Session sender) {
+  private void updatePartiesCurrentSong(Party party, Session sender,
+      MESSAGE_TYPE messageType) {
     try {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
@@ -235,26 +263,63 @@ public class PartyWebsocket {
       updateMessage.add("payload", updatePayload);
       updateMessage.addProperty("type", MESSAGE_TYPE.UPDATE_PLAYER.ordinal());
       updateMessage.addProperty("success", true);
-      for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
-        if (sesh.equals(sender)) {
-          JsonObject senderUpdateMessage = new JsonObject();
-          senderUpdateMessage.add("payload", updatePayload);
-          senderUpdateMessage.addProperty("type",
-              MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST.ordinal());
-          senderUpdateMessage.addProperty("success", true);
-          sesh.getRemote().sendString(senderUpdateMessage.toString());
-        } else {
-          sesh.getRemote().sendString(updateMessage.toString());
-        }
-      }
+
+      JsonObject senderUpdateMessage = new JsonObject();
+      senderUpdateMessage.add("payload", updatePayload);
+      senderUpdateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST.ordinal());
+      senderUpdateMessage.addProperty("success", true);
+      sendUpdateToEntireParty(sender, updateMessage, senderUpdateMessage,
+          party.getPartyId());
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException(e.getMessage());
     }
   }
 
+  /**
+   * Sends the updatemessage to everyone in the party except the sender. Sends
+   * the sender the senderUpdateMessage
+   * 
+   * @param sender
+   * @param updateMessage
+   * @param senderUpdateMessage
+   * @param partyId
+   * @throws IOException
+   */
+  private void sendUpdateToEntireParty(Session sender, JsonObject updateMessage,
+      JsonObject senderUpdateMessage, int partyId) throws IOException {
+    for (Session sesh : partyIdToSessions.get(partyId)) {
+      if (sesh.equals(sender)) {
+        sesh.getRemote().sendString(senderUpdateMessage.toString());
+      } else {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
+    }
+  }
+
+  /**
+   * Sends the updatemessage to everyone in the party except the sender. Sends
+   * the sender the senderUpdateMessage
+   * 
+   * @param sender
+   * @param updateMessage
+   * @param senderUpdateMessage
+   * @param partyId
+   * @throws IOException
+   */
+  private void sendUpdateToEntirePartyExceptSender(Session sender,
+      JsonObject updateMessage, int partyId) throws IOException {
+    for (Session sesh : partyIdToSessions.get(partyId)) {
+      if (!sesh.equals(sender)) {
+        sesh.getRemote().sendString(updateMessage.toString());
+      }
+    }
+  }
+
   private void sendReorderPlaylistTrackUpdate(JsonObject payload, User user,
-      Party party, Session session) throws IOException {
+      Party party, Session session, MESSAGE_TYPE messageType)
+      throws IOException {
     int startIndex = payload.get("startIndex").getAsInt();
     int endIndex = payload.get("endIndex").getAsInt();
     JsonObject updatePayload = new JsonObject();
@@ -275,12 +340,13 @@ public class PartyWebsocket {
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
-  private void sendUpdateEntireParty(int partyId, Session session)
-      throws IOException {
+  private void sendUpdateEntireParty(int partyId, Session session,
+      MESSAGE_TYPE messageType) throws IOException {
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
     try {
@@ -295,12 +361,14 @@ public class PartyWebsocket {
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
     }
     session.getRemote().sendString(updateMessage.toString());
   }
 
   private void sendAddSongDirectlyToPlaylistUpdate(JsonObject payload,
-      User user, Party party, Session session) throws IOException {
+      User user, Party party, Session session, MESSAGE_TYPE messageType)
+      throws IOException {
     String songId = payload.get("songId").getAsString();
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
@@ -322,12 +390,13 @@ public class PartyWebsocket {
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
   private void sendAddRequestUpdate(JsonObject payload, User user, Party party,
-      Session session) throws IOException {
+      Session session, MESSAGE_TYPE messageType) throws IOException {
     String songId = payload.get("songId").getAsString();
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
@@ -347,12 +416,14 @@ public class PartyWebsocket {
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
   private void sendVoteRequestUpdate(JsonObject payload, User user, Party party,
-      Session session, Request.VoteType voteType) throws IOException {
+      Session session, Request.VoteType voteType, MESSAGE_TYPE messageType)
+      throws IOException {
     String requestId = payload.get("requestId").getAsString();
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
@@ -378,13 +449,14 @@ public class PartyWebsocket {
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
     }
   }
 
   private void sendAfterRequestTransferUpdate(JsonObject payload, User user,
-      Party party, Session session, TRANSFER_TYPE transferType)
-      throws IOException {
+      Party party, Session session, TRANSFER_TYPE transferType,
+      MESSAGE_TYPE messageType) throws IOException {
     String requestId = payload.get("requestId").getAsString();
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
@@ -415,6 +487,7 @@ public class PartyWebsocket {
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      updateMessage.addProperty("type", messageType.ordinal());
       session.getRemote().sendString(updateMessage.toString());
       e.printStackTrace();
     }

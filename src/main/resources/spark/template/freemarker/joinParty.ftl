@@ -5,6 +5,7 @@
 	let currSongId;
 	let showPlayed = false;
 	let isPaused = true;
+	const isHost = false;
 </script>
 <script src="/js/joinParty.js"></script>
 <script>
@@ -26,6 +27,13 @@
 </div>
 <div class="list-wrapper">
 <div class="tabContentRequestGuest" id="request-list">
+<div class="switchDiv">
+	<label id="switchLabel">Show My Requests</label>
+	<label class="switch">
+		<input type="checkbox">
+		<div class="slider round"></div>
+	</label>
+</div>
 <ul style="list-style-type:none"></ul>
 </div>
 
@@ -48,11 +56,8 @@
 </div>
 
 <div class="tabContentOptionsGuest">
-	<form method="GET" action="/leaveparty">
-	<input type="text" id="partyId" name="partyId" style="display: none;">
-	<input type="text" id="userId" name="userId" style="display: none;">
-	<input type="submit" id="leaveSubmitButton" value="Leave Party">
-	</form>
+
+	<input type="button" id="leaveButton" value="Leave Party">
 
 </div>
 </div>

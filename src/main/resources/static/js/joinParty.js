@@ -82,18 +82,15 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 }
 
 
+
+
 $(document).ready(() => {
-	setupWebsockets();
-	//make post request to get party lists
 
 
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
 	const $requests = $(".tabContentRequestGuest ul");
 	
-	/*setting invisible form */
-	$("#userId").val(userId);
-	$("#partyId").val(partyId);
 
 	$userInput.keyup(function() {
 		console.log("userId" + userId);
@@ -122,6 +119,26 @@ $(document).ready(() => {
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
+    $(".switch input").click(function() {
+        console.log("USER REQUESTED " + userRequests.length + "SONGS");
+        if ($(".switch input").is(":checked")) {
+            if (userRequests.length > 0) {
+                $("#request-list ul").find("li").hide();
+                for (let i in userRequests) {
+                    let id = userRequests[i].requestId;
+                    $("#request-list ul").find("#" + id).show();
+                }
+                /* show only user requests */
+            } else {
+                /* show nothing */
+                $("#request-list ul").find("li").hide();
+            }
+
+        } else {
+            /* show all songs in request list */
+            $("#request-list ul").find("li").show();
+        }
+    });
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");
@@ -132,8 +149,6 @@ $(document).ready(() => {
 	const $playlistTitle = $("#playlist-title");
 	const $requestTitle = $("#request-title");
 	const $listWrapper = $('.list-wrapper');
-	// const $leavebutton = $("#leaveButton");
-
 
 	//guest tabs
 	const $requestsGuest = $("#request-guest");
@@ -142,12 +157,20 @@ $(document).ready(() => {
 	const $optionsGuest = $("#options-guest");
 	const $favoritesGuest = $("#favorites-guest");
 
+	//leave button
+	const $leaveButton = $("#leaveButton");
+
+
 	$requestsGuest.addClass("active");
 	$tabContentPlaylistGuest.hide();
 	$tabContentSearchGuest.hide();
 	$tabContentOptionsGuest.hide();
 	$tabContentFavoritesGuest.hide();
 	$playlistTitle.hide();
+
+	$leaveButton.click(function() {
+		guestLeaveParty(false);
+    });
 
 
 	$playlistGuest.click(function() {
@@ -169,6 +192,8 @@ $(document).ready(() => {
 	$favoritesGuest.click(function(){
     	showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
     });
+
+    setupWebsockets();
 
 
 });
