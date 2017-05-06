@@ -9,20 +9,21 @@ import org.junit.Test;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.RequestProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
-import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
 public class PartyTest {
 
   @Test
-  public void testGetHost() throws SQLException, FileNotFoundException {
+  public void testGetHost() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -44,7 +45,8 @@ public class PartyTest {
 
   //
   @Test
-  public void testGetName() throws SQLException, FileNotFoundException {
+  public void testGetName() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -65,7 +67,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetTime() throws SQLException, FileNotFoundException {
+  public void testGetTime() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -86,7 +89,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetLocation() throws SQLException, FileNotFoundException {
+  public void testGetLocation() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -109,7 +113,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetStatus() throws SQLException, FileNotFoundException {
+  public void testGetStatus() throws SQLException, FileNotFoundException,
+      SpotifyUserApiException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -130,7 +135,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testEndParty() throws SQLException, FileNotFoundException {
+  public void testEndParty()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -152,7 +158,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testEndPartyTwice() throws SQLException, FileNotFoundException {
+  public void testEndPartyTwice()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -176,7 +183,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteDownvoteSongBySameUser()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -218,7 +225,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testUpvoteSong() throws SQLException, FileNotFoundException {
+  public void testUpvoteSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -260,7 +268,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongSameUser()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -293,7 +301,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongByNonGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -321,7 +329,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongAfterTransfer()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -349,7 +357,7 @@ public class PartyTest {
 
   @Test
   public void testUpvoteSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -381,7 +389,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testDownvoteSong() throws SQLException, FileNotFoundException {
+  public void testDownvoteSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -423,7 +432,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongSameUser()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -456,7 +465,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongByNonGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -484,7 +493,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongAfterTransfer()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -512,7 +521,7 @@ public class PartyTest {
 
   @Test
   public void testDownvoteSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -545,7 +554,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveFromPlaylist()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -574,7 +583,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveFromPlaylistPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -609,7 +618,7 @@ public class PartyTest {
 
   @Test
   public void testRemovePlaylistButInRequest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -636,7 +645,7 @@ public class PartyTest {
 
   @Test
   public void testRemovePlaylistButNonExistentRequest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -672,7 +681,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testRequestSong() throws SQLException, FileNotFoundException {
+  public void testRequestSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -708,7 +718,7 @@ public class PartyTest {
 
   @Test
   public void testRequestSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -737,7 +747,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testRequestSongByNonGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -753,7 +763,8 @@ public class PartyTest {
   }
 
   @Test(expected = RuntimeException.class)
-  public void testRequestSameSong() throws SQLException, FileNotFoundException {
+  public void testRequestSameSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -772,7 +783,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testApproveSong() throws SQLException, FileNotFoundException {
+  public void testApproveSong()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -798,7 +810,7 @@ public class PartyTest {
 
   @Test
   public void testApproveSongPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -834,7 +846,7 @@ public class PartyTest {
 
   @Test(expected = RuntimeException.class)
   public void testApproveReRequestSong()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -854,7 +866,8 @@ public class PartyTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testAddHostAsGuest() throws SQLException, FileNotFoundException {
+  public void testAddHostAsGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -870,7 +883,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testAddGuest() throws SQLException, FileNotFoundException {
+  public void testAddGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -902,7 +916,7 @@ public class PartyTest {
 
   @Test
   public void testAddGuestPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -929,7 +943,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testRemoveGuest() throws SQLException, FileNotFoundException {
+  public void testRemoveGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -962,7 +977,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveGuestPartyEnded()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -993,7 +1008,7 @@ public class PartyTest {
 
   @Test
   public void testRemoveNonExistentGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1025,7 +1040,8 @@ public class PartyTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testAddSameGuest() throws SQLException, FileNotFoundException {
+  public void testAddSameGuest()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1051,7 +1067,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testAddGuestOfAlreadyActiveParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1073,7 +1089,7 @@ public class PartyTest {
 
   @Test
   public void testAddGuestOfAlreadyActivePartyEndParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1102,7 +1118,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testAddGuestOfButAlreadyHostOfActiveParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1124,7 +1140,7 @@ public class PartyTest {
 
   @Test
   public void testAddGuestOfButAlreadyHostOfActivePartyEndParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1153,7 +1169,7 @@ public class PartyTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testAddHostButAlreadyActiveGuest()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1172,7 +1188,7 @@ public class PartyTest {
 
   @Test
   public void testAddHostButAlreadyActiveGuestEndParty()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1192,7 +1208,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetActiveParty() throws SQLException, FileNotFoundException {
+  public void testGetActiveParty()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1220,7 +1237,7 @@ public class PartyTest {
 
   @Test
   public void testGetActivePartyNone()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1239,7 +1256,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetAllParties() throws SQLException, FileNotFoundException {
+  public void testGetAllParties()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1261,7 +1279,7 @@ public class PartyTest {
 
   @Test
   public void testGetAllPartiesMultipleParties()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1298,7 +1316,7 @@ public class PartyTest {
 
   @Test
   public void testGetAllPartiesNoParties()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1316,7 +1334,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testGetPartyOfId() throws SQLException, FileNotFoundException {
+  public void testGetPartyOfId()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1341,7 +1360,7 @@ public class PartyTest {
 
   @Test
   public void testGetPartyOfInvalidId()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1362,7 +1381,7 @@ public class PartyTest {
 
   @Test
   public void testGetPartyDistanceFrom()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1381,7 +1400,7 @@ public class PartyTest {
 
   @Test
   public void testGetPartiesWithinDistance()
-      throws SQLException, FileNotFoundException {
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
@@ -1409,7 +1428,8 @@ public class PartyTest {
   }
 
   @Test
-  public void testRequestJson() throws SQLException, FileNotFoundException {
+  public void testRequestJson()
+      throws SQLException, FileNotFoundException, SpotifyUserApiException {
     SpotifyCommunicator.setUpTestApi();
     DbHandler.setFromUrl("test.db");
     DbHandler.clearAllTables();
