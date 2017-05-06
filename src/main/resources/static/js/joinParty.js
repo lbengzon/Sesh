@@ -89,9 +89,6 @@ $(document).ready(() => {
 	const $results = $(".searchResults");
 	const $requests = $(".tabContentRequestGuest ul");
 	
-	/*setting invisible form */
-	$("#userId").val(userId);
-	$("#partyId").val(partyId);
 
 	$userInput.keyup(function() {
 		console.log("userId" + userId);
@@ -132,8 +129,6 @@ $(document).ready(() => {
 	const $playlistTitle = $("#playlist-title");
 	const $requestTitle = $("#request-title");
 	const $listWrapper = $('.list-wrapper');
-	// const $leavebutton = $("#leaveButton");
-
 
 	//guest tabs
 	const $requestsGuest = $("#request-guest");
@@ -142,12 +137,30 @@ $(document).ready(() => {
 	const $optionsGuest = $("#options-guest");
 	const $favoritesGuest = $("#favorites-guest");
 
+	//leave button
+	const $leaveButton = $("#leaveButton");
+
+
 	$requestsGuest.addClass("active");
 	$tabContentPlaylistGuest.hide();
 	$tabContentSearchGuest.hide();
 	$tabContentOptionsGuest.hide();
 	$tabContentFavoritesGuest.hide();
 	$playlistTitle.hide();
+
+	$leaveButton.click(function() {
+		var v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
+		var deleteBool;
+        if (v === true) {
+            deleteBool = false;
+            console.log("playlist saved");
+        } else {
+            deleteBool = true;
+            console.log("playlist deleted");
+        }
+        const params = {userId: userId, partyId: partyId, deleteBool: deleteBool};
+       	post("/leaveparty",params, "get");
+    });
 
 
 	$playlistGuest.click(function() {

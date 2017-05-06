@@ -60,11 +60,7 @@
 </div>
 
 <div class="tabContentOptions">
-	<form method="GET" action="/endparty">
-	<input type="text" id="partyId" name="partyId" style="display: none;">
-	<input type="text" id="userId" name="userId" style="display: none;">
-	<input type="submit" id="endSubmitButton" value="End Party">
-	</form>
+	<input type="button" id="endButton" value="End Party">
 </div>
 
 </div>

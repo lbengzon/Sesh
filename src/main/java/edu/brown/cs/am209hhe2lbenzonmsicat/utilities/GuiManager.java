@@ -326,8 +326,12 @@ public class GuiManager {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
+      Boolean deleteBool = Boolean.valueOf(qm.value("deleteBool"));
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
+      if (deleteBool) {
+        party.deletePlaylist();
+      }
       party.removeGuest(user);
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
@@ -348,7 +352,12 @@ public class GuiManager {
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
+      Boolean deleteBool = Boolean.valueOf(qm.value("deleteBool"));
       Party party = Party.of(Integer.valueOf(partyId));
+
+      if (deleteBool) {
+        party.deletePlaylist();
+      }
       party.endParty();
 
       Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
