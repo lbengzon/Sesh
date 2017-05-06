@@ -7,7 +7,17 @@ import java.util.List;
 
 import org.junit.Test;
 
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.Status;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyProxy;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistProxy;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.RequestProxy;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
 public class PartyTest {
 

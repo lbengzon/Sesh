@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -6,6 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
 /**
  * Playlist proxy class.

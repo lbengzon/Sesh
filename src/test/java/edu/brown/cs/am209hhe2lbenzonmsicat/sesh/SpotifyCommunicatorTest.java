@@ -2,6 +2,8 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 import org.junit.Test;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
+
 public class SpotifyCommunicatorTest {
 
   @Test

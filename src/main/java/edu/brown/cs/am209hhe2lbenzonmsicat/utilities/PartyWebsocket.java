@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,7 +15,13 @@ import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request.VoteType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.CurrentSongPlaying;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 @WebSocket
 public class PartyWebsocket {

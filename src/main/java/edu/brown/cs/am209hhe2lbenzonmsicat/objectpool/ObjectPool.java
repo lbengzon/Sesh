@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.objectpool;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -52,7 +52,7 @@ public abstract class ObjectPool<T> {
    *
    * @return - object
    */
-  synchronized T checkOut() {
+  public synchronized T checkOut() {
     long now = System.currentTimeMillis();
     if (!unlocked.isEmpty()) {
       for (T o : unlocked.keySet()) {
@@ -88,7 +88,7 @@ public abstract class ObjectPool<T> {
    * @param o
    *          - object
    */
-  synchronized void checkIn(T o) {
+  public synchronized void checkIn(T o) {
     locked.remove(o);
     unlocked.put(o, new Long(System.currentTimeMillis()));
   }

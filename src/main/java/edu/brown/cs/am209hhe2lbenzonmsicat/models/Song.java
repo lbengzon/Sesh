@@ -1,6 +1,8 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.util.Objects;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Jsonable;
 
 /**
  * Song abstract class.

@@ -1,10 +1,13 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.wrapper.spotify.models.Track;
+
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the

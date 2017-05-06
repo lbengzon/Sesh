@@ -7,6 +7,9 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.GuiManager;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 import freemarker.template.Configuration;
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;

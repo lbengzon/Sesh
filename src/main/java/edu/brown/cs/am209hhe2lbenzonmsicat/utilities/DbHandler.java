@@ -1,4 +1,4 @@
-package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
+package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,10 +17,21 @@ import java.util.List;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.AttendeeType;
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Party.Status;
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Request.VoteType;
-import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyBean;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Playlist;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistBean;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.RequestBean;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.UserBean;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AttendeeType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.User.Type;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SqlStatements;
 
 /**
  * Database handler class.
