@@ -249,15 +249,10 @@ $(document).ready(() => {
         }
     });
 
-
-
-
     $results.click(function() {
         $listItems = $("li");
         $selected = $listItems.filter('.hover');
         addToPlaylist(partyId, userId, $selected.attr("id"));
-        console.log("WHAT IS HAPPENING")
-        console.log("LIST WRAPPER ===========", $listWrapper)
         showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
     });
 

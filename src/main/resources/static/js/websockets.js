@@ -54,8 +54,8 @@ function setupWebsockets() {
 
   conn.onmessage = msg => {
     const data = JSON.parse(msg.data);
-    console.log("DATA TYPE: " , data.type)
-    console.log("DATA OBJECT: " , data);
+    // console.log("DATA TYPE: " , data.type)
+    // console.log("DATA OBJECT: " , data);
     if(data.success){
       switch (data.type) {
         default:
@@ -108,11 +108,11 @@ function setupWebsockets() {
           $player.attr("src", data.payload.party.playlistUrl);
           break;
         case MESSAGE_TYPE.UPDATE_PLAYER:
-          console.log("Got update player")
+          //console.log("Got update player")
           updatePlayer(data)
           break;
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
-          console.log("got update next curr song request")
+          //console.log("got update next curr song request")
           updatePlayer(data)
           break;
 
@@ -134,7 +134,7 @@ function updatePlayer(data){
       console.log(data.payload.artistName);
       $("#artistName").html(data.payload.artist);
   }
-  console.log("isplaying", data.payload.isPlaying)
+  //console.log("isplaying", data.payload.isPlaying)
   if(data.payload.isPlaying === true){
     $("#playButton").hide();
     $("#pauseButton").show();
@@ -154,7 +154,7 @@ function hideSongsNotPlaying(){
   for (let i = 0; i < $("#ulPlaylist li").length; i++) {
       $("#ulPlaylist li").eq(i).show();
       if (currSongIndex >= i) {
-          console.log("hiding song", i)
+          //console.log("hiding song", i)
           $("#ulPlaylist li").eq(i).hide();
       }
   }
@@ -179,53 +179,172 @@ function vote() {
 }
 
 function appendToRequests($requests, data) {
-  $requests.append("<li " + "id=\"" + data.payload.newRequest.requestId + 
-    "\" onmouseover=\"hoverOn(this)\"" + " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" 
-    + data.payload.newRequest.song.title + " - " + data.payload.newRequest.song.artist 
-    + " " + data.payload.newRequest.score + "<div id=\"vote\"> <button class=\"upvote\" id=\"" 
-    + data.payload.newRequest.requestId 
-    + "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" 
-    + data.payload.newRequest.requestId 
-    + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+  $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+    + "id=\"" + data.payload.newRequest.requestId + "\" >"
+    + "<div id=\"songtitle\">" + data.payload.newRequest.song.title 
+    + "<div id=\"scorediv\">" + data.payload.newRequest.score + "</div>"
+    + "<div id=\"vote\" > "
+      + "<button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> "
+        + "<i class=\"material-icons\">thumb_up</i>"
+      + "</button>"
+      + "<button class=\"downvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> "
+        + "<i class=\"material-icons\">thumb_down</i>"
+      + "</button>"
+    //end of vote div
+    + "</div>"
+    //end of song title div
+    + "</div>"
+    + "<div id=\"songartist\">" + data.payload.newRequest.song.artist 
+    + "</div>"
+    + "</li>");
 }
 
-function updateRequestVotes($requests, key, requestList) {
-  $requests.append("<li " + "id=\"" + key + "\" onmouseover=\"hoverOn(this)\"" + 
-    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + requestList[key].song.title + 
-    " - " + requestList[key].song.artist + " " + requestList[key].score + 
-    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + key + 
-    "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
-    key + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+function updateRequestVotes($requests, key, requestList, upvote, downvote) {
+  if (upvote === true) {
+    $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+      + "id=\"" + key + "\" >"
+      + "<div id=\"songtitle\">" + requestList[key].song.title 
+      + "<div id=\"scorediv\">" + requestList[key].score + "</div>"
+      + "<div id=\"vote\" > "
+        + "<button class=\"upvote\" id=\"" + key + "\" type=\"button\"> "
+          + "<i style=\"color:green;\" class=\"material-icons\">thumb_up</i>"
+        + "</button>"
+        + "<button class=\"downvote\" id=\"" + key + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_down</i>"
+        + "</button>"
+      //end of vote div
+      + "</div>"
+      //end of song title div
+      + "</div>"
+      + "<div id=\"songartist\">" + requestList[key].song.artist 
+      + "</div>"
+      + "</li>");
+  } else if (downvote === true) {
+    $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+      + "id=\"" + key + "\" >"
+      + "<div id=\"songtitle\">" + requestList[key].song.title 
+      + "<div id=\"scorediv\">" + requestList[key].score + "</div>"
+      + "<div id=\"vote\" > "
+        + "<button class=\"upvote\" id=\"" + key + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_up</i>"
+        + "</button>"
+        + "<button class=\"downvote\" id=\"" + key + "\" type=\"button\"> "
+          + "<i style=\"color:red;\" class=\"material-icons\">thumb_down</i>"
+        + "</button>"
+      //end of vote div
+      + "</div>"
+      //end of song title div
+      + "</div>"
+      + "<div id=\"songartist\">" + requestList[key].song.artist 
+      + "</div>"
+      + "</li>");
+  } else {
+     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+      + "id=\"" + key + "\" >"
+      + "<div id=\"songtitle\">" + requestList[key].song.title 
+      + "<div id=\"scorediv\">" + requestList[key].score + "</div>"
+      + "<div id=\"vote\" > "
+        + "<button class=\"upvote\" id=\"" + key + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_up</i>"
+        + "</button>"
+        + "<button class=\"downvote\" id=\"" + key + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_down</i>"
+        + "</button>"
+      //end of vote div
+      + "</div>"
+      //end of song title div
+      + "</div>"
+      + "<div id=\"songartist\">" + requestList[key].song.artist 
+      + "</div>"
+      + "</li>");   
+  }
+
 }
 
 function appendToPlaylist($playlist, newRequest, startShowing) {
   if (!startShowing) {
-    $playlist.append("<li style=\"display:none;\"" + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
-    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
-    " - " + newRequest.song.artist + " " + newRequest.score + 
-    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + newRequest.requestId + 
-    "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
-    newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+    console.log("THIS SHOULD BE HIDDEN: " + newRequest.song.artist);
+    $playlist.append("<li style=\"display:none;\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+      + "id=\"" + newRequest.requestId + "\" >"
+      + "<div id=\"songtitle\">" + newRequest.song.title 
+      + "<div id=\"scorediv\">" + newRequest.score + "</div>"
+      + "<div id=\"vote\" > "
+        + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_up</i>"
+        + "</button>"
+        + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_down</i>"
+        + "</button>"
+      //end of vote div
+      + "</div>"
+      //end of song title div
+      + "</div>"
+      + "<div id=\"songartist\">" + newRequest.song.artist 
+      + "</div>"
+      + "</li>");
   } else {
-    $playlist.append("<li " + "id=\"" + newRequest.requestId + "\" onmouseover=\"hoverOn(this)\"" + 
-    " onmouseout=\"hoverOff(this)\"><div id=\"songdiv\">" + newRequest.song.title + 
-    " - " + newRequest.song.artist + " " + newRequest.score + 
-    "<div id=\"vote\"> <button class=\"upvote\" id=\"" + newRequest.requestId + 
-    "\" type=\"button\"> <i class=\"material-icons\">thumb_up</i></button><button class=\"downvote\" id=\"" + 
-    newRequest.requestId + "\" type=\"button\"> <i class=\"material-icons\">thumb_down</i> </button> </div> </div> </li>");
+    $playlist.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+      + "id=\"" + newRequest.requestId + "\" >"
+      + "<div id=\"songtitle\">" + newRequest.song.title 
+      + "<div id=\"scorediv\">" + newRequest.score + "</div>"
+      + "<div id=\"vote\" > "
+        + "<button class=\"upvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_up</i>"
+        + "</button>"
+        + "<button class=\"downvote\" id=\"" + newRequest.requestId + "\" type=\"button\"> "
+          + "<i class=\"material-icons\">thumb_down</i>"
+        + "</button>"
+      //end of vote div
+      + "</div>"
+      //end of song title div
+      + "</div>"
+      + "<div id=\"songartist\">" + newRequest.song.artist 
+      + "</div>"
+      + "</li>");
   }
 }
+
+// if (requests !== undefined) {
+//   let contained = false;
+//   for (let key in requests[x.currentTarget.id].upvotes) {
+//     if (requests[x.currentTarget.id].upvotes[key] === userId) {
+//       contained = true;
+//     }
+//   }
+
+//   if (contained) {
+//     console.log($("#" + x.currentTarget.id).find(".upvote i"));
+//     //$("#" + x.currentTarget.id).find(".upvote i").css("background-color", "green");
+//   } else {
+//     $("#" + x.currentTarget.id).find(".upvote i").css("background-color", "green");
+//     // console.log($("#" + x.currentTarget.id).find(".upvote i"));
+//     // $("#" + x.currentTarget.id).find(".upvote i").removeClass("upvoteSelected");
+//   }
+// }
 
 function clearAndPopulateRequests(requests, $requests){
   $requests.empty();
   for (let key in requests) {
+    let downvote = false;
+    let upvote = false;
     if (requests.hasOwnProperty(key)) {
-      console.log("populating request");
-      updateRequestVotes($requests, key, requests);
+      console.log(requests[key]);
+      for (let i in requests[key].upvotes) {
+        if (userId === requests[key].upvotes[i]) {
+          upvote = true;
+        }
+      }
+
+      for (let j in requests[key].downvotes) {
+        if (userId === requests[key].downvotes[j]) {
+          downvote = true;
+        }
+      }
+      updateRequestVotes($requests, key, requests, upvote, downvote);
     }
   }
 
-  vote();
+vote();
 }
 
 
