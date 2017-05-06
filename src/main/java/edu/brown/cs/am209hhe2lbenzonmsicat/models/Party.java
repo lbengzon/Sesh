@@ -352,7 +352,7 @@ public abstract class Party implements Jsonable {
    */
   // TODO: Modify parameters to take in Date object for time
   public static Party create(String name, User host, Coordinate location,
-      LocalDateTime time, String deviceId)
+      LocalDateTime time, String deviceId, String seshName)
       throws SQLException, SpotifyUserApiException {
     if (name == null || host == null || location == null || time == null) {
       throw new NullPointerException(
@@ -362,7 +362,7 @@ public abstract class Party implements Jsonable {
       throw new IllegalArgumentException(
           "ERROR: Can't host a party if you're not premium!");
     }
-    String newPlaylistId = Playlist.getNewPlaylistId(host);
+    String newPlaylistId = Playlist.getNewPlaylistId(host, seshName);
     return DbHandler.addParty(newPlaylistId, name, location, time, host,
         deviceId);
   }
