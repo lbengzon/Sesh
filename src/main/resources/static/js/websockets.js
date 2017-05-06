@@ -46,7 +46,7 @@ function setupWebsockets() {
   const $playlist = $("#playlist-list ul");
   const $player = $("#playback");
   // TODO Create the WebSocket connection and assign it to `conn`
-  conn = new WebSocket("wss://https://sesh.cloud/update");
+  conn = new WebSocket("wss://sesh.cloud/update");
 
   conn.onclose = function(){
     setTimeout(setupWebsockets, 1000)
