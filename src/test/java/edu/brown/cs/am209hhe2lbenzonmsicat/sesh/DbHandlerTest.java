@@ -978,6 +978,23 @@ public class DbHandlerTest {
 
     assert partyFull.checkAccessCode("1234") == true;
     assert partyFull.getAccessType().equals(AccessType.PRIVATE);
+  }
 
+  @Test
+  public void tesRemoveSongsToFavorite()
+      throws SQLException, FileNotFoundException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+    User host = User.of("s3shteam32", "seshteam32@gmail.com", "Sesh",
+        Type.valueOf("premium"));
+    Song s = Song.of("7AQAlklmptrrkBSeujkXsD");
+    DbHandler.AddSongToFavorites("s3shteam32", s.getSpotifyId());
+    List<Song> songs = DbHandler.GetUserFavoritedSongs("s3shteam32");
+    assert songs.size() == 1;
+    assert songs.get(0).getSpotifyId().equals("7AQAlklmptrrkBSeujkXsD");
+    DbHandler.removeSongFromFavorites("s3shteam32", s.getSpotifyId());
+    List<Song> songsAfterRemoval = DbHandler
+        .GetUserFavoritedSongs("s3shteam32");
+    assert songsAfterRemoval.size() == 0;
   }
 }

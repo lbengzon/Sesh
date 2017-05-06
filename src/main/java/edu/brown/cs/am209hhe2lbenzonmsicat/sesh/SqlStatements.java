@@ -164,5 +164,9 @@ public final class SqlStatements {
       + "AND Party.status='ongoing';";
 
   public static final String ADD_SONG_TO_FAVORITES = "INSERT INTO Favorites (userId, songId) VALUES (?, ?);";
+
+  public static final String REMOVE_SONG_FROM_FAVORITES = "DELETE "
+      + "FROM Favorites" + " WHERE userId=? AND songId=?;";
+
   public static final String GET_USER_FAVORITES = "SELECT songId FROM Favorites where userId = ?;";
 }

@@ -1089,6 +1089,26 @@ public final class DbHandler {
     }
   }
 
+  public static void removeSongFromFavorites(String userId, String songId)
+      throws SQLException {
+    String query = SqlStatements.REMOVE_SONG_FROM_FAVORITES;
+    try (Connection conn = getConnection()) {
+      if (conn == null) {
+        throw new SQLException("ERROR: No database has been set.");
+      }
+      PreparedStatement prep = conn.prepareStatement(query);
+
+      prep.setString(1, userId);
+      prep.setString(2, songId);
+
+      int success = prep.executeUpdate();
+      if (success < 1) {
+        throw new SQLException(
+            "ERROR: Could not remove the favorite with the query " + query);
+      }
+    }
+  }
+
   public static List<Song> GetUserFavoritedSongs(String userId)
       throws SQLException {
     String query = SqlStatements.GET_USER_FAVORITES;
