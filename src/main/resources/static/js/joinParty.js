@@ -90,8 +90,6 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 
 
 $(document).ready(() => {
-
-
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
 	const $requests = $(".tabContentRequestGuest ul");
