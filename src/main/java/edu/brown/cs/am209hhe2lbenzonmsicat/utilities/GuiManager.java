@@ -213,6 +213,17 @@ public class GuiManager {
     }
   }
 
+  // private static class getUserTopTracksHandler implements Route {
+  // @Override
+  // public String handle(Request req, Response res) {
+  // QueryParamsMap qm = req.queryMap();
+  //
+  // Map<String, Object> variables = ImmutableMap.of("topTracks",
+  // partyMapsToReturn);
+  // return GSON.toJson(variables);
+  // }
+  // }
+
   /**
    * Handles request to join a sesh page.
    *

@@ -190,4 +190,16 @@ public class UserProxy extends User implements Proxy {
     return userBean.getUserTopTracks(time_range);
   }
 
+  @Override
+  public List<Song> getFavorites() throws SQLException {
+    if (userBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return userBean.getFavorites();
+  }
+
 }
