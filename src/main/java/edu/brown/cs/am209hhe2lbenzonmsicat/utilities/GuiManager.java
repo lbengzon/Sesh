@@ -31,7 +31,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * GUI Manager class.
- * 
+ *
  * @author HE23
  */
 public class GuiManager {
@@ -40,7 +40,7 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   * 
+   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -71,7 +71,7 @@ public class GuiManager {
 
   /**
    * Sends the user to the error page.
-   * 
+   *
    * @author Matt
    *
    */
@@ -104,7 +104,7 @@ public class GuiManager {
 
   /**
    * Handles the homepage, where users enter their credentials.
-   * 
+   *
    * @author Matt
    */
   private class CallbackHandler implements TemplateViewRoute {
@@ -134,7 +134,7 @@ public class GuiManager {
 
   /**
    * Handles the create join page.
-   * 
+   *
    * @author Matt
    */
   private static class CreateJoinHandler implements TemplateViewRoute {
@@ -180,7 +180,7 @@ public class GuiManager {
 
   /**
    * Gets the active parties within join radius range.
-   * 
+   *
    * @author Matt
    *
    */
@@ -215,7 +215,7 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -316,7 +316,7 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   * 
+   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -333,7 +333,7 @@ public class GuiManager {
   }
 
   /**
-   * 
+   *
    * Creates party in the backend.
    *
    * @author HE23
@@ -417,7 +417,7 @@ public class GuiManager {
 
   /**
    * Handles when a guest leaves a party.
-   * 
+   *
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -455,7 +455,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   * 
+   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -492,7 +492,7 @@ public class GuiManager {
 
   /**
    * Handles adding favorites.
-   * 
+   *
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -554,7 +554,7 @@ public class GuiManager {
 
   /**
    * Handles redirecting if user is already seshing.
-   * 
+   *
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {

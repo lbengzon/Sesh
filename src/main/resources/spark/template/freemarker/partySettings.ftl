@@ -38,13 +38,13 @@
 
 <ul id="deviceList">
 <label> Select an Available Device: </label>
+<p id="loadingDevices"> Loading... </p>
+<p class="errorRequired" id="deviceError" style="display: none;">*Please select a device to play from. This is a required field.</p>
+</ul>
 <div id="deviceRefresh">
 <p> If you don't see the device you're looking for, ensure Spotify is open and hit refresh </p>
 <input type="button" value="Refresh" id="refresh">
 </div>
-<p id="loadingDevices"> Loading... </p>
-<p class="errorRequired" id="deviceError" style="display: none;">*Please select a device to play from. This is a required field.</p>
-</ul>
 
 <input type="text" id="lat" name="lat" style="display: none;">
 <input type="text" id="lon" name="lon" style="display: none;">
