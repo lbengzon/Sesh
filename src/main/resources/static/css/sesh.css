@@ -668,7 +668,7 @@ input#accessCode {
 .switch {
   position: relative;
   display: inline-block;
-  width: 21%;
+  width: 11%;
   height: 80%;
 }
 
@@ -724,11 +724,12 @@ input:checked + .slider:before {
 
 #switchLabel {
 	color: black;
-	float: right;
+	float: left;
+	padding-right: 2%;
 }
 
 .switchDiv {
-	width: 30%;
+	width: 90%;
 	height: 10%;
 	margin-top: 1.5%;
 	margin-left: 3%;
