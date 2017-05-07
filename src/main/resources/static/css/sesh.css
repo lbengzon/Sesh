@@ -317,6 +317,27 @@ input#private_sesh, input#public_sesh {
 	padding-right: 1.5%;
 }
 
+#passwordDiv {
+    margin-left: -130%;
+    margin-top: 30%;
+}
+
+#public {
+    margin-left: 50%;
+}
+
+#public_sesh {
+    margin-left: 45%;
+}
+
+#private {
+    margin-left: 10%;
+}
+
+#private_sesh {
+    margin-left: 45%;
+}
+
 .upvote, .downvote {
 	background: none;
 	border: none;
@@ -365,6 +386,8 @@ input#private_sesh, input#public_sesh {
 	padding-top: 1%;
 	border-top: 3px solid #81c1db;
 }
+
+
 
 
 .hover {

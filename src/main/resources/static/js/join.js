@@ -27,7 +27,6 @@ function wait() {
 
 
 $(document).ready(() => {
-	$("#userId").val(userId);
 
 	const postParameters = {userId: userId};
     $.post("/getactiveparty", postParameters, responseJSON => {
@@ -43,8 +42,39 @@ $(document).ready(() => {
 	wait();
 
 	const $partyList = $("#party-list ul");
+	let partyId;
+	let accessType;
+	let accessCode;
 
-	
+	$("#partySubmit").click(function() {
+		console.log("START");
+		console.log("AT: " + accessType);
+		if (accessType === "PRIVATE") {
+			console.log("INSIDE PRIVATE");
+			accessCode = prompt("Please enter your access token to join this party");
+			if (accessCode === null || accessCode === "") {
+				//user pressed cancel
+				return;
+			} else {
+				const postParameters ={userId: userId, partyId: partyId, accessType: accessType, accessCode: accessCode};
+			}
+		} else {
+			console.log("INSIDE PUBLIC");
+			const postParameters ={userId: userId, partyId: partyId, accessType: accessType, accessCode: ""};
+		}
+		$.post("/joinParty", postParameters, responseJSON => {
+			console.log("INSIDE FIRST POST");
+			const responseObject = JSON.parse(responseJSON);
+			const success = responseObject.success;
+			if(!success) {
+				alert("Invalid access code!");
+			} else {
+				console.log("INSIDE 2ND POST");
+				const params = {userId: userId, partyId: partyId};
+				post("/join/party", params, "post");
+			}
+		})
+	});
 	
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position) {
@@ -54,17 +84,19 @@ $(document).ready(() => {
 			$.post("/join2", postParameters, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);
 				parties = responseObject.parties;
-				const partyIds = responseObject.partyIds;
 				console.log("party length: " + parties.length);
 				$("#loadingParties").hide();
 				for (var i = 0; i < parties.length; i++) {
-					$partyList.append("<li id=\"" + partyIds[i] + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + partyIds[i] + ": " + parties[i] + "</li>");
+					$partyList.append("<li id=\"" + parties[i].partyId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + parties[i].name+ "</li>");
+					$("#" + parties[i].partyId).data('accessType', parties[i].accessType);
 				}
 				
 				$partyList.on("click", event => {
 					$listItems = $("li");
 					$selected = $listItems.filter('.hover');
-					$("#partyId").val($selected.attr('id'));
+					partyId = ($selected.attr('id'));
+					accessType = ($selected.data('accessType'));
+					console.log("SELECTED: ", $selected);
 					$selected.addClass("selected");
 					//$selected.css("background-color", "grey");
 					$("#partySubmit").attr("disabled", false);
@@ -75,5 +107,6 @@ $(document).ready(() => {
 			});
 		}, errorCallBack);
 	}
+
 });
 

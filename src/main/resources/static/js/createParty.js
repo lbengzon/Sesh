@@ -130,11 +130,8 @@ $(document).ready(() => {
     const $nextButton = $("#nextButton");
     const $progressBar = $("#progressbar");
 
-
     //end button
     const $endButton = $("#endButton");
-
-
 
     let startPlaylistIndex;
     let startList;
