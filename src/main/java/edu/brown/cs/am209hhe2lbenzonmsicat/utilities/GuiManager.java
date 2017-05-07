@@ -515,6 +515,20 @@ public class GuiManager {
     }
   }
 
+  private static class SearchFavoritesHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String input = qm.value("userInputFavs");
+      User user = User.of(qm.value("userId"));
+      // TODO: finish this
+      List<Request> favorites = user.getFavorites();
+      // go through list of favorites, check if input str is contained in song
+      // name, artist, album
+      // if so, add to list and send back to frontend
+    }
+  }
+
   /**
    * Handles adding favorites.
    *
