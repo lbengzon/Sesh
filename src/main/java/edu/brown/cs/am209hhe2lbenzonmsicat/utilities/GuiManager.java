@@ -94,7 +94,7 @@ public class GuiManager {
       QueryParamsMap qm = req.queryMap();
       String message = qm.value("message");
       if (message == null) {
-        message = "Welcome to Sesh! Please Login.";
+        message = "";
       }
       Map<String, Object> variables = ImmutableMap.of("title", "Login",
           "authURL", comm.createAuthorizeURL(), "message", message);
