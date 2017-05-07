@@ -42,6 +42,8 @@ public abstract class User implements Jsonable {
    */
   public abstract String getLastName();
 
+  public abstract List<Song> getFavorites() throws SQLException;
+
   /**
    * This method gets the user's full name.
    *

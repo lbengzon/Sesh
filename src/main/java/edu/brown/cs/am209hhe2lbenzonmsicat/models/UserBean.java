@@ -1,10 +1,12 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator.Time_range;
 
@@ -134,6 +136,11 @@ public class UserBean extends User {
   public List<Song> getUserTopTracks(Time_range time_range)
       throws SpotifyUserApiException {
     return SpotifyCommunicator.getUserTopTracks(spotifyId, time_range, true);
+  }
+
+  @Override
+  public List<Song> getFavorites() throws SQLException {
+    return DbHandler.GetUserFavoritedSongs(spotifyId);
   }
 
 }
