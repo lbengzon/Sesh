@@ -62,7 +62,7 @@ $(document).ready(() => {
 				const deviceType = devices[key].type;
 				console.log(devices[key].name);
 				$("#loadingDevices").hide();
-				$deviceList.append("<li id=\"" + deviceId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + devices[key].name + "</li>");
+				$deviceList.append("<li id=\"" + deviceId + "\">" + devices[key].name + "</li>");
 			}
 		});
 	});
