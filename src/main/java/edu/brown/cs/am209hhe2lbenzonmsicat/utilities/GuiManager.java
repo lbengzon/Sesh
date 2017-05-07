@@ -66,7 +66,7 @@ public class GuiManager {
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
     Spark.post("/addSongToFavorites", new AddFavoriteHandler());
-    Spark.get("/createjoin", new CreateJoinHandler(), fme);
+    Spark.post("/createjoin", new CreateJoinHandler(), fme);
   }
 
   /**
@@ -271,6 +271,10 @@ public class GuiManager {
     }
   }
 
+  /**
+   * Handles joining a party.
+   *
+   */
   private static class JoinPartyHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
