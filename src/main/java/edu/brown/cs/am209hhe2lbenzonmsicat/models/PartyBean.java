@@ -16,11 +16,11 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.gson.JsonElement;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyOutOfSyncException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 /**
  * Models a party.
- *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -42,7 +42,6 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -347,7 +346,7 @@ public class PartyBean extends Party {
 
   @Override
   public CurrentSongPlaying getSongBeingCurrentlyPlayed()
-      throws SpotifyUserApiException {
+      throws SpotifyUserApiException, SpotifyOutOfSyncException {
     return playlist.getCurrentSong();
   }
 

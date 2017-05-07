@@ -229,7 +229,13 @@ $(document).ready(() => {
         });
     });
 
-    setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
+    setInterval(constantlyUpdateCurrentSong, 500);
+
+    function constantlyUpdateCurrentSong(){
+        if(!constantUpdateLocked){
+            updatePartyCurrentSong(partyId, userId);
+        }
+    }
 
     $(".switch input").click(function() {
         console.log("USER REQUESTED " + userRequests.length + "SONGS");
