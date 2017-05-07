@@ -20,6 +20,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator.Time_range;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -213,16 +214,24 @@ public class GuiManager {
     }
   }
 
-  // private static class getUserTopTracksHandler implements Route {
-  // @Override
-  // public String handle(Request req, Response res) {
-  // QueryParamsMap qm = req.queryMap();
-  //
-  // Map<String, Object> variables = ImmutableMap.of("topTracks",
-  // partyMapsToReturn);
-  // return GSON.toJson(variables);
-  // }
-  // }
+  private static class getUserTopTracksHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      // Time_range time_range = Time_range.valueOf(qm.value("time_range"));
+      Time_range time_range = Time_range.short_term;
+      List<Song> topTracks = new ArrayList<Song>();
+      try {
+        topTracks = SpotifyCommunicator.getUserTopTracks(userId, time_range,
+            true);
+      } catch (SpotifyUserApiException e) {
+        return GSON.toJson(topTracks);
+      }
+      Map<String, Object> variables = ImmutableMap.of("topTracks", topTracks);
+      return GSON.toJson(variables);
+    }
+  }
 
   /**
    * Handles request to join a sesh page.
