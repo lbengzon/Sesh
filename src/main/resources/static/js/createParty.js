@@ -211,11 +211,15 @@ $(document).ready(() => {
 
     //search favorites
     $userInputFavs.keyup(function() {
-        const postParameters = {userId: userId, userInputFavs: $userInputFavs};
-        $.post("/searchFavorites", postParameters, responseJSON => {
-            const responseObject = JSON.parse(responseJSON);
-            //TODO: finish
-        });
+        $("favoritesList").find("li").each(function(index, value) {
+            console.log($(this));
+        })
+        //console.log("INPUT: " , $userInputFavs.val());
+        // const postParameters = {userId: userId, userInputFavs: $userInputFavs};
+        // $.post("/searchFavorites", postParameters, responseJSON => {
+        //     const responseObject = JSON.parse(responseJSON);
+        //     //TODO: finish
+        // });
     });
 
     //search for songs
@@ -224,7 +228,6 @@ $(document).ready(() => {
         $.post("/search", postParameters, responseJSON => {
             const responseObject = JSON.parse(responseJSON);
             const suggestions = responseObject.results;
-            console.log("SUGGESTIONS", suggestions);
 
             $results.empty();
 
