@@ -60,14 +60,14 @@ public class GuiManager {
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
-    Spark.post("/join2", new JoinHandler2());
+    Spark.post("/join2", new GetPartiesWithinRange());
+    Spark.post("/joinParty", new JoinPartyHandler());
     Spark.post("/getParty", new GetPartyHandler());
     Spark.post("/create/party", new CreatePartyHandler(), fme);
-    Spark.post("/join/party", new JoinPartyHandler(), fme);
+    Spark.post("/join/party", new GuestViewHandler(), fme);
     Spark.post("/search", new SearchHandler());
     Spark.post("/devices", new DevicesHandler());
     Spark.post("/getactiveparty", new ActivePartyHandler());
-    // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
     Spark.post("/addSongToFavorites", new AddFavoriteHandler());
@@ -170,7 +170,7 @@ public class GuiManager {
 
   }
 
-  private static class JoinHandler2 implements Route {
+  private static class GetPartiesWithinRange implements Route {
     @Override
     public String handle(Request req, Response res) {
       System.out.println("Running post request to get list of active parties");
@@ -233,19 +233,21 @@ public class GuiManager {
   /**
    * Handles joining a party.
    */
-  private class JoinPartyHandler implements TemplateViewRoute {
+  private class GuestViewHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       // success
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
-      System.out.println("partyid: " + partyId);
 
+      System.out.println("partyid: " + partyId);
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
       if (!party.getAttendees().contains(user)) {
-        party.addGuest(user, "TEST PASSWORD");
+        Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
+            "userId", userId);
+        return new ModelAndView(variables, "join.ftl");
       }
 
       // should probably get party name from previous page to display on
@@ -255,6 +257,36 @@ public class GuiManager {
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
           "userId", userId, "partyId", partyId);
       return new ModelAndView(variables, "joinParty.ftl");
+    }
+  }
+
+  private static class JoinPartyHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      Map<String, Object> variables;
+
+      try {
+        QueryParamsMap qm = req.queryMap();
+        // success
+        String userId = qm.value("userId");
+        String partyId = qm.value("partyId");
+        String accessCode = qm.value("accessCode");
+
+        User user = User.of(userId);
+        Party party = Party.of(Integer.valueOf(partyId));
+        if (!party.getAttendees().contains(user)) {
+          boolean success = party.addGuest(user, accessCode);
+          if (success) {
+            variables = ImmutableMap.of("success", true, "userId", userId,
+                "partyId", partyId);
+          }
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      variables = ImmutableMap.of("success", false);
+      return GSON.toJson(variables);
+
     }
   }
 

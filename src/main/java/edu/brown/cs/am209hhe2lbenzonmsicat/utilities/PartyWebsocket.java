@@ -2,6 +2,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.utilities;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -31,11 +32,35 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST,
+    PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST, SEEK_SONG, RESUME_SONG, END_PARTY, UPDATE_GUESTS_END_PARTY
+    CONNECT,
+    SET_PARTY_ID,
+    ADD_REQUEST,
+    UPVOTE_REQUEST,
+    DOWNVOTE_REQUEST,
+    MOVE_REQUEST_TO_QUEUE,
+    MOVE_FROM_QUEUE_TO_REQUEST,
+    ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_ADD_REQUEST,
+    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_VOTE_REQUESTS,
+    UPDATE_AFTER_REQUEST_TRANSFER,
+    UPDATE_ENTIRE_PARTY,
+    UPDATE_REARRANGE_PLAYLIST,
+    REORDER_PLAYLIST_TRACK,
+    PLAY_PLAYLIST,
+    PAUSE_SONG,
+    UPDATE_PLAYER,
+    SONG_MOVED_TO_NEXT,
+    UPDATE_NEXT_CURR_SONG_REQUEST,
+    SEEK_SONG,
+    RESUME_SONG,
+    END_PARTY,
+    UPDATE_GUESTS_END_PARTY
   }
 
   @OnWebSocketConnect
@@ -78,7 +103,8 @@ public class PartyWebsocket {
       User user = User.of(userId);
       switch (messageType) {
         case SET_PARTY_ID:
-          sendUpdateEntireParty(partyId, session, MESSAGE_TYPE.SET_PARTY_ID);
+          sendUpdateEntireParty(partyId, user, session,
+              MESSAGE_TYPE.SET_PARTY_ID);
           break;
         case ADD_REQUEST:
           sendAddRequestUpdate(payload, user, party, session,
@@ -280,7 +306,6 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
-   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -301,7 +326,6 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
-   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -345,7 +369,7 @@ public class PartyWebsocket {
     }
   }
 
-  private void sendUpdateEntireParty(int partyId, Session session,
+  private void sendUpdateEntireParty(int partyId, User user, Session session,
       MESSAGE_TYPE messageType) throws IOException {
     JsonObject updatePayload = new JsonObject();
     JsonObject updateMessage = new JsonObject();
@@ -353,7 +377,16 @@ public class PartyWebsocket {
       partyIdToSessions.put(partyId, session);
       sessionToPartyId.put(session, partyId);
       Party party = Party.of(partyId);
+      List<Song> favorites = DbHandler
+          .GetUserFavoritedSongs(user.getSpotifyId());
+      Map<String, Map<String, Object>> favoriteRequestIdToSongMaps = new HashMap<>();
+      for (Song song : favorites) {
+        String requestId = Request.getId(partyId, song.getSpotifyId());
+        favoriteRequestIdToSongMaps.put(requestId, song.toMap());
+      }
       updatePayload.add("party", party.toJson());
+      updatePayload.add("favorites",
+          GSON.toJsonTree(favoriteRequestIdToSongMaps));
       updateMessage.addProperty("type",
           MESSAGE_TYPE.UPDATE_ENTIRE_PARTY.ordinal());
       updateMessage.addProperty("success", true);
