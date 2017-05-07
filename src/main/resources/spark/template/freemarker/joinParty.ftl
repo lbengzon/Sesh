@@ -57,7 +57,7 @@
 
 <div class="tabContentOptionsGuest">
 
-	<input type="button" id="leaveButton" value="Leave Party">
+	<input type="button" id="leaveButton" value="Leave Sesh">
 
 </div>
 </div>

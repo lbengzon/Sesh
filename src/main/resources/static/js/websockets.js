@@ -128,8 +128,7 @@ function setupWebsockets() {
           updatePlayer(data);
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
-          console.log("implement the end party update message for guests. Only guests will recieve this message");
-          alert("The user has ended the party.");
+          alert("The host has ended the party.");
           guestLeaveParty(true);
           break;
 

@@ -363,6 +363,12 @@ input#private_sesh, input#public_sesh {
 	border: 2px solid black;
 }
 
+#messageDiv {
+    font-size: 300%;
+    margin-top: 7%;
+    margin-left: 23%;
+}
+
 .favoritesSearch, .favoritesSearchGuest {
 	width: 90%;
 	height: 5%;

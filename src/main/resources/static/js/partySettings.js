@@ -86,12 +86,14 @@ $(document).ready(() => {
 			const postParams = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), accessType: accessType, accessCode: accessCode, lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
 			$.post("/getParty", postParams, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);
-				if (responseObject.message !=== undefined) {
+				console.log("responseObject: " , responseObject);
+				if (responseObject.message === null || responseObject.message === undefined) {
+					console.log("HERE");
 					const postParams = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
 					post("/create/party", postParams);
 				} else {
-					console.log("HERE");
-					const params = {};
+					console.log("message: " + responseObject.message);
+					const params = {message: responseObject.message};
 					post("/login", params, "get");
 				}
 				
