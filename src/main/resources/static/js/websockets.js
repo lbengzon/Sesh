@@ -30,6 +30,8 @@ let timeoutCheckForNewCurrSong;
 let myId = -1;
 
 let userRequests = [];
+let favIds = [];
+let favObjs;
 
 function hoverOn(x) {
   x.className = 'selected';
@@ -76,6 +78,8 @@ function setupWebsockets() {
           appendToRequests($requests, data);
           $requests.sortable("refresh");
           vote();
+          favorite();
+          highlightFavorites();
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
@@ -192,28 +196,100 @@ function vote() {
   });
 }
 
+function highlightFavorites() {
+  $("#request-list ul").find("li").each(function(index, value) {
+    if (jQuery.inArray(value.id, favIds) >= 0) {
+      $(this).find("i#ifav").attr("style", "color: yellow;");
+    } else {
+      $(this).find("i#ifav").attr("style", "color: grey;");
+    }
+  });
+
+  $("#playlist-list ul").find("li").each(function(index, value) {
+      if (jQuery.inArray(value.id, favIds) >= 0) {
+        $(this).find("i#ifav").attr("style", "color: yellow;");
+      } else {
+        $(this).find("i#ifav").attr("style", "color: grey;");
+      }
+  });
+}
+
 function favorite() {
   $(".favButton").unbind("click");
   $(".favButton").click(function(x) {
-    //check if yellow or grey and add boolean post param for add or remove
-    const postParams = {userId: userId, songId: x.currentTarget.id, add: true, partyId: partyId};
-    $.post("/addSongToFavorites", postParams, responseJSON => {
-      const responseObject = JSON.parse(responseJSON);
-      const favList = responseObject.favorites;
+    console.log($(this).find("i#ifav"));
+    console.log($(this).find("i#ifav").css("color"));
+    console.log($(this).find("i#ifav").css("color") === "rgb(181, 181, 181)");
+    //add fav
+    if ($(this).find("i#ifav").css("color") === "rgb(128, 128, 128)") {
+      const postParams = {userId: userId, songId: x.currentTarget.id, add: true, partyId: partyId};
+      $.post("/addSongToFavorites", postParams, responseJSON => {
+        const responseObject = JSON.parse(responseJSON);
+        const favList = responseObject.favorites;
+        favObjs = favList;
+        
+        favIds = [];
+        for (let i in favList) {
+          favIds.push(i);
+        }    
 
-      // $("#request-list li").each(function(index, value) {
-      //   for (let key in favList) {
+        highlightFavorites();
 
-      //   }
-      //   console.log($("#"+value.id));
-      // });
+      });
 
-      // $("#playlist-list li").each(function(index, value) {
-      //   console.log($("#"+value.id));
-      // });
-  
-    });
+    } else {
+      const postParameters = {userId: userId, songId: x.currentTarget.id, add: false, partyId: partyId};
+      $.post("/addSongToFavorites", postParameters, responseJSON => {
+        const resObject = JSON.parse(responseJSON);
+        const favList = resObject.favorites;
+        favObjs = favList;
+
+        favIds = [];
+        for (let i in favList) {
+          favIds.push(i);
+        }
+
+        highlightFavorites();
+
+      });
+
+    }
   });
+}
+
+function appendPlaylistFavs(isFavorite, ) {
+  //yellow
+  if (isFavorite) {
+    $("#playlist-list ul").append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+      + "id=\"" + newRequest.requestId + "\" >"
+      + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + newRequest.song.spotifyId + "\" type=\"button\"> " 
+          + "<i id=\"ifav\" class=\"material-icons\" style=\"color:yellow;\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
+      + "<div id=\"songtitle\">" + newRequest.song.title 
+      + "<div id=\"scorediv\">" + newRequest.score + "</div>"
+      + "</div>"
+      + "<div id=\"songartist\">" + newRequest.song.artist 
+      + "</div>"
+      + "</li>");
+  } else {
+    $("#playlist-list ul").append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+      + "id=\"" + newRequest.requestId + "\" >"
+      + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + newRequest.song.spotifyId + "\" type=\"button\"> " 
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
+      + "<div id=\"songtitle\">" + newRequest.song.title 
+      + "<div id=\"scorediv\">" + newRequest.score + "</div>"
+      + "</div>"
+      + "<div id=\"songartist\">" + newRequest.song.artist 
+      + "</div>"
+      + "</li>");
+  }
 }
 
 function appendToRequests($requests, data) {
@@ -221,7 +297,7 @@ function appendToRequests($requests, data) {
     + "id=\"" + data.payload.newRequest.requestId + "\" >"
     + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + data.payload.newRequest.song.spotifyId + "\" type=\"button\"> " 
-          + "<i class=\"material-icons\">grade</i>"
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
         + "</button>"
       //end of fav div
       + "</div>"
@@ -254,7 +330,7 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       + "id=\"" + key + "\" >"
       + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + requestList[key].song.spotifyId + "\" type=\"button\"> " 
-          + "<i class=\"material-icons\">grade</i>"
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
         + "</button>"
       //end of fav div
       + "</div>"
@@ -283,7 +359,7 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       + "id=\"" + key + "\" >"
       + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + requestList[key].song.spotifyId + "\" type=\"button\"> " 
-          + "<i class=\"material-icons\">grade</i>"
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
         + "</button>"
       //end of fav div
       + "</div>"
@@ -312,7 +388,7 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       + "id=\"" + key + "\" >"
       + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + requestList[key].song.spotifyId + "\" type=\"button\"> " 
-          + "<i class=\"material-icons\">grade</i>"
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
         + "</button>"
       //end of fav div
       + "</div>"
@@ -345,7 +421,7 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
       + "id=\"" + newRequest.requestId + "\" >"
       + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + newRequest.song.spotifyId + "\" type=\"button\"> " 
-          + "<i class=\"material-icons\">grade</i>"
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
         + "</button>"
       //end of fav div
       + "</div>"
@@ -360,7 +436,7 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
       + "id=\"" + newRequest.requestId + "\" >"
       + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + newRequest.song.spotifyId + "\" type=\"button\"> " 
-          + "<i class=\"material-icons\">grade</i>"
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
         + "</button>"
       //end of fav div
       + "</div>"
@@ -396,6 +472,7 @@ function clearAndPopulateRequests(requests, $requests){
 
   vote();
   favorite();
+  highlightFavorites();
 }
 
 
@@ -419,6 +496,7 @@ function clearAndPopulatePlaylist(playlist, $playlist, isHost){
       }   
     }
     favorite();
+    highlightFavorites();
   }
 
 function setPartyId (partyId, userId) {

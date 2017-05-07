@@ -503,7 +503,10 @@ input:checked + .slider:before {
 
 .favButton i.material-icons {
 	font-size: 32px;
+	color: rgb(128, 128, 128);
 }
+
+
 
 
 
