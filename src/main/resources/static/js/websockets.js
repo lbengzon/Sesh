@@ -80,10 +80,13 @@ function setupWebsockets() {
           vote();
           favorite();
           highlightFavorites();
+          $.notify(data.payload.newRequest.song.title + " by " + data.payload.newRequest.song.artist + " has been requested!", "info");
+
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
           console.log("updating request vote");
+          console.log("DATA" , data.payload.requestList);
           clearAndPopulateRequests(data.payload.requestList, $requests);
           break;
 
@@ -100,6 +103,7 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
+          console.log(data.payload);
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
           $playlist.sortable("refresh");
           //$player.attr("src", $player.attr("src"));
