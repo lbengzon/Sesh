@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AccessType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.Status;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistProxy;
@@ -30,16 +31,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
-        LocalDateTime.now(), "deviceId", "testTitle");
+    Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     assert p.getHost().equals(l);
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getHost().equals(l);
   }
 
@@ -53,16 +56,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     assert p.getName().equals("Dope Party");
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getName().equals("Dope Party");
   }
 
@@ -75,16 +80,17 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     LocalDateTime now = LocalDateTime.now();
     Party p = Party.create("Dope Party", l, new Coordinate(1, 2), now,
-        "deviceId", "testTitle");
+        "deviceId", "testTitle", AccessType.PUBLIC, "public");
     assert p.getTime().equals(now);
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "public",
+        AccessType.PUBLIC, "public");
     assert p1.getTime().equals(now);
   }
 
@@ -97,17 +103,19 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 2),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     assert p.getLocation().getLat() == 1;
     assert p.getLocation().getLon() == 2;
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getLocation().getLat() == 1;
     assert p1.getLocation().getLon() == 2;
   }
@@ -121,16 +129,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     assert p.getStatus() == Status.ongoing;
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getStatus() == Status.ongoing;
   }
 
@@ -143,17 +153,19 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     p.endParty();
     assert p.getStatus() == Status.stopped;
 
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getStatus() == Status.stopped;
   }
 
@@ -166,10 +178,11 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     p.endParty();
     p.endParty();
     assert p.getStatus() == Status.stopped;
@@ -177,7 +190,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getStatus() == Status.stopped;
   }
 
@@ -190,17 +204,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(a);
-    p.addGuest(m);
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(a, "key");
+    p.addGuest(m, "key");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.upvoteSong(a, r1.getId()) == true;
     assert p.downvoteSong(a, r1.getId()) == true;
@@ -215,7 +230,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 0;
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
@@ -233,17 +249,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(a);
-    p.addGuest(m);
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(a, "key");
+    p.addGuest(m, "key");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.upvoteSong(a, r1.getId()) == true;
     assert p.upvoteSong(m, r1.getId()) == true;
@@ -257,7 +274,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 2;
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
@@ -275,17 +293,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(a);
-    p.addGuest(m);
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(a, "key");
+    p.addGuest(m, "key");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.upvoteSong(a, r1.getId()) == true;
     assert p.upvoteSong(a, r1.getId()) == true;
@@ -294,7 +313,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 0;
   }
@@ -308,13 +328,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.upvoteSong(a, r1.getId()) == false;
     assert ((Request) (p.getRequestedSongs().toArray()[0])).getUpvotes()
@@ -322,7 +343,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 0;
   }
@@ -336,13 +358,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
     assert p.upvoteSong(a, r1.getId()) == false;
@@ -351,7 +374,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getPlaylist().getSongs().get(0).getUpvotes().isEmpty();
   }
 
@@ -364,13 +388,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.endParty();
     try {
@@ -382,7 +407,8 @@ public class PartyTest {
       RequestProxy.clearCache();
       PartyProxy.clearCache();
       Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-          p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+          p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+          AccessType.PUBLIC, "public");
       assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
           .isEmpty();
     }
@@ -397,17 +423,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(a);
-    p.addGuest(m);
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(a, "key");
+    p.addGuest(m, "key");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.downvoteSong(a, r1.getId()) == true;
     assert p.downvoteSong(m, r1.getId()) == true;
@@ -421,7 +448,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
         .size() == 2;
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
@@ -439,17 +467,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(a);
-    p.addGuest(m);
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(a, "key");
+    p.addGuest(m, "key");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.downvoteSong(a, r1.getId()) == true;
     assert p.downvoteSong(a, r1.getId()) == true;
@@ -458,7 +487,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
         .size() == 0;
   }
@@ -472,13 +502,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.downvoteSong(a, r1.getId()) == false;
     assert ((Request) (p.getRequestedSongs().toArray()[0])).getDownvotes()
@@ -486,7 +517,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
         .size() == 0;
   }
@@ -500,13 +532,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
     assert p.downvoteSong(a, r1.getId()) == false;
@@ -515,7 +548,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getPlaylist().getSongs().get(0).getDownvotes().isEmpty();
   }
 
@@ -528,13 +562,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.endParty();
     try {
@@ -546,7 +581,8 @@ public class PartyTest {
       RequestProxy.clearCache();
       PartyProxy.clearCache();
       Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-          p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+          p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+          AccessType.PUBLIC, "public");
       assert ((Request) (p1.getRequestedSongs().toArray()[0])).getDownvotes()
           .isEmpty();
     }
@@ -561,12 +597,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
     p.removeFromPlaylist(r1.getId());
@@ -576,7 +613,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getRequestedSongs().contains(r1);
     assert !p1.getPlaylist().getSongs().contains(r1);
   }
@@ -590,12 +628,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
     p.endParty();
@@ -609,7 +648,8 @@ public class PartyTest {
       RequestProxy.clearCache();
       PartyProxy.clearCache();
       Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-          p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+          p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+          AccessType.PUBLIC, "public");
       assert p1.getRequestedSongs().isEmpty();
       assert p1.getPlaylist().getSongs().size() == 1;
       assert p1.getPlaylist().getSongs().contains(r1);
@@ -625,12 +665,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.removeFromPlaylist(r1.getId()) == false;
     assert p.getRequestedSongs().contains(r1);
@@ -638,7 +679,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getRequestedSongs().contains(r1);
     assert !p1.getPlaylist().getSongs().contains(r1);
   }
@@ -653,18 +695,20 @@ public class PartyTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
+        "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(m);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(m, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), m);
     Party p1 = Party.create("Dope Party1", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     assert p1.getRequestedSongs().size() == 0;
     assert p1.removeFromPlaylist(r1.getId()) == false;
     assert p.getRequestedSongs().contains(r1);
@@ -675,7 +719,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getPlaylist().getId(),
-        p1.getLocation(), p1.getTime(), p1.getStatus(), "deviceId");
+        p1.getLocation(), p1.getTime(), p1.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p2.getRequestedSongs().size() == 0;
     assert p2.getPlaylist().getSongs().size() == 0;
   }
@@ -689,17 +734,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
-    p.addGuest(m);
-    p.addGuest(a);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
+    p.addGuest(m, "key");
+    p.addGuest(a, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     Request r2 = p.requestSong(Song.of("song2"), m);
     Request r3 = p.requestSong(Song.of("song3"), a);
@@ -710,7 +756,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getRequestedSongs().contains(r1);
     assert p1.getRequestedSongs().contains(r2);
     assert p1.getRequestedSongs().contains(r3);
@@ -725,12 +772,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     p.endParty();
     try {
       p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
@@ -740,7 +788,8 @@ public class PartyTest {
       RequestProxy.clearCache();
       PartyProxy.clearCache();
       Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-          p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+          p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+          AccessType.PUBLIC, "public");
       assert p1.getRequestedSongs().isEmpty();
     }
   }
@@ -754,11 +803,12 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
   }
 
@@ -771,13 +821,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "public");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), m);
   }
@@ -791,19 +842,21 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
     assert !p.getRequestedSongs().contains(r1);
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert !p1.getRequestedSongs().contains(r1);
     assert p1.getPlaylist().getSongs().contains(r1);
   }
@@ -818,12 +871,13 @@ public class PartyTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.endParty();
 
@@ -837,7 +891,8 @@ public class PartyTest {
       RequestProxy.clearCache();
       PartyProxy.clearCache();
       Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-          p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+          p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+          AccessType.PUBLIC, "public");
       assert p1.getRequestedSongs().size() == 1;
       assert p1.getRequestedSongs().contains(r1);
       assert p1.getPlaylist().getSongs().isEmpty();
@@ -853,13 +908,14 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     p.approveSong(r1.getId());
     p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), m);
@@ -874,12 +930,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
 
-    assert p.addGuest(l) == false;
+    assert p.addGuest(l, "key") == false;
   }
 
   @Test
@@ -891,24 +948,26 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
 
-    assert p.addGuest(h) == true;
-    assert p.addGuest(a) == true;
-    assert p.addGuest(m) == true;
+    assert p.addGuest(h, "key") == true;
+    assert p.addGuest(a, "key") == true;
+    assert p.addGuest(m, "key") == true;
     assert p.getGuests().contains(h);
     assert p.getGuests().contains(a);
     assert p.getGuests().contains(m);
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getGuests().contains(h);
     assert p1.getGuests().contains(a);
     assert p1.getGuests().contains(m);
@@ -923,21 +982,23 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     p.endParty();
     try {
-      p.addGuest(h);
+      p.addGuest(h, "key");
       assert false;
     } catch (IllegalStateException e) {
       assert p.getGuests().isEmpty();
       RequestProxy.clearCache();
       PartyProxy.clearCache();
       Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-          p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+          p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+          AccessType.PUBLIC, "public");
       assert p1.getGuests().isEmpty();
     }
   }
@@ -951,25 +1012,27 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
 
-    assert p.addGuest(h) == true;
-    assert p.addGuest(a) == true;
-    assert p.addGuest(m) == true;
+    assert p.addGuest(h, "key") == true;
+    assert p.addGuest(a, "key") == true;
+    assert p.addGuest(m, "key") == true;
     assert p.removeGuest(m) == true;
     assert p.getGuests().contains(h);
     assert p.getGuests().contains(a);
     assert !p.getGuests().contains(m);
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getGuests().contains(h);
     assert p1.getGuests().contains(a);
     assert !p1.getGuests().contains(m);
@@ -984,12 +1047,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     p.endParty();
     try {
       p.removeGuest(h);
@@ -1000,7 +1064,8 @@ public class PartyTest {
       RequestProxy.clearCache();
       PartyProxy.clearCache();
       Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-          p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+          p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+          AccessType.PUBLIC, "public");
       assert p1.getGuests().size() == 1;
       assert p1.getGuests().contains(h);
     }
@@ -1015,24 +1080,26 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
 
-    assert p.addGuest(h) == true;
-    assert p.addGuest(a) == true;
+    assert p.addGuest(h, "key") == true;
+    assert p.addGuest(a, "key") == true;
     assert p.removeGuest(m) == false;
     assert p.getGuests().contains(h);
     assert p.getGuests().contains(a);
     assert !p.getGuests().contains(m);
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p1.getGuests().contains(h);
     assert p1.getGuests().contains(a);
     assert !p1.getGuests().contains(m);
@@ -1048,18 +1115,19 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(h) == true;
-    assert p.addGuest(a) == true;
-    assert p.addGuest(m) == true;
-    assert p.addGuest(m) == false;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(h, "key") == true;
+    assert p.addGuest(a, "key") == true;
+    assert p.addGuest(m, "key") == true;
+    assert p.addGuest(m, "key") == false;
     assert p.getGuests().contains(h);
     assert p.getGuests().contains(a);
     assert p.getGuests().contains(m);
@@ -1074,17 +1142,19 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+        "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(a) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(a, "key") == true;
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p1.addGuest(a);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p1.addGuest(a, "key");
   }
 
   @Test
@@ -1096,22 +1166,25 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+        "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(a) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(a, "key") == true;
     p.endParty();
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p1.addGuest(a);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p1.addGuest(a, "key");
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getPlaylist().getId(),
-        p1.getLocation(), p1.getTime(), p1.getStatus(), "deviceId");
+        p1.getLocation(), p1.getTime(), p1.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p2.getGuests().size() == 1;
     assert p2.getGuests().contains(a);
   }
@@ -1125,17 +1198,19 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+        "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(a) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(a, "key") == true;
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p1.addGuest(l);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p1.addGuest(l, "key");
   }
 
   @Test
@@ -1147,22 +1222,25 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+        "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(a) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(a, "key") == true;
     Party p1 = Party.create("Dope Party", h, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     p.endParty();
-    p1.addGuest(l);
+    p1.addGuest(l, "key");
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p2 = Party.of(p1.getPartyId(), p1.getName(), p1.getPlaylist().getId(),
-        p1.getLocation(), p1.getTime(), p1.getStatus(), "deviceId");
+        p1.getLocation(), p1.getTime(), p1.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert p2.getGuests().size() == 1;
     assert p2.getGuests().contains(l);
   }
@@ -1176,14 +1254,15 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(h) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(h, "key") == true;
     Party.create("Dope Party", h, new Coordinate(1, 1), LocalDateTime.now(),
-        "deviceId", "testTitle");
+        "deviceId", "testTitle", AccessType.PUBLIC, "public");
   }
 
   @Test
@@ -1195,16 +1274,17 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(h) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(h, "key") == true;
     p.endParty();
     Party.create("Dope Party", h, new Coordinate(1, 1), LocalDateTime.now(),
-        "deviceId", "testTitle");
+        "deviceId", "testTitle", AccessType.PUBLIC, "public");
   }
 
   @Test
@@ -1216,16 +1296,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(h) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(h, "key") == true;
     p.endParty();
     Party p1 = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p1.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p1.addGuest(h, "key");
     Party active = Party.getActivePartyOfUser(h);
     assert active.equals(p1);
     assert active.getHost().equals(l);
@@ -1244,12 +1326,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(h) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(h, "key") == true;
     p.endParty();
     Party active = Party.getActivePartyOfUser(h);
     assert active == null;
@@ -1264,12 +1347,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(h) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(h, "key") == true;
     p.endParty();
     List<Party> parties = Party.getAllPartiesOfUser(h);
     assert parties.size() == 1;
@@ -1286,26 +1370,30 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    assert p.addGuest(h) == true;
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    assert p.addGuest(h, "key") == true;
     p.endParty();
     Party p1 = Party.create("Dope Party1", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p1.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p1.addGuest(h, "key");
     p1.endParty();
 
     Party p2 = Party.create("Dope Party1", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p2.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p2.addGuest(h, "key");
     p2.endParty();
 
     Party p3 = Party.create("Dope Party1", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p3.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p3.addGuest(h, "key");
     List<Party> parties = Party.getAllPartiesOfUser(h);
     assert parties.size() == 4;
     assert parties.contains(p);
@@ -1323,11 +1411,12 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
 
     List<Party> parties = Party.getAllPartiesOfUser(h);
     assert parties.size() == 0;
@@ -1342,12 +1431,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId());
@@ -1367,12 +1457,13 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(h, "key");
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(2);
@@ -1388,12 +1479,12 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
-    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "deviceId");
+    User h = User.create("hhe", "hannahhe@brown.edu", "Hannah He", "premium");
     Party p = Party.create("Dope Party", l,
         new Coordinate(35.967962, -112.124322), LocalDateTime.now(), "deviceId",
-        "testTitle");
+        "testTitle", AccessType.PUBLIC, "public");
     Coordinate c = new Coordinate(35.968544, -112.122230);
     assert p.getDistance(c) < 200;
   }
@@ -1407,18 +1498,18 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
-    User m = User.create("mattsicat", "ms@brown.edu", "Matt Sicat", "deviceId");
+        "premium");
+    User m = User.create("mattsicat", "ms@brown.edu", "Matt Sicat", "premium");
 
     Party p = Party.create("Dope Party", l,
         new Coordinate(35.967962, -112.124322), LocalDateTime.now(), "deviceId",
-        "testTitle");
+        "testTitle", AccessType.PUBLIC, "public");
     Party p1 = Party.create("Dope Party", h,
         new Coordinate(35.968726, -112.121458), LocalDateTime.now(), "deviceId",
-        "testTitle");
+        "testTitle", AccessType.PUBLIC, "public");
 
     Coordinate c = new Coordinate(35.968544, -112.122230);
     List<Party> parties = Party.getActivePartiesWithinDistance(c, 200);
@@ -1436,18 +1527,19 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "ali.ahmed.mir@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     User h = User.create("1185743437", "hannahhe@brown.edu", "Hannah He",
-        "deviceId");
-    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "deviceId");
+        "premium");
+    User a = User.create("ali", "ali@gmail.com", "Ali Mir", "premium");
     User m = User.create("msicat", "mattsicat@gmail.com", "Matt Sicat",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
-    p.addGuest(a);
-    p.addGuest(m);
-    p.addGuest(h);
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
+    p.addGuest(a, "key");
+    p.addGuest(m, "key");
+    p.addGuest(h, "key");
     Request r1 = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), h);
     assert p.upvoteSong(a, r1.getId()) == true;
     assert p.upvoteSong(m, r1.getId()) == true;
@@ -1461,7 +1553,8 @@ public class PartyTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     Party p1 = Party.of(p.getPartyId(), p.getName(), p.getPlaylist().getId(),
-        p.getLocation(), p.getTime(), p.getStatus(), "deviceId");
+        p.getLocation(), p.getTime(), p.getStatus(), "deviceId",
+        AccessType.PUBLIC, "public");
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
         .size() == 2;
     assert ((Request) (p1.getRequestedSongs().toArray()[0])).getUpvotes()
