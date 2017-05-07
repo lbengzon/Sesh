@@ -299,7 +299,7 @@ $(document).ready(() => {
         }
         endParty(partyId, userId, deleteBool);
         const params = {userId: userId};
-        post("/createjoin", params, "get");
+        post("/createjoin", params);
     });
 
 
