@@ -82,7 +82,6 @@ function setupWebsockets() {
           favorite();
           highlightFavorites();
           $.notify(data.payload.newRequest.song.title + " by " + data.payload.newRequest.song.artist + " has been requested!", "info");
-
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
