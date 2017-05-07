@@ -57,7 +57,7 @@ CREATE TABLE "PartyAttendee"(
 );
 
 CREATE TABLE "Favorites"(
-  "userId" Text,
+  "userId" TEXT,
   "songId" TEXT,
   PRIMARY KEY ("userId", "songId"),
   FOREIGN KEY ("userId") REFERENCES User(userId)
