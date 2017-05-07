@@ -419,8 +419,7 @@ public class GuiManager {
   }
 
   /**
-   * Handles when a guest leaves a party. <<<<<<< HEAD ======= >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * Handles when a guest leaves a party.
    * 
    * @author Matt
    */
@@ -434,9 +433,9 @@ public class GuiManager {
       Boolean partyEndedBool = Boolean.valueOf(qm.value("partyEndedBool"));
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
-      if (deleteBool) {
+      if (!deleteBool) {
         try {
-          party.deletePlaylist();
+          party.followPlaylist(userId);
         } catch (SpotifyUserApiException e) {
           // TODO: Redirect to login page
           e.printStackTrace();
