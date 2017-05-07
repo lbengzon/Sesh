@@ -57,7 +57,7 @@ function showPlaylists($search, $listview, $options, $tabContentSearch, $tabCont
     $listview.addClass("active");
     $search.removeClass("active");
     $options.removeClass("active");
-    $("#favorites-dj").removeClass("active");
+    $("#favorites").removeClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.show();
     $tabContentFavorites.hide();
@@ -69,7 +69,7 @@ function showSearch($search, $listview, $options, $tabContentSearch, $tabContent
     $search.addClass("active");
     $listview.removeClass("active");
     $options.removeClass("active");
-    $("#favorites-dj").removeClass("active");
+    $("#favorites").removeClass("active");
     $tabContentSearch.show();
     $tabContentPlaylist.hide();
     $tabContentFavorites.hide();
@@ -82,7 +82,7 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
     $options.addClass("active");
     $listview.removeClass("active");
     $search.removeClass("active");
-    $("#favorites-dj").removeClass("active");
+    $("#favorites").removeClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.hide();
     $tabContentFavorites.hide();
@@ -95,7 +95,7 @@ function showFavorites($search, $listview, $options, $tabContentSearch, $tabCont
     $options.removeClass("active");
     $listview.removeClass("active");
     $search.removeClass("active");
-    $("#favorites-dj").addClass("active");
+    $("#favorites").addClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.hide();
     $tabContentFavorites.show();
@@ -118,9 +118,9 @@ $(document).ready(() => {
 
     //dj tabs
     const $listview = $("#playlist-dj");
-    const $search = $("#search-dj");
+    const $search = $("#search");
     const $options = $("#options-dj");
-    const $favorites = $("#favorites-dj");
+    const $favorites = $("#favorites");
 
 
     const $userInput = $(".search");
@@ -210,8 +210,22 @@ $(document).ready(() => {
             $results.empty();
 
             for (var i = 0; i < suggestions.length; i++) {
-                $results.append("<li " + "id=\"" + songIds[i] + "\"" + "onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
+                  $results.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                    + "id=\"" + songIds[i] + "\" >"
+                    + "<div class=\"fav\" >"
+                        + "<button class=\"favButton\" id=\"" + songIds[i] + "\" type=\"button\"> " 
+                          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
+                        + "</button>"
+                      //end of fav div
+                      + "</div>"
+                    + "<div id=\"songtitle\">" + suggestions[i] 
+                    //end of song title div
+                    + "</div>"
+                    + "</li>");
+
             }
+            favorite();
+            highlightSearchFavorites(favIds);
         });
     });
 
@@ -237,6 +251,10 @@ $(document).ready(() => {
             $("#request-list ul").find("li").show();
         }
     });
+
+
+    
+    $("#favorites").click(populateFavoritesTab);
 
 
     $("#ulPlaylist").dblclick(function() {
@@ -287,6 +305,7 @@ $(document).ready(() => {
 
     $search.click(function() {
         showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper);
+        highlightSearchFavorites(favIds);
     });
 
     $listview.click(function() {
