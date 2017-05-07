@@ -67,7 +67,7 @@
 </div>
 
 <div class="tabContentOptions">
-	<input type="button" id="endButton" value="End Party">
+	<input type="button" id="endButton" value="End Sesh">
 </div>
 
 </div>

@@ -21,7 +21,7 @@ ${userId}
 
 <div id="party-list">
 <ul style="list-style-type:none"></ul>
-<h2 id="loadingParties"> Loading Nearby Parties ... </h2>
+<h2 id="loadingParties"> Loading Nearby Seshes ... </h2>
 </div>
 
 
