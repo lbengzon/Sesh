@@ -30,15 +30,8 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * <<<<<<< HEAD Gui Manager class. ======= <<<<<<< HEAD Gui Manager class.
- * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0 =======
- * Gui Manager class. >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
- * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+ * GUI Manager class.
  * 
-=======
- *
->>>>>>> finished requests highlighting
  * @author HE23
  */
 public class GuiManager {
@@ -46,16 +39,8 @@ public class GuiManager {
   private static final Gson GSON = new Gson();
 
   /**
-   * <<<<<<< HEAD Default constructor. ======= <<<<<<< HEAD Default constructor.
-   * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
-   * ======= Default constructor. >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * Default constructor.
    * 
-=======
-   *
->>>>>>> finished requests highlighting
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -84,6 +69,12 @@ public class GuiManager {
     Spark.get("/createjoin", new CreateJoinHandler(), fme);
   }
 
+  /**
+   * Sends the user to the error page.
+   * 
+   * @author Matt
+   *
+   */
   private static class ErrorHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
@@ -108,11 +99,7 @@ public class GuiManager {
 
   /**
    * Handles the homepage, where users enter their credentials.
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
    * 
-=======
-   *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private class CallbackHandler implements TemplateViewRoute {
@@ -142,11 +129,7 @@ public class GuiManager {
 
   /**
    * Handles the create join page.
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
    * 
-=======
-   *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private static class CreateJoinHandler implements TemplateViewRoute {
@@ -190,6 +173,12 @@ public class GuiManager {
 
   }
 
+  /**
+   * Gets the active parties within join radius range.
+   * 
+   * @author Matt
+   *
+   */
   private static class GetPartiesWithinRange implements Route {
     @Override
     public String handle(Request req, Response res) {
@@ -220,15 +209,8 @@ public class GuiManager {
   }
 
   /**
-   * <<<<<<< HEAD Handles request to join a sesh page. ======= Handles request
-   * to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * Handles request to join a sesh page.
    * 
-=======
-   *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -324,22 +306,8 @@ public class GuiManager {
   }
 
   /**
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Handles
-   * request to create a sesh page. ======= Handles request to create a sesh
-   * page. <<<<<<< HEAD ======= >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95
-   * >>>>>>> 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Handles request to
-   * create a sesh page.
-   *
-   * >>>>>>> added access code functionality
+   * Handles request to create a sesh page.
    * 
-=======
-   * <<<<<<< HEAD Handles request to create a sesh page. ======= Handles request
-   * to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-   *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -356,22 +324,9 @@ public class GuiManager {
   }
 
   /**
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Creates party
-   * in the backend. ======= Creates party in the backend. <<<<<<< HEAD =======
-   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Creates party in the
-   * backend.
-   *
-   * >>>>>>> added access code functionality
    * 
-=======
-   * <<<<<<< HEAD Creates party in the backend. ======= Creates party in the
-   * backend. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * Creates party in the backend.
    *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -426,7 +381,6 @@ public class GuiManager {
             "You must have a premium spotify account to host a party");
       }
 
-      System.out.println("reached end!!!!!");
       return GSON.toJson(variables);
 
     }
@@ -455,14 +409,8 @@ public class GuiManager {
   }
 
   /**
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
    * Handles when a guest leaves a party.
    * 
-=======
-   * Handles when a guest leaves a party. <<<<<<< HEAD ======= >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-   *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -497,13 +445,8 @@ public class GuiManager {
   }
 
   /**
-   * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * Handles displaying search results.
    * 
-=======
-   *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -539,12 +482,8 @@ public class GuiManager {
   }
 
   /**
-   * Handles displaying search results.
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * Handles adding favorites.
    * 
-=======
-   *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -605,15 +544,8 @@ public class GuiManager {
   }
 
   /**
-   * <<<<<<< HEAD Handles redirecting if user is already seshing. =======
-   * Handles redirecting if user is already seshing. <<<<<<< HEAD =======
-   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * Handles redirecting if user is already seshing.
    * 
-=======
-   *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {

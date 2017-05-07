@@ -70,7 +70,6 @@ $(document).ready(() => {
 		accessType = $("input[name=privacy_setting]:checked").val();
 		accessCode = "";
 		if(accessType === "PRIVATE"){
-			console.log($("#accessCode").val());
 			if ($("#accessCode").val().length === 0) {
 				alert("Please supply an access code for a private party!");
 				return;
@@ -87,8 +86,15 @@ $(document).ready(() => {
 			const postParams = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), accessType: accessType, accessCode: accessCode, lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
 			$.post("/getParty", postParams, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);
-				const postParams = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
-				post("/create/party", postParams);
+				if (responseObject.message !=== undefined) {
+					const postParams = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
+					post("/create/party", postParams);
+				} else {
+					console.log("HERE");
+					const params = {};
+					post("/login", params, "get");
+				}
+				
 			});
 		} else {
 			alert("Please fill out the sesh name and host name fields!");
