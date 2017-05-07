@@ -20,6 +20,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 /**
  * Models a party.
+ *
  * @author Matt
  */
 public class PartyBean extends Party {
@@ -41,6 +42,7 @@ public class PartyBean extends Party {
 
   /**
    * Constructor.
+   *
    * @param partyId
    *          - id
    * @param name
@@ -371,6 +373,11 @@ public class PartyBean extends Party {
 
   @Override
   public void deletePlaylist() {
+
+  }
+
+  @Override
+  public void followPlaylist(String userId) {
 
   }
 

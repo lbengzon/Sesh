@@ -265,7 +265,7 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
-  public boolean addGuest(User guest, String accessCode) {
+  public boolean addGuest(User guest, String accessCodeAttempt) {
     if (!isActive()) {
       throw new IllegalStateException("ERROR: Party has stoped");
     }
@@ -278,16 +278,20 @@ public class PartyProxy extends Party implements Proxy {
     }
     try {
       // If its a private party, check the accesscode
+      System.out.println("Access Type = " + accessType);
       if (getAccessType().equals(AccessType.PRIVATE)) {
-        if (checkAccessCode(accessCode)) {
+        System.out.println("ATTEMPT = " + accessCodeAttempt);
+        System.out.println("REAL = " + accessCode);
+
+        if (checkAccessCode(accessCodeAttempt)) {
           DbHandler.addPartyGuest(partyId, guest);
-          return partyBean.addGuest(guest, accessCode);
+          return partyBean.addGuest(guest, accessCodeAttempt);
         }
         return false;
       } else {
         assert getAccessType().equals(AccessType.PUBLIC);
         DbHandler.addPartyGuest(partyId, guest);
-        return partyBean.addGuest(guest, accessCode);
+        return partyBean.addGuest(guest, accessCodeAttempt);
       }
 
     } catch (SQLException e) {
@@ -478,6 +482,19 @@ public class PartyProxy extends Party implements Proxy {
       }
     }
     SpotifyCommunicator.unfollowPlaylist(partyBean.getHost().getSpotifyId(),
+        partyBean.getHost().getSpotifyId(), playlistId, true);
+  }
+
+  @Override
+  public void followPlaylist(String userId) throws SpotifyUserApiException {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    SpotifyCommunicator.followPlaylist(userId,
         partyBean.getHost().getSpotifyId(), playlistId, true);
   }
 
