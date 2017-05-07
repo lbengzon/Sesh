@@ -11,6 +11,7 @@ function showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGues
 	$requestsGuest.removeClass("active");
 	$searchGuest.removeClass("active");
 	$optionsGuest.removeClass("active");
+	$("#favorites").removeClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.hide();
 	$tabContentFavoritesGuest.hide();
@@ -26,6 +27,7 @@ function showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGues
 	$requestsGuest.addClass("active");
 	$searchGuest.removeClass("active");
 	$optionsGuest.removeClass("active");
+	$("#favorites").removeClass("active");
 	$tabContentRequestGuest.show();
 	$tabContentOptionsGuest.hide();
 	$tabContentFavoritesGuest.hide();
@@ -41,6 +43,7 @@ function showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest,
 	$requestsGuest.removeClass("active");
 	$searchGuest.addClass("active");
 	$optionsGuest.removeClass("active");
+	$("#favorites").removeClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.hide();
 	$tabContentFavoritesGuest.hide();
@@ -56,6 +59,7 @@ function showOptions($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest
 	$requestsGuest.removeClass("active");
 	$searchGuest.removeClass("active");
 	$optionsGuest.addClass("active");
+	$("#favorites").removeClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.show();
 	$tabContentFavoritesGuest.hide();
@@ -70,7 +74,8 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 	$playlistGuest.removeClass("active");
 	$requestsGuest.removeClass("active");
 	$searchGuest.removeClass("active");
-	$optionsGuest.addClass("active");
+	$optionsGuest.removeClass("active");
+	$("#favorites").addClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.hide();
 	$tabContentFavoritesGuest.show();
@@ -153,9 +158,9 @@ $(document).ready(() => {
 	//guest tabs
 	const $requestsGuest = $("#request-guest");
 	const $playlistGuest = $("#playlist-guest");
-	const $searchGuest = $("#search-guest");
+	const $searchGuest = $("#search");
 	const $optionsGuest = $("#options-guest");
-	const $favoritesGuest = $("#favorites-guest");
+	const $favoritesGuest = $("#favorites");
 
 	//leave button
 	const $leaveButton = $("#leaveButton");
@@ -167,6 +172,9 @@ $(document).ready(() => {
 	$tabContentOptionsGuest.hide();
 	$tabContentFavoritesGuest.hide();
 	$playlistTitle.hide();
+
+    $("#favorites").click(populateFavoritesTab);
+
 
 	$leaveButton.click(function() {
 		guestLeaveParty(false);
