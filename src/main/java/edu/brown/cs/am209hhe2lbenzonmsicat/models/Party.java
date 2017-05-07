@@ -354,7 +354,7 @@ public abstract class Party implements Jsonable {
           "ERROR: Can't host a party if you're not premium!");
     }
     String newPlaylistId = Playlist.getNewPlaylistId(host, seshName);
-    if (accessType.equals(AccessType.PRIVATE)) {
+    if (accessType.equals(AccessType.PUBLIC)) {
       accessCode = "";
     } else {
       assert accessCode != null : "cant have a null access code for a private party";

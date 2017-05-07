@@ -275,6 +275,9 @@ public class GuiManager {
         String userId = qm.value("userId");
         String partyId = qm.value("partyId");
         String accessCode = qm.value("accessCode");
+        System.out.println("partyId: " + partyId);
+        System.out.println("userId: " + userId);
+        System.out.println("accessCode: " + accessCode);
 
         User user = User.of(userId);
         Party party = Party.of(Integer.valueOf(partyId));

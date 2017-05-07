@@ -24,7 +24,9 @@ function wait() {
 	}
 
 }
-
+let partyId;
+let accessType;
+let accessCode;
 
 $(document).ready(() => {
 
@@ -42,11 +44,10 @@ $(document).ready(() => {
 	wait();
 
 	const $partyList = $("#party-list ul");
-	let partyId;
-	let accessType;
-	let accessCode;
+
 
 	$("#partySubmit").click(function() {
+		let postParameters;
 		console.log("START");
 		console.log("AT: " + accessType);
 		if (accessType === "PRIVATE") {
@@ -56,16 +57,20 @@ $(document).ready(() => {
 				//user pressed cancel
 				return;
 			} else {
-				const postParameters ={userId: userId, partyId: partyId, accessType: accessType, accessCode: accessCode};
+				console.log("partyId" + partyId);
+				console.log("accessCode" + accessCode);
+				postParameters ={userId: userId, partyId: partyId, accessType: accessType, accessCode: accessCode};
 			}
 		} else {
 			console.log("INSIDE PUBLIC");
-			const postParameters ={userId: userId, partyId: partyId, accessType: accessType, accessCode: ""};
+			postParameters ={userId: userId, partyId: partyId, accessType: accessType, accessCode: ""};
 		}
+		console.log("postParams: " ,postParameters);
 		$.post("/joinParty", postParameters, responseJSON => {
 			console.log("INSIDE FIRST POST");
 			const responseObject = JSON.parse(responseJSON);
 			const success = responseObject.success;
+			console.log("Respoonse obj: ", responseObject);
 			if(!success) {
 				alert("Invalid access code!");
 			} else {
@@ -95,6 +100,7 @@ $(document).ready(() => {
 					$listItems = $("li");
 					$selected = $listItems.filter('.hover');
 					partyId = ($selected.attr('id'));
+					console.log("id: " + partyId);
 					accessType = ($selected.data('accessType'));
 					console.log("SELECTED: ", $selected);
 					$selected.addClass("selected");
