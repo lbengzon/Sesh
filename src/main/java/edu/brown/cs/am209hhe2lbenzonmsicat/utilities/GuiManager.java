@@ -91,8 +91,13 @@ public class GuiManager {
   private class LoginHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String message = qm.value("message");
+      if (message == null) {
+        message = "Welcome to Sesh! Please Login.";
+      }
       Map<String, Object> variables = ImmutableMap.of("title", "Login",
-          "authURL", comm.createAuthorizeURL());
+          "authURL", comm.createAuthorizeURL(), "message", message);
       return new ModelAndView(variables, "login.ftl");
     }
   }
@@ -371,14 +376,12 @@ public class GuiManager {
       } catch (SQLException e) {
         System.out.println("Failed to add party to database");
       } catch (SpotifyUserApiException e) {
-        // TODO SEND USER TO THE LOGIN PAGE
-        variables = ImmutableMap.of("Message",
+        variables = ImmutableMap.of("message",
             "Your have been logged out! Please log back in again.");
         e.printStackTrace();
       } catch (IllegalArgumentException e) {
-        // If the user
-        variables = ImmutableMap.of("Message",
-            "You must have a premium spotify account to host a party");
+        variables = ImmutableMap.of("message",
+            "Unfortunately, you must have a premium spotify account to host a sesh.");
       }
 
       return GSON.toJson(variables);
@@ -416,6 +419,7 @@ public class GuiManager {
   private class LeavePartyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      String ftlPage = "createJoin.ftl";
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
@@ -423,12 +427,16 @@ public class GuiManager {
       Boolean partyEndedBool = Boolean.valueOf(qm.value("partyEndedBool"));
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
       if (!deleteBool) {
         try {
           party.followPlaylist(userId);
         } catch (SpotifyUserApiException e) {
-          // TODO: Redirect to login page
-          e.printStackTrace();
+          String message = "Failed to save Sesh playlist to Spotify. Please log in again.";
+          ftlPage = "login.ftl";
+          variables = ImmutableMap.of("title", "Sesh", "userId", userId,
+              "message", message);
         }
       }
 
@@ -436,10 +444,7 @@ public class GuiManager {
         party.removeGuest(user);
       }
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
-          userId);
-
-      return new ModelAndView(variables, "createJoin.ftl");
+      return new ModelAndView(variables, ftlPage);
     }
 
   }
