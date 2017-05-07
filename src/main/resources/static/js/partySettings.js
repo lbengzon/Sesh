@@ -70,7 +70,13 @@ $(document).ready(() => {
 		accessType = $("input[name=privacy_setting]:checked").val();
 		accessCode = "";
 		if(accessType === "PRIVATE"){
-			accessCode = $("#accessCode").val();
+			console.log($("#accessCode").val());
+			if ($("#accessCode").val().length === 0) {
+				alert("Please supply an access code for a private party!");
+				return;
+			} else {
+				accessCode = $("#accessCode").val();
+			}
 		}
 		if (global_device_id === null) {
 			alert("You must select a device to play from first!");
@@ -92,12 +98,10 @@ $(document).ready(() => {
 
 	$("#private_sesh").click(function() {
 		document.getElementById("passwordDiv").style.display = "block";
-		document.getElementById("accessCode").required = true;
 	});
 
 	$("#public_sesh").click(function() {
 		document.getElementById("passwordDiv").style.display = "none";
-		document.getElementById("accessCode").required = false;
 	});
 
 });
