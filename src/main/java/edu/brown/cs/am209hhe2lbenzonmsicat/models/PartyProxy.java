@@ -486,6 +486,19 @@ public class PartyProxy extends Party implements Proxy {
   }
 
   @Override
+  public void followPlaylist(String userId) throws SpotifyUserApiException {
+    if (partyBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    SpotifyCommunicator.followPlaylist(userId,
+        partyBean.getHost().getSpotifyId(), playlistId, true);
+  }
+
+  @Override
   public boolean checkAccessCode(String accessCodeAttempt) {
     return accessCode.equals(accessCodeAttempt);
   }
