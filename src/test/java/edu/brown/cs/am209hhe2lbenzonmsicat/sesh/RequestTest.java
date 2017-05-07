@@ -11,6 +11,7 @@ import org.sqlite.SQLiteException;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AccessType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.RequestProxy;
@@ -46,9 +47,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     assert r.getSong().equals(Song.of("7AQAlklmptrrkBSeujkXsD"));
@@ -70,9 +72,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     //
@@ -90,14 +93,16 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     User l1 = User.create("1185743437", "hannahhe97@yahoo.com.au", "Hannah He",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Party p1 = Party.create("Dope Party", l1, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
 
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
@@ -115,9 +120,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.upvote(l);
@@ -139,9 +145,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.upvote(l);
@@ -167,9 +174,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
@@ -190,9 +198,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
@@ -216,9 +225,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
@@ -245,9 +255,10 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
@@ -274,10 +285,11 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now().minusMinutes(100));
     r.downvote(l);
@@ -304,10 +316,11 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
@@ -328,10 +341,11 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
@@ -351,10 +365,11 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
     r.downvote(l);
@@ -375,10 +390,11 @@ public class RequestTest {
     RequestProxy.clearCache();
     PartyProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
 
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Request r1 = Request.of(1, LocalDateTime.now(),
         Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         new HashSet<User>(Arrays.asList(l)), new HashSet<User>());

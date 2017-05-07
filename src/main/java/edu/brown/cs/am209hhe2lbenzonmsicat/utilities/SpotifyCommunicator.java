@@ -45,6 +45,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
  *
  * @author HE23
  */
+
 public class SpotifyCommunicator {
 
   // private final Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
@@ -56,6 +57,10 @@ public class SpotifyCommunicator {
   private static Cache<String, Api> userToApi = CacheBuilder.newBuilder()
       .maximumSize(10000).expireAfterWrite(4, TimeUnit.HOURS).build();
   private static ApiPool apiPool;
+
+  public enum Time_range {
+    long_term, medium_term, short_term
+  }
 
   /**
    * This is the constructor which creates our map.
@@ -140,7 +145,7 @@ public class SpotifyCommunicator {
         "user-read-email", "playlist-modify-private", "playlist-modify-public",
         "playlist-read-private", "playlist-read-collaborative",
         "user-read-playback-state", "user-read-currently-playing",
-        "user-modify-playback-state");
+        "user-modify-playback-state", "user-top-read");
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
@@ -265,6 +270,68 @@ public class SpotifyCommunicator {
       throw new RuntimeException(e.getMessage());
     }
     return res;
+  }
+
+  public static List<Song> getUserTopTracks(String userId,
+      Time_range time_range, boolean shouldRefresh)
+      throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
+    List<Song> res = new ArrayList<Song>();
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/top/tracks?time_range=");
+      sb.append(time_range);
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+      String inputLine;
+      StringBuilder response = new StringBuilder();
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
+      try {
+        JsonObject jsonObj = new JsonParser().parse(response.toString())
+            .getAsJsonObject();
+        JsonArray items = jsonObj.get("items").getAsJsonArray();
+        for (JsonElement el : items) {
+          JsonObject album = el.getAsJsonObject().get("album")
+              .getAsJsonObject();
+          String albumName = album.get("name").getAsString();
+          JsonArray artistsArray = el.getAsJsonObject().get("artists")
+              .getAsJsonArray();
+          String artists = "";
+          for (JsonElement artist : artistsArray) {
+            artists = artists + " " + artist.getAsJsonObject().get("name");
+          }
+          artists = artists.trim();
+          String id = el.getAsJsonObject().get("id").getAsString();
+          double length = el.getAsJsonObject().get("duration_ms").getAsDouble();
+          String name = el.getAsJsonObject().get("name").getAsString();
+          Song s = Song.of(id, name, albumName, artists, length);
+          res.add(s);
+        }
+
+        return res;
+      } catch (NullPointerException | IllegalStateException
+          | ClassCastException e) {
+        return res;
+      }
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        return getUserTopTracks(userId, time_range, shouldRefresh);
+      }
+      throw new RuntimeException(e.getMessage());
+    }
   }
 
   public static List<Track> searchTracks(String query, boolean shouldRefresh) {

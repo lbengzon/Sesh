@@ -7,18 +7,17 @@ import java.util.Objects;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Jsonable;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator.Time_range;
 
 /**
  * User abstract class.
+ *
  * @author HE23
  */
 public abstract class User implements Jsonable {
 
   public static enum Type {
-    daypass,
-    free,
-    open,
-    premium
+    daypass, free, open, premium
   }
 
   /**
@@ -38,12 +37,14 @@ public abstract class User implements Jsonable {
 
   /**
    * This method gets the user's last name.
+   *
    * @return user's last name.
    */
   public abstract String getLastName();
 
   /**
    * This method gets the user's full name.
+   *
    * @return the user's full name.
    */
   public abstract String getFullName();
@@ -52,8 +53,12 @@ public abstract class User implements Jsonable {
 
   public abstract List<Device> getDevices() throws SpotifyUserApiException;
 
+  public abstract List<Song> getUserTopTracks(Time_range time_range)
+      throws SpotifyUserApiException;
+
   /**
    * User of.
+   *
    * @param spotifyId
    *          - id
    * @return User, null if id doesn't exist.
@@ -68,6 +73,7 @@ public abstract class User implements Jsonable {
 
   /**
    * Retrieve user data.
+   *
    * @param spotifyId
    *          - id
    * @param email
@@ -87,6 +93,7 @@ public abstract class User implements Jsonable {
 
   /**
    * Create user.
+   *
    * @param userId
    *          - id
    * @param email

@@ -3,6 +3,7 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 import org.junit.Test;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator.Time_range;
 
 public class SpotifyCommunicatorTest {
 
@@ -48,13 +49,13 @@ public class SpotifyCommunicatorTest {
 
   @Test
   public void testDevices() {
-    SpotifyCommunicator.setUpTestApi();
-    try {
-      SpotifyCommunicator.getDevices("alimiraculous", true);
-    } catch (SpotifyUserApiException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    // SpotifyCommunicator.setUpTestApi();
+    // try {
+    // SpotifyCommunicator.getDevices("alimiraculous", true);
+    // } catch (SpotifyUserApiException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
   }
 
   @Test
@@ -66,26 +67,39 @@ public class SpotifyCommunicatorTest {
 
   @Test
   public void testUnfollow() {
-    SpotifyCommunicator.setUpTestApi();
-    // spotify:user:spotify:playlist:37i9dQZF1DWTJNOeepZTGy
-    // spotify:user:spotify:playlist:37i9dQZF1DWTJNOeepZTGy
-    try {
-      SpotifyCommunicator.unfollowPlaylist("22f3kk24xtzmkkuw477v3dntq",
-          "spotify", "37i9dQZF1DWTJNOeepZTGy", true);
-    } catch (SpotifyUserApiException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    // SpotifyCommunicator.setUpTestApi();
+    // // spotify:user:spotify:playlist:37i9dQZF1DWTJNOeepZTGy
+    // // spotify:user:spotify:playlist:37i9dQZF1DWTJNOeepZTGy
+    // try {
+    // SpotifyCommunicator.unfollowPlaylist("22f3kk24xtzmkkuw477v3dntq",
+    // "spotify", "37i9dQZF1DWTJNOeepZTGy", true);
+    // } catch (SpotifyUserApiException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
   }
 
   @Test
   public void testFollow() {
+    // try {
+    // SpotifyCommunicator.setUpTestApi();
+    //// // spotify:user:11127253053:playlist:6Z2soNlTlRvVPeLmdnlQ95
+    //// //
+    // spotify:user:2237gcc5lt5k3vmvfjr6756qi:playlist:6dp1oOzZMx1cvJQYAq4uU8
+    // SpotifyCommunicator.followPlaylist("alimiraculous",
+    // "2237gcc5lt5k3vmvfjr6756qi", "6dp1oOzZMx1cvJQYAq4uU8", true);
+    // } catch (SpotifyUserApiException e) {
+    //
+    // }
+  }
+
+  @Test
+  public void testGetTopTracks() {
     try {
       SpotifyCommunicator.setUpTestApi();
-      // spotify:user:11127253053:playlist:6Z2soNlTlRvVPeLmdnlQ95
-      // spotify:user:2237gcc5lt5k3vmvfjr6756qi:playlist:6dp1oOzZMx1cvJQYAq4uU8
-      SpotifyCommunicator.followPlaylist("alimiraculous",
-          "2237gcc5lt5k3vmvfjr6756qi", "6dp1oOzZMx1cvJQYAq4uU8", true);
+      System.out.println(SpotifyCommunicator
+          .getUserTopTracks("alimiraculous", Time_range.short_term, true)
+          .size());
     } catch (SpotifyUserApiException e) {
 
     }

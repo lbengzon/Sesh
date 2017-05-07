@@ -56,7 +56,7 @@ public abstract class ObjectPool<T> {
     long now = System.currentTimeMillis();
     if (!unlocked.isEmpty()) {
       for (T o : unlocked.keySet()) {
-        if (now - (long) unlocked.get(o) > expirationTime) {
+        if (now - unlocked.get(o) > expirationTime) {
           /* object has expired */
           unlocked.remove(o);
           expire(o);
@@ -70,7 +70,6 @@ public abstract class ObjectPool<T> {
             /* object is valid */
             unlocked.remove(o);
             locked.put(o, new Long(now));
-            System.out.println("ping!");
             return o;
           }
 
