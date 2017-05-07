@@ -109,6 +109,9 @@ public abstract class Party implements Jsonable {
 
   public abstract void deletePlaylist() throws SpotifyUserApiException;
 
+  public abstract void followPlaylist(String userId)
+      throws SpotifyUserApiException;
+
   /**
    * <<<<<<< 32cd13dff327048ed71599f2610af13c009ef9d8 Upvote song. <<<<<<< HEAD
    * ======= >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
@@ -116,7 +119,7 @@ public abstract class Party implements Jsonable {
    * to moving request from playlist to request list ======= Upvote song.
    *
    * >>>>>>> added leaving and ending party functionality
-   * 
+   *
    * @param user
    *          - to upvote
    * @param req
@@ -127,7 +130,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Downvote song.
-   * 
+   *
    * @param user
    *          - to downvote
    * @param req
@@ -138,7 +141,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Approve song.
-   * 
+   *
    * @param req
    *          - request
    * @return boolean if successful
@@ -149,7 +152,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Approve song.
-   * 
+   *
    * @param req
    *          - request
    * @return boolean if successful
@@ -160,7 +163,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Approve song.
-   * 
+   *
    * @param req
    *          - request
    * @return boolean if successful
@@ -179,7 +182,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Remove from playlist.
-   * 
+   *
    * @param req
    *          - request
    * @return boolean if successful.
@@ -190,7 +193,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Request song.
-   * 
+   *
    * @param song
    *          - request
    * @param user
@@ -201,7 +204,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Attempts to add the guest to the party.
-   * 
+   *
    * @param guest
    *          The guest to add to the party.
    * @param accessCode
@@ -214,7 +217,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Removes a guest from the party.
-   * 
+   *
    * @param guest
    *          -Guest to remove
    * @return boolean if successful
@@ -223,7 +226,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Gets the distance from the party to the coordinate.
-   * 
+   *
    * @param coordinate
    *          The coordinate to get the distance from.
    * @return The distance from the coordinate.
@@ -253,7 +256,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Retrieve party data.
-   * 
+   *
    * @param partyId
    *          - id
    * @param name
@@ -284,7 +287,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Gets the party object with the party id passed in.
-   * 
+   *
    * @param partyId
    *          The id of the party
    * @return The party object representing the party.
@@ -299,7 +302,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Gets the parties within the distance.
-   * 
+   *
    * @param location
    *          The location of the user.
    * @param distance
@@ -326,7 +329,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Create a party and add to db.
-   * 
+   *
    * @param name
    *          - name
    * @param host
@@ -365,7 +368,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Returns the active party of the user if he has any.
-   * 
+   *
    * @param user
    *          The user you want to get the active party of
    * @return The active party of the user or null if there is no active party.
@@ -380,7 +383,7 @@ public abstract class Party implements Jsonable {
 
   /**
    * Gets all (active and stopped) parties of a user.
-   * 
+   *
    * @param user
    *          The user you want to get the parties of.
    * @return The parties of a user.
