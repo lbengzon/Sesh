@@ -488,19 +488,7 @@ public class GuiManager {
         for (Song s : results) {
           ret.add(s.toMap());
         }
-        // List<String> names = new ArrayList<>();
-        // List<String> ids = new ArrayList<>();
-        // for (Song t : results) {
-        // ids.add(t.getId());
-        // StringBuilder item = new StringBuilder(t.getName());
-        // item.append(" - ");
-        // for (SimpleArtist artist : t.getArtists()) {
-        // item.append(artist.getName() + ", ");
-        // }
-        // item.delete(item.length() - 2, item.length() - 1);
-        // names.add(item.toString());
-        // }
-        //
+
         Map<String, Object> variables = ImmutableMap.of("results", ret);
         return GSON.toJson(variables);
       } catch (Exception c) {
@@ -509,25 +497,41 @@ public class GuiManager {
       Map<String, Object> variables = ImmutableMap.of("results",
           new ArrayList<String>());
       return GSON.toJson(variables);
-      // Map<String, Object> variables = ImmutableMap.of("results",
-      // new ArrayList<String>(), "songIds", new ArrayList<String>());
-      // return GSON.toJson(variables);
     }
   }
 
-  private static class SearchFavoritesHandler implements Route {
-    @Override
-    public String handle(Request req, Response res) {
-      QueryParamsMap qm = req.queryMap();
-      String input = qm.value("userInputFavs");
-      User user = User.of(qm.value("userId"));
-      // TODO: finish this
-      List<Request> favorites = user.getFavorites();
-      // go through list of favorites, check if input str is contained in song
-      // name, artist, album
-      // if so, add to list and send back to frontend
-    }
-  }
+  // /**
+  // * Handles displaying search results for user's favorites.
+  // *
+  // * @author HE23
+  // *
+  // */
+  // private static class SearchFavoritesHandler implements Route {
+  // @Override
+  // public String handle(Request req, Response res) {
+  // QueryParamsMap qm = req.queryMap();
+  // String input = qm.value("userInputFavs");
+  // input = input.toLowerCase();
+  // User user = User.of(qm.value("userId"));
+  // List<Map<String, Object>> ret = new ArrayList<>();
+  // try {
+  // List<Song> favorites = user.getFavorites();
+  // for (Song s : favorites) {
+  // boolean inAlbum = s.getAlbum().toLowerCase().contains(input);
+  // boolean inArtist = s.getArtist().toLowerCase().contains(input);
+  // boolean inSong = s.getTitle().toLowerCase().contains(input);
+  // if (inAlbum || inArtist || inSong) {
+  // ret.add(s.toMap());
+  // }
+  // }
+  // } catch (SQLException e) {
+  // e.printStackTrace();
+  // }
+  // // go through list of favorites, check if input str is contained in song
+  // // name, artist, album
+  // // if so, add to list and send back to frontend
+  // }
+  // }
 
   /**
    * Handles adding favorites.
