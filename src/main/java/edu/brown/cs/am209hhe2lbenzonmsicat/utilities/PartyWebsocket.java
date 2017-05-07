@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -22,6 +23,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Request.VoteType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyOutOfSyncException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 @WebSocket
@@ -146,15 +148,13 @@ public class PartyWebsocket {
           break;
         case SEEK_SONG:
           seekSong(payload, user, party, session, MESSAGE_TYPE.SEEK_SONG);
-          // nextSongAndUpdate(payload, user, party, session);
           break;
         case RESUME_SONG:
           resumeSong(payload, user, party, session, MESSAGE_TYPE.RESUME_SONG);
-          // previousSongAndUpdate(payload, user, party, session);
           break;
         case SONG_MOVED_TO_NEXT:
-          updatePartiesCurrentSong(party, session,
-              MESSAGE_TYPE.SONG_MOVED_TO_NEXT);
+          updatePartiesCurrentSong(payload, party, session,
+              MESSAGE_TYPE.SONG_MOVED_TO_NEXT, true);
           break;
         case END_PARTY:
           endPartyUpdateGuests(payload, user, party, session,
@@ -202,7 +202,7 @@ public class PartyWebsocket {
       long seekPosition = payload.get("seekPosition").getAsLong();
       party.playPlaylist(index);
       party.seekSong(seekPosition);
-      // updatePartiesCurrentSong(party, session);
+      updatePartiesCurrentSong(payload, party, session, messageType, false);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -218,7 +218,7 @@ public class PartyWebsocket {
 
       long position = payload.get("seekPosition").getAsLong();
       party.seekSong(position);
-      // updatePartiesCurrentSong(party, session);
+      updatePartiesCurrentSong(payload, party, session, messageType, false);
     } catch (Exception e) {
       e.printStackTrace();
       JsonObject updateMessage = new JsonObject();
@@ -233,7 +233,7 @@ public class PartyWebsocket {
       Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
       party.pause();
-      // updatePartiesCurrentSong(party, session);
+      updatePartiesCurrentSong(payload, party, session, messageType, false);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -247,8 +247,11 @@ public class PartyWebsocket {
       Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
       int index = payload.get("index").getAsInt();
+      if (index >= party.getPlaylist().getSetOfSongs().size()) {
+        index = 0;
+      }
       party.playPlaylist(index);
-      // updatePartiesCurrentSong(party, session);
+      updatePartiesCurrentSong(payload, party, session, messageType, false);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -258,25 +261,93 @@ public class PartyWebsocket {
     }
   }
 
-  private void updatePartiesCurrentSong(Party party, Session sender,
-      MESSAGE_TYPE messageType) {
+  private void updatePartiesCurrentSong(JsonObject payload, Party party,
+      Session sender, MESSAGE_TYPE messageType, boolean checkSync) {
     try {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
-      CurrentSongPlaying curr;
+      CurrentSongPlaying curr = null;
       try {
         curr = party.getSongBeingCurrentlyPlayed();
-      } catch (SpotifyUserApiException e) {
-        // TODO REDIRECT TO LOGIN PAGE
-        e.printStackTrace();
-        return;
-      }
+        System.out.println("===============================");
 
+        if (curr == null) {
+          System.out.println("Curr is Null");
+          return;
+        }
+        System.out.println(curr.getTimePassed());
+        System.out.println("CurrentSong is playing + " + curr.getIsPlaying());
+
+        // If you should check for out of sync and you are provided the old song
+        // id
+        if (checkSync && payload.get("oldSongId") != null) {
+          String oldSongId = payload.get("oldSongId").getAsString();
+          boolean isPaused = payload.get("isPaused").getAsBoolean();
+          int index = payload.get("index").getAsInt();
+          // This is the id of the song that is currently playing on spotify
+          String newSongIdPlaying = Request.getId(party.getPartyId(),
+              curr.getSong().getSpotifyId());
+
+          // If the front end thinks the playlist should still be playing
+          // and the current song isn't playing it means that the playlist
+          // looped
+          // around the beginning because it thinks the playlist is over
+          if (!curr.getIsPlaying() && !isPaused) {
+            System.out.println(
+                "**********************RELOOPED AROUND?***********************");
+            int newIndex = 0;
+            // Figure out if infact the playlist really is over. If it isn't,
+            // set the new index to the index that should be playing. If not,
+            // start from the beginnning
+
+            if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
+              newIndex = index + 1;
+            }
+            party.playPlaylist(newIndex);
+            curr = party.getSongBeingCurrentlyPlayed();
+
+          } // if the playlist hasn't looped around and there are still more
+            // songs to be played
+          else if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
+            List<Request> playlistSongs = party.getPlaylist().getSongs();
+            // Set the new index to be the old index plus one
+            int newIndex = index + 1;
+            Request realNextSong = playlistSongs.get(newIndex);
+            // Check if there was a song change and if what should be playing is
+            // what is actually being played
+            if ((!oldSongId.equals(newSongIdPlaying)
+                && !realNextSong.getId().equals(newSongIdPlaying))) {
+              // If there is a mismatch, play the new index of the playlist.
+              System.out.println(
+                  "**********************WENT TO NEXT SONG and out of sync?***********************");
+              party.playPlaylist(newIndex);
+              curr = party.getSongBeingCurrentlyPlayed();
+            }
+          }
+        }
+      } catch (SpotifyOutOfSyncException e) {
+        // Throws an exception if the song being played does not exist in the
+        // playlist.
+        // We then correct this by playing the next index in the playlist.
+        System.out.println("Trying to sync playlist because of exception");
+        int index = payload.get("index").getAsInt();
+        Set<Request> playlistSongs = party.getPlaylist().getSetOfSongs();
+        int newIndex = 0;
+        if (index + 1 < playlistSongs.size()) {
+          newIndex = index + 1;
+        }
+        party.playPlaylist(newIndex);
+        curr = party.getSongBeingCurrentlyPlayed();
+      }
       if (curr == null) {
+
         return;
       }
+      System.out.println("Finally playing = " + curr.getSong().getTitle());
       String requestId = Request.getId(party.getPartyId(),
           curr.getSong().getSpotifyId());
+      System.out.println("===============================");
+
       updatePayload.addProperty("currentSongId", requestId);
       updatePayload.addProperty("timePassed", curr.getTimePassed());
       updatePayload.addProperty("duration", curr.getDuration());
@@ -297,9 +368,17 @@ public class PartyWebsocket {
       senderUpdateMessage.addProperty("success", true);
       sendUpdateToEntireParty(sender, updateMessage, senderUpdateMessage,
           party.getPartyId());
+
     } catch (IOException e) {
       e.printStackTrace();
       throw new RuntimeException(e.getMessage());
+    } catch (SpotifyUserApiException e) {
+      // TODO REDIRECT TO LOGIN PAGE
+      e.printStackTrace();
+      return;
+    } catch (SpotifyOutOfSyncException e) {
+      e.printStackTrace();
+      return;
     }
   }
 
