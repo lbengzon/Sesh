@@ -132,6 +132,8 @@ $(document).ready(() => {
 
 
     const $userInput = $(".search");
+    const $userInputFavs = $(".favoritesSearch");
+    const $resultsFavs = $(".favoritesList");
     const $results = $(".searchResults");
     const $playlist = $("#tabContentPlaylist ul");
 
@@ -207,6 +209,15 @@ $(document).ready(() => {
 
     setupWebsockets();
 
+    //search favorites
+    $userInputFavs.keyup(function() {
+        const postParameters = {userId: userId, userInputFavs: $userInputFavs};
+        $.post("/searchFavorites", postParameters, responseJSON => {
+            const responseObject = JSON.parse(responseJSON);
+            //TODO: finish
+        });
+    });
+
     //search for songs
     $userInput.keyup(function() {
         const postParameters = {userInput: $userInput.val()};
@@ -278,13 +289,11 @@ $(document).ready(() => {
         $selected = $listItems.filter('.hover');
         console.log("index :" + $selected.index());
         playPlaylist(partyId, userId, $selected.index());
-        // alert("you double clicked on song with id " + $selected.index());
     });
 
     $("#ulRequest").dblclick(function() {
         $listItems = $("li"); 
         $selected = $listItems.filter('.hover');
-        console.log($selected.attr("id"));
         if ($selected.attr("id")!== undefined) {
             moveRequestToQueue(partyId, userId, $selected.attr("id"), $("#ulPlaylist li").length);
         }
@@ -308,10 +317,8 @@ $(document).ready(() => {
         var deleteBool;
         if (v === true) {
             deleteBool = false;
-            console.log("playlist saved");
         } else {
             deleteBool = true;
-            console.log("playlist deleted");
         }
         endParty(partyId, userId, deleteBool);
         const params = {userId: userId};
