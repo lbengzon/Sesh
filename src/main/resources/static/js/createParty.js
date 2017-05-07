@@ -6,6 +6,14 @@ function hoverOff(x) {
     x.classList.remove('hover');
 }
 
+function enlarge(x) {
+    x.style.color = "#488c7e";
+}
+
+function minimize(x) {
+    x.style.color = "white";
+}
+
 //HANNAH PLEASE FILL THIS OUT. It should get the index of the song being currently played
 function getIndexOfCurrentSong(){
     alert("woah");

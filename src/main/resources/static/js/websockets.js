@@ -145,7 +145,16 @@ function setupWebsockets() {
   };
 }
 
+function convertTime(s) {
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s % 60;
+  var hrs = (s - mins) / 60;
 
+  return mins + ':' + secs;
+}
 
 function updatePlayer(data){
   if (currSongId !== data.payload.currentSongId) {
@@ -168,6 +177,9 @@ function updatePlayer(data){
 
   timePassed = data.payload.timePassed;
   $("#progressbar").attr("value", data.payload.timePassed);
+  console.log("TIME PASSED: " + timePassed);
+  $(".elapsed").text(convertTime(timePassed));
+  $(".duration").text(convertTime(data.payload.duration));
 }
 
 function hideSongsNotPlaying(){
