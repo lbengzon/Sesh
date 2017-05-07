@@ -492,6 +492,7 @@ public class PartyWebsocket {
         throw new RuntimeException("ERROR: could not add song");
       }
       updatePayload.add("playlist", party.getPlaylistQueueAsJson());
+      updatePayload.addProperty("requestId", newRequest.getId());
       updateMessage.addProperty("type",
           MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST.ordinal());
       updateMessage.addProperty("success", true);
@@ -551,6 +552,8 @@ public class PartyWebsocket {
         throw new RuntimeException("ERROR: Cannot vote on request");
       }
       updatePayload.add("requestList", party.getRequestsAsJson());
+      updatePayload.addProperty("requestIdVotedOn", requestId);
+      updatePayload.addProperty("voteType", voteType.toString());
       updateMessage.addProperty("type",
           MESSAGE_TYPE.UPDATE_VOTE_REQUESTS.ordinal());
       updateMessage.addProperty("success", true);
@@ -587,6 +590,8 @@ public class PartyWebsocket {
       }
       updatePayload.add("requestList", party.getRequestsAsJson());
       updatePayload.add("playlist", party.getPlaylistQueueAsJson());
+      updatePayload.addProperty("transferType", transferType.toString());
+      updatePayload.addProperty("requestIdTransfered", requestId);
       updateMessage.addProperty("type",
           MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER.ordinal());
 
