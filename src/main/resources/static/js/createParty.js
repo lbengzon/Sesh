@@ -213,25 +213,27 @@ $(document).ready(() => {
         $.post("/search", postParameters, responseJSON => {
             const responseObject = JSON.parse(responseJSON);
             const suggestions = responseObject.results;
-            const songIds = responseObject.songIds;
+            console.log("SUGGESTIONS", suggestions);
 
             $results.empty();
 
-            for (var i = 0; i < suggestions.length; i++) {
-                  $results.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
-                    + "id=\"" + songIds[i] + "\" >"
+            for (let i = 0; i < suggestions.length; i++) {
+                $results.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                    + "id=\"" + suggestions[i].spotifyId + "\" >"
                     + "<div class=\"fav\" >"
-                        + "<button class=\"favButton\" id=\"" + songIds[i] + "\" type=\"button\"> " 
+                        + "<button class=\"favButton\" id=\"" + suggestions[i].spotifyId + "\" type=\"button\"> " 
                           + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
                         + "</button>"
                       //end of fav div
                       + "</div>"
-                    + "<div id=\"songtitle\">" + suggestions[i] 
+                    + "<div id=\"songtitle\">" + suggestions[i].title 
                     //end of song title div
                     + "</div>"
-                    + "</li>");
-
+                    + "<div id=\"songartist\">" + suggestions[i].artist
+                    + "</div>"
+                    + "</li>"); 
             }
+            
             favorite();
             highlightSearchFavorites(favIds);
         });

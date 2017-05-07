@@ -50,8 +50,8 @@
 </div>
 
 <div id="titles">
-<h2 id="playlist-title">Playlist</h2>
-<h2 id="request-title">Requests</h2>
+<h2 id="playlist-title">Playlist | ${partyName}</h2>
+<h2 id="request-title">Requests | ${partyName}</h2>
 </div>
 <div class="list-wrapper">
 <div class="tabContentRequestGuest" id="request-list">
