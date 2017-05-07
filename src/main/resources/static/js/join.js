@@ -52,9 +52,10 @@ $(document).ready(() => {
 		console.log("AT: " + accessType);
 		if (accessType === "PRIVATE") {
 			console.log("INSIDE PRIVATE");
-			accessCode = prompt("Please enter your access token to join this party");
+			accessCode = prompt("Please enter your access code to join this party");
 			if (accessCode === null || accessCode === "") {
 				//user pressed cancel
+				console.log("here");
 				return;
 			} else {
 				console.log("partyId" + partyId);
