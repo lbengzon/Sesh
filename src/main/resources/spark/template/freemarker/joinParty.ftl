@@ -12,18 +12,46 @@
 	userId = "${userId}";
 	partyId = "${partyId}";
 </script>
-<div id="musicPlayer">
-	<h4 id="songTitle"></h4>
-	<h4 id="artistName"></h4>
-	<h4 id="albumTitle"></h4>
+<!-- <div id="musicPlayer">
+	<div id="musicTitles">
+		<h4 id="songTitle"></h4>
+		<h4 id="artistName"></h4>
+		<h4 id="albumTitle"></h4>
+	</div>
 	<img id="songArt" height="168" width="168">
 	<button id="playButton" class="playerButton" type="button">Play</button>
 	<button id="pauseButton" class="playerButton" type="button" style="display: none">Pause</button>
 	<progress id="progressbar" style="width:60%"></progress>
+</div> -->
+<div id="musicPlayer">
+	<div id="songDataDiv">
+		<div id="albumArtDiv"><img id="songArt" height="168" width="168"></div>
+		<div id="songTitles">
+			<h4 id="songTitle"></h4>
+			<h4 id="artistName"></h4>
+			<h4 id="albumTitle"></h4>
+		</div>
+	</div>
+
+	<div id="progressBarDiv">
+		<p class="elapsed">0:00</p>
+		<progress id="progressbar" style="width:60%"></progress>
+		<p class="duration">0:00</p>
+	</div>
+
+	<div id="controlsDiv">
+		<button id="playButton" class="playerButton" type="button" class="guestControl">
+			<i class="material-icons">play_circle_outline</i>
+		</button>
+		<button id="pauseButton" class="playerButton" type="button" style="display: none" class="guestControl">
+			<i class="material-icons">pause_circle_outline</i>
+		</button>
+	</div>
 </div>
+
 <div id="titles">
-<h2 id="playlist-title">Playlist</h2>
-<h2 id="request-title">Requests</h2>
+<h2 id="playlist-title">Playlist | ${partyName}</h2>
+<h2 id="request-title">Requests | ${partyName}</h2>
 </div>
 <div class="list-wrapper">
 <div class="tabContentRequestGuest" id="request-list">
@@ -57,7 +85,7 @@
 
 <div class="tabContentOptionsGuest">
 
-	<input type="button" id="leaveButton" value="Leave Party">
+	<input type="button" id="leaveButton" value="Leave Sesh">
 
 </div>
 </div>

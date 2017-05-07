@@ -9,8 +9,6 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import com.wrapper.spotify.models.SimpleArtist;
-import com.wrapper.spotify.models.Track;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Device;
@@ -20,6 +18,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.models.Song;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.User;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator.Time_range;
 import spark.ModelAndView;
 import spark.QueryParamsMap;
 import spark.Request;
@@ -30,15 +29,8 @@ import spark.TemplateViewRoute;
 import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * <<<<<<< HEAD Gui Manager class. ======= <<<<<<< HEAD Gui Manager class.
- * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0 =======
- * Gui Manager class. >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
- * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
- * 
-=======
+ * GUI Manager class.
  *
->>>>>>> finished requests highlighting
  * @author HE23
  */
 public class GuiManager {
@@ -46,16 +38,8 @@ public class GuiManager {
   private static final Gson GSON = new Gson();
 
   /**
-   * <<<<<<< HEAD Default constructor. ======= <<<<<<< HEAD Default constructor.
-   * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0
-   * ======= Default constructor. >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * 
-=======
+   * Default constructor.
    *
->>>>>>> finished requests highlighting
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -81,9 +65,15 @@ public class GuiManager {
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
     Spark.post("/addSongToFavorites", new AddFavoriteHandler());
-    Spark.get("/createjoin", new CreateJoinHandler(), fme);
+    Spark.post("/createjoin", new CreateJoinHandler(), fme);
   }
 
+  /**
+   * Sends the user to the error page.
+   *
+   * @author Matt
+   *
+   */
   private static class ErrorHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
@@ -100,19 +90,20 @@ public class GuiManager {
   private class LoginHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String message = qm.value("message");
+      if (message == null) {
+        message = "";
+      }
       Map<String, Object> variables = ImmutableMap.of("title", "Login",
-          "authURL", comm.createAuthorizeURL());
+          "authURL", comm.createAuthorizeURL(), "message", message);
       return new ModelAndView(variables, "login.ftl");
     }
   }
 
   /**
    * Handles the homepage, where users enter their credentials.
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * 
-=======
    *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private class CallbackHandler implements TemplateViewRoute {
@@ -142,11 +133,7 @@ public class GuiManager {
 
   /**
    * Handles the create join page.
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * 
-=======
    *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private static class CreateJoinHandler implements TemplateViewRoute {
@@ -190,6 +177,12 @@ public class GuiManager {
 
   }
 
+  /**
+   * Gets the active parties within join radius range.
+   *
+   * @author Matt
+   *
+   */
   private static class GetPartiesWithinRange implements Route {
     @Override
     public String handle(Request req, Response res) {
@@ -219,16 +212,28 @@ public class GuiManager {
     }
   }
 
+  private static class getUserTopTracksHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      QueryParamsMap qm = req.queryMap();
+      String userId = qm.value("userId");
+      // Time_range time_range = Time_range.valueOf(qm.value("time_range"));
+      Time_range time_range = Time_range.short_term;
+      List<Song> topTracks = new ArrayList<Song>();
+      try {
+        topTracks = SpotifyCommunicator.getUserTopTracks(userId, time_range,
+            true);
+      } catch (SpotifyUserApiException e) {
+        return GSON.toJson(topTracks);
+      }
+      Map<String, Object> variables = ImmutableMap.of("topTracks", topTracks);
+      return GSON.toJson(variables);
+    }
+  }
+
   /**
-   * <<<<<<< HEAD Handles request to join a sesh page. ======= Handles request
-   * to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * 
-=======
+   * Handles request to join a sesh page.
    *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -267,6 +272,7 @@ public class GuiManager {
       System.out.println("partyid: " + partyId);
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
+      String partyName = party.getName();
       if (!party.getAttendees().contains(user)) {
         Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
             "userId", userId);
@@ -279,11 +285,15 @@ public class GuiManager {
       // party view
 
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
-          "userId", userId, "partyId", partyId);
+          "userId", userId, "partyId", partyId, "partyName", partyName);
       return new ModelAndView(variables, "joinParty.ftl");
     }
   }
 
+  /**
+   * Handles joining a party.
+   *
+   */
   private static class JoinPartyHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
@@ -324,22 +334,8 @@ public class GuiManager {
   }
 
   /**
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Handles
-   * request to create a sesh page. ======= Handles request to create a sesh
-   * page. <<<<<<< HEAD ======= >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95
-   * >>>>>>> 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Handles request to
-   * create a sesh page.
+   * Handles request to create a sesh page.
    *
-   * >>>>>>> added access code functionality
-   * 
-=======
-   * <<<<<<< HEAD Handles request to create a sesh page. ======= Handles request
-   * to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-   *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -356,22 +352,9 @@ public class GuiManager {
   }
 
   /**
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Creates party
-   * in the backend. ======= Creates party in the backend. <<<<<<< HEAD =======
-   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Creates party in the
-   * backend.
    *
-   * >>>>>>> added access code functionality
-   * 
-=======
-   * <<<<<<< HEAD Creates party in the backend. ======= Creates party in the
-   * backend. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * Creates party in the backend.
    *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -416,17 +399,14 @@ public class GuiManager {
       } catch (SQLException e) {
         System.out.println("Failed to add party to database");
       } catch (SpotifyUserApiException e) {
-        // TODO SEND USER TO THE LOGIN PAGE
-        variables = ImmutableMap.of("Message",
+        variables = ImmutableMap.of("message",
             "Your have been logged out! Please log back in again.");
         e.printStackTrace();
       } catch (IllegalArgumentException e) {
-        // If the user
-        variables = ImmutableMap.of("Message",
-            "You must have a premium spotify account to host a party");
+        variables = ImmutableMap.of("message",
+            "Unfortunately, you must have a premium spotify account to host a sesh.");
       }
 
-      System.out.println("reached end!!!!!");
       return GSON.toJson(variables);
 
     }
@@ -455,19 +435,14 @@ public class GuiManager {
   }
 
   /**
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
    * Handles when a guest leaves a party.
-   * 
-=======
-   * Handles when a guest leaves a party. <<<<<<< HEAD ======= >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
    *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
+      String ftlPage = "createJoin.ftl";
       QueryParamsMap qm = req.queryMap();
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
@@ -475,12 +450,16 @@ public class GuiManager {
       Boolean partyEndedBool = Boolean.valueOf(qm.value("partyEndedBool"));
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
+      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
+          userId);
       if (!deleteBool) {
         try {
           party.followPlaylist(userId);
         } catch (SpotifyUserApiException e) {
-          // TODO: Redirect to login page
-          e.printStackTrace();
+          String message = "Failed to save Sesh playlist to Spotify. Please log in again.";
+          ftlPage = "login.ftl";
+          variables = ImmutableMap.of("title", "Sesh", "userId", userId,
+              "message", message);
         }
       }
 
@@ -488,22 +467,14 @@ public class GuiManager {
         party.removeGuest(user);
       }
 
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh", "userId",
-          userId);
-
-      return new ModelAndView(variables, "createJoin.ftl");
+      return new ModelAndView(variables, ftlPage);
     }
 
   }
 
   /**
-   * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * 
-=======
+   * Handles displaying search results.
    *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -512,39 +483,41 @@ public class GuiManager {
       try {
         QueryParamsMap qm = req.queryMap();
         String input = qm.value("userInput");
-        List<Track> results = SpotifyCommunicator.searchTracks(input, true);
-        List<String> names = new ArrayList<>();
-        List<String> ids = new ArrayList<>();
-        for (Track t : results) {
-          ids.add(t.getId());
-          StringBuilder item = new StringBuilder(t.getName());
-          item.append(" - ");
-          for (SimpleArtist artist : t.getArtists()) {
-            item.append(artist.getName() + ", ");
-          }
-          item.delete(item.length() - 2, item.length() - 1);
-          names.add(item.toString());
+        List<Song> results = SpotifyCommunicator.searchTracks(input, true);
+        List<Map<String, Object>> ret = new ArrayList<>();
+        for (Song s : results) {
+          ret.add(s.toMap());
         }
-
-        Map<String, Object> variables = ImmutableMap.of("results", names,
-            "songIds", ids);
+        // List<String> names = new ArrayList<>();
+        // List<String> ids = new ArrayList<>();
+        // for (Song t : results) {
+        // ids.add(t.getId());
+        // StringBuilder item = new StringBuilder(t.getName());
+        // item.append(" - ");
+        // for (SimpleArtist artist : t.getArtists()) {
+        // item.append(artist.getName() + ", ");
+        // }
+        // item.delete(item.length() - 2, item.length() - 1);
+        // names.add(item.toString());
+        // }
+        //
+        Map<String, Object> variables = ImmutableMap.of("results", ret);
         return GSON.toJson(variables);
       } catch (Exception c) {
         c.printStackTrace();
       }
       Map<String, Object> variables = ImmutableMap.of("results",
-          new ArrayList<String>(), "songIds", new ArrayList<String>());
+          new ArrayList<String>());
       return GSON.toJson(variables);
+      // Map<String, Object> variables = ImmutableMap.of("results",
+      // new ArrayList<String>(), "songIds", new ArrayList<String>());
+      // return GSON.toJson(variables);
     }
   }
 
   /**
-   * Handles displaying search results.
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * 
-=======
+   * Handles adding favorites.
    *
->>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -605,15 +578,8 @@ public class GuiManager {
   }
 
   /**
-   * <<<<<<< HEAD Handles redirecting if user is already seshing. =======
-   * Handles redirecting if user is already seshing. <<<<<<< HEAD =======
-   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
-<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
-   * 
-=======
+   * Handles redirecting if user is already seshing.
    *
->>>>>>> finished requests highlighting
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {

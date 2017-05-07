@@ -25,6 +25,7 @@ import com.wrapper.spotify.exceptions.WebApiException;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
 import com.wrapper.spotify.models.PlaylistTrack;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
+import com.wrapper.spotify.models.SimpleArtist;
 import com.wrapper.spotify.models.Track;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.CurrentSongPlaying;
@@ -44,6 +45,7 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
  * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
  * @author HE23
  */
+
 public class SpotifyCommunicator {
 
   // private final Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
@@ -55,6 +57,10 @@ public class SpotifyCommunicator {
   private static Cache<String, Api> userToApi = CacheBuilder.newBuilder()
       .maximumSize(10000).expireAfterWrite(4, TimeUnit.HOURS).build();
   private static ApiPool apiPool;
+
+  public enum Time_range {
+    long_term, medium_term, short_term
+  }
 
   /**
    * This is the constructor which creates our map.
@@ -139,7 +145,7 @@ public class SpotifyCommunicator {
         "user-read-email", "playlist-modify-private", "playlist-modify-public",
         "playlist-read-private", "playlist-read-collaborative",
         "user-read-playback-state", "user-read-currently-playing",
-        "user-modify-playback-state");
+        "user-modify-playback-state", "user-top-read");
 
     /* Set a state. This is used to prevent cross site request forgeries. */
     final String state = "someExpectedStateString";
@@ -264,15 +270,77 @@ public class SpotifyCommunicator {
     return res;
   }
 
-  public static List<Track> searchTracks(String query, boolean shouldRefresh) {
+  public static List<Song> getUserTopTracks(String userId,
+      Time_range time_range, boolean shouldRefresh)
+      throws SpotifyUserApiException {
+    Api api = getUserApi(userId);
+    List<Song> res = new ArrayList<Song>();
+    try {
+      String accessToken = api.refreshAccessToken().build().get()
+          .getAccessToken();
+      api.setAccessToken(accessToken);
+      StringBuilder sb = new StringBuilder();
+      sb.append("https://api.spotify.com/v1/me/top/tracks?time_range=");
+      sb.append(time_range);
+      URL url = new URL(sb.toString());
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("GET");
+      StringBuilder sb2 = new StringBuilder();
+      sb2.append("Bearer ");
+      sb2.append(accessToken);
+      conn.setRequestProperty("Authorization", sb2.toString());
+      BufferedReader in = new BufferedReader(
+          new InputStreamReader(conn.getInputStream()));
+      String inputLine;
+      StringBuilder response = new StringBuilder();
+      while ((inputLine = in.readLine()) != null) {
+        response.append(inputLine);
+      }
+      in.close();
+      try {
+        JsonObject jsonObj = new JsonParser().parse(response.toString())
+            .getAsJsonObject();
+        JsonArray items = jsonObj.get("items").getAsJsonArray();
+        for (JsonElement el : items) {
+          JsonObject album = el.getAsJsonObject().get("album")
+              .getAsJsonObject();
+          String albumName = album.get("name").getAsString();
+          JsonArray artistsArray = el.getAsJsonObject().get("artists")
+              .getAsJsonArray();
+          String artists = "";
+          for (JsonElement artist : artistsArray) {
+            artists = artists + " " + artist.getAsJsonObject().get("name");
+          }
+          artists = artists.trim();
+          String id = el.getAsJsonObject().get("id").getAsString();
+          double length = el.getAsJsonObject().get("duration_ms").getAsDouble();
+          String name = el.getAsJsonObject().get("name").getAsString();
+          Song s = Song.of(id, name, albumName, artists, length);
+          res.add(s);
+        }
+
+        return res;
+      } catch (NullPointerException | IllegalStateException
+          | ClassCastException e) {
+        return res;
+      }
+    } catch (IOException | WebApiException e) {
+      if (shouldRefresh) {
+        return getUserTopTracks(userId, time_range, shouldRefresh);
+      }
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+
+  public static List<Song> searchTracks(String query, boolean shouldRefresh) {
     Api api = apiPool.checkOut();
     List<Track> tracks = new ArrayList<Track>();
     List<Song> res = new ArrayList<Song>();
     try {
       tracks = api.searchTracks(query).build().get().getItems();
-      // res = buildSongsFromTracks(tracks);
+      res = buildSongsFromTracks(tracks);
       apiPool.checkIn(api);
-      return tracks;
+      return res;
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         return searchTracks(query, false);
@@ -281,22 +349,23 @@ public class SpotifyCommunicator {
     }
   }
 
-  // public static List<Song> buildSongsFromTracks(List<Track> tracks) {
-  // List<Song> results = new ArrayList<Song>();
-  // for (Track t : tracks) {
-  // String name = t.getName();
-  // String id = t.getId();
-  // String album = t.getAlbum().getName();
-  // String artist = "";
-  // for (SimpleArtist art : t.getArtists()) {
-  // artist = artist + " " + art.getName();
-  // }
-  // artist = artist.trim();
-  // int length = t.getDuration();
-  // Song s = Song.of(id, name, album, artist, length);
-  // }
-  // return results;
-  // }
+  public static List<Song> buildSongsFromTracks(List<Track> tracks) {
+    List<Song> results = new ArrayList<Song>();
+    for (Track t : tracks) {
+      String name = t.getName();
+      String id = t.getId();
+      String album = t.getAlbum().getName();
+      String artist = "";
+      for (SimpleArtist art : t.getArtists()) {
+        artist = artist + " " + art.getName();
+      }
+      artist = artist.trim();
+      int length = t.getDuration();
+      Song s = Song.of(id, name, album, artist, length);
+      results.add(s);
+    }
+    return results;
+  }
 
   public static Track getTrack(String id, boolean shouldRefresh) {
     Api api = apiPool.checkOut();
