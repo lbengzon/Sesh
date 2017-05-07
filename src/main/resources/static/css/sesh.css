@@ -316,6 +316,10 @@ input#accessCode {
 	margin: auto;
 }
 
+.partyHover {
+	background-color: #6dc6b5;
+}
+
 .deviceSelected {
 	background-color: #5aafc4;
 }
@@ -346,6 +350,82 @@ input#accessCode {
 #formSubmit:hover {
 	transition: background-color 0.4s linear;
 	background-color: #39aeb2;
+}
+
+#loadingParties {
+	padding-left: 3%;
+	color: white;
+}
+
+#noActiveSesh {
+	color: white;
+	padding-left: 3%;
+}
+
+@keyframes blink {
+    /**
+     * At the start of the animation the dot
+     * has an opacity of .2
+     */
+    0% {
+      opacity: .2;
+    }
+    /**
+     * At 20% the dot is fully visible and
+     * then fades out slowly
+     */
+    20% {
+      opacity: 1;
+    }
+    /**
+     * Until it reaches an opacity of .2 and
+     * the animation can start again
+     */
+    100% {
+      opacity: .2;
+    }
+}
+
+#loadingParties span {
+	font-size: 200%;
+    /**
+     * Use the blink animation, which is defined above
+     */
+    animation-name: blink;
+    /**
+     * The animation should take 1.4 seconds
+     */
+    animation-duration: 1.4s;
+    /**
+     * It will repeat itself forever
+     */
+    animation-iteration-count: infinite;
+    /**
+     * This makes sure that the starting style (opacity: .2)
+     * of the animation is applied before the animation starts.
+     * Otherwise we would see a short flash or would have
+     * to set the default styling of the dots to the same
+     * as the animation. Same applies for the ending styles.
+     */
+    animation-fill-mode: both;
+}
+
+#loadingParties span:nth-child(2) {
+    /**
+     * Starts the animation of the third dot
+     * with a delay of .2s, otherwise all dots
+     * would animate at the same time
+     */
+    animation-delay: .2s;
+}
+
+#loadingParties span:nth-child(3) {
+    /**
+     * Starts the animation of the third dot
+     * with a delay of .4s, otherwise all dots
+     * would animate at the same time
+     */
+    animation-delay: .4s;
 }
 
 .list-wrapper {
@@ -439,18 +519,23 @@ input#accessCode {
 #party-list {
 	width: 96%;
 	height: 60%;
-	background-color: white;
+	background-color: #72d8d0;
 	margin-left: 2%;
 	color: black;
 	font-size: 150%;
 	overflow-y: auto;
+	box-shadow: 0 0px 50px 1px #298279, 0 0px 20px 1px #298279
 }
 
 #party-list ul {
+	padding-left: 6%;
+	font-size: 200%;
 	width: 92%;
+	color: white;
 }
 
 #party-list li {
+	width: 96%;
 	padding-top: 1%;
 	padding-bottom: 1%;
 	padding-left: 1%;
@@ -664,6 +749,59 @@ ul.favoritesList {
 	color: black;
 	text-align: left;
 	font-size: 150%;
+}
+
+#musicPlayer {
+	padding-top: 2%;
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+	justify-content: space-around;
+}
+
+#songDataDiv {
+	padding-left: 3%;
+	width: 55%;
+	text-align: left;
+	display: inline-flex;
+	padding-bottom: 2%;
+}
+
+#songTitles {
+	padding-left: 4%;
+}
+
+#progressBarDiv {
+	width: 100%;
+	display: inline-flex;
+	padding-left: 19%;
+	margin-bottom: -50%;
+}
+
+#controlsDiv {
+	min-height: 100%;
+}
+
+#playButton, #pauseButton, #nextButton, #prevButton {
+	background: none;
+	border: none;
+}
+
+#playButton:focus, #pauseButton:focus{
+	outline:none;
+}
+
+#playButton:hover, #pauseButton:hover{
+	cursor: pointer;
+}
+
+#playButton i, #pauseButton i, #nextButton i, #prevButton i {
+	font-size: 300%;
+	color: white;
+}
+
+.guestControl {
+	cursor: default;
 }
 
 
