@@ -34,6 +34,7 @@ import spark.template.freemarker.FreeMarkerEngine;
  * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0 =======
  * Gui Manager class. >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
  * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+ * 
  * @author HE23
  */
 public class GuiManager {
@@ -46,6 +47,7 @@ public class GuiManager {
    * ======= Default constructor. >>>>>>>
    * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * 
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -98,6 +100,7 @@ public class GuiManager {
 
   /**
    * Handles the homepage, where users enter their credentials.
+   * 
    * @author Matt
    */
   private class CallbackHandler implements TemplateViewRoute {
@@ -127,6 +130,7 @@ public class GuiManager {
 
   /**
    * Handles the create join page.
+   * 
    * @author Matt
    */
   private static class CreateJoinHandler implements TemplateViewRoute {
@@ -178,25 +182,23 @@ public class GuiManager {
       String lat = qm.value("latitude");
       String lon = qm.value("longitude");
 
-      List<String> parties = new ArrayList<>();
-      List<Integer> partyIds = new ArrayList<>();
-
       System.out.println("lat " + lat + " lon " + lon);
-
+      List<Map<String, Object>> partyMapsToReturn = new ArrayList<>();
       if (lat != null && lon != null) {
         Coordinate coord = new Coordinate(Double.valueOf(lat),
             Double.valueOf(lon));
-        List<Party> p = Party.getActivePartiesWithinDistance(coord,
+        List<Party> parties = Party.getActivePartiesWithinDistance(coord,
             Constants.PARTY_JOIN_RADIUS);
-        for (Party party : p) {
-          parties.add(party.getName());
-          partyIds.add(party.getPartyId());
+        for (Party party : parties) {
+          Map<String, Object> partyMap = new HashMap<>();
+          partyMap.put("name", party.getName());
+          partyMap.put("partyId", party.getPartyId());
+          partyMap.put("accessType", party.getAccessType());
+          partyMapsToReturn.add(partyMap);
         }
       }
-
-      Map<String, Object> variables = ImmutableMap.of("parties", parties,
-          "partyIds", partyIds);
-
+      Map<String, Object> variables = ImmutableMap.of("parties",
+          partyMapsToReturn);
       return GSON.toJson(variables);
     }
   }
@@ -206,6 +208,7 @@ public class GuiManager {
    * to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
    * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * 
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -248,6 +251,7 @@ public class GuiManager {
         Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
             "userId", userId);
         return new ModelAndView(variables, "join.ftl");
+
       }
 
       // should probably get party name from previous page to display on
@@ -274,12 +278,18 @@ public class GuiManager {
 
         User user = User.of(userId);
         Party party = Party.of(Integer.valueOf(partyId));
-        if (!party.getAttendees().contains(user)) {
+        if (!party.getGuests().contains(user)) {
           boolean success = party.addGuest(user, accessCode);
           if (success) {
             variables = ImmutableMap.of("success", true, "userId", userId,
                 "partyId", partyId);
+            return GSON.toJson(variables);
           }
+        } else {
+          variables = ImmutableMap.of("success", true, "userId", userId,
+              "partyId", partyId);
+          return GSON.toJson(variables);
+
         }
       } catch (Exception e) {
         e.printStackTrace();
@@ -291,10 +301,14 @@ public class GuiManager {
   }
 
   /**
-   * <<<<<<< HEAD Handles request to create a sesh page. ======= Handles request
-   * to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Handles
+   * request to create a sesh page. ======= Handles request to create a sesh
+   * page. <<<<<<< HEAD ======= >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95
+   * >>>>>>> 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Handles request to
+   * create a sesh page.
+   *
+   * >>>>>>> added access code functionality
+   * 
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -311,21 +325,30 @@ public class GuiManager {
   }
 
   /**
-   * <<<<<<< HEAD Creates party in the backend. ======= Creates party in the
-   * backend. <<<<<<< HEAD ======= >>>>>>>
-   * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
-   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Creates party
+   * in the backend. ======= Creates party in the backend. <<<<<<< HEAD =======
+   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Creates party in the
+   * backend.
+   *
+   * >>>>>>> added access code functionality
+   * 
    * @author HE23
    */
   private class GetPartyHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
+      String accessTypeStr = qm.value("accessType");
+      AccessType accessType = AccessType.valueOf(accessTypeStr);
+      String accessCode = qm.value("accessCode");
+
+      System.out.println("access type: " + accessType);
+      System.out.println("access code: " + accessCode);
+
       String userId = qm.value("userId");
       String partyName = qm.value("sesh_name"); // required
-      String hostName = qm.value("host_name");
-      String privacyStatus = qm.value("privacy_setting"); // add to
-                                                          // Party.create
+      // String hostName = qm.value("host_name"); WE DONT NEED HOST NAME
       String lat = qm.value("lat");
       String lon = qm.value("lon");
       String deviceId = qm.value("deviceId");
@@ -345,7 +368,7 @@ public class GuiManager {
         User host = User.of(userId);
         System.out.println("got the user");
         party = Party.create(partyName, host, coord, LocalDateTime.now(),
-            deviceId, partyName, AccessType.PUBLIC, "");
+            deviceId, partyName, accessType, accessCode);
         System.out.println("created the party");
         partyId = party.getPartyId();
         variables = ImmutableMap.of("partyId", partyId, "partyName", partyName,
@@ -395,6 +418,7 @@ public class GuiManager {
   /**
    * Handles when a guest leaves a party. <<<<<<< HEAD ======= >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * 
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -431,6 +455,7 @@ public class GuiManager {
   /**
    * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * 
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -467,6 +492,7 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
+   * 
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -530,6 +556,7 @@ public class GuiManager {
    * Handles redirecting if user is already seshing. <<<<<<< HEAD =======
    * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   * 
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {
