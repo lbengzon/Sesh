@@ -113,12 +113,7 @@ public abstract class Party implements Jsonable {
       throws SpotifyUserApiException;
 
   /**
-   * <<<<<<< 32cd13dff327048ed71599f2610af13c009ef9d8 Upvote song. <<<<<<< HEAD
-   * ======= >>>>>>> d50b8f626056187d3c69cea53817244af4c7c6f8 <<<<<<<
-   * e41b659867a347536c9fbd24f352ea417f562c49 ======= >>>>>>> fixed bug related
-   * to moving request from playlist to request list ======= Upvote song.
-   *
-   * >>>>>>> added leaving and ending party functionality
+   * Upvote song.
    *
    * @param user
    *          - to upvote
