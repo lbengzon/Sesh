@@ -69,13 +69,24 @@ $(document).ready(() => {
 	});
 
 	$("#formSubmit").click(function() {
+		accessType = $("input[name=privacy_setting]:checked").val();
+		accessCode = "";
+		if(accessType === "PRIVATE"){
+			console.log($("#accessCode").val());
+			if ($("#accessCode").val().length === 0) {
+				alert("Please supply an access code for a private party!");
+				return;
+			} else {
+				accessCode = $("#accessCode").val();
+			}
+		}
 		if (global_device_id === null) {
 			alert("You must select a device to play from first!");
 			return;
 		} 
 
 		if ($("#sesh_name").val() !== "" && $("#host_name").val() !== "") {
-			const postParams = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), privacy_setting: $("input[name=privacy_setting]:checked").val(), lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
+			const postParams = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), accessType: accessType, accessCode: accessCode, lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
 			$.post("/getParty", postParams, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);
 				const postParams = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
@@ -85,6 +96,14 @@ $(document).ready(() => {
 			alert("Please fill out the sesh name and host name fields!");
 		}
 
+	});
+
+	$("#private_sesh").click(function() {
+		document.getElementById("passwordDiv").style.display = "block";
+	});
+
+	$("#public_sesh").click(function() {
+		document.getElementById("passwordDiv").style.display = "none";
 	});
 
 });

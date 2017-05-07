@@ -249,7 +249,7 @@ input#private_sesh, input#public_sesh {
 	background-color: #8fd4e8;
 }
 
-.tabContentSearch, .tabContentSearchGuest {
+.tabContentSearch, .tabContentSearchGuest, .tabContentFavorites, .tabContentFavoritesGuest  {
 	width: 75%;
 	height: 100%;
 	background-color: white;
@@ -317,6 +317,27 @@ input#private_sesh, input#public_sesh {
 	padding-right: 1.5%;
 }
 
+#passwordDiv {
+    margin-left: -130%;
+    margin-top: 30%;
+}
+
+#public {
+    margin-left: 50%;
+}
+
+#public_sesh {
+    margin-left: 45%;
+}
+
+#private {
+    margin-left: 10%;
+}
+
+#private_sesh {
+    margin-left: 45%;
+}
+
 .upvote, .downvote {
 	background: none;
 	border: none;
@@ -353,18 +374,20 @@ input#private_sesh, input#public_sesh {
 	border: 2px solid black;
 }
 
-.searchResults {
+.searchResults, .favoritesList {
 	color: black;
 	text-align: left;
 	font-size: 150%;
 	width: 93%;
 }
 
-.results li {
+.results li, .favoritesList li {
 	padding-bottom: 1%;
 	padding-top: 1%;
 	border-top: 3px solid #81c1db;
 }
+
+
 
 
 .hover {
@@ -480,7 +503,16 @@ input:checked + .slider:before {
 
 .favButton i.material-icons {
 	font-size: 32px;
+	color: rgb(128, 128, 128);
 }
+
+ul.favoritesList {
+	color: black;
+	text-align: left;
+	font-size: 150%;
+}
+
+
 
 
 

@@ -34,6 +34,11 @@ import spark.template.freemarker.FreeMarkerEngine;
  * <<<<<<< HEAD ======= >>>>>>> 95539040b5146fa67d5bb15373dd5c2eb0fd6ea0 =======
  * Gui Manager class. >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
  * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+ * 
+=======
+ *
+>>>>>>> finished requests highlighting
  * @author HE23
  */
 public class GuiManager {
@@ -46,6 +51,11 @@ public class GuiManager {
    * ======= Default constructor. >>>>>>>
    * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * 
+=======
+   *
+>>>>>>> finished requests highlighting
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -60,14 +70,14 @@ public class GuiManager {
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
-    Spark.post("/join2", new JoinHandler2());
+    Spark.post("/join2", new GetPartiesWithinRange());
+    Spark.post("/joinParty", new JoinPartyHandler());
     Spark.post("/getParty", new GetPartyHandler());
     Spark.post("/create/party", new CreatePartyHandler(), fme);
-    Spark.post("/join/party", new JoinPartyHandler(), fme);
+    Spark.post("/join/party", new GuestViewHandler(), fme);
     Spark.post("/search", new SearchHandler());
     Spark.post("/devices", new DevicesHandler());
     Spark.post("/getactiveparty", new ActivePartyHandler());
-    // Spark.post("/currentSong", new CurrentSongHandler());
     Spark.get("/error", new ErrorHandler(), fme);
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
     Spark.post("/addSongToFavorites", new AddFavoriteHandler());
@@ -98,6 +108,11 @@ public class GuiManager {
 
   /**
    * Handles the homepage, where users enter their credentials.
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * 
+=======
+   *
+>>>>>>> finished requests highlighting
    * @author Matt
    */
   private class CallbackHandler implements TemplateViewRoute {
@@ -127,6 +142,11 @@ public class GuiManager {
 
   /**
    * Handles the create join page.
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * 
+=======
+   *
+>>>>>>> finished requests highlighting
    * @author Matt
    */
   private static class CreateJoinHandler implements TemplateViewRoute {
@@ -170,7 +190,7 @@ public class GuiManager {
 
   }
 
-  private static class JoinHandler2 implements Route {
+  private static class GetPartiesWithinRange implements Route {
     @Override
     public String handle(Request req, Response res) {
       System.out.println("Running post request to get list of active parties");
@@ -178,25 +198,23 @@ public class GuiManager {
       String lat = qm.value("latitude");
       String lon = qm.value("longitude");
 
-      List<String> parties = new ArrayList<>();
-      List<Integer> partyIds = new ArrayList<>();
-
       System.out.println("lat " + lat + " lon " + lon);
-
+      List<Map<String, Object>> partyMapsToReturn = new ArrayList<>();
       if (lat != null && lon != null) {
         Coordinate coord = new Coordinate(Double.valueOf(lat),
             Double.valueOf(lon));
-        List<Party> p = Party.getActivePartiesWithinDistance(coord,
+        List<Party> parties = Party.getActivePartiesWithinDistance(coord,
             Constants.PARTY_JOIN_RADIUS);
-        for (Party party : p) {
-          parties.add(party.getName());
-          partyIds.add(party.getPartyId());
+        for (Party party : parties) {
+          Map<String, Object> partyMap = new HashMap<>();
+          partyMap.put("name", party.getName());
+          partyMap.put("partyId", party.getPartyId());
+          partyMap.put("accessType", party.getAccessType());
+          partyMapsToReturn.add(partyMap);
         }
       }
-
-      Map<String, Object> variables = ImmutableMap.of("parties", parties,
-          "partyIds", partyIds);
-
+      Map<String, Object> variables = ImmutableMap.of("parties",
+          partyMapsToReturn);
       return GSON.toJson(variables);
     }
   }
@@ -206,6 +224,11 @@ public class GuiManager {
    * to join a sesh page. <<<<<<< HEAD ======= >>>>>>>
    * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * 
+=======
+   *
+>>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -233,19 +256,22 @@ public class GuiManager {
   /**
    * Handles joining a party.
    */
-  private class JoinPartyHandler implements TemplateViewRoute {
+  private class GuestViewHandler implements TemplateViewRoute {
     @Override
     public ModelAndView handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
       // success
       String userId = qm.value("userId");
       String partyId = qm.value("partyId");
-      System.out.println("partyid: " + partyId);
 
+      System.out.println("partyid: " + partyId);
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
       if (!party.getAttendees().contains(user)) {
-        party.addGuest(user, "TEST PASSWORD");
+        Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
+            "userId", userId);
+        return new ModelAndView(variables, "join.ftl");
+
       }
 
       // should probably get party name from previous page to display on
@@ -258,11 +284,62 @@ public class GuiManager {
     }
   }
 
+  private static class JoinPartyHandler implements Route {
+    @Override
+    public String handle(Request req, Response res) {
+      Map<String, Object> variables;
+
+      try {
+        QueryParamsMap qm = req.queryMap();
+        // success
+        String userId = qm.value("userId");
+        String partyId = qm.value("partyId");
+        String accessCode = qm.value("accessCode");
+        System.out.println("partyId: " + partyId);
+        System.out.println("userId: " + userId);
+        System.out.println("accessCode: " + accessCode);
+
+        User user = User.of(userId);
+        Party party = Party.of(Integer.valueOf(partyId));
+        if (!party.getGuests().contains(user)) {
+          boolean success = party.addGuest(user, accessCode);
+          if (success) {
+            variables = ImmutableMap.of("success", true, "userId", userId,
+                "partyId", partyId);
+            return GSON.toJson(variables);
+          }
+        } else {
+          variables = ImmutableMap.of("success", true, "userId", userId,
+              "partyId", partyId);
+          return GSON.toJson(variables);
+
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      variables = ImmutableMap.of("success", false);
+      return GSON.toJson(variables);
+
+    }
+  }
+
   /**
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Handles
+   * request to create a sesh page. ======= Handles request to create a sesh
+   * page. <<<<<<< HEAD ======= >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95
+   * >>>>>>> 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Handles request to
+   * create a sesh page.
+   *
+   * >>>>>>> added access code functionality
+   * 
+=======
    * <<<<<<< HEAD Handles request to create a sesh page. ======= Handles request
    * to create a sesh page. <<<<<<< HEAD ======= >>>>>>>
    * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   *
+>>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -279,21 +356,38 @@ public class GuiManager {
   }
 
   /**
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * <<<<<<< f999ce85843e395275513f91f16f22a8d479f57f <<<<<<< HEAD Creates party
+   * in the backend. ======= Creates party in the backend. <<<<<<< HEAD =======
+   * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
+   * 4cd40d6a734985201d6a104cccf4a71b9b2281c3 ======= Creates party in the
+   * backend.
+   *
+   * >>>>>>> added access code functionality
+   * 
+=======
    * <<<<<<< HEAD Creates party in the backend. ======= Creates party in the
    * backend. <<<<<<< HEAD ======= >>>>>>>
    * 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   *
+>>>>>>> finished requests highlighting
    * @author HE23
    */
   private class GetPartyHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
+      String accessTypeStr = qm.value("accessType");
+      AccessType accessType = AccessType.valueOf(accessTypeStr);
+      String accessCode = qm.value("accessCode");
+
+      System.out.println("access type: " + accessType);
+      System.out.println("access code: " + accessCode);
+
       String userId = qm.value("userId");
       String partyName = qm.value("sesh_name"); // required
-      String hostName = qm.value("host_name");
-      String privacyStatus = qm.value("privacy_setting"); // add to
-                                                          // Party.create
+      // String hostName = qm.value("host_name"); WE DONT NEED HOST NAME
       String lat = qm.value("lat");
       String lon = qm.value("lon");
       String deviceId = qm.value("deviceId");
@@ -310,7 +404,7 @@ public class GuiManager {
         User host = User.of(userId);
         System.out.println("got the user");
         party = Party.create(partyName, host, coord, LocalDateTime.now(),
-            deviceId, partyName, AccessType.PUBLIC, "");
+            deviceId, partyName, accessType, accessCode);
         System.out.println("created the party");
         partyId = party.getPartyId();
         variables = ImmutableMap.of("partyId", partyId, "partyName", partyName,
@@ -358,8 +452,14 @@ public class GuiManager {
   }
 
   /**
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * Handles when a guest leaves a party.
+   * 
+=======
    * Handles when a guest leaves a party. <<<<<<< HEAD ======= >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+   *
+>>>>>>> finished requests highlighting
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -372,9 +472,9 @@ public class GuiManager {
       Boolean partyEndedBool = Boolean.valueOf(qm.value("partyEndedBool"));
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
-      if (deleteBool) {
+      if (!deleteBool) {
         try {
-          party.deletePlaylist();
+          party.followPlaylist(userId);
         } catch (SpotifyUserApiException e) {
           // TODO: Redirect to login page
           e.printStackTrace();
@@ -396,6 +496,11 @@ public class GuiManager {
   /**
    * Handles displaying search results. <<<<<<< HEAD ======= >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * 
+=======
+   *
+>>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -432,6 +537,11 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * 
+=======
+   *
+>>>>>>> finished requests highlighting
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -456,6 +566,7 @@ public class GuiManager {
               .getId(partyId, song.getSpotifyId());
           favoriteRequestIdToSongMaps.put(requestId, song.toMap());
         }
+        System.out.println(favoriteRequestIdToSongMaps);
         Map<String, Object> variables = ImmutableMap.of("favorites",
             favoriteRequestIdToSongMaps);
         return GSON.toJson(variables);
@@ -495,6 +606,11 @@ public class GuiManager {
    * Handles redirecting if user is already seshing. <<<<<<< HEAD =======
    * >>>>>>> 3c9453bc42a1b742af1d7554f4cb30503c82ca95 >>>>>>>
    * 4cd40d6a734985201d6a104cccf4a71b9b2281c3
+<<<<<<< 9b462668b2a36c12e82182293553b9f868945626
+   * 
+=======
+   *
+>>>>>>> finished requests highlighting
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {

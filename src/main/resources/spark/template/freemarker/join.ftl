@@ -24,11 +24,8 @@ ${userId}
 <h2 id="loadingParties"> Loading Nearby Parties ... </h2>
 </div>
 
-<form method="POST" action="/join/party">
-<input type="text" id="partyId" name="partyId" style="display: none;">
-<input type="text" id="userId" name="userId" style="display: none;">
-<input type="submit" class="footerButtons" id="partySubmit" value="Join">
-</form>
+
+<input type="button" class="footerButtons" id="partySubmit" value="Join">
 
 </#assign>
 <#include "main.ftl">

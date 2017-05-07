@@ -57,6 +57,7 @@ function showPlaylists($search, $listview, $options, $tabContentSearch, $tabCont
     $listview.addClass("active");
     $search.removeClass("active");
     $options.removeClass("active");
+    $("#favorites").removeClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.show();
     $tabContentFavorites.hide();
@@ -68,6 +69,7 @@ function showSearch($search, $listview, $options, $tabContentSearch, $tabContent
     $search.addClass("active");
     $listview.removeClass("active");
     $options.removeClass("active");
+    $("#favorites").removeClass("active");
     $tabContentSearch.show();
     $tabContentPlaylist.hide();
     $tabContentFavorites.hide();
@@ -80,6 +82,7 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
     $options.addClass("active");
     $listview.removeClass("active");
     $search.removeClass("active");
+    $("#favorites").removeClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.hide();
     $tabContentFavorites.hide();
@@ -89,9 +92,10 @@ function showOptions($search, $listview, $options, $tabContentSearch, $tabConten
 }
 
 function showFavorites($search, $listview, $options, $tabContentSearch, $tabContentPlaylist,$tabContentFavorites,$tabContentOptions, $titles, $listWrapper) {
-    $options.addClass("active");
+    $options.removeClass("active");
     $listview.removeClass("active");
     $search.removeClass("active");
+    $("#favorites").addClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.hide();
     $tabContentFavorites.show();
@@ -114,9 +118,9 @@ $(document).ready(() => {
 
     //dj tabs
     const $listview = $("#playlist-dj");
-    const $search = $("#search-dj");
+    const $search = $("#search");
     const $options = $("#options-dj");
-    const $favorites = $("#favorites-dj");
+    const $favorites = $("#favorites");
 
 
     const $userInput = $(".search");
@@ -130,11 +134,8 @@ $(document).ready(() => {
     const $nextButton = $("#nextButton");
     const $progressBar = $("#progressbar");
 
-
     //end button
     const $endButton = $("#endButton");
-
-
 
     let startPlaylistIndex;
     let startList;
@@ -209,62 +210,27 @@ $(document).ready(() => {
             $results.empty();
 
             for (var i = 0; i < suggestions.length; i++) {
-                $results.append("<li " + "id=\"" + songIds[i] + "\"" + "onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" + suggestions[i] + "</li>");
+                  $results.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                    + "id=\"" + songIds[i] + "\" >"
+                    + "<div class=\"fav\" >"
+                        + "<button class=\"favButton\" id=\"" + songIds[i] + "\" type=\"button\"> " 
+                          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
+                        + "</button>"
+                      //end of fav div
+                      + "</div>"
+                    + "<div id=\"songtitle\">" + suggestions[i] 
+                    //end of song title div
+                    + "</div>"
+                    + "</li>");
+
             }
+            favorite();
+            highlightSearchFavorites(favIds);
         });
     });
 
-  //   $(".favButton").click(function(x) {
-  //       console.log('HERE');
-  //       const postParams = {userId: userId, songId: x.currentTarget.id};
-  //       $.post("/addSongToFavorites", postParams, responseJSON => {
-  //         const responseObject = JSON.parse(responseJSON);
-  //         const favList = responseObject.favorites;
-  //         $("#request-list li").each(function(index, value) {
-  //           console.log($(this));
-  //         });
-          
-  //       });
-  // });
-
-    // $(".favButton").click(function(x) {
-    //     console.log("HEREEE");
-    // });
-// console.log($(".favButton button"));
-
-    
-
-    // function getCurrentSong() {
-    //     const postParameters = {partyId: partyId};
-    //     $.post("/currentSong", postParameters, responseJSON => {
-    //         const responseObject = JSON.parse(responseJSON);
-    //         if (currSongId !== responseObject.currentSong) {
-    //             //console.log("Reloading playlist: the current song changed");
-    //             currSongId = responseObject.currentSong;
-    //         }
-
     setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
 
-
-    // $(".switch input").click(function() {
-    //     if ($(".switch input").is(":checked")) {
-    //         if (userRequests.length > 0) {
-    //             $("#request-list ul").find("li").hide();
-    //             $("#request-list li").each(function(idx, li) {
-    //                 let id = userRequests[idx].requestId;
-    //                 $("#request-list ul").find("#" + id).show();
-    //             });
-    //             /* show only user requests */
-    //         } else {
-    //             /* show nothing */
-    //             $("#request-list ul").find("li").hide();
-    //         }
-
-    //     } else {
-    //         /* show all songs in request list */
-    //         $("#request-list ul").find("li").show();
-    //     }
-    // });
     $(".switch input").click(function() {
         console.log("USER REQUESTED " + userRequests.length + "SONGS");
         if ($(".switch input").is(":checked")) {
@@ -285,6 +251,10 @@ $(document).ready(() => {
             $("#request-list ul").find("li").show();
         }
     });
+
+
+    
+    $("#favorites").click(populateFavoritesTab);
 
 
     $("#ulPlaylist").dblclick(function() {
@@ -335,6 +305,7 @@ $(document).ready(() => {
 
     $search.click(function() {
         showSearch($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentFavorites, $tabContentOptions, $titles, $listWrapper);
+        highlightSearchFavorites(favIds);
     });
 
     $listview.click(function() {

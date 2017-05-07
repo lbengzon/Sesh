@@ -25,6 +25,7 @@ import com.wrapper.spotify.exceptions.WebApiException;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
 import com.wrapper.spotify.models.PlaylistTrack;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
+import com.wrapper.spotify.models.SimpleArtist;
 import com.wrapper.spotify.models.Track;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.CurrentSongPlaying;
@@ -279,20 +280,38 @@ public class SpotifyCommunicator {
     return res;
   }
 
-  public static List<Track> searchTracks(String query, boolean shouldRefresh) {
+  public static List<Song> searchTracks(String query, boolean shouldRefresh) {
     Api api = apiPool.checkOut();
     List<Track> tracks = new ArrayList<Track>();
+    List<Song> res = new ArrayList<Song>();
     try {
       tracks = api.searchTracks(query).build().get().getItems();
+      res = buildSongsFromTracks(tracks);
       apiPool.checkIn(api);
-      return tracks;
+      return res;
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         return searchTracks(query, false);
       }
       throw new RuntimeException(e.getMessage());
     }
+  }
 
+  public static List<Song> buildSongsFromTracks(List<Track> tracks) {
+    List<Song> results = new ArrayList<Song>();
+    for (Track t : tracks) {
+      String name = t.getName();
+      String id = t.getId();
+      String album = t.getAlbum().getName();
+      String artist = "";
+      for (SimpleArtist art : t.getArtists()) {
+        artist = artist + " " + art.getName();
+      }
+      artist = artist.trim();
+      int length = t.getDuration();
+      Song s = Song.of(id, name, album, artist, length);
+    }
+    return results;
   }
 
   public static Track getTrack(String id, boolean shouldRefresh) {
