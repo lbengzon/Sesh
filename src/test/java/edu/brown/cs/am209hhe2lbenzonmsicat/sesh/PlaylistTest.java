@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party;
+import edu.brown.cs.am209hhe2lbenzonmsicat.models.Party.AccessType;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PartyProxy;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Playlist;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.PlaylistProxy;
@@ -70,9 +71,10 @@ public class PlaylistTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Playlist playlist = p.getPlaylist();
     Request r = Request.create(Song.of("7AQAlklmptrrkBSeujkXsD"), l,
         p.getPartyId(), LocalDateTime.now());
@@ -108,9 +110,10 @@ public class PlaylistTest {
     PartyProxy.clearCache();
     PlaylistProxy.clearCache();
     User l = User.create("s3shteam32", "seshteam32@gmail.com", "Ali Mir",
-        "deviceId");
+        "premium");
     Party p = Party.create("Dope Party", l, new Coordinate(1, 1),
-        LocalDateTime.now(), "deviceId", "testTitle");
+        LocalDateTime.now(), "deviceId", "testTitle", AccessType.PUBLIC,
+        "public");
     Playlist playlist = p.getPlaylist();
     Request r = p.requestSong(Song.of("7AQAlklmptrrkBSeujkXsD"), l);
     // Somewhere only we know - keane

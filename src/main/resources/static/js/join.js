@@ -1,9 +1,10 @@
 function hoverOn(x) {
-	x.className = 'hover';
+	x.classList.add("partyHover");
+	//x.className = 'partyHover';
 }
 
 function hoverOff(x) {
-	x.classList.remove('hover');
+	x.classList.remove('partyHover');
 }
 
 function errorCallBack(error) {
@@ -14,7 +15,7 @@ function errorCallBack(error) {
 }
 
 function wait() {
-	if ($("#party-list li").filter(".selected").attr("id") !== undefined) {
+	if ($("#party-list li").filter(".deviceSelected").attr("id") !== undefined) {
 		$("#partySubmit").attr("disabled", false);
 		$("#partySubmit").val("Join");
 	} else {
@@ -92,25 +93,30 @@ $(document).ready(() => {
 				parties = responseObject.parties;
 				console.log("party length: " + parties.length);
 				$("#loadingParties").hide();
-				for (var i = 0; i < parties.length; i++) {
-					$partyList.append("<li id=\"" + parties[i].partyId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + parties[i].name+ "</li>");
-					$("#" + parties[i].partyId).data('accessType', parties[i].accessType);
-				}
+				if (parties.length === 0) {
+					$("#noActiveSesh").show();
+				} else {
+					for (var i = 0; i < parties.length; i++) {
+						$partyList.append("<li id=\"" + parties[i].partyId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + parties[i].name+ "</li>");
+						$("#" + parties[i].partyId).data('accessType', parties[i].accessType);
+					}	
 				
-				$partyList.on("click", event => {
-					$listItems = $("li");
-					$selected = $listItems.filter('.hover');
-					partyId = ($selected.attr('id'));
-					console.log("id: " + partyId);
-					accessType = ($selected.data('accessType'));
-					console.log("SELECTED: ", $selected);
-					$selected.addClass("selected");
-					//$selected.css("background-color", "grey");
-					$("#partySubmit").attr("disabled", false);
-					//console.log("SELECTED: " , $("#party-list li").filter(".selected").attr("id"));
-				});
+					$partyList.on("click", event => {
+						$listItems = $("li");
+						$selected = $listItems.filter('.partyHover');
+						partyId = ($selected.attr('id'));
+						console.log("id: " + partyId);
+						accessType = ($selected.data('accessType'));
+						console.log("SELECTED: ", $selected);
+						$selected.addClass("deviceSelected");
+						//$selected.css("background-color", "grey");
+						$("#partySubmit").attr("disabled", false);
+						//console.log("SELECTED: " , $("#party-list li").filter(".selected").attr("id"));
+					});
 
-				console.log("parties should be received if you are here!");
+					console.log("parties should be received if you are here!");
+				}
+	
 			});
 		}, errorCallBack);
 	}

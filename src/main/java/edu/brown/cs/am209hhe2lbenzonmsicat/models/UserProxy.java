@@ -9,10 +9,12 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator.Time_range;
 
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
+ *
  * @author leandro
  */
 public class UserProxy extends User implements Proxy {
@@ -22,6 +24,7 @@ public class UserProxy extends User implements Proxy {
 
   /**
    * Constructor.
+   *
    * @param spotifyId
    *          - unique id
    */
@@ -31,6 +34,7 @@ public class UserProxy extends User implements Proxy {
 
   /**
    * this method is a constructor for the full user proxy.
+   *
    * @param spotifyId
    *          the user id
    * @param email
@@ -171,6 +175,31 @@ public class UserProxy extends User implements Proxy {
   @Override
   public List<Device> getDevices() throws SpotifyUserApiException {
     return SpotifyCommunicator.getDevices(spotifyId, true);
+  }
+
+  @Override
+  public List<Song> getUserTopTracks(Time_range time_range)
+      throws SpotifyUserApiException {
+    if (userBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return userBean.getUserTopTracks(time_range);
+  }
+
+  @Override
+  public List<Song> getFavorites() throws SQLException {
+    if (userBean == null) {
+      try {
+        fill();
+      } catch (SQLException e) {
+        throw new RuntimeException(e.getMessage());
+      }
+    }
+    return userBean.getFavorites();
   }
 
 }

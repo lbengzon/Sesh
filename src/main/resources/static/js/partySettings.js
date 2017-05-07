@@ -1,9 +1,9 @@
 let pos;
 let global_lat = null;
 let global_lon = null;
-let global_device_id = null;
 
 $(document).ready(() => {
+	let global_device_id = null;
 	$("#userId").val(userId);
 
 	const postParameters = {userId: userId};
@@ -41,9 +41,9 @@ $(document).ready(() => {
 	});
 
 	$("#deviceList").on("click", "li", function() {
-		$("#deviceList li").removeClass("selected");
+		$("#deviceList li").removeClass("deviceSelected");
 		$selected = $(this);
-		$selected.addClass("selected");
+		$selected.addClass("deviceSelected");
 		global_device_id = $selected.attr("id");
 		console.log("device id set: " + global_device_id);
 		$("#deviceId").val($selected.attr("id"));
@@ -51,7 +51,8 @@ $(document).ready(() => {
 
 	$("#refresh").click(function() {
 		console.log("here");
-		$deviceList.empty();
+		$("#deviceList li").remove();
+		//$deviceList.empty();
 		const postParams = {userId, userId};
 		$.post("/devices", postParams, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);
@@ -61,37 +62,54 @@ $(document).ready(() => {
 				const deviceType = devices[key].type;
 				console.log(devices[key].name);
 				$("#loadingDevices").hide();
-				$deviceList.append("<li id=\"" + deviceId + "\" onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\">" + devices[key].name + "</li>");
+				$deviceList.append("<li id=\"" + deviceId + "\">" + devices[key].name + "</li>");
 			}
 		});
 	});
 
 	$("#formSubmit").click(function() {
+			$("#seshNameError").hide();
+			$("#hostNameError").hide();
+			$("#deviceError").hide();
+			$("#accessCodeError").hide();
 		accessType = $("input[name=privacy_setting]:checked").val();
 		accessCode = "";
 		if(accessType === "PRIVATE"){
-			console.log($("#accessCode").val());
 			if ($("#accessCode").val().length === 0) {
-				alert("Please supply an access code for a private party!");
+				$("#accessCodeError").show();
+				//alert("Please supply an access code for a private party!");
 				return;
 			} else {
 				accessCode = $("#accessCode").val();
 			}
 		}
 		if (global_device_id === null) {
-			alert("You must select a device to play from first!");
+			$("#deviceError").show();
+			//alert("You must select a device to play from first!");
 			return;
-		} 
+		}
 
 		if ($("#sesh_name").val() !== "" && $("#host_name").val() !== "") {
 			const postParams = {userId: userId, sesh_name: $("#sesh_name").val(), host_name: $("#host_name").val(), accessType: accessType, accessCode: accessCode, lat: $("#lat").val(), lon: $("#lon").val(), deviceId: global_device_id};
 			$.post("/getParty", postParams, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);
-				const postParams = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
-				post("/create/party", postParams);
+				console.log("responseObject: " , responseObject);
+				if (responseObject.message === null || responseObject.message === undefined) {
+					console.log("HERE");
+					const postParams = {userId: responseObject.userId, partyId: responseObject.partyId, partyName: responseObject.partyName};
+					post("/create/party", postParams);
+				} else {
+					console.log("message: " + responseObject.message);
+					const params = {message: responseObject.message};
+					post("/login", params, "get");
+				}
+				
 			});
-		} else {
-			alert("Please fill out the sesh name and host name fields!");
+		} else if ($("#sesh_name").val() === "") {
+			$("#seshNameError").show();
+			//alert("Please fill out the sesh name and host name fields!");
+		} else if ($("#host_name").val() === "") {
+			$("#hostNameError").show();
 		}
 
 	});

@@ -81,10 +81,13 @@ function setupWebsockets() {
           vote();
           favorite();
           highlightFavorites();
+          $.notify(data.payload.newRequest.song.title + " by " + data.payload.newRequest.song.artist + " has been requested!", "info");
+
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
           console.log("updating request vote");
+          console.log("DATA" , data.payload.requestList);
           clearAndPopulateRequests(data.payload.requestList, $requests);
           break;
 
@@ -101,6 +104,7 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
+          console.log(data.payload);
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
           $playlist.sortable("refresh");
           //$player.attr("src", $player.attr("src"));
@@ -131,8 +135,7 @@ function setupWebsockets() {
           updatePlayer(data);
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
-          console.log("implement the end party update message for guests. Only guests will recieve this message");
-          alert("The user has ended the party.");
+          alert("The host has ended the party.");
           guestLeaveParty(true);
           break;
 
@@ -149,7 +152,16 @@ function setupWebsockets() {
   };
 }
 
+function convertTime(s) {
+  var ms = s % 1000;
+  s = (s - ms) / 1000;
+  var secs = s % 60;
+  s = (s - secs) / 60;
+  var mins = s % 60;
+  var hrs = (s - mins) / 60;
 
+  return mins + ':' + secs;
+}
 
 function updatePlayer(data){
   if (currSongId !== data.payload.currentSongId) {
@@ -172,6 +184,9 @@ function updatePlayer(data){
   isPaused = !data.payload.isPlaying;
   timePassed = data.payload.timePassed;
   $("#progressbar").attr("value", data.payload.timePassed);
+  console.log("TIME PASSED: " + timePassed);
+  $(".elapsed").text(convertTime(timePassed));
+  $(".duration").text(convertTime(data.payload.duration));
 }
 
 function hideSongsNotPlaying(){
