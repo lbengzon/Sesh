@@ -22,7 +22,8 @@ UPDATE_NEXT_CURR_SONG_REQUEST: 19,
 SEEK_SONG: 20,
 RESUME_SONG: 21,
 END_PARTY: 22,
-UPDATE_GUESTS_END_PARTY: 23
+UPDATE_GUESTS_END_PARTY: 23,
+UPDATE_NEW_USER_JOINED: 24
 };
 
 let conn;
@@ -157,6 +158,9 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
           alert("The host has ended the party.");
           guestLeaveParty(true);
+          break;
+        case MESSAGE_TYPE.UPDATE_NEW_USER_JOINED:
+          console.log("new user joined!", data.payload)
           break;
 
       }
