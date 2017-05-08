@@ -209,6 +209,22 @@ $(document).ready(() => {
 
     setupWebsockets();
 
+    $("#seshFavs").addClass("favSelected");
+
+    $("#seshFavs").click(function() {
+        $("#seshFavs").addClass("favSelected");
+        $("#spotFavs").removeClass("favSelected");
+        $(".favoritesSearch").show();
+        $(".favoritesList").show();
+    });
+
+    $("#spotFavs").click(function() {
+        $("#spotFavs").addClass("favSelected");
+        $("#seshFavs").removeClass("favSelected");
+        $(".favoritesSearch").hide();
+        $(".favoritesList").hide();
+    }); 
+
     //search favorites
     $userInputFavs.keyup(function() {
         $(".favoritesList").find("li").each(function(index, value) {

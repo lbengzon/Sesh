@@ -77,6 +77,10 @@
 </div>
 
 <div class="tabContentFavoritesGuest">
+	<div class="favHeaderButtonsDiv">
+		<button class="favHeaderButtons" id="seshFavs">Sesh</button>
+		<button class="favHeaderButtons" id="spotFavs">Spotify</button>
+	</div>
 	<input type="text" class="favoritesSearchGuest" name="favoritesSearchGuest">
 	<div class="favorites">
 	<ul style="list-style: none;" class="favoritesList"></ul>
