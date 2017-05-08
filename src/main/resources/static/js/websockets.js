@@ -113,17 +113,15 @@ function setupWebsockets() {
           break;
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
+          
+          console.log("update rearrange playlist");
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, false);
           if(constantUpdateLocked != undefined){
             constantUpdateLocked = false;
           }
-          console.log("update rearrange playlist");
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, false);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
-          if(constantUpdateLocked != undefined){
-            constantUpdateLocked = false;
-          }
           console.log("update after request transfer");
           console.log(data.payload);
           requestId = data.payload.requestIdTransferred;
@@ -144,17 +142,21 @@ function setupWebsockets() {
           }
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, true);
           clearAndPopulateRequests(data.payload.requestList, $requests);
-          break;
-
-        case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           if(constantUpdateLocked != undefined){
             constantUpdateLocked = false;
           }
+          break;
+
+        case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
+          
           console.log("adding song directly to playlist");
           console.log(data.payload);
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, true);
           $playlist.sortable("refresh");
           //$player.attr("src", $player.attr("src"));
+          if(constantUpdateLocked != undefined){
+            constantUpdateLocked = false;
+          }
           break;
 
         case MESSAGE_TYPE.UPDATE_ENTIRE_PARTY:
@@ -178,8 +180,8 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
           //console.log("got update next curr song request")
           //console.log("UNLOCKED")
-          constantUpdateLocked = false;
           updatePlayer(data);
+          constantUpdateLocked = false;
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
           alert("The host has ended the party.");
@@ -225,10 +227,10 @@ function convertTime(s) {
 }
 
 function updatePlayer(data){
+  currSongId = data.payload.currentSongId;
   isPaused = !data.payload.isPlaying;
   timePassed = data.payload.timePassed;
   if (currSongId !== data.payload.currentSongId) {
-      currSongId = data.payload.currentSongId;
       $("#songArt").attr("src", data.payload.imageUrl);
       $("#progressbar").attr("max", data.payload.duration);
       $("#songTitle").html(data.payload.songTitle);
