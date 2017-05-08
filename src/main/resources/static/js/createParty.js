@@ -112,7 +112,7 @@ function showFavorites($search, $listview, $options, $tabContentSearch, $tabCont
     $('.list-wrapper').height("56%");
 }
 
-
+let loadedSpot = false;
 
 $(document).ready(() => {
 
@@ -146,6 +146,8 @@ $(document).ready(() => {
 
     //end button
     const $endButton = $("#endButton");
+
+    $("#seshFavs").addClass("favSelected");
 
     let startPlaylistIndex;
     let startList;
@@ -209,7 +211,7 @@ $(document).ready(() => {
 
     setupWebsockets();
 
-    $("#seshFavs").addClass("favSelected");
+
 
     $("#seshFavs").click(function() {
         $("#seshFavs").addClass("favSelected");
@@ -223,6 +225,26 @@ $(document).ready(() => {
         $("#seshFavs").removeClass("favSelected");
         $(".favoritesSearch").hide();
         $(".favoritesList").hide();
+
+        if (!loadedSpot) {
+            //loadedSpot = true;
+            const postParameters = {userId: userId};
+            $.post("/topTracks", postParameters, responseJSON => {
+                const resObject = JSON.parse(responseJSON);
+                const topTracks = resObject.topTracks;
+                for (let key in topTracks) {
+                    $(".favoritesList").append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                    + "id=\"" + topTracks[key].spotifyId + "\" >"
+                    + "<div id=\"songtitle\">" + topTracks[key].title 
+                    //end of song title div
+                    + "</div>"
+                    + "<div id=\"songartist\">" + topTracks[key].artist
+                    + "</div>"
+                    + "</li>");
+                    //console.log(topTracks[key]);
+                }
+            });
+        }
     }); 
 
     //search favorites

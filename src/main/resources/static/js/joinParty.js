@@ -169,6 +169,22 @@ $(document).ready(() => {
         }
     });
 
+    $("#seshFavs").addClass("favSelected");
+
+    $("#seshFavs").click(function() {
+        $("#seshFavs").addClass("favSelected");
+        $("#spotFavs").removeClass("favSelected");
+        $(".favoritesSearch").show();
+        $(".favoritesList").show();
+    });
+
+    $("#spotFavs").click(function() {
+        $("#spotFavs").addClass("favSelected");
+        $("#seshFavs").removeClass("favSelected");
+        $(".favoritesSearch").hide();
+        $(".favoritesList").hide();
+    }); 
+
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");
 	const $tabContentPlaylistGuest = $(".tabContentPlaylistGuest");

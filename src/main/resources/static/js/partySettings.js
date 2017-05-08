@@ -52,7 +52,6 @@ $(document).ready(() => {
 	$("#refresh").click(function() {
 		console.log("here");
 		$("#deviceList li").remove();
-		$deviceList.empty();
 		const postParams = {userId, userId};
 		$.post("/devices", postParams, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);
