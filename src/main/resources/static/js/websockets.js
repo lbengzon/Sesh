@@ -213,6 +213,8 @@ function convertTime(s) {
 }
 
 function updatePlayer(data){
+  isPaused = !data.payload.isPlaying;
+  timePassed = data.payload.timePassed;
   if (currSongId !== data.payload.currentSongId) {
       currSongId = data.payload.currentSongId;
       $("#songArt").attr("src", data.payload.imageUrl);
@@ -230,8 +232,7 @@ function updatePlayer(data){
     $("#pauseButton").hide();
   }
   hideSongsNotPlaying();
-  isPaused = !data.payload.isPlaying;
-  timePassed = data.payload.timePassed;
+  
   $("#progressbar").attr("value", data.payload.timePassed);
   //console.log("TIME PASSED: " + timePassed);
   $(".elapsed").text(convertTime(timePassed));
