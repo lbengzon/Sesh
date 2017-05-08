@@ -62,7 +62,8 @@ public class PartyWebsocket {
     SEEK_SONG,
     RESUME_SONG,
     END_PARTY,
-    UPDATE_GUESTS_END_PARTY
+    UPDATE_GUESTS_END_PARTY,
+    UPDATE_NEW_USER_JOINED
   }
 
   @OnWebSocketConnect
@@ -470,6 +471,15 @@ public class PartyWebsocket {
           MESSAGE_TYPE.UPDATE_ENTIRE_PARTY.ordinal());
       updateMessage.addProperty("success", true);
       updateMessage.add("payload", updatePayload);
+
+      JsonObject updatePartyPayload = new JsonObject();
+      JsonObject updatePartyMessage = new JsonObject();
+      // UPDATE_NEW_USER_JOINED
+      updatePartyPayload.add("newUser", user.toJson());
+      updatePartyMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_NEW_USER_JOINED.toString());
+      sendUpdateToEntirePartyExceptSender(session, updateMessage, partyId);
+
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
