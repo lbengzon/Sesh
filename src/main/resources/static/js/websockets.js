@@ -33,7 +33,7 @@ let myId = -1;
 let userRequests = [];
 let favIds = [];
 let favObjs;
-let constantUpdateLocked = true;
+let constantUpdateLocked = false;
 
 function hoverOn(x) {
   x.className = 'selected';
@@ -105,7 +105,7 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
           console.log("update rearrange playlist");
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, false);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
@@ -127,14 +127,14 @@ function setupWebsockets() {
               $.notify("Your request '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was removed from the playlist!", "error");
             }
           }
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, true);
           clearAndPopulateRequests(data.payload.requestList, $requests);
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
           console.log("adding song directly to playlist");
           console.log(data.payload);
-          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
+          clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, true);
           $playlist.sortable("refresh");
           //$player.attr("src", $player.attr("src"));
           break;
@@ -148,7 +148,7 @@ function setupWebsockets() {
             favIds.push(key);
           }
           favObjs = favorites;
-          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist, isHost);
+          clearAndPopulatePlaylist(data.payload.party.playlist, $playlist, isHost, false);
           clearAndPopulateRequests(data.payload.party.requests, $requests);
 
           //$player.attr("src", data.payload.party.playlistUrl);
@@ -551,9 +551,8 @@ function clearAndPopulateRequests(requests, $requests){
 }
 
 
-function clearAndPopulatePlaylist(playlist, $playlist, isHost){
+function clearAndPopulatePlaylist(playlist, $playlist, isHost, play){
   let startShowing = false
-
   $playlist.empty();
   for (let key in playlist) {
     if (playlist.hasOwnProperty(key)) {
@@ -561,8 +560,9 @@ function clearAndPopulatePlaylist(playlist, $playlist, isHost){
         if(key === currSongId){
           startShowing = true;
         }//If a song is not playing, and you just added the first song. Play that song 
-        else if ((currSongId === -1 || currSongId === undefined) && startShowing == false){
+        else if ((currSongId === -1 || currSongId === undefined) && startShowing == false && play){
           startShowing = true;
+
           if(isHost){
             playPlaylist(partyId, userId)
             pauseSong(partyId, userId);

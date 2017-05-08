@@ -294,6 +294,7 @@ $(document).ready(() => {
     setInterval(constantlyUpdateCurrentSong, 500);
 
     function constantlyUpdateCurrentSong(){
+        console.log("trying to send stuff")
         if(!constantUpdateLocked){
             updatePartyCurrentSong(partyId, userId);
         }
