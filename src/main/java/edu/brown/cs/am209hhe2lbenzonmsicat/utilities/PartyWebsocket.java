@@ -297,7 +297,7 @@ public class PartyWebsocket {
           System.out.println("Curr is Null");
           return;
         }
-        System.out.println(curr.getTimePassed());
+        System.out.println("Time passed " + curr.getTimePassed());
         System.out.println("CurrentSong is playing + " + curr.getIsPlaying());
 
         // If you should check for out of sync and you are provided the old song
@@ -311,12 +311,15 @@ public class PartyWebsocket {
           // This is the id of the song that is currently playing on spotify
           String newSongIdPlaying = Request.getId(party.getPartyId(),
               curr.getSong().getSpotifyId());
+          System.out.println("isPaused front end" + isPaused);
+          System.out.println("time passed front end" + timePassed);
 
           // If the front end thinks the playlist should still be playing
           // and the current song isn't playing it means that the playlist
           // looped
           // around the beginning because it thinks the playlist is over
-          if (!curr.getIsPlaying() && !isPaused && curr.getTimePassed() == 0) {
+          if (!curr.getIsPlaying() && !isPaused && curr.getTimePassed() == 0
+              && timePassed == 0) {
             System.out.println(
                 "**********************RELOOPED AROUND?***********************");
             int newIndex = 0;
