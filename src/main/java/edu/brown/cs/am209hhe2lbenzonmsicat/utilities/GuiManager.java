@@ -427,7 +427,7 @@ public class GuiManager {
       System.out.println("userId: " + userId);
       System.out.println("partyId: " + partyId);
       System.out.println("partyName: " + partyName);
-      Map<String, Object> variables = ImmutableMap.of("title", "Sesh Settings",
+      Map<String, Object> variables = ImmutableMap.of("title", partyName,
           "partyId", partyId, "partyName", partyName, "userId", userId);
 
       return new ModelAndView(variables, "createParty.ftl");
