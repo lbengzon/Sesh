@@ -51,7 +51,7 @@
 </div>
 
 <div id="titles">
-<h2 class="titles">Playlist | ${partyName} </h2>
+<h2 class="titles">Queue | ${partyName} </h2>
 <h2 class="titles">Requests | ${partyName} </h2>
 </div>
 
@@ -100,7 +100,7 @@
 </div>
 
 <div id="footer">
-<button class="footerButtons" id="playlist-dj">Playlist</button>
+<button class="footerButtons" id="playlist-dj">Queue</button>
 <button class="footerButtons" id="search">Search</button>
 <button class="footerButtons" id="favorites">Favorites</button>
 <button class="footerButtons" id="options-dj">Options</button>

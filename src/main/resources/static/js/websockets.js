@@ -99,9 +99,9 @@ function setupWebsockets() {
           }
           if (requestVotedOn.userRequestId === userId) {
             if (voteType === "upvote") {
-              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " was " + voteType + "d", "success");
+              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " by " + requestVotedOn.song.artist + " was " + voteType + "d", "success");
             } else {
-              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " was " + voteType + "d", "error");
+              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " by " + requestVotedOn.song.artist + " was " + voteType + "d", "error");
             }
           }
           break;
@@ -122,7 +122,7 @@ function setupWebsockets() {
           if (transferType === "REQUEST_TO_PLAYLIST") {
             requestTransferred = data.payload.playlist[requestId];
             console.log("request transferred: ",requestTransferred);
-            $.notify("The song '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was added to the playlist!", "success");
+            $.notify("The song '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was added to the queue!", "success");
           } else {
             requestTransferred = data.payload.requestList[requestId];
             console.log("request transferred: ",requestTransferred);
@@ -183,11 +183,11 @@ function setupWebsockets() {
       if (data.type === MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST) {
         console.log(data);
         if (data.location === "requests") {
-          if (confirm("This song has already been requested, would you like to move it to the playlist?")) {
+          if (confirm("This song has already been requested, would you like to move it to the queue?")) {
             moveRequestToQueue(partyId, userId, data.requestId, $("#ulPlaylist li").length);
           }
         } else {
-          alert("This song is already in the playlist");
+          alert("This song is already in the queue");
         }
       } else if (data.type === MESSAGE_TYPE.ADD_REQUEST) {
         alert("Someone has already requested this song!");

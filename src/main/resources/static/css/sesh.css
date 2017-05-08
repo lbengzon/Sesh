@@ -811,7 +811,7 @@ ul.favoritesList {
 }
 
 .guestControl {
-	cursor: default;
+	cursor: default !important;
 }
 
 .favHeaderButtonsDiv {

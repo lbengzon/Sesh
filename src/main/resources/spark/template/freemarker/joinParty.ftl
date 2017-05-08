@@ -50,7 +50,7 @@
 </div>
 
 <div id="titles">
-<h2 id="playlist-title">Playlist | ${partyName}</h2>
+<h2 id="playlist-title">Queue | ${partyName}</h2>
 <h2 id="request-title">Requests | ${partyName}</h2>
 </div>
 <div class="list-wrapper">
@@ -90,15 +90,13 @@
 </div>
 
 <div class="tabContentOptionsGuest">
-
 	<input type="button" id="leaveButton" value="Leave Sesh">
-
 </div>
 </div>
 
 <div id="footer">
 <button class="footerButtons" id="request-guest">Requests</button>
-<button class="footerButtons" id="playlist-guest">Playlist</button>
+<button class="footerButtons" id="playlist-guest">Queue</button>
 <button class="footerButtons" id="search">Search</button>
 <button class="footerButtons" id="favorites">Favorites</button>
 <button class="footerButtons" id="options-guest">Options</button>
