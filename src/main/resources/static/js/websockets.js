@@ -23,7 +23,8 @@ SEEK_SONG: 20,
 RESUME_SONG: 21,
 END_PARTY: 22,
 UPDATE_GUESTS_END_PARTY: 23,
-UPDATE_NEW_USER_JOINED: 24
+UPDATE_NEW_USER_JOINED: 24,
+UPDATE_SEND_USER_TO_LOGIN: 25
 };
 
 let conn;
@@ -33,7 +34,9 @@ let myId = -1;
 let userRequests = [];
 let favIds = [];
 let favObjs;
+
 let constantUpdateLocked = false;
+let votedId;
 
 function hoverOn(x) {
   x.className = 'selected';
@@ -79,15 +82,18 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
           console.log("adding new request");
           appendToRequests($requests, data);
-          $requests.sortable("refresh");
           vote();
           favorite();
+          console.log("==================");
           highlightFavorites();
+          console.log("HERE!!!");
           $.notify(data.payload.newRequest.song.title + " by " + data.payload.newRequest.song.artist + " has been requested!", "info");
+          $requests.sortable("refresh");
+
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
-          clearAndPopulateRequests(data.payload.requestList, $requests);
+          clearAndPopulateRequests(data.payload.requestList, $requests, data.payload.votedUser);
           requestId = data.payload.requestIdVotedOn;
           let requestVotedOn = data.payload.requestList[requestId];
           let voteType = data.payload.voteType;
@@ -96,9 +102,9 @@ function setupWebsockets() {
           }
           if (requestVotedOn.userRequestId === userId) {
             if (voteType === "upvote") {
-              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " was " + voteType + "d", "success");
+              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " by " + requestVotedOn.song.artist + " was " + voteType + "d", "success");
             } else {
-              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " was " + voteType + "d", "error");
+              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " by " + requestVotedOn.song.artist + " was " + voteType + "d", "error");
             }
           }
           break;
@@ -119,7 +125,7 @@ function setupWebsockets() {
           if (transferType === "REQUEST_TO_PLAYLIST") {
             requestTransferred = data.payload.playlist[requestId];
             console.log("request transferred: ",requestTransferred);
-            $.notify("The song '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was added to the playlist!", "success");
+            $.notify("The song '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was added to the queue!", "success");
           } else {
             requestTransferred = data.payload.requestList[requestId];
             console.log("request transferred: ",requestTransferred);
@@ -143,8 +149,8 @@ function setupWebsockets() {
           console.log("updating whole party");
 
           let favorites = data.payload.favorites;
+          favIds = [];
           for(let key in favorites){
-            favIds = [];
             favIds.push(key);
           }
           favObjs = favorites;
@@ -159,7 +165,7 @@ function setupWebsockets() {
           break;
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
           //console.log("got update next curr song request")
-          console.log("UNLOCKED")
+          //console.log("UNLOCKED")
           constantUpdateLocked = false;
           updatePlayer(data);
           break;
@@ -170,11 +176,22 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_NEW_USER_JOINED:
           $.notify(data.payload.newUser.firstName + " " + data.payload.newUser.lastName + " has joined the sesh!", "info");
           break;
+        case MESSAGE_TYPE.UPDATE_SEND_USER_TO_LOGIN:
+          //alert("you gotta redirect to login bro");
+          post("/", {}, "get");
+          break;
 
       }
     } else{
       if (data.type === MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST) {
-        alert("You cannot add a duplicate song to the playlist!");
+        console.log(data);
+        if (data.location === "requests") {
+          if (confirm("This song has already been requested, would you like to move it to the queue?")) {
+            moveRequestToQueue(partyId, userId, data.requestId, $("#ulPlaylist li").length);
+          }
+        } else {
+          alert("This song is already in the queue");
+        }
       } else if (data.type === MESSAGE_TYPE.ADD_REQUEST) {
         alert("Someone has already requested this song!");
       }
@@ -216,7 +233,7 @@ function updatePlayer(data){
   isPaused = !data.payload.isPlaying;
   timePassed = data.payload.timePassed;
   $("#progressbar").attr("value", data.payload.timePassed);
-  console.log("TIME PASSED: " + timePassed);
+  //console.log("TIME PASSED: " + timePassed);
   $(".elapsed").text(convertTime(timePassed));
   $(".duration").text(convertTime(data.payload.duration));
 }
@@ -241,14 +258,16 @@ function getCurrentSongIndex(){
   return index;
 }
 
-
 function vote() {
   //unbind TODO
   $(".upvote").click(function(x) {
+    votedId = x.currentTarget.id;
     upvoteRequest(partyId, userId, x.currentTarget.id);
+
   });
 
   $(".downvote").click(function(x) {
+    votedId = x.currentTarget.id;
     downvoteRequest(partyId, userId, x.currentTarget.id);
   });
 }
@@ -259,9 +278,7 @@ function getRequestId(songId){
 
 function highlightFavorites() {
   $("#request-list ul").find("li").each(function(index, value) {
-    // console.log(jQuery.inArray(getRequestId(getRequestId(value.id), favIds));
-    // console.log("FAV IDS", favIds);
-    // console.log("VALUE ID", value.id);
+
     if (jQuery.inArray(value.id, favIds) >= 0) {
       $(this).find("i#ifav").attr("style", "color: yellow;");
     } else {
@@ -270,6 +287,7 @@ function highlightFavorites() {
   });
 
   $("#playlist-list ul").find("li").each(function(index, value) {
+    console.log(favIds);
       if (jQuery.inArray(value.id, favIds) >= 0) {
         $(this).find("i#ifav").attr("style", "color: yellow;");
       } else {
@@ -368,7 +386,33 @@ function favorite() {
 }
 
 function appendToRequests($requests, data) {
-  $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+  if (data.payload.newRequest.userRequestId === userId) {
+      $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+    + "id=\"" + data.payload.newRequest.requestId + "\" >"
+    + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + data.payload.newRequest.song.spotifyId + "\" type=\"button\"> " 
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
+    + "<div id=\"songtitle\">" + data.payload.newRequest.song.title 
+    + "<div id=\"scorediv\">" + data.payload.newRequest.score + "</div>"
+    + "<div id=\"vote\" > "
+      + "<button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> "
+        + "<i class=\"material-icons\" style=\"color: green;\">thumb_up</i>"
+      + "</button>"
+      + "<button class=\"downvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> "
+        + "<i class=\"material-icons\">thumb_down</i>"
+      + "</button>"
+    //end of vote div
+    + "</div>"
+    //end of song title div
+    + "</div>"
+    + "<div id=\"songartist\">" + data.payload.newRequest.song.artist 
+    + "</div>"
+    + "</li>");
+} else {
+    $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
     + "id=\"" + data.payload.newRequest.requestId + "\" >"
     + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + data.payload.newRequest.song.spotifyId + "\" type=\"button\"> " 
@@ -392,6 +436,8 @@ function appendToRequests($requests, data) {
     + "<div id=\"songartist\">" + data.payload.newRequest.song.artist 
     + "</div>"
     + "</li>");
+}
+
 
   if (data.payload.newRequest.userRequestId === userId) {
     userRequests.push(data.payload.newRequest);
@@ -399,7 +445,7 @@ function appendToRequests($requests, data) {
 
 }
 
-function updateRequestVotes($requests, key, requestList, upvote, downvote) {
+function updateRequestVotes($requests, key, requestList, upvote, downvote, user) {
   if (upvote === true) {
     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -429,6 +475,14 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       if (requestList[key].userRequestId === userId) {
         userRequests.push(requestList[key]);
       }
+
+      if (key === votedId && user !== undefined && user === userId) {
+        $("#"+key).effect( "highlight",{color:'#26a82b',easing:'swing'},2500 );
+        $("#request-list").animate({
+          scrollTop: $("#"+key).position().top - $("#request-list ul").first().position().top
+        }, 1000);
+      }
+
   } else if (downvote === true) {
     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -458,6 +512,14 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       if (requestList[key].userRequestId === userId) {
         userRequests.push(requestList[key]);
       }
+
+      if (key === votedId && user !== undefined && user === userId) {
+        $("#"+key).effect( "highlight",{color:'#e21818',easing:'swing'},1500 );
+        $("#request-list").animate({
+          scrollTop: $("#"+key).position().top - $("#request-list ul").first().position().top
+        }, 1000);
+      } 
+
   } else {
      $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -486,6 +548,13 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
 
       if (requestList[key].userRequestId === userId) {
         userRequests.push(requestList[key]);
+      }
+
+      if (key === votedId && user !== undefined && user === userId) {
+        $("#"+key).effect( "highlight",{color:'#39aeb2',easing:'swing'},2500 );
+        $("#request-list").animate({
+          scrollTop: $("#"+key).position().top - $("#request-list ul").first().position().top
+        }, 1000);
       } 
   }
 }
@@ -524,7 +593,7 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
   }
 }
 
-function clearAndPopulateRequests(requests, $requests){
+function clearAndPopulateRequests(requests, $requests, user){
   $requests.empty();
   for (let key in requests) {
     let downvote = false;
@@ -541,7 +610,7 @@ function clearAndPopulateRequests(requests, $requests){
           downvote = true;
         }
       }
-      updateRequestVotes($requests, key, requests, upvote, downvote);
+      updateRequestVotes($requests, key, requests, upvote, downvote, user);
     }
   }
 
