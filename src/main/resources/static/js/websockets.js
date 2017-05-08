@@ -82,11 +82,14 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_ADD_REQUEST:
           console.log("adding new request");
           appendToRequests($requests, data);
-          $requests.sortable("refresh");
           vote();
           favorite();
+          console.log("==================");
           highlightFavorites();
+          console.log("HERE!!!");
           $.notify(data.payload.newRequest.song.title + " by " + data.payload.newRequest.song.artist + " has been requested!", "info");
+          $requests.sortable("refresh");
+
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
@@ -146,8 +149,8 @@ function setupWebsockets() {
           console.log("updating whole party");
 
           let favorites = data.payload.favorites;
+          favIds = [];
           for(let key in favorites){
-            favIds = [];
             favIds.push(key);
           }
           favObjs = favorites;
@@ -275,9 +278,7 @@ function getRequestId(songId){
 
 function highlightFavorites() {
   $("#request-list ul").find("li").each(function(index, value) {
-    // console.log(jQuery.inArray(getRequestId(getRequestId(value.id), favIds));
-    // console.log("FAV IDS", favIds);
-    // console.log("VALUE ID", value.id);
+
     if (jQuery.inArray(value.id, favIds) >= 0) {
       $(this).find("i#ifav").attr("style", "color: yellow;");
     } else {
@@ -286,6 +287,7 @@ function highlightFavorites() {
   });
 
   $("#playlist-list ul").find("li").each(function(index, value) {
+    console.log(favIds);
       if (jQuery.inArray(value.id, favIds) >= 0) {
         $(this).find("i#ifav").attr("style", "color: yellow;");
       } else {
@@ -384,7 +386,33 @@ function favorite() {
 }
 
 function appendToRequests($requests, data) {
-  $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+  if (data.payload.newRequest.userRequestId === userId) {
+      $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+    + "id=\"" + data.payload.newRequest.requestId + "\" >"
+    + "<div class=\"fav\" >"
+        + "<button class=\"favButton\" id=\"" + data.payload.newRequest.song.spotifyId + "\" type=\"button\"> " 
+          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
+        + "</button>"
+      //end of fav div
+      + "</div>"
+    + "<div id=\"songtitle\">" + data.payload.newRequest.song.title 
+    + "<div id=\"scorediv\">" + data.payload.newRequest.score + "</div>"
+    + "<div id=\"vote\" > "
+      + "<button class=\"upvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> "
+        + "<i class=\"material-icons\" style=\"color: green;\">thumb_up</i>"
+      + "</button>"
+      + "<button class=\"downvote\" id=\"" + data.payload.newRequest.requestId + "\" type=\"button\"> "
+        + "<i class=\"material-icons\">thumb_down</i>"
+      + "</button>"
+    //end of vote div
+    + "</div>"
+    //end of song title div
+    + "</div>"
+    + "<div id=\"songartist\">" + data.payload.newRequest.song.artist 
+    + "</div>"
+    + "</li>");
+} else {
+    $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
     + "id=\"" + data.payload.newRequest.requestId + "\" >"
     + "<div class=\"fav\" >"
         + "<button class=\"favButton\" id=\"" + data.payload.newRequest.song.spotifyId + "\" type=\"button\"> " 
@@ -408,6 +436,8 @@ function appendToRequests($requests, data) {
     + "<div id=\"songartist\">" + data.payload.newRequest.song.artist 
     + "</div>"
     + "</li>");
+}
+
 
   if (data.payload.newRequest.userRequestId === userId) {
     userRequests.push(data.payload.newRequest);
