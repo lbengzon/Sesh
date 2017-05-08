@@ -85,9 +85,20 @@ function setupWebsockets() {
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
-          console.log("updating request vote");
-          console.log("DATA" , data.payload.requestList);
           clearAndPopulateRequests(data.payload.requestList, $requests);
+          requestId = data.payload.requestIdVotedOn;
+          requestVotedOn = data.payload.requestList[requestId];
+          voteType = data.payload.voteType;
+          if (requestId === undefined ||requestVotedOn === undefined || voteType === undefined) {
+            break;
+          }
+          if (requestVotedOn.userRequestId === userId) {
+            if (voteType === "upvote") {
+              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " was " + voteType + "d", "success");
+            } else {
+              $.notify("Your request for '" + requestVotedOn.song.title + "'" + " was " + voteType + "d", "error");
+            }
+          }
           break;
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
@@ -97,6 +108,16 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
+          transferType = data.payload.transferType;
+          requestTransferred = data.payload.playlist[requestId];
+          
+          if (transferType === "REQUEST_TO_PLAYLIST") {
+            $.notify("The song '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was added to the playlist!", "success");
+          } else {
+            if (requestTransferred.userRequestId === userId) {
+              $.notify("Your request '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was removed from the playlist!", "error");
+            }
+          }
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost);
           clearAndPopulateRequests(data.payload.requestList, $requests);
           break;
