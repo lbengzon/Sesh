@@ -813,6 +813,48 @@ ul.favoritesList {
 	cursor: default;
 }
 
+.favHeaderButtonsDiv {
+	width: 100%;
+	display: inline-flex;
+}
+
+.favHeaderButtons {
+	background-color: #72d8d0;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 2px;
+	padding: 1%;
+	width: 50%;
+	font-size: 120%;
+	color: white;
+	border: solid;
+	border-width: 4px;
+	border-color: white;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	margin: auto;
+	transition: background-color 0.4s linear;
+}
+
+.favHeaderButtons:hover {
+	transition: background-color 0.4s linear;
+	background-color: #39aeb2;
+}
+
+.favSelected {
+	background-color: #39aeb2
+}
+
+.favHeaderButtons:focus{
+	outline:none;
+}
+
+.tabContentFavoritesGuest, .tabContentFavorites {
+	overflow-y: scroll;
+}
+
+
+
 
 
 
