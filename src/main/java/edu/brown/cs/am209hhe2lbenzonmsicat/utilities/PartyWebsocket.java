@@ -355,6 +355,10 @@ public class PartyWebsocket {
             System.out.println("Playing playlist at index " + newIndex);
             party.playPlaylist(newIndex);
             curr = party.getSongBeingCurrentlyPlayed();
+            while (!curr.getSong().equals(
+                party.getPlaylist().getSongs().get(newIndex).getSong())) {
+              curr = party.getSongBeingCurrentlyPlayed();
+            }
             System.out
                 .println("new song being played" + curr.getSong().getTitle());
 
@@ -373,10 +377,14 @@ public class PartyWebsocket {
               System.out.println(
                   "**********************WENT TO NEXT SONG and out of sync?***********************");
               System.out.println("Playing playlist at index " + newIndex);
-              // party.playPlaylist(newIndex);
-              // curr = party.getSongBeingCurrentlyPlayed();
-              // System.out
-              // .println("new song being played" + curr.getSong().getTitle());
+              party.playPlaylist(newIndex);
+              curr = party.getSongBeingCurrentlyPlayed();
+              while (!curr.getSong().equals(
+                  party.getPlaylist().getSongs().get(newIndex).getSong())) {
+                curr = party.getSongBeingCurrentlyPlayed();
+              }
+              System.out
+                  .println("new song being played" + curr.getSong().getTitle());
             }
           }
         }
@@ -395,6 +403,10 @@ public class PartyWebsocket {
         }
         party.playPlaylist(newIndex);
         curr = party.getSongBeingCurrentlyPlayed();
+        while (!curr.getSong()
+            .equals(party.getPlaylist().getSongs().get(newIndex).getSong())) {
+          curr = party.getSongBeingCurrentlyPlayed();
+        }
       }
       if (curr == null) {
 
