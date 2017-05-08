@@ -98,7 +98,7 @@ $(document).ready(() => {
 				} else {
 					console.log("message: " + responseObject.message);
 					const params = {message: responseObject.message};
-					post("/login", params, "get");
+					post("/", params, "get");
 				}
 				
 			});
