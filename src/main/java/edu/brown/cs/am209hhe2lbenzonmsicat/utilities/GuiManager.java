@@ -68,6 +68,7 @@ public class GuiManager {
     Spark.get("/leaveparty", new LeavePartyHandler(), fme);
     Spark.post("/addSongToFavorites", new AddFavoriteHandler());
     Spark.post("/createjoin", new CreateJoinHandler(), fme);
+    Spark.post("/topTracks", new UserTopTracksHandler());
   }
 
   /**
@@ -214,7 +215,7 @@ public class GuiManager {
     }
   }
 
-  private static class getUserTopTracksHandler implements Route {
+  private static class UserTopTracksHandler implements Route {
     @Override
     public String handle(Request req, Response res) {
       QueryParamsMap qm = req.queryMap();
