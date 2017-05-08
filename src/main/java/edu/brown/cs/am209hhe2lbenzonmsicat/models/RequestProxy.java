@@ -67,6 +67,7 @@ public class RequestProxy extends Request implements Proxy {
     this.requestTime = requestTime;
     requestBean = new RequestBean(partyId, requestTime, song, userRequestedBy,
         upvotes, downvotes);
+    addBeanToCache();
   }
 
   @Override
@@ -75,10 +76,14 @@ public class RequestProxy extends Request implements Proxy {
     // if the actor exists in the cache just use that
     RequestBean request = RequestProxy.idToRequestCache.get(getId());
     if (request != null) {
+      System.out.println(
+          "**********************USED CACHE TO FILL REFRESH**********************");
       requestBean = request;
       return;
     }
     try {
+      System.out.println(
+          "**********************USED DB TO FILL REFRESH**********************");
       requestBean = DbHandler.getFullRequest(partyId, song, userRequestedBy,
           requestTime);
     } catch (SQLException e) {

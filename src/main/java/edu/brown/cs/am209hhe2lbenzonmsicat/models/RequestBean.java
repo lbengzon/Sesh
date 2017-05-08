@@ -163,7 +163,6 @@ public class RequestBean extends Request {
     } else if (downvotes.contains(user)) {
       downvotes.remove(user);
     }
-
   }
 
   @Override

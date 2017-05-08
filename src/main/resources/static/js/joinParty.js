@@ -14,7 +14,7 @@ function showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGues
 	$("#favorites").removeClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.hide();
-	$tabContentFavoritesGuest.hide();
+	$(".tabContentFavoritesGuest").hide();
 	$tabContentSearchGuest.hide();
 	$tabContentPlaylistGuest.show();
 	$requestTitle.hide();
@@ -86,7 +86,7 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 	$listWrapper.height("56%");
 }
 
-
+let loadedSpot = false;
 
 
 $(document).ready(() => {
@@ -95,8 +95,15 @@ $(document).ready(() => {
 	const $requests = $(".tabContentRequestGuest ul");
 	const $userInputFavs = $(".favoritesSearchGuest");
 	
+	$("#seshFavs").addClass("favSelected");
 
+    //search for songs
     $userInput.keyup(function() {
+            efficientSongSearch();
+        
+    });
+
+    function searchSongs(){
         const postParameters = {userInput: $userInput.val()};
         $.post("/search", postParameters, responseJSON => {
             const responseObject = JSON.parse(responseJSON);
@@ -124,7 +131,24 @@ $(document).ready(() => {
             favorite();
             highlightSearchFavorites(favIds);
         });
-    });
+    }
+
+    let efficientSongSearch = debounce(searchSongs, 500);
+
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
 
     $userInputFavs.keyup(function() {
         $(".favoritesList").find("li").each(function(index, value) {
@@ -148,6 +172,21 @@ $(document).ready(() => {
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
+	$(".favoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
+        console.log($selected);
+       	addRequest(partyId, userId, $selected.attr("id"));
+		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+    });
+
+    $(".spotifyFavoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
+		addRequest(partyId, userId, $selected.attr("id"));
+		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+    });
+
     $(".switch input").click(function() {
         console.log("USER REQUESTED " + userRequests.length + "SONGS");
         if ($(".switch input").is(":checked")) {
@@ -169,13 +208,15 @@ $(document).ready(() => {
         }
     });
 
-    $("#seshFavs").addClass("favSelected");
+    
+$("#favorites").click(populateFavoritesTab);
 
     $("#seshFavs").click(function() {
         $("#seshFavs").addClass("favSelected");
         $("#spotFavs").removeClass("favSelected");
         $(".favoritesSearch").show();
         $(".favoritesList").show();
+        $(".spotifyFavoritesList").hide();
     });
 
     $("#spotFavs").click(function() {
@@ -183,7 +224,35 @@ $(document).ready(() => {
         $("#seshFavs").removeClass("favSelected");
         $(".favoritesSearch").hide();
         $(".favoritesList").hide();
-    }); 
+        if (!loadedSpot) {
+            loadedSpot = true;
+            const postParameters = {userId: userId};
+            $.post("/topTracks", postParameters, responseJSON => {
+                const resObject = JSON.parse(responseJSON);
+                topTracks = resObject.topTracks;
+
+                if (topTracks.length === 0) 
+                {
+                    $("#noTopTracks").show();
+                } else {
+                    $("#noTopTracks").hide();
+                    for (let key in topTracks) {
+                        $(".spotifyFavoritesList").append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                        + "id=\"" + topTracks[key].songBean.spotifyId + "\" >"
+                        + "<div id=\"songtitle\">" + topTracks[key].songBean.title 
+                        //end of song title div
+                        + "</div>"
+                        + "<div id=\"songartist\">" + topTracks[key].songBean.artist
+                        + "</div>"
+                        + "</li>");
+                    }
+                }
+            });
+
+        } else {
+            $(".spotifyFavoritesList").show();
+        }
+    });
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");
@@ -231,6 +300,7 @@ $(document).ready(() => {
 
 	$searchGuest.click(function() {
 		showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		highlightSearchFavorites(favIds);
 	});
 
 	$optionsGuest.click(function() {

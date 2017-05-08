@@ -34,11 +34,37 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST,
+    PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST, SEEK_SONG, RESUME_SONG, END_PARTY, UPDATE_GUESTS_END_PARTY, UPDATE_NEW_USER_JOINED
+    CONNECT,
+    SET_PARTY_ID,
+    ADD_REQUEST,
+    UPVOTE_REQUEST,
+    DOWNVOTE_REQUEST,
+    MOVE_REQUEST_TO_QUEUE,
+    MOVE_FROM_QUEUE_TO_REQUEST,
+    ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_ADD_REQUEST,
+    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_VOTE_REQUESTS,
+    UPDATE_AFTER_REQUEST_TRANSFER,
+    UPDATE_ENTIRE_PARTY,
+    UPDATE_REARRANGE_PLAYLIST,
+    REORDER_PLAYLIST_TRACK,
+    PLAY_PLAYLIST,
+    PAUSE_SONG,
+    UPDATE_PLAYER,
+    SONG_MOVED_TO_NEXT,
+    UPDATE_NEXT_CURR_SONG_REQUEST,
+    SEEK_SONG,
+    RESUME_SONG,
+    END_PARTY,
+    UPDATE_GUESTS_END_PARTY,
+    UPDATE_NEW_USER_JOINED,
+    UPDATE_SEND_USER_TO_LOGIN
   }
 
   @OnWebSocketConnect
@@ -49,6 +75,7 @@ public class PartyWebsocket {
     message.addProperty("success", true);
     message.addProperty("type", MESSAGE_TYPE.CONNECT.ordinal());
     message.add("payload", payload);
+
     session.getRemote().sendString(message.toString());
   }
 
@@ -145,6 +172,14 @@ public class PartyWebsocket {
     }
   }
 
+  private void sendRedirectLoginUpdate(Session session) throws IOException {
+    JsonObject updateMessage = new JsonObject();
+    updateMessage.addProperty("type",
+        MESSAGE_TYPE.UPDATE_SEND_USER_TO_LOGIN.ordinal());
+    updateMessage.addProperty("success", true);
+    session.getRemote().sendString(updateMessage.toString());
+  }
+
   private void endPartyUpdateGuests(JsonObject payload, User user, Party party,
       Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
@@ -162,6 +197,8 @@ public class PartyWebsocket {
       sendUpdateToEntirePartyExceptSender(session, updateMessage,
           party.getPartyId());
 
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -179,6 +216,8 @@ public class PartyWebsocket {
       party.playPlaylist(index);
       party.seekSong(seekPosition);
       updatePartiesCurrentSong(payload, party, session, messageType, false);
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -195,6 +234,8 @@ public class PartyWebsocket {
       long position = payload.get("seekPosition").getAsLong();
       party.seekSong(position);
       updatePartiesCurrentSong(payload, party, session, messageType, false);
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       e.printStackTrace();
       JsonObject updateMessage = new JsonObject();
@@ -210,6 +251,8 @@ public class PartyWebsocket {
     try {
       party.pause();
       updatePartiesCurrentSong(payload, party, session, messageType, false);
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -228,6 +271,8 @@ public class PartyWebsocket {
       }
       party.playPlaylist(index);
       updatePartiesCurrentSong(payload, party, session, messageType, false);
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       JsonObject updateMessage = new JsonObject();
       updateMessage.addProperty("success", false);
@@ -238,7 +283,8 @@ public class PartyWebsocket {
   }
 
   private void updatePartiesCurrentSong(JsonObject payload, Party party,
-      Session sender, MESSAGE_TYPE messageType, boolean checkSync) {
+      Session sender, MESSAGE_TYPE messageType, boolean checkSync)
+      throws IOException {
     try {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
@@ -301,6 +347,8 @@ public class PartyWebsocket {
             }
           }
         }
+      } catch (SpotifyUserApiException e) {
+        sendRedirectLoginUpdate(sender);
       } catch (SpotifyOutOfSyncException e) {
         // Throws an exception if the song being played does not exist in the
         // playlist.
@@ -349,8 +397,7 @@ public class PartyWebsocket {
       e.printStackTrace();
       throw new RuntimeException(e.getMessage());
     } catch (SpotifyUserApiException e) {
-      // TODO REDIRECT TO LOGIN PAGE
-      e.printStackTrace();
+      sendRedirectLoginUpdate(sender);
       return;
     } catch (SpotifyOutOfSyncException e) {
       e.printStackTrace();
@@ -361,7 +408,6 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
-   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -382,7 +428,6 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
-   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -418,6 +463,8 @@ public class PartyWebsocket {
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
         sesh.getRemote().sendString(updateMessage.toString());
       }
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
@@ -488,10 +535,18 @@ public class PartyWebsocket {
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
         sesh.getRemote().sendString(updateMessage.toString());
       }
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      String requestId = Request.getId(party.getPartyId(), songId);
+      Request request = Request.of(requestId);
+      updateMessage.addProperty("requestId", requestId);
       updateMessage.addProperty("type", messageType.ordinal());
+      boolean isInRequests = party.getRequestedSongs().contains(request);
+      updateMessage.addProperty("location",
+          isInRequests ? "requests" : "playlist");
       session.getRemote().sendString(updateMessage.toString());
     }
   }
@@ -541,7 +596,10 @@ public class PartyWebsocket {
       }
 
       updatePayload.add("requestList", party.getRequestsAsJson());
+      updatePayload.addProperty("votedUser", user.getSpotifyId());
+
       Request r = Request.of(requestId);
+
       if (r.getDownvotes().contains(user) || r.getUpvotes().contains(user)) {
         updatePayload.addProperty("requestIdVotedOn", requestId);
         updatePayload.addProperty("voteType", voteType.toString());
@@ -594,6 +652,8 @@ public class PartyWebsocket {
         sesh.getRemote().sendString(updateMessage.toString());
       }
 
+    } catch (SpotifyUserApiException e) {
+      sendRedirectLoginUpdate(session);
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());

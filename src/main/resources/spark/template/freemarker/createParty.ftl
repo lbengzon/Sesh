@@ -28,7 +28,9 @@
 	</div>
 
 	<div id="progressBarDiv">
+		<p class="elapsed">0:00</p>
 		<progress id="progressbar" style="width:60%"></progress>
+		<p class="duration">0:00</p>
 	</div>
 
 	<div id="controlsDiv">
@@ -49,7 +51,7 @@
 </div>
 
 <div id="titles">
-<h2 class="titles">Playlist | ${partyName} </h2>
+<h2 class="titles">Queue | ${partyName} </h2>
 <h2 class="titles">Requests | ${partyName} </h2>
 </div>
 
@@ -86,6 +88,8 @@
 	<input type="text" class="favoritesSearch" name="favoritesSearch">
 	<div class="favorites">
 	<ul style="list-style: none;" class="favoritesList"></ul>
+	<ul style="list-style: none;" class="spotifyFavoritesList"></ul>
+	<h3 id="noTopTracks" style="display: none;"> It looks like you don't have any top tracks from Spotify to display </h3>
 	</div>
 </div>
 
@@ -96,7 +100,7 @@
 </div>
 
 <div id="footer">
-<button class="footerButtons" id="playlist-dj">Playlist</button>
+<button class="footerButtons" id="playlist-dj">Queue</button>
 <button class="footerButtons" id="search">Search</button>
 <button class="footerButtons" id="favorites">Favorites</button>
 <button class="footerButtons" id="options-dj">Options</button>
