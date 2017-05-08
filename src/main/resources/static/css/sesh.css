@@ -20,7 +20,7 @@ body {
 
 #header {
 	text-align: center;
-	font-size: 70px;
+	font-size: 450%;
 	letter-spacing: 10px;
 }
 
@@ -32,7 +32,6 @@ body {
 }
 
 #loginButton {
-	-webkit-appearance: button !important;
 	background-color: #72d8d0 !important;
 	font-family: 'Source Sans Pro', sans-serif !important;
 	letter-spacing: 2px !important;
@@ -107,7 +106,7 @@ h1 {
 	padding-right: 50px;*/
 	/*width: 15%;*/
 	padding: 1%;
-	width: 22%;
+	width: 15%;
 	font-size: 120%;
 	color: white;
 	border: solid;
@@ -123,6 +122,100 @@ h1 {
 .footerButtons:hover {
 	transition: background-color 0.4s linear;
 	background-color: #39aeb2;
+}
+
+.errorRequired {
+	font-size: 60%;
+	color: red;
+}
+
+#helpPrivacy {
+	display: inline-flex;
+	height: 100%;
+	width: 100%;
+}
+
+.help-tip{
+	margin-right: 2%;
+	margin-top: 1.5%;
+	position: relative;
+	text-align: center;
+	background-color: cadetblue;
+	border-radius: 50%;
+	width: 28px;
+	height: 28px;
+	font-size: 16px;
+	line-height: 26px;
+	cursor: default;
+}
+
+.help-tip:before{
+	content:'?';
+	font-weight: bold;
+	color:#fff;
+}
+
+.help-tip:hover p{
+	display:block;
+	transform-origin: 100% 0%;
+	-webkit-animation: fadeIn 0.3s ease-in-out;
+	animation: fadeIn 0.3s ease-in-out;
+
+}
+
+.help-tip p{	/* The tooltip */
+	display: none;
+	z-index: 200;
+	text-align: left;
+	background-color: #1E2021;
+	padding: 20px;
+	width: 300px;
+	position: relative;
+	border-radius: 3px;
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	right: -4px;
+	color: #FFF;
+	font-size: 16px;
+	line-height: 1.4;
+}
+
+.help-tip p:before{ /* The pointer of the tooltip */
+/*	position: absolute;*/
+	content: '';
+	width:0;
+	height: 0;
+	border:6px solid transparent;
+	border-bottom-color:#1E2021;
+	right:10px;
+	top:-12px;
+}
+
+.help-tip p:after{ /* Prevents the tooltip from being hidden */
+	width:100%;
+	height:40px;
+	content:'';
+/*	position: absolute;*/
+	top:-40px;
+	left:0;
+}
+
+/* CSS animation */
+
+@-webkit-keyframes fadeIn {
+	0% { 
+		opacity:0; 
+		transform: scale(0.6);
+	}
+
+	100% {
+		opacity:100%;
+		transform: scale(1);
+	}
+}
+
+@keyframes fadeIn {
+	0% { opacity:0; }
+	100% { opacity:100%; }
 }
 
 #form-wrapper {
@@ -151,18 +244,84 @@ h1 {
 
 #create_sesh input[type="text"] {
 	color: #3f7a84;
+	width:100%;
 }
 
 input#private_sesh, input#public_sesh {
 	margin-top: 7%;
 	transform: scale(2);
+	width: 20%;
+}
+
+input#private_sesh:hover, input#private_sesh:hover {
+	outline:none;
 }
 
 #privacy_settings {
 	display: inline-flex;
-	width: 85%;
+	width: 70%;
+	margin-left: 3%;
 	justify-content: space-between;
 	margin-bottom: 5%;
+}
+
+#passwordDiv {
+	font-size: 80%;
+	display: inline-flex;
+}
+
+#passwordDiv label {
+	padding-bottom: 1px;
+}
+
+input#accessCode {
+	height: 50%;
+	margin-top: 5%;
+}
+
+#deviceRefresh {
+	font-size:70%;
+	width:150%;
+	margin-left:-20%;
+	text-align: center;
+	display: inline-flex;
+}
+
+#deviceList li {
+	padding: 1%;
+	padding-left: 3%;
+}
+
+#refresh{
+	background-color: #72d8d0;
+	border: 4px solid white;
+	color: white;
+	font-family: 'Source Sans Pro', sans-serif;
+	padding: 2%;
+	border-radius: 75%;
+	margin: auto;
+	margin-left: 3%;
+}
+
+#refresh:focus{
+	outline: none;
+}
+
+#refresh:hover {
+	transition: background-color 0.4s linear;
+	background-color: #39aeb2;
+}
+
+#loadingDevices {
+	margin: auto;
+}
+
+.partyHover {
+	background-color: #6dc6b5;
+}
+
+.deviceSelected {
+	background-color: #5aafc4;
 }
 
 #formSubmit {
@@ -191,6 +350,82 @@ input#private_sesh, input#public_sesh {
 #formSubmit:hover {
 	transition: background-color 0.4s linear;
 	background-color: #39aeb2;
+}
+
+#loadingParties {
+	padding-left: 3%;
+	color: white;
+}
+
+#noActiveSesh {
+	color: white;
+	padding-left: 3%;
+}
+
+@keyframes blink {
+    /**
+     * At the start of the animation the dot
+     * has an opacity of .2
+     */
+    0% {
+      opacity: .2;
+    }
+    /**
+     * At 20% the dot is fully visible and
+     * then fades out slowly
+     */
+    20% {
+      opacity: 1;
+    }
+    /**
+     * Until it reaches an opacity of .2 and
+     * the animation can start again
+     */
+    100% {
+      opacity: .2;
+    }
+}
+
+#loadingParties span {
+	font-size: 200%;
+    /**
+     * Use the blink animation, which is defined above
+     */
+    animation-name: blink;
+    /**
+     * The animation should take 1.4 seconds
+     */
+    animation-duration: 1.4s;
+    /**
+     * It will repeat itself forever
+     */
+    animation-iteration-count: infinite;
+    /**
+     * This makes sure that the starting style (opacity: .2)
+     * of the animation is applied before the animation starts.
+     * Otherwise we would see a short flash or would have
+     * to set the default styling of the dots to the same
+     * as the animation. Same applies for the ending styles.
+     */
+    animation-fill-mode: both;
+}
+
+#loadingParties span:nth-child(2) {
+    /**
+     * Starts the animation of the third dot
+     * with a delay of .2s, otherwise all dots
+     * would animate at the same time
+     */
+    animation-delay: .2s;
+}
+
+#loadingParties span:nth-child(3) {
+    /**
+     * Starts the animation of the third dot
+     * with a delay of .4s, otherwise all dots
+     * would animate at the same time
+     */
+    animation-delay: .4s;
 }
 
 .list-wrapper {
@@ -284,18 +519,23 @@ input#private_sesh, input#public_sesh {
 #party-list {
 	width: 96%;
 	height: 60%;
-	background-color: white;
+	background-color: #72d8d0;
 	margin-left: 2%;
 	color: black;
 	font-size: 150%;
 	overflow-y: auto;
+	box-shadow: 0 0px 50px 1px #298279, 0 0px 20px 1px #298279
 }
 
 #party-list ul {
+	padding-left: 6%;
+	font-size: 200%;
 	width: 92%;
+	color: white;
 }
 
 #party-list li {
+	width: 96%;
 	padding-top: 1%;
 	padding-bottom: 1%;
 	padding-left: 1%;
@@ -317,26 +557,22 @@ input#private_sesh, input#public_sesh {
 	padding-right: 1.5%;
 }
 
-#passwordDiv {
-    margin-left: -130%;
-    margin-top: 30%;
-}
-
-#public {
-    margin-left: 50%;
-}
 
 #public_sesh {
     margin-left: 45%;
 }
 
-#private {
-    margin-left: 10%;
+
+#private, #public {
+	height: 100%;
+	font-size: 80%;
 }
 
 #private_sesh {
     margin-left: 45%;
 }
+
+
 
 .upvote, .downvote {
 	background: none;
@@ -363,6 +599,12 @@ input#private_sesh, input#public_sesh {
 	border: 2px solid black;
 }
 
+#messageDiv {
+    font-size: 300%;
+    margin-top: 7%;
+    margin-left: 23%;
+}
+
 .favoritesSearch, .favoritesSearchGuest {
 	width: 90%;
 	height: 5%;
@@ -386,9 +628,6 @@ input#private_sesh, input#public_sesh {
 	padding-top: 1%;
 	border-top: 3px solid #81c1db;
 }
-
-
-
 
 .hover {
 	background-color: #dddddd;
@@ -429,8 +668,16 @@ input#private_sesh, input#public_sesh {
 .switch {
   position: relative;
   display: inline-block;
-  width: 21%;
+  width: 8.5%;
+  min-width: 60px;
+  max-width: 60px;
   height: 80%;
+}
+
+#guestSwitch {
+	width: 5%;
+	min-width: 60px;
+	max-width: 60px;
 }
 
 .switch input {display:none;}
@@ -485,11 +732,12 @@ input:checked + .slider:before {
 
 #switchLabel {
 	color: black;
-	float: right;
+	float: left;
+	padding-right: 2%;
 }
 
 .switchDiv {
-	width: 30%;
+	width: 90%;
 	height: 10%;
 	margin-top: 1.5%;
 	margin-left: 3%;
@@ -511,6 +759,101 @@ ul.favoritesList {
 	text-align: left;
 	font-size: 150%;
 }
+
+#musicPlayer {
+	padding-top: 2%;
+	text-align: center;
+	width: 100%;
+	display: inline-block;
+	justify-content: space-around;
+}
+
+#songDataDiv {
+	padding-left: 3%;
+	width: 55%;
+	text-align: left;
+	display: inline-flex;
+	padding-bottom: 2%;
+}
+
+#songTitles {
+	padding-left: 4%;
+}
+
+#progressBarDiv {
+	width: 100%;
+	display: inline-flex;
+	padding-left: 19%;
+	margin-bottom: -50%;
+}
+
+#controlsDiv {
+	min-height: 100%;
+}
+
+#playButton, #pauseButton, #nextButton, #prevButton {
+	background: none;
+	border: none;
+}
+
+#playButton:focus, #pauseButton:focus{
+	outline:none;
+}
+
+#playButton:hover, #pauseButton:hover{
+	cursor: pointer;
+}
+
+#playButton i, #pauseButton i, #nextButton i, #prevButton i {
+	font-size: 300%;
+	color: white;
+}
+
+.guestControl {
+	cursor: default;
+}
+
+.favHeaderButtonsDiv {
+	width: 100%;
+	display: inline-flex;
+}
+
+.favHeaderButtons {
+	background-color: #72d8d0;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 2px;
+	padding: 1%;
+	width: 50%;
+	font-size: 120%;
+	color: white;
+	border: solid;
+	border-width: 4px;
+	border-color: white;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	margin: auto;
+	transition: background-color 0.4s linear;
+}
+
+.favHeaderButtons:hover {
+	transition: background-color 0.4s linear;
+	background-color: #39aeb2;
+}
+
+.favSelected {
+	background-color: #39aeb2
+}
+
+.favHeaderButtons:focus{
+	outline:none;
+}
+
+.tabContentFavoritesGuest, .tabContentFavorites {
+	overflow-y: scroll;
+}
+
+
 
 
 

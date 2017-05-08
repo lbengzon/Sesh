@@ -1,14 +1,18 @@
 package edu.brown.cs.am209hhe2lbenzonmsicat.models;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
+import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator.Time_range;
 
 /**
  * Models an arbitrary Sesh user.
+ *
  * @author Matt
  */
 public class UserBean extends User {
@@ -20,6 +24,7 @@ public class UserBean extends User {
 
   /**
    * This is the constructor for the User class.
+   *
    * @param spotifyId
    *          - user id
    * @param email
@@ -49,6 +54,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the email of the user.
+   *
    * @return the user's email
    */
   @Override
@@ -58,6 +64,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the id of the user.
+   *
    * @return the user's id
    */
   @Override
@@ -67,6 +74,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the user's first name.
+   *
    * @return user's first name.
    */
   @Override
@@ -76,6 +84,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the user's last name.
+   *
    * @return user's last name.
    */
   @Override
@@ -85,6 +94,7 @@ public class UserBean extends User {
 
   /**
    * This method gets the user's full name.
+   *
    * @return the user's full name.
    */
   @Override
@@ -120,6 +130,17 @@ public class UserBean extends User {
   public List<Device> getDevices() throws SpotifyUserApiException {
     assert false : "should never really get here";
     return SpotifyCommunicator.getDevices(spotifyId, true);
+  }
+
+  @Override
+  public List<Song> getUserTopTracks(Time_range time_range)
+      throws SpotifyUserApiException {
+    return SpotifyCommunicator.getUserTopTracks(spotifyId, time_range, true);
+  }
+
+  @Override
+  public List<Song> getFavorites() throws SQLException {
+    return DbHandler.GetUserFavoritedSongs(spotifyId);
   }
 
 }

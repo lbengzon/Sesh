@@ -26,23 +26,20 @@ public final class Constants {
       + "FJPqlRVYMM6QW9kLxtaij0oqmnSBi-VLjVCr59OTdDoVAgjQjNm"
       + "_9E_flrxsjXmMV0yKvJF8LyRTq-b1gQBOsbNok6wBLSN3ggzdLO29e9wSVQQ"
       + "0Nh5189mCMoCvDKq0EDRLAJY3wzKWP0G5s_Di66RutiGjT40";
-  public static final String SESH_REFRESH = "AQC_vi9Zu6QM7yVQ9gswi-rmvFwmdyMrOg5TSKl1iUKzi"
-      + "s7yipVt1wKnlFgQgT1n_twT8_K8r0ekwmVAiMJN1RD5fR1a4LYX9-"
-      + "UgImBwRcJtQmxSfoUXdZ_KKpksyRXDQkc";
+  public static final String SESH_REFRESH = "AQAjequ2-s0lWF8AYAmiUOOr61TLg5cS"
+      + "0C21ZRzB8ERLl62NOVzd4Qp-9O7q5rim8_x6Azsepmw9euCqawqKk410JW"
+      + "39jTmklbhit6buBOncZahYewji80R0asBd37_YDdg";
 
-  public static final String HANNAH_REFRESH = "AQAZl5TBDPPa5hxWgELg2elD9hu9Mbr8YXjP06"
-      + "2YIu2smq3Qg2mNh1"
-      + "5wFbXxrcrVEIzJ14SYSw2ziHHIT_IVFQ8sAuwA_Er9LSaM9Xlbh4ZivmMBW9G"
-      + "D4QxR-pXZfcSEGW0";
+  public static final String HANNAH_REFRESH = "AQDvdEw7-ANWcQdLsStf5sycqgIZDfEjStXKBleYwlWzRp"
+      + "EH3p6FWxlDfRsyzaP5b-yh25BKwzww796mSdRc982stjM9wwJXBNy"
+      + "COwUd1T-gI5hSWcHEiHLWsoNfjgUxdUc";
 
-  public static final String ALI_REFRESH = "AQA5HBUfgKwlixuFzzuyC2xX0bW"
-      + "eOHvi_HoQnW2gpdZcPl7-7yEJpriAUdKUBDM3kdo4iyuoT8CUXKKRh36Ch_nFaKVAVNBd4_rqUnoC"
-      + "xIrLlGFokOdp1YW1zquqTbtzk08";
+  public static final String ALI_REFRESH = "AQBNsJ2bV8A6Gllg5YaQ-Yi0wwy_"
+      + "jOdK-DwnScXvS8GZOhNSjVoTFIyaeHS1ZJd44vZsn4h"
+      + "mVBIPb28hOjJ5uHBu6CEL78Ik6Mi2cv5j3_-7102Z3YLLF9dvc9178QBJno8";
 
-  public static final String LEANDRO_REFRESH = "AQAc3lT-3F_e-65vhFo86jSC3"
-      + "KqrTaNwHqBXVCsBIn"
-      + "2Am4UnqN135eAJZrbflEv-_kwaCVYBXNkFkem-tDzODChoXtVmP_ie-"
-      + "pi8KH3H9RZa-GQY-8RReJBTsdA5Gnc3A-8";
+  public static final String LEANDRO_REFRESH = "AQDt0nLREMXmy4oRbOwHnf_4SiD-eQbzoCuhp"
+      + "MUT6OStwWU5A22qn5XVuJhBCRxiM9f0gfSuG4Wz83Rpbqm3tKFHDb9VD9KGpynEk2CldQ4FGszAjyiRFH8ClpGjSLxrBi4";
   public static final int SEVEN = 7;
 
   public static final double PARTY_JOIN_RADIUS = 1000.0;
