@@ -227,10 +227,10 @@ function convertTime(s) {
 }
 
 function updatePlayer(data){
-  currSongId = data.payload.currentSongId;
   isPaused = !data.payload.isPlaying;
   timePassed = data.payload.timePassed;
   if (currSongId !== data.payload.currentSongId) {
+      currSongId = data.payload.currentSongId;
       $("#songArt").attr("src", data.payload.imageUrl);
       $("#progressbar").attr("max", data.payload.duration);
       $("#songTitle").html(data.payload.songTitle);
