@@ -116,6 +116,12 @@ public final class SqlStatements {
       + " * FROM SongRequest" + " WHERE partyId=? AND isQueued=0;";
 
   /**
+   * Gets all the song requests of a party.
+   */
+  public static final String GET_SONG_REQUEST = "SELECT" + " * FROM SongRequest"
+      + " WHERE requestId=?;";
+
+  /**
    * Gets all the song requests that are not queued.
    */
   public static final String GET_PARTY_QUEUED_SONG_REQUESTS = "SELECT"
