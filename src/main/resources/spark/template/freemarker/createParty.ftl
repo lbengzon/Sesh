@@ -28,7 +28,9 @@
 	</div>
 
 	<div id="progressBarDiv">
+		<p class="elapsed">0:00</p>
 		<progress id="progressbar" style="width:60%"></progress>
+		<p class="duration">0:00</p>
 	</div>
 
 	<div id="controlsDiv">
@@ -86,6 +88,8 @@
 	<input type="text" class="favoritesSearch" name="favoritesSearch">
 	<div class="favorites">
 	<ul style="list-style: none;" class="favoritesList"></ul>
+	<ul style="list-style: none;" class="spotifyFavoritesList"></ul>
+	<h3 id="noTopTracks" style="display: none;"> It looks like you don't have any top tracks from Spotify to display </h3>
 	</div>
 </div>
 

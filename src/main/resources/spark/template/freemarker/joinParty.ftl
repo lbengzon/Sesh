@@ -84,6 +84,8 @@
 	<input type="text" class="favoritesSearchGuest" name="favoritesSearchGuest">
 	<div class="favorites">
 	<ul style="list-style: none;" class="favoritesList"></ul>
+	<ul style="list-style: none;" class="spotifyFavoritesList"></ul>
+	<h3 id="noTopTracks" style="display: none;"> It looks like you don't have any top tracks from Spotify to display </h3>
 	</div>
 </div>
 
