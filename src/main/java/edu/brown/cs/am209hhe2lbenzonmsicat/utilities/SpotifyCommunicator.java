@@ -25,6 +25,7 @@ import com.wrapper.spotify.exceptions.WebApiException;
 import com.wrapper.spotify.models.AuthorizationCodeCredentials;
 import com.wrapper.spotify.models.PlaylistTrack;
 import com.wrapper.spotify.models.PlaylistTrackPosition;
+import com.wrapper.spotify.models.SimpleArtist;
 import com.wrapper.spotify.models.Track;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.CurrentSongPlaying;
@@ -42,7 +43,6 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
  * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Class that
  * integrates Spotify API for Sesh. >>>>>>>
  * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
- *
  * @author HE23
  */
 
@@ -169,7 +169,6 @@ public class SpotifyCommunicator {
    * <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed
    * device id issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e =======
    * Get access token. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
-   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -242,7 +241,6 @@ public class SpotifyCommunicator {
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * gets the playlist tracks. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
-   *
    * @param userId
    *          user id
    * @param playlistId
@@ -334,15 +332,15 @@ public class SpotifyCommunicator {
     }
   }
 
-  public static List<Track> searchTracks(String query, boolean shouldRefresh) {
+  public static List<Song> searchTracks(String query, boolean shouldRefresh) {
     Api api = apiPool.checkOut();
     List<Track> tracks = new ArrayList<Track>();
     List<Song> res = new ArrayList<Song>();
     try {
       tracks = api.searchTracks(query).build().get().getItems();
-      // res = buildSongsFromTracks(tracks);
+      res = buildSongsFromTracks(tracks);
       apiPool.checkIn(api);
-      return tracks;
+      return res;
     } catch (IOException | WebApiException e) {
       if (shouldRefresh) {
         return searchTracks(query, false);
@@ -351,22 +349,23 @@ public class SpotifyCommunicator {
     }
   }
 
-  // public static List<Song> buildSongsFromTracks(List<Track> tracks) {
-  // List<Song> results = new ArrayList<Song>();
-  // for (Track t : tracks) {
-  // String name = t.getName();
-  // String id = t.getId();
-  // String album = t.getAlbum().getName();
-  // String artist = "";
-  // for (SimpleArtist art : t.getArtists()) {
-  // artist = artist + " " + art.getName();
-  // }
-  // artist = artist.trim();
-  // int length = t.getDuration();
-  // Song s = Song.of(id, name, album, artist, length);
-  // }
-  // return results;
-  // }
+  public static List<Song> buildSongsFromTracks(List<Track> tracks) {
+    List<Song> results = new ArrayList<Song>();
+    for (Track t : tracks) {
+      String name = t.getName();
+      String id = t.getId();
+      String album = t.getAlbum().getName();
+      String artist = "";
+      for (SimpleArtist art : t.getArtists()) {
+        artist = artist + " " + art.getName();
+      }
+      artist = artist.trim();
+      int length = t.getDuration();
+      Song s = Song.of(id, name, album, artist, length);
+      results.add(s);
+    }
+    return results;
+  }
 
   public static Track getTrack(String id, boolean shouldRefresh) {
     Api api = apiPool.checkOut();
@@ -480,7 +479,6 @@ public class SpotifyCommunicator {
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * reorders tracks in the playlist. >>>>>>>
    * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
-   *
    * @param userId
    *          the user id
    * @param playlistId
@@ -567,22 +565,22 @@ public class SpotifyCommunicator {
         // THUS context doesn't exist, so context will be null
       }
 
-      if (context != null) {
-        String type = context.get("type").toString();
-        if (!type.equals("\"playlist\"")) {
-          return null;
-        }
-        String uri = context.get("uri").toString();
-        sb = new StringBuilder();
-        sb.append("\"spotify:user:");
-        sb.append(userId);
-        sb.append(":playlist:");
-        sb.append(playlistId);
-        sb.append("\"");
-        if (!uri.equals(sb.toString())) {
-          return null;
-        }
-      }
+      // if (context != null) {
+      // String type = context.get("type").toString();
+      // if (!type.equals("\"playlist\"")) {
+      // return null;
+      // }
+      // String uri = context.get("uri").toString();
+      // sb = new StringBuilder();
+      // sb.append("\"spotify:user:");
+      // sb.append(userId);
+      // sb.append(":playlist:");
+      // sb.append(playlistId);
+      // sb.append("\"");
+      // if (!uri.equals(sb.toString())) {
+      // return null;
+      // }
+      // }
 
       JsonObject item = jsonObj.getAsJsonObject("item");
       if (item != null) {

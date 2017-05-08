@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyOutOfSyncException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
@@ -129,13 +130,15 @@ public class PlaylistBean extends Playlist {
   }
 
   @Override
-  public CurrentSongPlaying getCurrentSong() throws SpotifyUserApiException {
+  public CurrentSongPlaying getCurrentSong()
+      throws SpotifyUserApiException, SpotifyOutOfSyncException {
     CurrentSongPlaying curr = SpotifyCommunicator
         .getCurrentSong(host.getSpotifyId(), id, true);
-    if (curr != null && queuedRequests.containsKey(curr.getSong())) {
-      return curr;
+    if (curr != null && !queuedRequests.containsKey(curr.getSong())) {
+      throw new SpotifyOutOfSyncException(
+          "A song is playing that isn't party of your playlist!");
     }
-    return null;
+    return curr;
   }
 
   @Override

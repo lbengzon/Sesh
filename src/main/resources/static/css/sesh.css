@@ -106,7 +106,7 @@ h1 {
 	padding-right: 50px;*/
 	/*width: 15%;*/
 	padding: 1%;
-	width: 22%;
+	width: 15%;
 	font-size: 120%;
 	color: white;
 	border: solid;
@@ -668,8 +668,16 @@ input#accessCode {
 .switch {
   position: relative;
   display: inline-block;
-  width: 21%;
+  width: 8.5%;
+  min-width: 60px;
+  max-width: 60px;
   height: 80%;
+}
+
+#guestSwitch {
+	width: 5%;
+	min-width: 60px;
+	max-width: 60px;
 }
 
 .switch input {display:none;}
@@ -724,11 +732,12 @@ input:checked + .slider:before {
 
 #switchLabel {
 	color: black;
-	float: right;
+	float: left;
+	padding-right: 2%;
 }
 
 .switchDiv {
-	width: 30%;
+	width: 90%;
 	height: 10%;
 	margin-top: 1.5%;
 	margin-left: 3%;

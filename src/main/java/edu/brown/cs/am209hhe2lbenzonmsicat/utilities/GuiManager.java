@@ -9,8 +9,6 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
-import com.wrapper.spotify.models.SimpleArtist;
-import com.wrapper.spotify.models.Track;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Coordinate;
 import edu.brown.cs.am209hhe2lbenzonmsicat.models.Device;
@@ -275,6 +273,7 @@ public class GuiManager {
       System.out.println("partyid: " + partyId);
       User user = User.of(userId);
       Party party = Party.of(Integer.valueOf(partyId));
+      String partyName = party.getName();
       if (!party.getAttendees().contains(user)) {
         Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
             "userId", userId);
@@ -287,7 +286,7 @@ public class GuiManager {
       // party view
 
       Map<String, Object> variables = ImmutableMap.of("title", "Join a Sesh",
-          "userId", userId, "partyId", partyId);
+          "userId", userId, "partyId", partyId, "partyName", partyName);
       return new ModelAndView(variables, "joinParty.ftl");
     }
   }
@@ -485,31 +484,55 @@ public class GuiManager {
       try {
         QueryParamsMap qm = req.queryMap();
         String input = qm.value("userInput");
-        List<Track> results = SpotifyCommunicator.searchTracks(input, true);
-        List<String> names = new ArrayList<>();
-        List<String> ids = new ArrayList<>();
-        for (Track t : results) {
-          ids.add(t.getId());
-          StringBuilder item = new StringBuilder(t.getName());
-          item.append(" - ");
-          for (SimpleArtist artist : t.getArtists()) {
-            item.append(artist.getName() + ", ");
-          }
-          item.delete(item.length() - 2, item.length() - 1);
-          names.add(item.toString());
+        List<Song> results = SpotifyCommunicator.searchTracks(input, true);
+        List<Map<String, Object>> ret = new ArrayList<>();
+        for (Song s : results) {
+          ret.add(s.toMap());
         }
 
-        Map<String, Object> variables = ImmutableMap.of("results", names,
-            "songIds", ids);
+        Map<String, Object> variables = ImmutableMap.of("results", ret);
         return GSON.toJson(variables);
       } catch (Exception c) {
         c.printStackTrace();
       }
       Map<String, Object> variables = ImmutableMap.of("results",
-          new ArrayList<String>(), "songIds", new ArrayList<String>());
+          new ArrayList<String>());
       return GSON.toJson(variables);
     }
   }
+
+  // /**
+  // * Handles displaying search results for user's favorites.
+  // *
+  // * @author HE23
+  // *
+  // */
+  // private static class SearchFavoritesHandler implements Route {
+  // @Override
+  // public String handle(Request req, Response res) {
+  // QueryParamsMap qm = req.queryMap();
+  // String input = qm.value("userInputFavs");
+  // input = input.toLowerCase();
+  // User user = User.of(qm.value("userId"));
+  // List<Map<String, Object>> ret = new ArrayList<>();
+  // try {
+  // List<Song> favorites = user.getFavorites();
+  // for (Song s : favorites) {
+  // boolean inAlbum = s.getAlbum().toLowerCase().contains(input);
+  // boolean inArtist = s.getArtist().toLowerCase().contains(input);
+  // boolean inSong = s.getTitle().toLowerCase().contains(input);
+  // if (inAlbum || inArtist || inSong) {
+  // ret.add(s.toMap());
+  // }
+  // }
+  // } catch (SQLException e) {
+  // e.printStackTrace();
+  // }
+  // // go through list of favorites, check if input str is contained in song
+  // // name, artist, album
+  // // if so, add to list and send back to frontend
+  // }
+  // }
 
   /**
    * Handles adding favorites.

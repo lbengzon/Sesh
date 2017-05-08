@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyOutOfSyncException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
@@ -103,7 +104,8 @@ public class PlaylistProxy extends Playlist implements Proxy {
   }
 
   @Override
-  public CurrentSongPlaying getCurrentSong() throws SpotifyUserApiException {
+  public CurrentSongPlaying getCurrentSong()
+      throws SpotifyUserApiException, SpotifyOutOfSyncException {
     if (playlistBean == null) {
       try {
         fill();

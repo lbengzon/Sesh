@@ -52,7 +52,7 @@ $(document).ready(() => {
 	$("#refresh").click(function() {
 		console.log("here");
 		$("#deviceList li").remove();
-		//$deviceList.empty();
+		$deviceList.empty();
 		const postParams = {userId, userId};
 		$.post("/devices", postParams, responseJSON => {
 			const responseObject = JSON.parse(responseJSON);
@@ -77,7 +77,6 @@ $(document).ready(() => {
 		if(accessType === "PRIVATE"){
 			if ($("#accessCode").val().length === 0) {
 				$("#accessCodeError").show();
-				//alert("Please supply an access code for a private party!");
 				return;
 			} else {
 				accessCode = $("#accessCode").val();
@@ -85,7 +84,6 @@ $(document).ready(() => {
 		}
 		if (global_device_id === null) {
 			$("#deviceError").show();
-			//alert("You must select a device to play from first!");
 			return;
 		}
 
