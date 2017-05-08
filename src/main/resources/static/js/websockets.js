@@ -110,11 +110,17 @@ function setupWebsockets() {
           break;
 
         case MESSAGE_TYPE.UPDATE_REARRANGE_PLAYLIST:
+          if(constantUpdateLocked != undefined){
+            constantUpdateLocked = false;
+          }
           console.log("update rearrange playlist");
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, false);
           break;
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
+          if(constantUpdateLocked != undefined){
+            constantUpdateLocked = false;
+          }
           console.log("update after request transfer");
           console.log(data.payload);
           requestId = data.payload.requestIdTransferred;
@@ -138,6 +144,9 @@ function setupWebsockets() {
           break;
 
         case MESSAGE_TYPE.UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST:
+          if(constantUpdateLocked != undefined){
+            constantUpdateLocked = false;
+          }
           console.log("adding song directly to playlist");
           console.log(data.payload);
           clearAndPopulatePlaylist(data.payload.playlist, $playlist, isHost, true);
@@ -634,8 +643,8 @@ function clearAndPopulatePlaylist(playlist, $playlist, isHost, play){
           startShowing = true;
 
           if(isHost){
-            playPlaylist(partyId, userId)
-            pauseSong(partyId, userId);
+            //playPlaylist(partyId, userId)
+            //pauseSong(partyId, userId);
           }
         }
       }   
@@ -693,6 +702,8 @@ function downvoteRequest (partyId, userId, requestId) {
 }
 
 function moveRequestToQueue (partyId, userId, requestId, index) {
+  constantUpdateLocked = true;
+
   let message = {
     type: MESSAGE_TYPE.MOVE_REQUEST_TO_QUEUE, 
     payload:{
@@ -732,6 +743,7 @@ function reorderPlaylistTrack(partyId, userId, requestId, oldIndex, newIndex){
 }
 
 function addToPlaylist(partyId, userId, songId) {
+  constantUpdateLocked = true;
   let message = {
     type: MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST, 
     payload:{
