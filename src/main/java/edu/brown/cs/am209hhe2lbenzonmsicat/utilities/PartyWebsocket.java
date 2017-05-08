@@ -347,17 +347,6 @@ public class PartyWebsocket {
             // what is actually being played
             if ((!oldSongId.equals(newSongIdPlaying)
                 && !realNextSong.getId().equals(newSongIdPlaying))) {
-              // If there is a mismatch, play the new index of the playlist.
-              System.out.println(
-                  "**********************WENT TO NEXT SONG and out of sync?***********************");
-              // System.out.println("Playing playlist at index " + newIndex);
-              // party.playPlaylist(newIndex);
-              // curr = party.getSongBeingCurrentlyPlayed();
-              // // while (!curr.getSong().equals(
-              // // party.getPlaylist().getSongs().get(newIndex).getSong())) {
-              // // }
-              // System.out
-              // .println("new song being played" + curr.getSong().getTitle());
             }
           }
         }
