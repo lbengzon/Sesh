@@ -43,7 +43,6 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
  * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Class that
  * integrates Spotify API for Sesh. >>>>>>>
  * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
- *
  * @author HE23
  */
 
@@ -60,7 +59,9 @@ public class SpotifyCommunicator {
   private static ApiPool apiPool;
 
   public enum Time_range {
-    long_term, medium_term, short_term
+    long_term,
+    medium_term,
+    short_term
   }
 
   /**
@@ -170,7 +171,6 @@ public class SpotifyCommunicator {
    * <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed
    * device id issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e =======
    * Get access token. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
-   *
    * @param code
    *          - code
    * @return a list of the user's info
@@ -243,7 +243,6 @@ public class SpotifyCommunicator {
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * gets the playlist tracks. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
-   *
    * @param userId
    *          user id
    * @param playlistId
@@ -482,7 +481,6 @@ public class SpotifyCommunicator {
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * reorders tracks in the playlist. >>>>>>>
    * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
-   *
    * @param userId
    *          the user id
    * @param playlistId
