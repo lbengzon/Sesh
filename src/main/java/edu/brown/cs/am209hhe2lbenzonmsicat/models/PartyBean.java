@@ -162,11 +162,11 @@ public class PartyBean extends Party {
   @Override
   public Request requestSong(Song song, User user) {
     assert isActive() == true;
-
     try {
       if (getAttendees().contains(user)) {
         Request newRequest = Request.create(song, user, partyId,
             LocalDateTime.now());
+        newRequest.upvote(user);
         requestIdToRequest.put(newRequest.getId(), newRequest);
         userToNumTotalRequests.add(newRequest.getUserRequestedBy());
         return newRequest;
@@ -198,12 +198,19 @@ public class PartyBean extends Party {
           .count(r2.getUserRequestedBy());
       int numTotalRequestOfUser2 = userToNumTotalRequests
           .count(r2.getUserRequestedBy());
-      // double r1Multiplier = numApprovedRequestsOfUser1 /
-      // numTotalRequestOfUser1;
-      // double r2Multiplier = numApprovedRequestsOfUser2 /
-      // numTotalRequestOfUser2;
-      Double r1Rank = r1.getRanking();
-      Double r2Rank = r2.getRanking();
+      double r1Multiplier = 0.5;
+      if (numApprovedRequestsOfUser1 != 0 && numTotalRequestOfUser1 != 0) {
+        r1Multiplier += 0.5
+            * (numApprovedRequestsOfUser1 / numTotalRequestOfUser1);
+      }
+      double r2Multiplier = 0.5;
+      if (numApprovedRequestsOfUser2 != 0 && numTotalRequestOfUser2 != 0) {
+        r2Multiplier += 0.5
+            * (numApprovedRequestsOfUser2 / numTotalRequestOfUser2);
+      }
+
+      Double r1Rank = r1Multiplier * r1.getRanking();
+      Double r2Rank = r2Multiplier * r2.getRanking();
       return r1Rank.compareTo(r2Rank);
     }
 

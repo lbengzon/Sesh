@@ -563,6 +563,7 @@ public class PartyWebsocket {
 
       updatePayload.add("requestList", party.getRequestsAsJson());
       Request r = Request.of(requestId);
+
       if (r.getDownvotes().contains(user) || r.getUpvotes().contains(user)) {
         updatePayload.addProperty("requestIdVotedOn", requestId);
         updatePayload.addProperty("voteType", voteType.toString());
