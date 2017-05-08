@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -34,39 +35,11 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST,
-    PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT,
-    SET_PARTY_ID,
-    ADD_REQUEST,
-    UPVOTE_REQUEST,
-    DOWNVOTE_REQUEST,
-    MOVE_REQUEST_TO_QUEUE,
-    MOVE_FROM_QUEUE_TO_REQUEST,
-    ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_ADD_REQUEST,
-    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_VOTE_REQUESTS,
-    UPDATE_AFTER_REQUEST_TRANSFER,
-    UPDATE_ENTIRE_PARTY,
-    UPDATE_REARRANGE_PLAYLIST,
-    REORDER_PLAYLIST_TRACK,
-    PLAY_PLAYLIST,
-    PAUSE_SONG,
-    UPDATE_PLAYER,
-    SONG_MOVED_TO_NEXT,
-    UPDATE_NEXT_CURR_SONG_REQUEST,
-    SEEK_SONG,
-    RESUME_SONG,
-    END_PARTY,
-    UPDATE_GUESTS_END_PARTY,
-    UPDATE_NEW_USER_JOINED,
-    UPDATE_SEND_USER_TO_LOGIN,
-    PREV_SONG,
-    NEXT_SONG
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST, SEEK_SONG, RESUME_SONG, END_PARTY, UPDATE_GUESTS_END_PARTY, UPDATE_NEW_USER_JOINED, UPDATE_SEND_USER_TO_LOGIN, PREV_SONG, NEXT_SONG
   }
 
   @OnWebSocketConnect
@@ -284,6 +257,7 @@ public class PartyWebsocket {
       CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
       while (!curr.getSong()
           .equals(party.getPlaylist().getSongs().get(index).getSong())) {
+        TimeUnit.MILLISECONDS.sleep(100);
         curr = party.getSongBeingCurrentlyPlayed();
       }
       updatePartiesCurrentSong(payload, party, session, messageType, false);
@@ -453,6 +427,7 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
+   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -473,6 +448,7 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
+   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
