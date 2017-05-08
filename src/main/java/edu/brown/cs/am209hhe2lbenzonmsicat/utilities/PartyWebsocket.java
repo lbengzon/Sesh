@@ -607,10 +607,9 @@ public class PartyWebsocket {
       if (r.getDownvotes().contains(user) || r.getUpvotes().contains(user)) {
         updatePayload.addProperty("transferType", transferType.toString());
         updatePayload.addProperty("requestIdTransfered", requestId);
-        updateMessage.addProperty("type",
-            MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER.ordinal());
       }
-
+      updateMessage.addProperty("type",
+          MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER.ordinal());
       updateMessage.addProperty("success", true);
       updateMessage.add("payload", updatePayload);
       for (Session sesh : partyIdToSessions.get(party.getPartyId())) {
