@@ -297,8 +297,9 @@ public class PartyWebsocket {
           System.out.println("Curr is Null");
           return;
         }
-        System.out.println("Time passed " + curr.getTimePassed());
-        System.out.println("CurrentSong is playing + " + curr.getIsPlaying());
+        System.out.println("Real Time passed " + curr.getTimePassed());
+        System.out
+            .println("Real CurrentSong is playing = " + curr.getIsPlaying());
 
         // If you should check for out of sync and you are provided the old song
         // id
@@ -311,6 +312,8 @@ public class PartyWebsocket {
           // This is the id of the song that is currently playing on spotify
           String newSongIdPlaying = Request.getId(party.getPartyId(),
               curr.getSong().getSpotifyId());
+          System.out.println("SongId currently playing:" + newSongIdPlaying);
+          System.out.println("SongId sent from front end " + oldSongId);
           System.out.println("isPaused front end" + isPaused);
           System.out.println("time passed front end" + timePassed);
 
