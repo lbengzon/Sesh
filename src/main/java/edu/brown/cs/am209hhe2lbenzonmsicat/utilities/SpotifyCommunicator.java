@@ -160,7 +160,7 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * 
+   *
    * @param code
    *          - code
    * @return a list of the user's info
