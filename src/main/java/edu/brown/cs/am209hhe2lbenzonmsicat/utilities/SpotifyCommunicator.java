@@ -37,6 +37,13 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 /**
+ * <<<<<<< HEAD ======= <<<<<<< HEAD <<<<<<< HEAD Class that integrates Spotify
+ * API for Sesh. ======= Class that integrates Spotify API for Sesh. <<<<<<<
+ * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
+ * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Class that
+ * integrates Spotify API for Sesh. >>>>>>>
+ * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd >>>>>>>
+ * d07493cf6ae08448f8045c8257226d9d8d4a0f45
  *
  * @author HE23
  */
@@ -160,6 +167,12 @@ public class SpotifyCommunicator {
   }
 
   /**
+   * <<<<<<< HEAD ======= <<<<<<< HEAD <<<<<<< HEAD Get access token. =======
+   * Get access token. <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 =======
+   * >>>>>>> fixed device id issue >>>>>>>
+   * d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Get access token. >>>>>>>
+   * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd >>>>>>>
+   * d07493cf6ae08448f8045c8257226d9d8d4a0f45
    *
    * @param code
    *          - code
@@ -228,6 +241,12 @@ public class SpotifyCommunicator {
   }
 
   /**
+   * <<<<<<< HEAD ======= <<<<<<< HEAD <<<<<<< HEAD This method gets the
+   * playlist tracks. ======= This method gets the playlist tracks. <<<<<<<
+   * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
+   * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
+   * gets the playlist tracks. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * >>>>>>> d07493cf6ae08448f8045c8257226d9d8d4a0f45
    *
    * @param userId
    *          user id

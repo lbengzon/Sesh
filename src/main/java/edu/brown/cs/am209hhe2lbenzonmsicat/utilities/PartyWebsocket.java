@@ -451,11 +451,12 @@ public class PartyWebsocket {
 
       JsonObject updatePartyPayload = new JsonObject();
       JsonObject updatePartyMessage = new JsonObject();
-      // UPDATE_NEW_USER_JOINED
       updatePartyPayload.add("newUser", user.toJson());
       updatePartyMessage.addProperty("type",
-          MESSAGE_TYPE.UPDATE_NEW_USER_JOINED.toString());
-      sendUpdateToEntirePartyExceptSender(session, updateMessage, partyId);
+          MESSAGE_TYPE.UPDATE_NEW_USER_JOINED.ordinal());
+      updatePartyMessage.addProperty("success", true);
+      updatePartyMessage.add("payload", updatePartyPayload);
+      sendUpdateToEntirePartyExceptSender(session, updatePartyMessage, partyId);
 
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
