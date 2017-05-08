@@ -491,7 +491,13 @@ public class PartyWebsocket {
     } catch (Exception e) {
       updateMessage.addProperty("success", false);
       updateMessage.addProperty("message", e.getMessage());
+      String requestId = Request.getId(party.getPartyId(), songId);
+      Request request = Request.of(requestId);
+      updateMessage.addProperty("requestId", requestId);
       updateMessage.addProperty("type", messageType.ordinal());
+      boolean isInRequests = party.getRequestedSongs().contains(request);
+      updateMessage.addProperty("location",
+          isInRequests ? "requests" : "playlist");
       session.getRemote().sendString(updateMessage.toString());
     }
   }

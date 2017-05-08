@@ -174,7 +174,14 @@ function setupWebsockets() {
       }
     } else{
       if (data.type === MESSAGE_TYPE.ADD_SONG_DIRECTLY_TO_PLAYLIST) {
-        alert("You cannot add a duplicate song to the playlist!");
+        console.log(data);
+        if (data.location === "requests") {
+          if (confirm("This song has already been requested, would you like to move it to the playlist?")) {
+            moveRequestToQueue(partyId, userId, data.requestId, $("#ulPlaylist li").length);
+          }
+        } else {
+          alert("This song is already in the playlist");
+        }
       } else if (data.type === MESSAGE_TYPE.ADD_REQUEST) {
         alert("Someone has already requested this song!");
       }

@@ -241,7 +241,6 @@ $(document).ready(() => {
                     + "<div id=\"songartist\">" + topTracks[key].artist
                     + "</div>"
                     + "</li>");
-                    //console.log(topTracks[key]);
                 }
             });
         }
@@ -294,7 +293,6 @@ $(document).ready(() => {
     setInterval(constantlyUpdateCurrentSong, 500);
 
     function constantlyUpdateCurrentSong(){
-        console.log("trying to send stuff")
         if(!constantUpdateLocked){
             updatePartyCurrentSong(partyId, userId);
         }
