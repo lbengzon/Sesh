@@ -1131,4 +1131,29 @@ public final class DbHandler {
     return songs;
   }
 
+  public static Request getRequest(String requestId) throws SQLException {
+    String query = SqlStatements.GET_SONG_REQUEST;
+    List<Song> songs = new ArrayList<Song>();
+    try (Connection conn = getConnection()) {
+      if (conn == null) {
+        throw new SQLException("ERROR: No database has been set.");
+      }
+      PreparedStatement prep = conn.prepareStatement(query);
+
+      prep.setString(1, requestId);
+      try (ResultSet rs = prep.executeQuery()) {
+        if (rs.next()) {
+          String spotifySongId = rs.getString(2);
+          int partyId = rs.getInt(3);
+          String userId = rs.getString(4);
+          String time = rs.getString(5);
+          Request r = Request.of(partyId, Song.of(spotifySongId),
+              User.of(userId), LocalDateTime.parse(time));
+          return r;
+        }
+      }
+    }
+    throw new RuntimeException("No request of that id");
+  }
+
 }

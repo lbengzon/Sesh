@@ -18,7 +18,8 @@ public abstract class Request implements Comparable<Request>, Jsonable {
    * Vote type enum.
    */
   public enum VoteType {
-    upvote, downvote
+    upvote,
+    downvote
   }
 
   /**
@@ -150,6 +151,14 @@ public abstract class Request implements Comparable<Request>, Jsonable {
       User user, HashSet<User> upvotes, HashSet<User> downvotes) {
     // TODO Auto-generated method stub
     return new RequestProxy(partyId, time, song, user, upvotes, downvotes);
+  }
+
+  public static Request of(String requestId) {
+    try {
+      return DbHandler.getRequest(requestId);
+    } catch (Exception e) {
+      throw new RuntimeException("ERROR: No such request id");
+    }
   }
 
   /**

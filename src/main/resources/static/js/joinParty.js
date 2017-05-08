@@ -90,29 +90,53 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 
 
 $(document).ready(() => {
-
-
 	const $userInput = $(".search");
 	const $results = $(".searchResults");
 	const $requests = $(".tabContentRequestGuest ul");
+	const $userInputFavs = $(".favoritesSearchGuest");
 	
 
-	$userInput.keyup(function() {
-		console.log("userId" + userId);
-		const postParameters = {userInput: $userInput.val()};
-		$.post("/search", postParameters, responseJSON => {
-			const responseObject = JSON.parse(responseJSON);
-			const suggestions = responseObject.results;
-			const songIds = responseObject.songIds;
+    $userInput.keyup(function() {
+        const postParameters = {userInput: $userInput.val()};
+        $.post("/search", postParameters, responseJSON => {
+            const responseObject = JSON.parse(responseJSON);
+            const suggestions = responseObject.results;
 
-			$results.empty();
-			for (var i = 0; i < suggestions.length; i++) {
-				$results.append("<li " + "id=\"" + songIds[i] + "\"" + 
-					"onmouseover=\"hoverOn(this)\"" + "onmouseout=\"hoverOff(this)\">" 
-					+ suggestions[i] + "</li>");
-			}
-		});
-	});
+            $results.empty();
+
+            for (let i = 0; i < suggestions.length; i++) {
+                $results.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                    + "id=\"" + suggestions[i].spotifyId + "\" >"
+                    + "<div class=\"fav\" >"
+                        + "<button class=\"favButton\" id=\"" + suggestions[i].spotifyId + "\" type=\"button\"> " 
+                          + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
+                        + "</button>"
+                      //end of fav div
+                      + "</div>"
+                    + "<div id=\"songtitle\">" + suggestions[i].title 
+                    //end of song title div
+                    + "</div>"
+                    + "<div id=\"songartist\">" + suggestions[i].artist
+                    + "</div>"
+                    + "</li>"); 
+            }
+            
+            favorite();
+            highlightSearchFavorites(favIds);
+        });
+    });
+
+    $userInputFavs.keyup(function() {
+        $(".favoritesList").find("li").each(function(index, value) {
+            let text = $(this)[0].innerText.replace("grade", "");
+            text = text.toLowerCase();
+            if (!text.includes($userInputFavs.val())) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
+    });
 
 
 	/* HANDLES ADDING A REQUEST FROM SEARCH */
@@ -144,6 +168,22 @@ $(document).ready(() => {
             $("#request-list ul").find("li").show();
         }
     });
+
+    $("#seshFavs").addClass("favSelected");
+
+    $("#seshFavs").click(function() {
+        $("#seshFavs").addClass("favSelected");
+        $("#spotFavs").removeClass("favSelected");
+        $(".favoritesSearch").show();
+        $(".favoritesList").show();
+    });
+
+    $("#spotFavs").click(function() {
+        $("#spotFavs").addClass("favSelected");
+        $("#seshFavs").removeClass("favSelected");
+        $(".favoritesSearch").hide();
+        $(".favoritesList").hide();
+    }); 
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");

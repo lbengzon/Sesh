@@ -7,7 +7,7 @@ userId = "${userId}";
 
 $(document).ready(function() {
     const params = {userId: userId};
-    post("/createjoin", params, "get");
+    post("/createjoin", params);
 });
 
 </script>
