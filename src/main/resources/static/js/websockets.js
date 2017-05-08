@@ -89,7 +89,7 @@ function setupWebsockets() {
           requestId = data.payload.requestIdVotedOn;
           requestVotedOn = data.payload.requestList[requestId];
           voteType = data.payload.voteType;
-          if (requestId === undefined ||requestVotedOn === undefined || voteType === undefined) {
+          if (requestId === null ||requestVotedOn === null || voteType === null) {
             break;
           }
           if (requestVotedOn.userRequestId === userId) {
