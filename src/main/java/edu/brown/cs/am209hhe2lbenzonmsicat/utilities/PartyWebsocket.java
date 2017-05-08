@@ -281,6 +281,11 @@ public class PartyWebsocket {
         index = 0;
       }
       party.playPlaylist(index);
+      CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
+      while (!curr.getSong()
+          .equals(party.getPlaylist().getSongs().get(index).getSong())) {
+        curr = party.getSongBeingCurrentlyPlayed();
+      }
       updatePartiesCurrentSong(payload, party, session, messageType, false);
     } catch (SpotifyUserApiException e) {
       sendRedirectLoginUpdate(session);

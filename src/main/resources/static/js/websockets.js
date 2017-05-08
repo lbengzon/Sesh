@@ -39,6 +39,7 @@ let favObjs;
 
 let constantUpdateLocked = false;
 let votedId;
+let changedTrackManual = false;
 
 function hoverOn(x) {
   x.className = 'selected';
