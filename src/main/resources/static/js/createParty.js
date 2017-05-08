@@ -68,7 +68,7 @@ function showPlaylists($search, $listview, $options, $tabContentSearch, $tabCont
     $("#favorites").removeClass("active");
     $tabContentSearch.hide();
     $tabContentPlaylist.show();
-    $tabContentFavorites.hide();
+    $(".tabContentFavorites").hide();
     $tabContentOptions.hide();
     $titles.show();
 }
@@ -151,20 +151,23 @@ $(document).ready(() => {
 
     let startPlaylistIndex;
     let startList;
+    let topTracks;
 
     $(".sortable").sortable({
         dropOnEmpty: true,
         connectWith: ".sortable",
         containment: $(".list-wrapper"),
         start: function(event, ui) {
-            // console.log("start playlist index: " + ui.item.index());
-            // console.log("the song started in list: " + ui.item.parent().attr("id"));
             if (ui.item.parent().attr("id") === "ulPlaylist") {
                 startPlaylistIndex = ui.item.index();
                 startList = ui.item.parent().attr("id");
             } else {
                 startList = ui.item.parent().attr("id");
             }
+            $(ui.placeholder).slideUp();
+        },
+        change: function(event, ui) {
+            $(ui.placeholder).hide().slideDown();
         },
         beforeStop: function(event, ui) {
             if ($(this).attr('id') === "ulRequest") {
@@ -196,8 +199,6 @@ $(document).ready(() => {
                 if(startPlaylistIndex < endIndex){
                     endIndex = endIndex + 1
                 }
-                console.log("ending at: " + endIndex);
-                console.log("==========================");
 
                 reorderPlaylistTrack(partyId, userId, ui.item.attr("id"), startPlaylistIndex, endIndex);
             }
@@ -218,6 +219,7 @@ $(document).ready(() => {
         $("#spotFavs").removeClass("favSelected");
         $(".favoritesSearch").show();
         $(".favoritesList").show();
+        $(".spotifyFavoritesList").hide();
     });
 
     $("#spotFavs").click(function() {
@@ -225,26 +227,34 @@ $(document).ready(() => {
         $("#seshFavs").removeClass("favSelected");
         $(".favoritesSearch").hide();
         $(".favoritesList").hide();
-
         if (!loadedSpot) {
-            //loadedSpot = true;
+            loadedSpot = true;
             const postParameters = {userId: userId};
             $.post("/topTracks", postParameters, responseJSON => {
                 const resObject = JSON.parse(responseJSON);
-                const topTracks = resObject.topTracks;
-                for (let key in topTracks) {
-                    $(".favoritesList").append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
-                    + "id=\"" + topTracks[key].spotifyId + "\" >"
-                    + "<div id=\"songtitle\">" + topTracks[key].title 
-                    //end of song title div
-                    + "</div>"
-                    + "<div id=\"songartist\">" + topTracks[key].artist
-                    + "</div>"
-                    + "</li>");
+                topTracks = resObject.topTracks;
+
+                if (topTracks.length === 0) {
+                    $("#noTopTracks").show();
+                } else {
+                    $("#noTopTracks").hide();
+                    for (let key in topTracks) {
+                        $(".spotifyFavoritesList").append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                        + "id=\"" + topTracks[key].songBean.spotifyId + "\" >"
+                        + "<div id=\"songtitle\">" + topTracks[key].songBean.title 
+                        //end of song title div
+                        + "</div>"
+                        + "<div id=\"songartist\">" + topTracks[key].songBean.artist
+                        + "</div>"
+                        + "</li>");
+                    }
                 }
             });
+
+        } else {
+            $(".spotifyFavoritesList").show();
         }
-    }); 
+    });
 
     //search favorites
     $userInputFavs.keyup(function() {
@@ -342,6 +352,28 @@ $(document).ready(() => {
     });
 
 
+    // $(".upvote").click(function() {
+    //     console.log("upvote");
+    //     // $listItems = ("li");
+    //     // $selected = $listItems.filter('.hover');
+    //     // if (key === votedId && ) {
+    //     //     $("#"+key).effect( "highlight",{color:'#26a82b',easing:'swing'},2500 );
+    //     //     $(".tabContentPlaylist").animate({
+    //     //       scrollTop: $("#"+key).position().top - $("#ulRequest").first().position().top
+    //     //     }, 1000);
+    //     // } 
+    // });
+
+    $(".upvote").click(function() {
+
+    });
+
+
+    // click(function() {
+    //     console.log("here");
+    // });
+
+
     
     $("#favorites").click(populateFavoritesTab);
 
@@ -364,6 +396,20 @@ $(document).ready(() => {
     $results.click(function() {
         $listItems = $("li");
         $selected = $listItems.filter('.hover');
+        addToPlaylist(partyId, userId, $selected.attr("id"));
+        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+    });
+
+    $(".favoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
+        addToPlaylist(partyId, userId, $selected.attr("id"));
+        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+    });
+
+    $(".spotifyFavoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
         addToPlaylist(partyId, userId, $selected.attr("id"));
         showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
     });

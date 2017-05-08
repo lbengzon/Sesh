@@ -34,7 +34,9 @@ let myId = -1;
 let userRequests = [];
 let favIds = [];
 let favObjs;
+
 let constantUpdateLocked = false;
+let votedId;
 
 function hoverOn(x) {
   x.className = 'selected';
@@ -160,7 +162,7 @@ function setupWebsockets() {
           break;
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
           //console.log("got update next curr song request")
-          console.log("UNLOCKED")
+          //console.log("UNLOCKED")
           constantUpdateLocked = false;
           updatePlayer(data);
           break;
@@ -228,7 +230,7 @@ function updatePlayer(data){
   isPaused = !data.payload.isPlaying;
   timePassed = data.payload.timePassed;
   $("#progressbar").attr("value", data.payload.timePassed);
-  console.log("TIME PASSED: " + timePassed);
+  //console.log("TIME PASSED: " + timePassed);
   $(".elapsed").text(convertTime(timePassed));
   $(".duration").text(convertTime(data.payload.duration));
 }
@@ -253,14 +255,16 @@ function getCurrentSongIndex(){
   return index;
 }
 
-
 function vote() {
   //unbind TODO
   $(".upvote").click(function(x) {
+    votedId = x.currentTarget.id;
     upvoteRequest(partyId, userId, x.currentTarget.id);
+
   });
 
   $(".downvote").click(function(x) {
+    votedId = x.currentTarget.id;
     downvoteRequest(partyId, userId, x.currentTarget.id);
   });
 }
@@ -441,6 +445,13 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       if (requestList[key].userRequestId === userId) {
         userRequests.push(requestList[key]);
       }
+
+      if (key === votedId) {
+        $("#"+key).effect( "highlight",{color:'#26a82b',easing:'swing'},2500 );
+        $(".tabContentPlaylist").animate({
+          scrollTop: $("#"+key).position().top - $("#ulRequest").first().position().top
+        }, 1000);
+      } 
   } else if (downvote === true) {
     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -470,6 +481,13 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
       if (requestList[key].userRequestId === userId) {
         userRequests.push(requestList[key]);
       }
+
+      if (key === votedId) {
+        $("#"+key).effect( "highlight",{color:'#e21818',easing:'swing'},1500 );
+        $(".tabContentPlaylist").animate({
+          scrollTop: $("#"+key).position().top - $("#ulRequest").first().position().top
+        }, 1000);
+      } 
   } else {
      $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -498,6 +516,13 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
 
       if (requestList[key].userRequestId === userId) {
         userRequests.push(requestList[key]);
+      }
+
+      if (key === votedId) {
+        $("#"+key).effect( "highlight",{color:'#39aeb2',easing:'swing'},2500 );
+        $(".tabContentPlaylist").animate({
+          scrollTop: $("#"+key).position().top - $("#ulRequest").first().position().top
+        }, 1000);
       } 
   }
 }

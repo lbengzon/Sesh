@@ -14,7 +14,7 @@ function showPlaylist($playlistGuest, $requestsGuest, $searchGuest, $optionsGues
 	$("#favorites").removeClass("active");
 	$tabContentRequestGuest.hide();
 	$tabContentOptionsGuest.hide();
-	$tabContentFavoritesGuest.hide();
+	$(".tabContentFavoritesGuest").hide();
 	$tabContentSearchGuest.hide();
 	$tabContentPlaylistGuest.show();
 	$requestTitle.hide();
@@ -86,7 +86,7 @@ function showFavorites($playlistGuest, $requestsGuest, $searchGuest, $optionsGue
 	$listWrapper.height("56%");
 }
 
-
+let loadedSpot = false;
 
 
 $(document).ready(() => {
@@ -95,6 +95,7 @@ $(document).ready(() => {
 	const $requests = $(".tabContentRequestGuest ul");
 	const $userInputFavs = $(".favoritesSearchGuest");
 	
+	$("#seshFavs").addClass("favSelected");
 
     $userInput.keyup(function() {
         const postParameters = {userInput: $userInput.val()};
@@ -169,13 +170,14 @@ $(document).ready(() => {
         }
     });
 
-    $("#seshFavs").addClass("favSelected");
+    
 
     $("#seshFavs").click(function() {
         $("#seshFavs").addClass("favSelected");
         $("#spotFavs").removeClass("favSelected");
         $(".favoritesSearch").show();
         $(".favoritesList").show();
+        $(".spotifyFavoritesList").hide();
     });
 
     $("#spotFavs").click(function() {
@@ -183,7 +185,49 @@ $(document).ready(() => {
         $("#seshFavs").removeClass("favSelected");
         $(".favoritesSearch").hide();
         $(".favoritesList").hide();
-    }); 
+        if (!loadedSpot) {
+            loadedSpot = true;
+            const postParameters = {userId: userId};
+            $.post("/topTracks", postParameters, responseJSON => {
+                const resObject = JSON.parse(responseJSON);
+                topTracks = resObject.topTracks;
+
+                if (topTracks.length === 0) 
+                {
+                    $("#noTopTracks").show();
+                } else {
+                    $("#noTopTracks").hide();
+                    for (let key in topTracks) {
+                        $(".spotifyFavoritesList").append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                        + "id=\"" + topTracks[key].songBean.spotifyId + "\" >"
+                        + "<div id=\"songtitle\">" + topTracks[key].songBean.title 
+                        //end of song title div
+                        + "</div>"
+                        + "<div id=\"songartist\">" + topTracks[key].songBean.artist
+                        + "</div>"
+                        + "</li>");
+                    }
+                }
+            });
+
+        } else {
+            $(".spotifyFavoritesList").show();
+        }
+    });
+
+    $(".favoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
+        addToPlaylist(partyId, userId, $selected.attr("id"));
+        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+    });
+
+    $(".spotifyFavoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
+        addToPlaylist(partyId, userId, $selected.attr("id"));
+        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
+    });
 
 	//guest tab content
 	const $tabContentRequestGuest = $(".tabContentRequestGuest");

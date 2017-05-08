@@ -465,6 +465,7 @@ input#accessCode {
 	border-top: 3px solid #81c1db;
 	padding-left: 1%;
 	padding-top: 1%;
+	background-color: white;
 }
 
 #songartist {
@@ -616,14 +617,14 @@ input#accessCode {
 	border: 2px solid black;
 }
 
-.searchResults, .favoritesList {
+.searchResults, .favoritesList, .spotifyFavoritesList {
 	color: black;
 	text-align: left;
 	font-size: 150%;
 	width: 93%;
 }
 
-.results li, .favoritesList li {
+.results li, .favoritesList li, .spotifyFavoritesList li {
 	padding-bottom: 1%;
 	padding-top: 1%;
 	border-top: 3px solid #81c1db;
