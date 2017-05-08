@@ -64,7 +64,9 @@ public class PartyWebsocket {
     END_PARTY,
     UPDATE_GUESTS_END_PARTY,
     UPDATE_NEW_USER_JOINED,
-    UPDATE_SEND_USER_TO_LOGIN
+    UPDATE_SEND_USER_TO_LOGIN,
+    PREV_SONG,
+    NEXT_SONG
   }
 
   @OnWebSocketConnect
@@ -143,7 +145,15 @@ public class PartyWebsocket {
           break;
         case PLAY_PLAYLIST:
           playPlaylistAndUpdate(payload, user, party, session,
-              MESSAGE_TYPE.PLAY_PLAYLIST);
+              MESSAGE_TYPE.PLAY_PLAYLIST, false);
+          break;
+        case NEXT_SONG:
+          playPlaylistAndUpdate(payload, user, party, session,
+              MESSAGE_TYPE.PLAY_PLAYLIST, false);
+          break;
+        case PREV_SONG:
+          playPlaylistAndUpdate(payload, user, party, session,
+              MESSAGE_TYPE.PLAY_PLAYLIST, false);
           break;
         case PAUSE_SONG:
           pauseSongAndUpdate(payload, user, party, session,
@@ -263,7 +273,8 @@ public class PartyWebsocket {
   }
 
   private void playPlaylistAndUpdate(JsonObject payload, User user, Party party,
-      Session session, MESSAGE_TYPE messageType) throws IOException {
+      Session session, MESSAGE_TYPE messageType, boolean fixSync)
+      throws IOException {
     try {
       int index = payload.get("index").getAsInt();
       if (index >= party.getPlaylist().getSetOfSongs().size()) {
@@ -356,10 +367,10 @@ public class PartyWebsocket {
               System.out.println(
                   "**********************WENT TO NEXT SONG and out of sync?***********************");
               System.out.println("Playing playlist at index " + newIndex);
-              party.playPlaylist(newIndex);
-              curr = party.getSongBeingCurrentlyPlayed();
-              System.out
-                  .println("new song being played" + curr.getSong().getTitle());
+              // party.playPlaylist(newIndex);
+              // curr = party.getSongBeingCurrentlyPlayed();
+              // System.out
+              // .println("new song being played" + curr.getSong().getTitle());
             }
           }
         }

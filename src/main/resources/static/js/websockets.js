@@ -24,7 +24,9 @@ RESUME_SONG: 21,
 END_PARTY: 22,
 UPDATE_GUESTS_END_PARTY: 23,
 UPDATE_NEW_USER_JOINED: 24,
-UPDATE_SEND_USER_TO_LOGIN: 25
+UPDATE_SEND_USER_TO_LOGIN: 25,
+PREV_SONG: 26,
+NEXT_SONG: 27
 };
 
 let conn;
@@ -812,7 +814,7 @@ function nextSong (partyId, userId) {
   index = getCurrentSongIndex() + 1;
   //TODO add check to see if the index is greater than the current size of the list
   let message = {
-    type: MESSAGE_TYPE.PLAY_PLAYLIST, 
+    type: MESSAGE_TYPE.NEXT_SONG, 
     payload:{
       userId: userId,
       partyId: partyId,
@@ -833,7 +835,7 @@ function prevSong (partyId, userId) {
   constantUpdateLocked = true;
 
   let message = {
-    type: MESSAGE_TYPE.PLAY_PLAYLIST, 
+    type: MESSAGE_TYPE.PREV_SONG, 
     payload:{
       userId: userId,
       partyId: partyId,
