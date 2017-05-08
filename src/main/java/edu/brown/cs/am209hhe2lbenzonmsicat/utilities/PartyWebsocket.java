@@ -530,7 +530,10 @@ public class PartyWebsocket {
     try {
       Request newRequest = party.requestSong(Song.of(songId), user);
       boolean success = party.approveSong(newRequest.getId());
-
+      if (party.getPlaylist().getSetOfSongs().size() == 1) {
+        party.playPlaylist(0);
+        party.pause();
+      }
       if (newRequest == null || success == false) {
         throw new RuntimeException("ERROR: could not add song");
       }
@@ -638,6 +641,10 @@ public class PartyWebsocket {
       if (transferType.equals(TRANSFER_TYPE.REQUEST_TO_PLAYLIST)) {
         int insertIndex = payload.get("insertIndex").getAsInt();
         success = party.approveSong(requestId, insertIndex);
+        if (party.getPlaylist().getSetOfSongs().size() == 1) {
+          party.playPlaylist(0);
+          party.pause();
+        }
       } else {
         assert transferType.equals(TRANSFER_TYPE.PLAYLIST_TO_REQUEST);
         success = party.removeFromPlaylist(requestId);
