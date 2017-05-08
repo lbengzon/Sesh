@@ -305,6 +305,8 @@ public class PartyWebsocket {
         if (checkSync && payload.get("oldSongId") != null) {
           String oldSongId = payload.get("oldSongId").getAsString();
           boolean isPaused = payload.get("isPaused").getAsBoolean();
+          long timePassed = payload.get("timePassed").getAsLong();
+
           int index = payload.get("index").getAsInt();
           // This is the id of the song that is currently playing on spotify
           String newSongIdPlaying = Request.getId(party.getPartyId(),
@@ -314,7 +316,7 @@ public class PartyWebsocket {
           // and the current song isn't playing it means that the playlist
           // looped
           // around the beginning because it thinks the playlist is over
-          if (!curr.getIsPlaying() && !isPaused) {
+          if (!curr.getIsPlaying() && !isPaused && curr.getTimePassed() == 0) {
             System.out.println(
                 "**********************RELOOPED AROUND?***********************");
             int newIndex = 0;
