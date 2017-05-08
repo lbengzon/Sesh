@@ -997,4 +997,31 @@ public class DbHandlerTest {
         .GetUserFavoritedSongs("s3shteam32");
     assert songsAfterRemoval.size() == 0;
   }
+
+  @Test
+  public void testGetRequests() throws FileNotFoundException, SQLException {
+    DbHandler.setFromUrl("test.db");
+    DbHandler.clearAllTables();
+
+    User host = DbHandler.addUser("lbengzon", "leandro_bengzon@brown.edu",
+        "Leandro Bengzon", "premium");
+    User ali = DbHandler.addUser("ali", "ali_mir@brown.edu", "Ali Mir",
+        "premium");
+
+    LocalDateTime time = LocalDateTime.now();
+
+    Party party = DbHandler.addParty("testPlaylistId", "My Party",
+        new Coordinate(71.6, 41.8), time, host, "deviceId", AccessType.PUBLIC,
+        "");
+
+    Request song1 = DbHandler.requestSong("songId1", party.getPartyId(), ali,
+        time);
+
+    Request r1 = DbHandler.getRequest(song1.getId());
+
+    assert r1.getId().equals(song1.getId());
+    assert r1.getPartyId() == song1.getPartyId();
+    assert r1.getSong().equals(song1.getSong());
+
+  }
 }
