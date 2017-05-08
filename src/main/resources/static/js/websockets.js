@@ -32,6 +32,7 @@ let myId = -1;
 let userRequests = [];
 let favIds = [];
 let favObjs;
+let constantUpdateLocked = true;
 
 function hoverOn(x) {
   x.className = 'selected';
@@ -81,7 +82,6 @@ function setupWebsockets() {
           favorite();
           highlightFavorites();
           $.notify(data.payload.newRequest.song.title + " by " + data.payload.newRequest.song.artist + " has been requested!", "info");
-
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
@@ -129,6 +129,8 @@ function setupWebsockets() {
           break;
         case MESSAGE_TYPE.UPDATE_NEXT_CURR_SONG_REQUEST:
           //console.log("got update next curr song request")
+          console.log("UNLOCKED")
+          constantUpdateLocked = false;
           updatePlayer(data);
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
@@ -178,7 +180,7 @@ function updatePlayer(data){
     $("#pauseButton").hide();
   }
   hideSongsNotPlaying();
-
+  isPaused = !data.payload.isPlaying;
   timePassed = data.payload.timePassed;
   $("#progressbar").attr("value", data.payload.timePassed);
   console.log("TIME PASSED: " + timePassed);
@@ -245,11 +247,7 @@ function highlightFavorites() {
 
 function highlightSearchFavorites(favIds){
   $(".searchResults").find("li").each(function(index, value) {
-    console.log("outside hightlight search");
-        console.log("FAV IDS", favIds);
-        console.log(getRequestId(value.id));
       if (jQuery.inArray(getRequestId(value.id), favIds) >= 0) {
-        console.log("inside highligh search");
         $(this).find("i#ifav").attr("style", "color: yellow;");
       } else {
         $(this).find("i#ifav").attr("style", "color: grey;");
@@ -319,9 +317,7 @@ function onStarClick(x){
       }
 
       highlightFavorites();
-      console.log("hey");
       if($("#favorites").hasClass("active")){
-        console.log("wow");
         populateFavoritesTab();
       } else if($("#search").hasClass("active")){
         highlightSearchFavorites(favIds);
@@ -660,6 +656,9 @@ function playPlaylist(partyId, userId, index){
   console.log("playplalist sent ", partyId, userId)
   //IF you should play the current song (i.e it was paused) if you dont go into his if statement it means 
   //the host double clicked on a song to play it.
+  console.log("LOCKED PLAY PLAYLIST")
+
+  constantUpdateLocked = true;
   if(index === undefined || index === null){
       index = getCurrentSongIndex();
   }
@@ -675,6 +674,10 @@ function playPlaylist(partyId, userId, index){
 }
 
 function pauseSong (partyId, userId) {
+  console.log("LOCKED PLAY PAUSE SONG")
+
+  constantUpdateLocked = true;
+
   let message = {
     type: MESSAGE_TYPE.PAUSE_SONG, 
     payload:{
@@ -687,6 +690,10 @@ function pauseSong (partyId, userId) {
 
 
 function nextSong (partyId, userId) {
+    console.log("LOCKED NEXT SONG")
+
+  constantUpdateLocked = true;
+
   index = getCurrentSongIndex() + 1;
   //TODO add check to see if the index is greater than the current size of the list
   let message = {
@@ -701,10 +708,15 @@ function nextSong (partyId, userId) {
 }
 
 function prevSong (partyId, userId) {
+    
   index = getCurrentSongIndex() - 1;
   if(index < 0){
     return;
   }
+  console.log("LOCKED PREV SONG")
+
+  constantUpdateLocked = true;
+
   let message = {
     type: MESSAGE_TYPE.PLAY_PLAYLIST, 
     payload:{
@@ -717,6 +729,9 @@ function prevSong (partyId, userId) {
 }
 
 function seekSong (partyId, userId, position) {
+    console.log("LOCKED SEEK SONG")
+
+  constantUpdateLocked = true;
   let message = {
     type: MESSAGE_TYPE.SEEK_SONG, 
     payload:{
@@ -729,6 +744,9 @@ function seekSong (partyId, userId, position) {
 }
 
 function resumeSong(partyId, userId, position){
+    console.log("LOCKED RESUME SONG")
+
+  constantUpdateLocked = true;
   index = getCurrentSongIndex();
   //IF you should play the current song (i.e it was paused) if you dont go into his if statement it means 
   //the host double clicked on a song to play it.
@@ -769,11 +787,15 @@ function post(path, params, method) {
 }
 
 function updatePartyCurrentSong (partyId, userId) {
+  index = getCurrentSongIndex();
   let message = {
     type: MESSAGE_TYPE.SONG_MOVED_TO_NEXT, 
     payload:{
       userId: userId,
       partyId: partyId,
+      oldSongId: currSongId,
+      index: index,
+      isPaused: isPaused
     }
   }
   conn.send(JSON.stringify(message));

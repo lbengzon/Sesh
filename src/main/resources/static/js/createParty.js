@@ -132,6 +132,8 @@ $(document).ready(() => {
 
 
     const $userInput = $(".search");
+    const $userInputFavs = $(".favoritesSearch");
+    const $resultsFavs = $(".favoritesList");
     const $results = $(".searchResults");
     const $playlist = $("#tabContentPlaylist ul");
 
@@ -207,37 +209,57 @@ $(document).ready(() => {
 
     setupWebsockets();
 
+    //search favorites
+    $userInputFavs.keyup(function() {
+        $("favoritesList").find("li").each(function(index, value) {
+            console.log($(this));
+        })
+        //console.log("INPUT: " , $userInputFavs.val());
+        // const postParameters = {userId: userId, userInputFavs: $userInputFavs};
+        // $.post("/searchFavorites", postParameters, responseJSON => {
+        //     const responseObject = JSON.parse(responseJSON);
+        //     //TODO: finish
+        // });
+    });
+
     //search for songs
     $userInput.keyup(function() {
         const postParameters = {userInput: $userInput.val()};
         $.post("/search", postParameters, responseJSON => {
             const responseObject = JSON.parse(responseJSON);
             const suggestions = responseObject.results;
-            const songIds = responseObject.songIds;
 
             $results.empty();
 
-            for (var i = 0; i < suggestions.length; i++) {
-                  $results.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
-                    + "id=\"" + songIds[i] + "\" >"
+            for (let i = 0; i < suggestions.length; i++) {
+                $results.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
+                    + "id=\"" + suggestions[i].spotifyId + "\" >"
                     + "<div class=\"fav\" >"
-                        + "<button class=\"favButton\" id=\"" + songIds[i] + "\" type=\"button\"> " 
+                        + "<button class=\"favButton\" id=\"" + suggestions[i].spotifyId + "\" type=\"button\"> " 
                           + "<i id=\"ifav\" class=\"material-icons\">grade</i>"
                         + "</button>"
                       //end of fav div
                       + "</div>"
-                    + "<div id=\"songtitle\">" + suggestions[i] 
+                    + "<div id=\"songtitle\">" + suggestions[i].title 
                     //end of song title div
                     + "</div>"
-                    + "</li>");
-
+                    + "<div id=\"songartist\">" + suggestions[i].artist
+                    + "</div>"
+                    + "</li>"); 
             }
+            
             favorite();
             highlightSearchFavorites(favIds);
         });
     });
 
-    setInterval(function(){updatePartyCurrentSong(partyId, userId);}, 1000);
+    setInterval(constantlyUpdateCurrentSong, 500);
+
+    function constantlyUpdateCurrentSong(){
+        if(!constantUpdateLocked){
+            updatePartyCurrentSong(partyId, userId);
+        }
+    }
 
     $(".switch input").click(function() {
         console.log("USER REQUESTED " + userRequests.length + "SONGS");
@@ -270,13 +292,11 @@ $(document).ready(() => {
         $selected = $listItems.filter('.hover');
         console.log("index :" + $selected.index());
         playPlaylist(partyId, userId, $selected.index());
-        // alert("you double clicked on song with id " + $selected.index());
     });
 
     $("#ulRequest").dblclick(function() {
         $listItems = $("li"); 
         $selected = $listItems.filter('.hover');
-        console.log($selected.attr("id"));
         if ($selected.attr("id")!== undefined) {
             moveRequestToQueue(partyId, userId, $selected.attr("id"), $("#ulPlaylist li").length);
         }
@@ -300,10 +320,8 @@ $(document).ready(() => {
         var deleteBool;
         if (v === true) {
             deleteBool = false;
-            console.log("playlist saved");
         } else {
             deleteBool = true;
-            console.log("playlist deleted");
         }
         endParty(partyId, userId, deleteBool);
         const params = {userId: userId};

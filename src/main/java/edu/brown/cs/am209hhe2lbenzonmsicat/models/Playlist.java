@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyOutOfSyncException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 
 /**
  * Abstract playlist class.
- * 
  * @author HE23
  */
 public abstract class Playlist {
@@ -47,7 +47,7 @@ public abstract class Playlist {
   public abstract Request getRequest(String requestId);
 
   public abstract CurrentSongPlaying getCurrentSong()
-      throws SpotifyUserApiException;
+      throws SpotifyUserApiException, SpotifyOutOfSyncException;
 
   public abstract void play(int offset, String deviceId)
       throws SpotifyUserApiException;
@@ -78,7 +78,6 @@ public abstract class Playlist {
 
   /**
    * This should only be used for testing!
-   * 
    * @param spotifyId
    *          - spotify id
    * @param partyId
@@ -93,7 +92,6 @@ public abstract class Playlist {
 
   /**
    * Add playlist to database.
-   * 
    * @param user
    *          - user
    * @return playlist

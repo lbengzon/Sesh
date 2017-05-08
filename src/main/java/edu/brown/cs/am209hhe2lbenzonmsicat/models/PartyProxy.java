@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonElement;
 
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
+import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyOutOfSyncException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.DbHandler;
 import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
@@ -17,7 +18,6 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.utilities.SpotifyCommunicator;
 /**
  * The actor proxy class. Deals with the data base to fetch the data about the
  * actor.
- *
  * @author leandro
  */
 public class PartyProxy extends Party implements Proxy {
@@ -37,7 +37,6 @@ public class PartyProxy extends Party implements Proxy {
 
   /**
    * Constructor.
-   *
    * @param partyId
    *          - id
    * @param name
@@ -425,7 +424,7 @@ public class PartyProxy extends Party implements Proxy {
 
   @Override
   public CurrentSongPlaying getSongBeingCurrentlyPlayed()
-      throws SpotifyUserApiException {
+      throws SpotifyUserApiException, SpotifyOutOfSyncException {
     if (partyBean == null) {
       try {
         fill();

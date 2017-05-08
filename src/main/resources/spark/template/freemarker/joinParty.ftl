@@ -50,14 +50,14 @@
 </div>
 
 <div id="titles">
-<h2 id="playlist-title">Playlist</h2>
-<h2 id="request-title">Requests</h2>
+<h2 id="playlist-title">Playlist | ${partyName}</h2>
+<h2 id="request-title">Requests | ${partyName}</h2>
 </div>
 <div class="list-wrapper">
 <div class="tabContentRequestGuest" id="request-list">
 <div class="switchDiv">
-	<label id="switchLabel">Show My Requests</label>
-	<label class="switch">
+	<label id="switchLabel">My Requests</label>
+	<label class="switch" id="guestSwitch">
 		<input type="checkbox">
 		<div class="slider round"></div>
 	</label>
