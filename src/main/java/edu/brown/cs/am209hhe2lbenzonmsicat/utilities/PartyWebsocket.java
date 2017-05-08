@@ -335,8 +335,11 @@ public class PartyWebsocket {
             if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
               newIndex = index + 1;
             }
+            System.out.println("Playing playlist at index " + newIndex);
             party.playPlaylist(newIndex);
             curr = party.getSongBeingCurrentlyPlayed();
+            System.out
+                .println("new song being played" + curr.getSong().getTitle());
 
           } // if the playlist hasn't looped around and there are still more
             // songs to be played
@@ -352,8 +355,11 @@ public class PartyWebsocket {
               // If there is a mismatch, play the new index of the playlist.
               System.out.println(
                   "**********************WENT TO NEXT SONG and out of sync?***********************");
+              System.out.println("Playing playlist at index " + newIndex);
               party.playPlaylist(newIndex);
               curr = party.getSongBeingCurrentlyPlayed();
+              System.out
+                  .println("new song being played" + curr.getSong().getTitle());
             }
           }
         }
