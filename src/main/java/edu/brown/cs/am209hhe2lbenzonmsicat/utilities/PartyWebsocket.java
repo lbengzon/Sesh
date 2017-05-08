@@ -319,7 +319,7 @@ public class PartyWebsocket {
           // looped
           // around the beginning because it thinks the playlist is over
           if (!curr.getIsPlaying() && !isPaused && curr.getTimePassed() == 0
-              && timePassed == 0) {
+              && curr.getTimePassed() < timePassed) {
             System.out.println(
                 "**********************RELOOPED AROUND?***********************");
             int newIndex = 0;
