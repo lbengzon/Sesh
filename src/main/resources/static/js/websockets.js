@@ -90,7 +90,7 @@ function setupWebsockets() {
           break;
 
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
-          clearAndPopulateRequests(data.payload.requestList, $requests);
+          clearAndPopulateRequests(data.payload.requestList, $requests, data.payload.votedUser);
           requestId = data.payload.requestIdVotedOn;
           let requestVotedOn = data.payload.requestList[requestId];
           let voteType = data.payload.voteType;
@@ -415,7 +415,7 @@ function appendToRequests($requests, data) {
 
 }
 
-function updateRequestVotes($requests, key, requestList, upvote, downvote) {
+function updateRequestVotes($requests, key, requestList, upvote, downvote, user) {
   if (upvote === true) {
     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -446,12 +446,13 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
         userRequests.push(requestList[key]);
       }
 
-      if (key === votedId) {
+      if (key === votedId && user !== undefined && user === userId) {
         $("#"+key).effect( "highlight",{color:'#26a82b',easing:'swing'},2500 );
-        $(".tabContentPlaylist").animate({
-          scrollTop: $("#"+key).position().top - $("#ulRequest").first().position().top
+        $("#request-list").animate({
+          scrollTop: $("#"+key).position().top - $("#request-list ul").first().position().top
         }, 1000);
-      } 
+      }
+
   } else if (downvote === true) {
     $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -482,12 +483,13 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
         userRequests.push(requestList[key]);
       }
 
-      if (key === votedId) {
+      if (key === votedId && user !== undefined && user === userId) {
         $("#"+key).effect( "highlight",{color:'#e21818',easing:'swing'},1500 );
-        $(".tabContentPlaylist").animate({
-          scrollTop: $("#"+key).position().top - $("#ulRequest").first().position().top
+        $("#request-list").animate({
+          scrollTop: $("#"+key).position().top - $("#request-list ul").first().position().top
         }, 1000);
       } 
+
   } else {
      $requests.append("<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
       + "id=\"" + key + "\" >"
@@ -518,10 +520,10 @@ function updateRequestVotes($requests, key, requestList, upvote, downvote) {
         userRequests.push(requestList[key]);
       }
 
-      if (key === votedId) {
+      if (key === votedId && user !== undefined && user === userId) {
         $("#"+key).effect( "highlight",{color:'#39aeb2',easing:'swing'},2500 );
-        $(".tabContentPlaylist").animate({
-          scrollTop: $("#"+key).position().top - $("#ulRequest").first().position().top
+        $("#request-list").animate({
+          scrollTop: $("#"+key).position().top - $("#request-list ul").first().position().top
         }, 1000);
       } 
   }
@@ -561,7 +563,7 @@ function appendToPlaylist($playlist, newRequest, startShowing) {
   }
 }
 
-function clearAndPopulateRequests(requests, $requests){
+function clearAndPopulateRequests(requests, $requests, user){
   $requests.empty();
   for (let key in requests) {
     let downvote = false;
@@ -578,7 +580,7 @@ function clearAndPopulateRequests(requests, $requests){
           downvote = true;
         }
       }
-      updateRequestVotes($requests, key, requests, upvote, downvote);
+      updateRequestVotes($requests, key, requests, upvote, downvote, user);
     }
   }
 
