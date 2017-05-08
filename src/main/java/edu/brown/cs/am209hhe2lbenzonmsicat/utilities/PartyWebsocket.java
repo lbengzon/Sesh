@@ -329,7 +329,9 @@ public class PartyWebsocket {
             // Figure out if infact the playlist really is over. If it isn't,
             // set the new index to the index that should be playing. If not,
             // start from the beginnning
-
+            System.out.println("oldIndex" + index);
+            System.out.println(
+                "playlist size" + party.getPlaylist().getSetOfSongs().size());
             if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
               newIndex = index + 1;
             }
