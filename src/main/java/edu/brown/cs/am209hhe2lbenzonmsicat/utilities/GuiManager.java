@@ -50,7 +50,7 @@ public class GuiManager {
 
   private void installRoutes(FreeMarkerEngine fme) {
     Spark.webSocket("/update", PartyWebsocket.class);
-    Spark.get("/login", new LoginHandler(), fme);
+    Spark.get("/", new LoginHandler(), fme);
     Spark.get("/spotifycallback", new CallbackHandler(), fme);
     Spark.post("/create", new PartySettingsHandler(), fme);
     Spark.post("/join", new JoinHandler(), fme);
@@ -485,6 +485,7 @@ public class GuiManager {
         QueryParamsMap qm = req.queryMap();
         String input = qm.value("userInput");
         List<Song> results = SpotifyCommunicator.searchTracks(input, true);
+        results = results.subList(0, 5);
         List<Map<String, Object>> ret = new ArrayList<>();
         for (Song s : results) {
           ret.add(s.toMap());

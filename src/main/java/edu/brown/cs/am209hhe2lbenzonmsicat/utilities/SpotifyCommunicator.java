@@ -340,7 +340,7 @@ public class SpotifyCommunicator {
     List<Track> tracks = new ArrayList<Track>();
     List<Song> res = new ArrayList<Song>();
     try {
-      tracks = api.searchTracks(query).limit(10).build().get().getItems();
+      tracks = api.searchTracks(query).build().get().getItems();
       res = buildSongsFromTracks(tracks);
       apiPool.checkIn(api);
       return res;
