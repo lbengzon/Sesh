@@ -421,8 +421,8 @@ $(document).ready(() => {
     $tabContentFavorites.hide();
 
     $endButton.click(function() {
-        var v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
-        var deleteBool;
+        let v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
+        let deleteBool;
         if (v === true) {
             deleteBool = false;
         } else {
