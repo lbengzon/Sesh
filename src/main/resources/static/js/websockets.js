@@ -49,6 +49,7 @@ function setupWebsockets() {
   const $requests = $("#request-list ul");
   const $playlist = $("#playlist-list ul");
   const $player = $("#playback");
+  let requestId;
   // TODO Create the WebSocket connection and assign it to `conn`
   conn = new WebSocket("ws://localhost:4567/update");
 
@@ -88,9 +89,9 @@ function setupWebsockets() {
         case MESSAGE_TYPE.UPDATE_VOTE_REQUESTS:
           clearAndPopulateRequests(data.payload.requestList, $requests);
           requestId = data.payload.requestIdVotedOn;
-          requestVotedOn = data.payload.requestList[requestId];
-          voteType = data.payload.voteType;
-          if (requestId === null ||requestVotedOn === null || voteType === null) {
+          let requestVotedOn = data.payload.requestList[requestId];
+          let voteType = data.payload.voteType;
+          if (requestId === undefined ||requestVotedOn === undefined || voteType === undefined) {
             break;
           }
           if (requestVotedOn.userRequestId === userId) {
@@ -109,12 +110,19 @@ function setupWebsockets() {
 
         case MESSAGE_TYPE.UPDATE_AFTER_REQUEST_TRANSFER:
           console.log("update after request transfer");
-          transferType = data.payload.transferType;
-          requestTransferred = data.payload.playlist[requestId];
+          console.log(data.payload);
+          requestId = data.payload.requestIdTransferred;
+          console.log("requestId transfered", requestId);
+          let transferType = data.payload.transferType;
+          let requestTransferred;
           
           if (transferType === "REQUEST_TO_PLAYLIST") {
+            requestTransferred = data.payload.playlist[requestId];
+            console.log("request transferred: ",requestTransferred);
             $.notify("The song '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was added to the playlist!", "success");
           } else {
+            requestTransferred = data.payload.requestList[requestId];
+            console.log("request transferred: ",requestTransferred);
             if (requestTransferred.userRequestId === userId) {
               $.notify("Your request '" + requestTransferred.song.title + "' by " + requestTransferred.song.artist + " was removed from the playlist!", "error");
             }
