@@ -561,6 +561,7 @@ public class PartyWebsocket {
       if (success == false) {
         throw new RuntimeException("ERROR: Cannot vote on request");
       }
+
       updatePayload.add("requestList", party.getRequestsAsJson());
 
       updatePayload.addProperty("requestIdVotedOn", requestId);
