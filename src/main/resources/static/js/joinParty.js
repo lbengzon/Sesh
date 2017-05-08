@@ -97,7 +97,13 @@ $(document).ready(() => {
 	
 	$("#seshFavs").addClass("favSelected");
 
+    //search for songs
     $userInput.keyup(function() {
+            efficientSongSearch();
+        
+    });
+
+    function searchSongs(){
         const postParameters = {userInput: $userInput.val()};
         $.post("/search", postParameters, responseJSON => {
             const responseObject = JSON.parse(responseJSON);
@@ -125,7 +131,24 @@ $(document).ready(() => {
             favorite();
             highlightSearchFavorites(favIds);
         });
-    });
+    }
+
+    let efficientSongSearch = debounce(searchSongs, 500);
+
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
 
     $userInputFavs.keyup(function() {
         $(".favoritesList").find("li").each(function(index, value) {
@@ -149,6 +172,21 @@ $(document).ready(() => {
 		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
 	});
 
+	$(".favoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
+        console.log($selected);
+       	addRequest(partyId, userId, $selected.attr("id"));
+		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+    });
+
+    $(".spotifyFavoritesList").click(function() {
+        $listItems = $("li");
+        $selected = $listItems.filter(".hover");
+		addRequest(partyId, userId, $selected.attr("id"));
+		showRequests($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+    });
+
     $(".switch input").click(function() {
         console.log("USER REQUESTED " + userRequests.length + "SONGS");
         if ($(".switch input").is(":checked")) {
@@ -171,6 +209,7 @@ $(document).ready(() => {
     });
 
     
+$("#favorites").click(populateFavoritesTab);
 
     $("#seshFavs").click(function() {
         $("#seshFavs").addClass("favSelected");
@@ -213,20 +252,6 @@ $(document).ready(() => {
         } else {
             $(".spotifyFavoritesList").show();
         }
-    });
-
-    $(".favoritesList").click(function() {
-        $listItems = $("li");
-        $selected = $listItems.filter(".hover");
-        addToPlaylist(partyId, userId, $selected.attr("id"));
-        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
-    });
-
-    $(".spotifyFavoritesList").click(function() {
-        $listItems = $("li");
-        $selected = $listItems.filter(".hover");
-        addToPlaylist(partyId, userId, $selected.attr("id"));
-        showPlaylists($search, $listview, $options, $tabContentSearch, $tabContentPlaylist, $tabContentOptions, $titles, $listWrapper);
     });
 
 	//guest tab content
@@ -275,6 +300,7 @@ $(document).ready(() => {
 
 	$searchGuest.click(function() {
 		showSearch($playlistGuest, $requestsGuest, $searchGuest, $optionsGuest, $tabContentRequestGuest, $tabContentOptionsGuest, $tabContentFavoritesGuest, $tabContentSearchGuest, $tabContentPlaylistGuest, $requestTitle, $playlistTitle, $listWrapper);
+		highlightSearchFavorites(favIds);
 	});
 
 	$optionsGuest.click(function() {
