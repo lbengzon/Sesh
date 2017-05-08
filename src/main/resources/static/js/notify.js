@@ -198,7 +198,7 @@
 		style: "bootstrap",
 		className: "error",
 		showAnimation: "slideDown",
-		showDuration: 400,
+		showDuration: 300,
 		hideAnimation: "slideUp",
 		hideDuration: 200,
 		gap: 5
