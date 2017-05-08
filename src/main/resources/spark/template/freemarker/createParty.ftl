@@ -7,6 +7,7 @@
 	let isPaused = true;
 	let timePassed;
 	const isHost = true;
+	let justRefreshed = true;
 </script>
 <script src="/js/createParty.js"></script>
 <script>
