@@ -211,10 +211,14 @@ $(document).ready(() => {
 
     //search favorites
     $userInputFavs.keyup(function() {
-        const postParameters = {userId: userId, userInputFavs: $userInputFavs};
-        $.post("/searchFavorites", postParameters, responseJSON => {
-            const responseObject = JSON.parse(responseJSON);
-            //TODO: finish
+        $(".favoritesList").find("li").each(function(index, value) {
+            let text = $(this)[0].innerText.replace("grade", "");
+            text = text.toLowerCase();
+            if (!text.includes($userInputFavs.val())) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
         });
     });
 
@@ -224,7 +228,6 @@ $(document).ready(() => {
         $.post("/search", postParameters, responseJSON => {
             const responseObject = JSON.parse(responseJSON);
             const suggestions = responseObject.results;
-            console.log("SUGGESTIONS", suggestions);
 
             $results.empty();
 
