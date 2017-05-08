@@ -211,15 +211,15 @@ $(document).ready(() => {
 
     //search favorites
     $userInputFavs.keyup(function() {
-        $("favoritesList").find("li").each(function(index, value) {
-            console.log($(this));
-        })
-        //console.log("INPUT: " , $userInputFavs.val());
-        // const postParameters = {userId: userId, userInputFavs: $userInputFavs};
-        // $.post("/searchFavorites", postParameters, responseJSON => {
-        //     const responseObject = JSON.parse(responseJSON);
-        //     //TODO: finish
-        // });
+        $(".favoritesList").find("li").each(function(index, value) {
+            let text = $(this)[0].innerText.replace("grade", "");
+            text = text.toLowerCase();
+            if (!text.includes($userInputFavs.val())) {
+                $(this).hide();
+            } else {
+                $(this).show();
+            }
+        });
     });
 
     //search for songs
