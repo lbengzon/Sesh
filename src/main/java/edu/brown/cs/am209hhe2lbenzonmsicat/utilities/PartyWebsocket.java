@@ -34,36 +34,11 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST,
-    PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT,
-    SET_PARTY_ID,
-    ADD_REQUEST,
-    UPVOTE_REQUEST,
-    DOWNVOTE_REQUEST,
-    MOVE_REQUEST_TO_QUEUE,
-    MOVE_FROM_QUEUE_TO_REQUEST,
-    ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_ADD_REQUEST,
-    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
-    UPDATE_VOTE_REQUESTS,
-    UPDATE_AFTER_REQUEST_TRANSFER,
-    UPDATE_ENTIRE_PARTY,
-    UPDATE_REARRANGE_PLAYLIST,
-    REORDER_PLAYLIST_TRACK,
-    PLAY_PLAYLIST,
-    PAUSE_SONG,
-    UPDATE_PLAYER,
-    SONG_MOVED_TO_NEXT,
-    UPDATE_NEXT_CURR_SONG_REQUEST,
-    SEEK_SONG,
-    RESUME_SONG,
-    END_PARTY,
-    UPDATE_GUESTS_END_PARTY,
-    UPDATE_NEW_USER_JOINED
+    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST, SEEK_SONG, RESUME_SONG, END_PARTY, UPDATE_GUESTS_END_PARTY, UPDATE_NEW_USER_JOINED
   }
 
   @OnWebSocketConnect
@@ -386,6 +361,7 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
+   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -406,6 +382,7 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
+   * 
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -476,7 +453,9 @@ public class PartyWebsocket {
       JsonObject updatePartyMessage = new JsonObject();
       updatePartyPayload.add("newUser", user.toJson());
       updatePartyMessage.addProperty("type",
-          MESSAGE_TYPE.UPDATE_NEW_USER_JOINED.toString());
+          MESSAGE_TYPE.UPDATE_NEW_USER_JOINED.ordinal());
+      updatePartyMessage.addProperty("success", true);
+      updatePartyMessage.add("payload", updatePartyPayload);
       sendUpdateToEntirePartyExceptSender(session, updatePartyMessage, partyId);
 
     } catch (Exception e) {

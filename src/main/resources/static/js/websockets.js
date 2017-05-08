@@ -168,7 +168,7 @@ function setupWebsockets() {
           guestLeaveParty(true);
           break;
         case MESSAGE_TYPE.UPDATE_NEW_USER_JOINED:
-          console.log("new user joined!", data.payload)
+          $.notify(data.payload.newUser.firstName + " " + data.payload.newUser.lastName + " has joined the sesh!", "info");
           break;
 
       }
