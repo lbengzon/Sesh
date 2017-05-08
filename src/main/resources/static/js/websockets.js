@@ -897,7 +897,8 @@ function updatePartyCurrentSong (partyId, userId) {
       partyId: partyId,
       oldSongId: currSongId,
       index: index,
-      isPaused: isPaused
+      isPaused: isPaused,
+      timePassed: timePassed
     }
   }
   conn.send(JSON.stringify(message));
