@@ -23,7 +23,8 @@ SEEK_SONG: 20,
 RESUME_SONG: 21,
 END_PARTY: 22,
 UPDATE_GUESTS_END_PARTY: 23,
-UPDATE_NEW_USER_JOINED: 24
+UPDATE_NEW_USER_JOINED: 24,
+UPDATE_SEND_USER_TO_LOGIN: 25
 };
 
 let conn;
@@ -169,6 +170,10 @@ function setupWebsockets() {
           break;
         case MESSAGE_TYPE.UPDATE_NEW_USER_JOINED:
           $.notify(data.payload.newUser.firstName + " " + data.payload.newUser.lastName + " has joined the sesh!", "info");
+          break;
+        case MESSAGE_TYPE.UPDATE_SEND_USER_TO_LOGIN:
+          //alert("you gotta redirect to login bro");
+          post("/", {}, "get");
           break;
 
       }
