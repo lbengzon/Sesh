@@ -16,7 +16,7 @@
 	console.log("user id: " + userId);
 	console.log("party id: " + partyId);
 </script>
-
+<h2 class="seshName"> ${partyName} </h2>
 <div id="musicPlayer">
 	<div id="songDataDiv">
 		<div id="albumArtDiv"><img id="songArt" height="168" width="168"></div>
@@ -51,8 +51,8 @@
 </div>
 
 <div id="titles">
-<h2 class="titles">Queue | ${partyName} </h2>
-<h2 class="titles">Requests | ${partyName} </h2>
+<h2 class="titles">Queue </h2>
+<h2 class="titles">Requests</h2>
 </div>
 
 <div class="list-wrapper">
