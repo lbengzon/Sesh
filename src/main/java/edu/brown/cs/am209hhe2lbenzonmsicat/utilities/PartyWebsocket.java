@@ -437,8 +437,9 @@ public class PartyWebsocket {
         }
       }
       if (curr == null) {
-
-        return;
+        throw new RuntimeException(
+            "SONG IS NULL SO YOU JUST STARTED THE PLAYLIST (DONT REALLY WORRY ABOUT THIS EXCEPTION) ");
+        // return;
       }
       System.out.println("Finally playing = " + curr.getSong().getTitle());
       String requestId = Request.getId(party.getPartyId(),
