@@ -431,7 +431,7 @@ public class PartyWebsocket {
               curr = party.getSongBeingCurrentlyPlayed();
             }
             break;
-          } catch (SpotifyUserApiException g) {
+          } catch (SpotifyOutOfSyncException g) {
 
           }
         }
