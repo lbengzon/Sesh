@@ -302,6 +302,125 @@ public class PartyWebsocket {
     }
   }
 
+  private void checkSync(CurrentSongPlaying curr, Party party,
+      JsonObject payload) throws SpotifyUserApiException,
+      SpotifyOutOfSyncException, InterruptedException {
+
+    System.out.println("Real Time passed " + curr.getTimePassed());
+    System.out.println("Real CurrentSong is playing = " + curr.getIsPlaying());
+    String newSongIdPlaying = Request.getId(party.getPartyId(),
+        curr.getSong().getSpotifyId());
+    System.out.println("SongId currently playing:" + newSongIdPlaying);
+    String oldSongId = payload.get("oldSongId").getAsString();
+    boolean isPaused = payload.get("isPaused").getAsBoolean();
+    long timePassed = payload.get("timePassed").getAsLong();
+
+    int index = payload.get("index").getAsInt();
+    // This is the id of the song that is currently playing on spotify
+
+    System.out.println("SongId sent from front end " + oldSongId);
+    System.out.println("isPaused front end" + isPaused);
+    System.out.println("time passed front end" + timePassed);
+
+    // If the front end thinks the playlist should still be playing
+    // and the current song isn't playing it means that the playlist
+    // looped
+    // around the beginning because it thinks the playlist is over
+    if (!curr.getIsPlaying() && !isPaused && curr.getTimePassed() == 0
+        && curr.getTimePassed() < timePassed) {
+      System.out.println(
+          "**********************RELOOPED AROUND?***********************");
+      int newIndex = 0;
+      // Figure out if infact the playlist really is over. If it isn't,
+      // set the new index to the index that should be playing. If not,
+      // start from the beginnning
+      System.out.println("oldIndex" + index);
+      System.out.println(
+          "playlist size" + party.getPlaylist().getSetOfSongs().size());
+      if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
+        newIndex = index + 1;
+      }
+      System.out.println("Playing playlist at index " + newIndex);
+      party.playPlaylist(newIndex);
+      curr = party.getSongBeingCurrentlyPlayed();
+      while (!curr.getSong()
+          .equals(party.getPlaylist().getSongs().get(newIndex).getSong())) {
+        TimeUnit.MILLISECONDS.sleep(100);
+        curr = party.getSongBeingCurrentlyPlayed();
+      }
+      System.out.println("new song being played" + curr.getSong().getTitle());
+
+    } // if the playlist hasn't looped around and there are still more
+      // songs to be played
+    else if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
+
+      // Check if there was a song change and if what should be playing is
+      // what is actually being played
+      if ((!oldSongId.equals(newSongIdPlaying))) {
+        System.out.println(
+            "**********************WENT TO A DIFFERENT SONG NATURALLY***********************");
+
+        List<Request> playlistSongs = party.getPlaylist().getSongs();
+        // Set the new index to be the old index plus one
+        int newIndex = index + 1;
+        Request realNextSong = playlistSongs.get(newIndex);
+        if (!realNextSong.getId().equals(newSongIdPlaying)) {
+          System.out.println(
+              "**********************THE NEW SONG IS NOT THE NEXT SONG***********************");
+          Request currRequestPlaying = Request.of(newSongIdPlaying);
+          int indexOfCurrSongPlaying = playlistSongs
+              .indexOf(currRequestPlaying);
+          assert indexOfCurrSongPlaying != -1 : "This should never get here because the SpotifyOutOfSyncException should be thrown";
+          if (indexOfCurrSongPlaying > newIndex) {
+            // If there is a mismatch, play the new index of the playlist.
+            System.out.println(
+                "**********************THE NEW SONG PLAYING HAS A HIGHGHER INDEX THAN WHAT SHOULD BE PLAYING NEXT and out of sync?***********************");
+            System.out.println("Playing playlist at index " + newIndex);
+            party.playPlaylist(newIndex);
+            curr = party.getSongBeingCurrentlyPlayed();
+            while (!curr.getSong().equals(
+                party.getPlaylist().getSongs().get(newIndex).getSong())) {
+              TimeUnit.MILLISECONDS.sleep(100);
+              curr = party.getSongBeingCurrentlyPlayed();
+            }
+            System.out
+                .println("new song being played" + curr.getSong().getTitle());
+          }
+        }
+
+      }
+    }
+  }
+
+  private void syncAfterTotalDesynchornization(CurrentSongPlaying curr,
+      Party party, JsonObject payload)
+      throws SpotifyUserApiException, InterruptedException {
+    // Throws an exception if the song being played does not exist in the
+    // playlist.
+    // We then correct this by playing the next index in the playlist.
+    System.out.println("Trying to sync playlist because of exception");
+    int index = payload.get("index").getAsInt();
+    Set<Request> playlistSongsSet = party.getPlaylist().getSetOfSongs();
+    int newIndex = 0;
+    if (index + 1 < playlistSongsSet.size()) {
+      newIndex = index + 1;
+    }
+    party.playPlaylist(newIndex);
+    while (true) {
+      try {
+        curr = party.getSongBeingCurrentlyPlayed();
+        while (curr != null && !curr.getSong()
+            .equals(party.getPlaylist().getSongs().get(newIndex).getSong())) {
+          TimeUnit.MILLISECONDS.sleep(100);
+          curr = party.getSongBeingCurrentlyPlayed();
+        }
+        break;
+      } catch (SpotifyOutOfSyncException g) {
+
+      }
+    }
+  }
+
   private void updatePartiesCurrentSong(JsonObject payload, Party party,
       Session sender, MESSAGE_TYPE messageType, boolean checkSync)
       throws IOException, InterruptedException {
@@ -315,120 +434,12 @@ public class PartyWebsocket {
         // If you should check for out of sync and you are provided the old song
         // id
         if (curr != null && checkSync && payload.get("oldSongId") != null) {
-          System.out.println("Real Time passed " + curr.getTimePassed());
-          System.out
-              .println("Real CurrentSong is playing = " + curr.getIsPlaying());
-          String newSongIdPlaying = Request.getId(party.getPartyId(),
-              curr.getSong().getSpotifyId());
-          System.out.println("SongId currently playing:" + newSongIdPlaying);
-          String oldSongId = payload.get("oldSongId").getAsString();
-          boolean isPaused = payload.get("isPaused").getAsBoolean();
-          long timePassed = payload.get("timePassed").getAsLong();
-
-          int index = payload.get("index").getAsInt();
-          // This is the id of the song that is currently playing on spotify
-
-          System.out.println("SongId sent from front end " + oldSongId);
-          System.out.println("isPaused front end" + isPaused);
-          System.out.println("time passed front end" + timePassed);
-
-          // If the front end thinks the playlist should still be playing
-          // and the current song isn't playing it means that the playlist
-          // looped
-          // around the beginning because it thinks the playlist is over
-          if (!curr.getIsPlaying() && !isPaused && curr.getTimePassed() == 0
-              && curr.getTimePassed() < timePassed) {
-            System.out.println(
-                "**********************RELOOPED AROUND?***********************");
-            int newIndex = 0;
-            // Figure out if infact the playlist really is over. If it isn't,
-            // set the new index to the index that should be playing. If not,
-            // start from the beginnning
-            System.out.println("oldIndex" + index);
-            System.out.println(
-                "playlist size" + party.getPlaylist().getSetOfSongs().size());
-            if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
-              newIndex = index + 1;
-            }
-            System.out.println("Playing playlist at index " + newIndex);
-            party.playPlaylist(newIndex);
-            curr = party.getSongBeingCurrentlyPlayed();
-            while (!curr.getSong().equals(
-                party.getPlaylist().getSongs().get(newIndex).getSong())) {
-              TimeUnit.MILLISECONDS.sleep(100);
-              curr = party.getSongBeingCurrentlyPlayed();
-            }
-            System.out
-                .println("new song being played" + curr.getSong().getTitle());
-
-          } // if the playlist hasn't looped around and there are still more
-            // songs to be played
-          else if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
-
-            // Check if there was a song change and if what should be playing is
-            // what is actually being played
-            if ((!oldSongId.equals(newSongIdPlaying))) {
-              System.out.println(
-                  "**********************WENT TO A DIFFERENT SONG NATURALLY***********************");
-
-              List<Request> playlistSongs = party.getPlaylist().getSongs();
-              // Set the new index to be the old index plus one
-              int newIndex = index + 1;
-              Request realNextSong = playlistSongs.get(newIndex);
-              if (!realNextSong.getId().equals(newSongIdPlaying)) {
-                System.out.println(
-                    "**********************THE NEW SONG IS NOT THE NEXT SONG***********************");
-                Request currRequestPlaying = Request.of(newSongIdPlaying);
-                int indexOfCurrSongPlaying = playlistSongs
-                    .indexOf(currRequestPlaying);
-                assert indexOfCurrSongPlaying != -1 : "This should never get here because the SpotifyOutOfSyncException should be thrown";
-                if (indexOfCurrSongPlaying > newIndex) {
-                  // If there is a mismatch, play the new index of the playlist.
-                  System.out.println(
-                      "**********************THE NEW SONG PLAYING HAS A HIGHGHER INDEX THAN WHAT SHOULD BE PLAYING NEXT and out of sync?***********************");
-                  System.out.println("Playing playlist at index " + newIndex);
-                  party.playPlaylist(newIndex);
-                  curr = party.getSongBeingCurrentlyPlayed();
-                  while (!curr.getSong().equals(
-                      party.getPlaylist().getSongs().get(newIndex).getSong())) {
-                    TimeUnit.MILLISECONDS.sleep(100);
-                    curr = party.getSongBeingCurrentlyPlayed();
-                  }
-                  System.out.println(
-                      "new song being played" + curr.getSong().getTitle());
-                }
-              }
-
-            }
-          }
+          checkSync(curr, party, payload);
         }
       } catch (SpotifyUserApiException e) {
         sendRedirectLoginUpdate(sender);
       } catch (SpotifyOutOfSyncException e) {
-        // Throws an exception if the song being played does not exist in the
-        // playlist.
-        // We then correct this by playing the next index in the playlist.
-        System.out.println("Trying to sync playlist because of exception");
-        int index = payload.get("index").getAsInt();
-        Set<Request> playlistSongsSet = party.getPlaylist().getSetOfSongs();
-        int newIndex = 0;
-        if (index + 1 < playlistSongsSet.size()) {
-          newIndex = index + 1;
-        }
-        party.playPlaylist(newIndex);
-        while (true) {
-          try {
-            curr = party.getSongBeingCurrentlyPlayed();
-            while (curr != null && !curr.getSong().equals(
-                party.getPlaylist().getSongs().get(newIndex).getSong())) {
-              TimeUnit.MILLISECONDS.sleep(100);
-              curr = party.getSongBeingCurrentlyPlayed();
-            }
-            break;
-          } catch (SpotifyOutOfSyncException g) {
-
-          }
-        }
+        syncAfterTotalDesynchornization(curr, party, payload);
       }
       if (curr == null) {
         JsonObject updateErrorMessage = new JsonObject();
@@ -470,10 +481,7 @@ public class PartyWebsocket {
     } catch (SpotifyUserApiException e) {
       sendRedirectLoginUpdate(sender);
       return;
-    } // catch (SpotifyOutOfSyncException e) {
-    // e.printStackTrace();
-    // return;
-    // }
+    }
   }
 
   /**
