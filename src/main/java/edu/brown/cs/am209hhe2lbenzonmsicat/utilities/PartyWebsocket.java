@@ -312,21 +312,15 @@ public class PartyWebsocket {
       try {
         curr = party.getSongBeingCurrentlyPlayed();
         System.out.println("===============================");
-
-        if (curr == null) {
-          System.out.println("Curr is Null");
-          return;
-        }
-        System.out.println("Real Time passed " + curr.getTimePassed());
-        System.out
-            .println("Real CurrentSong is playing = " + curr.getIsPlaying());
-        String newSongIdPlaying = Request.getId(party.getPartyId(),
-            curr.getSong().getSpotifyId());
-        System.out.println("SongId currently playing:" + newSongIdPlaying);
-
         // If you should check for out of sync and you are provided the old song
         // id
-        if (checkSync && payload.get("oldSongId") != null) {
+        if (curr != null && checkSync && payload.get("oldSongId") != null) {
+          System.out.println("Real Time passed " + curr.getTimePassed());
+          System.out
+              .println("Real CurrentSong is playing = " + curr.getIsPlaying());
+          String newSongIdPlaying = Request.getId(party.getPartyId(),
+              curr.getSong().getSpotifyId());
+          System.out.println("SongId currently playing:" + newSongIdPlaying);
           String oldSongId = payload.get("oldSongId").getAsString();
           boolean isPaused = payload.get("isPaused").getAsBoolean();
           long timePassed = payload.get("timePassed").getAsLong();
