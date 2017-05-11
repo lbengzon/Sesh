@@ -437,9 +437,12 @@ public class PartyWebsocket {
         }
       }
       if (curr == null) {
-        throw new RuntimeException(
-            "SONG IS NULL SO YOU JUST STARTED THE PLAYLIST (DONT REALLY WORRY ABOUT THIS EXCEPTION) ");
-        // return;
+        JsonObject updateErrorMessage = new JsonObject();
+        updateErrorMessage.addProperty("success", false);
+        updateErrorMessage.addProperty("message", "No Song Playing");
+        updateErrorMessage.addProperty("type", messageType.ordinal());
+        sender.getRemote().sendString(updateErrorMessage.toString());
+        return;
       }
       System.out.println("Finally playing = " + curr.getSong().getTitle());
       String requestId = Request.getId(party.getPartyId(),
