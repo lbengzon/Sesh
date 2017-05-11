@@ -302,7 +302,7 @@ public class PartyWebsocket {
 
   private void updatePartiesCurrentSong(JsonObject payload, Party party,
       Session sender, MESSAGE_TYPE messageType, boolean checkSync)
-      throws IOException {
+      throws IOException, InterruptedException {
     try {
       JsonObject updatePayload = new JsonObject();
       JsonObject updateMessage = new JsonObject();
@@ -357,10 +357,11 @@ public class PartyWebsocket {
             System.out.println("Playing playlist at index " + newIndex);
             party.playPlaylist(newIndex);
             curr = party.getSongBeingCurrentlyPlayed();
-            // while (!curr.getSong().equals(
-            // party.getPlaylist().getSongs().get(newIndex).getSong())) {
-            // curr = party.getSongBeingCurrentlyPlayed();
-            // }
+            while (!curr.getSong().equals(
+                party.getPlaylist().getSongs().get(newIndex).getSong())) {
+              TimeUnit.MILLISECONDS.sleep(100);
+              curr = party.getSongBeingCurrentlyPlayed();
+            }
             System.out
                 .println("new song being played" + curr.getSong().getTitle());
 
@@ -386,9 +387,11 @@ public class PartyWebsocket {
                 System.out.println("Playing playlist at index " + newIndex);
                 party.playPlaylist(newIndex);
                 curr = party.getSongBeingCurrentlyPlayed();
-                // while (!curr.getSong().equals(
-                // party.getPlaylist().getSongs().get(newIndex).getSong())) {
-                // }
+                while (!curr.getSong().equals(
+                    party.getPlaylist().getSongs().get(newIndex).getSong())) {
+                  TimeUnit.MILLISECONDS.sleep(100);
+                  curr = party.getSongBeingCurrentlyPlayed();
+                }
                 System.out.println(
                     "new song being played" + curr.getSong().getTitle());
               }
