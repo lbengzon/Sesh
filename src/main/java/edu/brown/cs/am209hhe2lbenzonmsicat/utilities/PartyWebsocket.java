@@ -302,7 +302,7 @@ public class PartyWebsocket {
     }
   }
 
-  private void checkSync(CurrentSongPlaying curr, Party party,
+  private CurrentSongPlaying checkSync(CurrentSongPlaying curr, Party party,
       JsonObject payload) throws SpotifyUserApiException,
       SpotifyOutOfSyncException, InterruptedException {
 
@@ -390,10 +390,11 @@ public class PartyWebsocket {
 
       }
     }
+    return curr;
   }
 
-  private void syncAfterTotalDesynchornization(CurrentSongPlaying curr,
-      Party party, JsonObject payload)
+  private CurrentSongPlaying syncAfterTotalDesynchornization(
+      CurrentSongPlaying curr, Party party, JsonObject payload)
       throws SpotifyUserApiException, InterruptedException {
     // Throws an exception if the song being played does not exist in the
     // playlist.
@@ -419,6 +420,7 @@ public class PartyWebsocket {
 
       }
     }
+    return curr;
   }
 
   private void updatePartiesCurrentSong(JsonObject payload, Party party,
@@ -434,12 +436,12 @@ public class PartyWebsocket {
         // If you should check for out of sync and you are provided the old song
         // id
         if (curr != null && checkSync && payload.get("oldSongId") != null) {
-          checkSync(curr, party, payload);
+          curr = checkSync(curr, party, payload);
         }
       } catch (SpotifyUserApiException e) {
         sendRedirectLoginUpdate(sender);
       } catch (SpotifyOutOfSyncException e) {
-        syncAfterTotalDesynchornization(curr, party, payload);
+        curr = syncAfterTotalDesynchornization(curr, party, payload);
       }
       if (curr == null) {
         JsonObject updateErrorMessage = new JsonObject();
