@@ -425,7 +425,7 @@ public class PartyWebsocket {
         while (true) {
           try {
             curr = party.getSongBeingCurrentlyPlayed();
-            while (!curr.getSong().equals(
+            while (curr != null && !curr.getSong().equals(
                 party.getPlaylist().getSongs().get(newIndex).getSong())) {
               TimeUnit.MILLISECONDS.sleep(100);
               curr = party.getSongBeingCurrentlyPlayed();
