@@ -472,10 +472,10 @@ public class PartyWebsocket {
     } catch (SpotifyUserApiException e) {
       sendRedirectLoginUpdate(sender);
       return;
-    } catch (SpotifyOutOfSyncException e) {
-      e.printStackTrace();
-      return;
-    }
+    } // catch (SpotifyOutOfSyncException e) {
+    // e.printStackTrace();
+    // return;
+    // }
   }
 
   /**
