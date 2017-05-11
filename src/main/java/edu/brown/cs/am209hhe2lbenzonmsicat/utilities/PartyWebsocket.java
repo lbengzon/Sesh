@@ -422,11 +422,19 @@ public class PartyWebsocket {
           newIndex = index + 1;
         }
         party.playPlaylist(newIndex);
-        curr = party.getSongBeingCurrentlyPlayed();
-        // while (!curr.getSong()
-        // .equals(party.getPlaylist().getSongs().get(newIndex).getSong())) {
-        // curr = party.getSongBeingCurrentlyPlayed();
-        // }
+        while (true) {
+          try {
+            curr = party.getSongBeingCurrentlyPlayed();
+            while (!curr.getSong().equals(
+                party.getPlaylist().getSongs().get(newIndex).getSong())) {
+              TimeUnit.MILLISECONDS.sleep(100);
+              curr = party.getSongBeingCurrentlyPlayed();
+            }
+            break;
+          } catch (SpotifyUserApiException g) {
+
+          }
+        }
       }
       if (curr == null) {
 
