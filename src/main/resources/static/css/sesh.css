@@ -443,6 +443,14 @@ input#accessCode {
 	font-size: 150%;
 }
 
+<<<<<<< HEAD
+=======
+.tabContentOptions, .tabContentOptionsGuest {
+	width: 50%;
+	height: 100%;
+}
+
+>>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 .tabContentPlaylistGuest, .tabContentRequestGuest {
 	width: 75%;
 	height: 100%;
@@ -814,6 +822,28 @@ ul.favoritesList {
 	cursor: default !important;
 }
 
+<<<<<<< HEAD
+=======
+#endButton, #leaveButton {
+	background-color: #72d8d0;
+	font-family: 'Source Sans Pro', sans-serif;
+	letter-spacing: 2px;
+	padding: 5%;
+	width: 100%;
+	font-size: 200%;
+	color: white;
+	border: solid;
+	border-width: 4px;
+	border-color: white;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	margin-top: 20%;
+/*	margin: auto;*/
+	transition: background-color 0.4s linear;	
+}
+
+>>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 .favHeaderButtonsDiv {
 	width: 100%;
 	display: inline-flex;
@@ -854,6 +884,17 @@ ul.favoritesList {
 	overflow-y: scroll;
 }
 
+<<<<<<< HEAD
+=======
+.elapsed, .duration {
+	width: 4%;
+}
+
+.seshName {
+	text-align: center;
+}
+
+>>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 
 
 

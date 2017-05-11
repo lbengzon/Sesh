@@ -37,12 +37,13 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.Constants;
 import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 
 /**
- * <<<<<<< HEAD <<<<<<< HEAD Class that integrates Spotify API for Sesh. =======
- * Class that integrates Spotify API for Sesh. <<<<<<<
+ * <<<<<<< HEAD <<<<<<< HEAD <<<<<<< HEAD Class that integrates Spotify API for
+ * Sesh. ======= Class that integrates Spotify API for Sesh. <<<<<<<
  * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
  * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= Class that
  * integrates Spotify API for Sesh. >>>>>>>
- * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+ * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd ======= >>>>>>>
+ * ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
  * @author HE23
  */
 
@@ -51,7 +52,13 @@ public class SpotifyCommunicator {
   // private final Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
   // .clientSecret(Consta
   // nts.LEANDRO_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL)
+
+  // private final Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+  // .clientSecret(Consta
+  // nts.ALI_CLIENT_SECRET).redirectURI(Constants.REDIRECT_URL_ONLINE)
+
   // .build();
+
   private static Api testApi;
   private List<String> results;
   private static Cache<String, Api> userToApi = CacheBuilder.newBuilder()
@@ -87,6 +94,9 @@ public class SpotifyCommunicator {
     testApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
+    // testApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+    // .clientSecret(Constants.ALI_CLIENT_SECRET)
+    // .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     testApi.setRefreshToken(Constants.SESH_REFRESH);
     apiPool = new ApiPool();
     String aT2;
@@ -100,6 +110,9 @@ public class SpotifyCommunicator {
     Api hannahApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
+    // Api hannahApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+    // .clientSecret(Constants.ALI_CLIENT_SECRET)
+    // .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     hannahApi.setRefreshToken(Constants.HANNAH_REFRESH);
     String aT;
     try {
@@ -113,6 +126,9 @@ public class SpotifyCommunicator {
     Api aliApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
+    // Api aliApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+    // .clientSecret(Constants.ALI_CLIENT_SECRET)
+    // .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     aliApi.setRefreshToken(Constants.ALI_REFRESH);
     String aT3;
     try {
@@ -125,6 +141,9 @@ public class SpotifyCommunicator {
     Api leandroApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
+    // Api leandroApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+    // .clientSecret(Constants.ALI_CLIENT_SECRET)
+    // .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     leandroApi.setRefreshToken(Constants.LEANDRO_REFRESH);
     String aT4;
     try {
@@ -154,6 +173,10 @@ public class SpotifyCommunicator {
     Api newApi = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
+    // Api newApi = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+    // .clientSecret(Constants.ALI_CLIENT_SECRET)
+    // .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
+
     String authorizeURL = newApi.createAuthorizeURL(scopes, state);
 
     /*
@@ -167,10 +190,11 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD <<<<<<< HEAD Get access token. ======= Get access token.
-   * <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed
-   * device id issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e =======
-   * Get access token. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * <<<<<<< HEAD <<<<<<< HEAD <<<<<<< HEAD Get access token. ======= Get access
+   * token. <<<<<<< 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>>
+   * fixed device id issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e
+   * ======= Get access token. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * ======= >>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
    * @param code
    *          - code
    * @return a list of the user's info
@@ -184,6 +208,9 @@ public class SpotifyCommunicator {
     Api api = Api.builder().clientId(Constants.LEANDRO_CLIENT_ID)
         .clientSecret(Constants.LEANDRO_CLIENT_SECRET)
         .redirectURI(Constants.REDIRECT_URL).build();
+    // Api api = Api.builder().clientId(Constants.ALI_CLIENT_ID)
+    // .clientSecret(Constants.ALI_CLIENT_SECRET)
+    // .redirectURI(Constants.REDIRECT_URL_ONLINE).build();
     final SettableFuture<AuthorizationCodeCredentials> authCodeCredFuture = api
         .authorizationCodeGrant(code).build().getAsync();
 
@@ -238,11 +265,12 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD <<<<<<< HEAD This method gets the playlist tracks. =======
-   * This method gets the playlist tracks. <<<<<<<
+   * <<<<<<< HEAD <<<<<<< HEAD <<<<<<< HEAD This method gets the playlist
+   * tracks. ======= This method gets the playlist tracks. <<<<<<<
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * gets the playlist tracks. >>>>>>> b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * ======= >>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
    * @param userId
    *          user id
    * @param playlistId
@@ -475,12 +503,13 @@ public class SpotifyCommunicator {
   }
 
   /**
-   * <<<<<<< HEAD <<<<<<< HEAD This method reorders tracks in the playlist.
-   * ======= This method reorders tracks in the playlist. <<<<<<<
+   * <<<<<<< HEAD <<<<<<< HEAD <<<<<<< HEAD This method reorders tracks in the
+   * playlist. ======= This method reorders tracks in the playlist. <<<<<<<
    * 1866e385e9b08f37dca6f7fc29ec9f0527578003 ======= >>>>>>> fixed device id
    * issue >>>>>>> d3a2a8900f9e3542f5ab174cb98971c0363e9d6e ======= This method
    * reorders tracks in the playlist. >>>>>>>
-   * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd
+   * b131bf14c1c0795d3ea2e7ca3a775d3096e9cdbd ======= >>>>>>>
+   * ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
    * @param userId
    *          the user id
    * @param playlistId

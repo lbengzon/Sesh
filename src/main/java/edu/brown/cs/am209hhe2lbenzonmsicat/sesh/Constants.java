@@ -2,8 +2,6 @@ package edu.brown.cs.am209hhe2lbenzonmsicat.sesh;
 
 /**
  * Constants class.
- *
- *
  */
 public final class Constants {
 
@@ -21,6 +19,9 @@ public final class Constants {
   public static final String REDIRECT_URL = "http://localhost:"
       + "4567/spotifycallback";
   public static final String REDIRECT_URL_ONLINE = "http://35.185.92.16/spotifycallback";
+  // public static final String REDIRECT_URL_ONLINE =
+  // "https://sesh.cloud/spotifycallback";
+
   public static final String ALI_ACCESS = "BQCmw12JTnmiC0MizSBkavZKgBIqAA9_8PZJIlWu7DDc"
       + "HrjTZcpqGmQw5WXlrldBKZHvOhW06ecYS0kHhqnAaYJuG7Wg00SuBzXOkQ6H_ZkH0pbgQkFc"
       + "FJPqlRVYMM6QW9kLxtaij0oqmnSBi-VLjVCr59OTdDoVAgjQjNm"

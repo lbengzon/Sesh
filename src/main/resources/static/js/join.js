@@ -87,6 +87,11 @@ $(document).ready(() => {
 		navigator.geolocation.getCurrentPosition(function(position) {
 			const lat = position.coords.latitude;
 			const lon = position.coords.longitude;
+<<<<<<< HEAD
+=======
+			// const lat = 41.8240;
+			// const lon = 71.4128;
+>>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 			const postParameters = {latitude: lat, longitude: lon};
 			$.post("/join2", postParameters, responseJSON => {
 				const responseObject = JSON.parse(responseJSON);
@@ -101,6 +106,7 @@ $(document).ready(() => {
 						$("#" + parties[i].partyId).data('accessType', parties[i].accessType);
 					}	
 				
+<<<<<<< HEAD
 					$partyList.on("click", event => {
 						$listItems = $("li");
 						$selected = $listItems.filter('.partyHover');
@@ -113,6 +119,21 @@ $(document).ready(() => {
 						$("#partySubmit").attr("disabled", false);
 						//console.log("SELECTED: " , $("#party-list li").filter(".selected").attr("id"));
 					});
+=======
+
+				$partyList.on("click", event => {
+					$listItems = $("li");
+					$selected = $listItems.filter('.partyHover');
+					partyId = ($selected.attr('id'));
+					console.log("id: " + partyId);
+					accessType = ($selected.data('accessType'));
+					console.log("SELECTED: ", $selected);
+					$selected.addClass("deviceSelected");
+					//$selected.css("background-color", "grey");
+					$("#partySubmit").attr("disabled", false);
+					//console.log("SELECTED: " , $("#party-list li").filter(".selected").attr("id"));
+				});
+>>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 
 					console.log("parties should be received if you are here!");
 				}

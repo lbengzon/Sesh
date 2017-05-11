@@ -57,7 +57,11 @@ function setupWebsockets() {
   const $player = $("#playback");
   let requestId;
   // TODO Create the WebSocket connection and assign it to `conn`
+<<<<<<< HEAD
   conn = new WebSocket("ws://localhost:4567/update");
+=======
+  conn = new WebSocket("wss://sesh.cloud/update");
+>>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 
   conn.onclose = function(){
     setTimeout(setupWebsockets, 1000)

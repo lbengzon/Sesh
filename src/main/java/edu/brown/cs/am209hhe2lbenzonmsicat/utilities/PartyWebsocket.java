@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -67,6 +68,7 @@ public class PartyWebsocket {
     UPDATE_SEND_USER_TO_LOGIN,
     PREV_SONG,
     NEXT_SONG
+
   }
 
   @OnWebSocketConnect
@@ -284,6 +286,7 @@ public class PartyWebsocket {
       CurrentSongPlaying curr = party.getSongBeingCurrentlyPlayed();
       while (!curr.getSong()
           .equals(party.getPlaylist().getSongs().get(index).getSong())) {
+        TimeUnit.MILLISECONDS.sleep(100);
         curr = party.getSongBeingCurrentlyPlayed();
       }
       updatePartiesCurrentSong(payload, party, session, messageType, false);
@@ -373,18 +376,19 @@ public class PartyWebsocket {
             // what is actually being played
             if ((!oldSongId.equals(newSongIdPlaying)
                 && !realNextSong.getId().equals(newSongIdPlaying))) {
-              // If there is a mismatch, play the new index of the playlist.
-              System.out.println(
-                  "**********************WENT TO NEXT SONG and out of sync?***********************");
-              System.out.println("Playing playlist at index " + newIndex);
-              party.playPlaylist(newIndex);
-              curr = party.getSongBeingCurrentlyPlayed();
-              // while (!curr.getSong().equals(
-              // party.getPlaylist().getSongs().get(newIndex).getSong())) {
+              // // If there is a mismatch, play the new index of the playlist.
+              // System.out.println(
+              // "**********************WENT TO NEXT SONG and out of
+              // sync?***********************");
+              // System.out.println("Playing playlist at index " + newIndex);
+              // party.playPlaylist(newIndex);
               // curr = party.getSongBeingCurrentlyPlayed();
-              // }
-              System.out
-                  .println("new song being played" + curr.getSong().getTitle());
+              // // while (!curr.getSong().equals(
+              // // party.getPlaylist().getSongs().get(newIndex).getSong())) {
+              // // curr = party.getSongBeingCurrentlyPlayed();
+              // // }
+              // System.out
+              // .println("new song being played" + curr.getSong().getTitle());
             }
           }
         }
@@ -452,7 +456,8 @@ public class PartyWebsocket {
 
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
-   * the sender the senderUpdateMessage
+   * the sender the senderUpdateMessage <<<<<<< HEAD ======= >>>>>>>
+   * ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -472,7 +477,8 @@ public class PartyWebsocket {
 
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
-   * the sender the senderUpdateMessage
+   * the sender the senderUpdateMessage <<<<<<< HEAD ======= >>>>>>>
+   * ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage

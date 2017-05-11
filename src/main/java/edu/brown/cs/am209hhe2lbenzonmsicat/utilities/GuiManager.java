@@ -30,7 +30,6 @@ import spark.template.freemarker.FreeMarkerEngine;
 
 /**
  * GUI Manager class.
- *
  * @author HE23
  */
 public class GuiManager {
@@ -39,7 +38,6 @@ public class GuiManager {
 
   /**
    * Default constructor.
-   *
    * @param freeMarkerEngine
    *          - freemarker engine
    */
@@ -71,9 +69,7 @@ public class GuiManager {
 
   /**
    * Sends the user to the error page.
-   *
    * @author Matt
-   *
    */
   private static class ErrorHandler implements TemplateViewRoute {
     @Override
@@ -104,7 +100,6 @@ public class GuiManager {
 
   /**
    * Handles the homepage, where users enter their credentials.
-   *
    * @author Matt
    */
   private class CallbackHandler implements TemplateViewRoute {
@@ -134,7 +129,6 @@ public class GuiManager {
 
   /**
    * Handles the create join page.
-   *
    * @author Matt
    */
   private static class CreateJoinHandler implements TemplateViewRoute {
@@ -180,9 +174,7 @@ public class GuiManager {
 
   /**
    * Gets the active parties within join radius range.
-   *
    * @author Matt
-   *
    */
   private static class GetPartiesWithinRange implements Route {
     @Override
@@ -234,7 +226,6 @@ public class GuiManager {
 
   /**
    * Handles request to join a sesh page.
-   *
    * @author HE23
    */
   private static class JoinHandler implements TemplateViewRoute {
@@ -293,7 +284,6 @@ public class GuiManager {
 
   /**
    * Handles joining a party.
-   *
    */
   private static class JoinPartyHandler implements Route {
     @Override
@@ -336,7 +326,6 @@ public class GuiManager {
 
   /**
    * Handles request to create a sesh page.
-   *
    * @author HE23
    */
   private static class PartySettingsHandler implements TemplateViewRoute {
@@ -353,9 +342,7 @@ public class GuiManager {
   }
 
   /**
-   *
    * Creates party in the backend.
-   *
    * @author HE23
    */
   private class GetPartyHandler implements Route {
@@ -378,6 +365,7 @@ public class GuiManager {
 
       Party party = null;
       int partyId = -1;
+
       System.out.println("lat " + lat);
       System.out.println("lon " + lon);
 
@@ -387,6 +375,12 @@ public class GuiManager {
       Map<String, Object> variables = ImmutableMap.of("partyId", "",
           "partyName", partyName, "userId", userId);
 
+      // // Coordinate coord = new Coordinate(Double.valueOf(lat),
+      // // Double.valueOf(lon));
+      // Coordinate coord = new Coordinate(41.8240, 71.4128);
+      // Map<String, Object> variables = ImmutableMap.of("partyId", "",
+      // "partyName", partyName, "userId", userId);
+      // System.out.println("going into try");
       try {
         User host = User.of(userId);
         System.out.println("got the user");
@@ -437,7 +431,6 @@ public class GuiManager {
 
   /**
    * Handles when a guest leaves a party.
-   *
    * @author Matt
    */
   private class LeavePartyHandler implements TemplateViewRoute {
@@ -475,7 +468,6 @@ public class GuiManager {
 
   /**
    * Handles displaying search results.
-   *
    * @author HE23
    */
   private static class SearchHandler implements Route {
@@ -536,7 +528,6 @@ public class GuiManager {
 
   /**
    * Handles adding favorites.
-   *
    * @author HE23
    */
   private static class AddFavoriteHandler implements Route {
@@ -598,7 +589,6 @@ public class GuiManager {
 
   /**
    * Handles redirecting if user is already seshing.
-   *
    * @author Matt
    */
   private static class ActivePartyHandler implements Route {
