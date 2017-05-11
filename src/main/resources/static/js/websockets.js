@@ -182,6 +182,7 @@ function setupWebsockets() {
           //console.log("UNLOCKED")
           updatePlayer(data);
           constantUpdateLocked = false;
+          hasSentCheckForNewCurrSong = false;
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
           alert("The host has ended the party.");
@@ -210,6 +211,7 @@ function setupWebsockets() {
         alert("Someone has already requested this song!");
       }
       console.log("SERVER SIDE WEBSOCKET ERROR MESSAGE: " + data.message);
+      hasSentCheckForNewCurrSong = false;
     }
     
   };

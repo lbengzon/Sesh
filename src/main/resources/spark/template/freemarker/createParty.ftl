@@ -8,6 +8,7 @@
 	let timePassed;
 	const isHost = true;
 	let justRefreshed = true;
+	let hasSentCheckForNewCurrSong = false;
 </script>
 <script src="/js/createParty.js"></script>
 <script>
