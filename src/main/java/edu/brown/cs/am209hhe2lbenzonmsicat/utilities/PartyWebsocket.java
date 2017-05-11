@@ -35,11 +35,39 @@ public class PartyWebsocket {
   private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
 
   private static enum TRANSFER_TYPE {
-    REQUEST_TO_PLAYLIST, PLAYLIST_TO_REQUEST
+    REQUEST_TO_PLAYLIST,
+    PLAYLIST_TO_REQUEST
   }
 
   private static enum MESSAGE_TYPE {
-    CONNECT, SET_PARTY_ID, ADD_REQUEST, UPVOTE_REQUEST, DOWNVOTE_REQUEST, MOVE_REQUEST_TO_QUEUE, MOVE_FROM_QUEUE_TO_REQUEST, ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_ADD_REQUEST, UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST, UPDATE_VOTE_REQUESTS, UPDATE_AFTER_REQUEST_TRANSFER, UPDATE_ENTIRE_PARTY, UPDATE_REARRANGE_PLAYLIST, REORDER_PLAYLIST_TRACK, PLAY_PLAYLIST, PAUSE_SONG, UPDATE_PLAYER, SONG_MOVED_TO_NEXT, UPDATE_NEXT_CURR_SONG_REQUEST, SEEK_SONG, RESUME_SONG, END_PARTY, UPDATE_GUESTS_END_PARTY, UPDATE_NEW_USER_JOINED, UPDATE_SEND_USER_TO_LOGIN, PREV_SONG, NEXT_SONG
+    CONNECT,
+    SET_PARTY_ID,
+    ADD_REQUEST,
+    UPVOTE_REQUEST,
+    DOWNVOTE_REQUEST,
+    MOVE_REQUEST_TO_QUEUE,
+    MOVE_FROM_QUEUE_TO_REQUEST,
+    ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_ADD_REQUEST,
+    UPDATE_ADD_SONG_DIRECTLY_TO_PLAYLIST,
+    UPDATE_VOTE_REQUESTS,
+    UPDATE_AFTER_REQUEST_TRANSFER,
+    UPDATE_ENTIRE_PARTY,
+    UPDATE_REARRANGE_PLAYLIST,
+    REORDER_PLAYLIST_TRACK,
+    PLAY_PLAYLIST,
+    PAUSE_SONG,
+    UPDATE_PLAYER,
+    SONG_MOVED_TO_NEXT,
+    UPDATE_NEXT_CURR_SONG_REQUEST,
+    SEEK_SONG,
+    RESUME_SONG,
+    END_PARTY,
+    UPDATE_GUESTS_END_PARTY,
+    UPDATE_NEW_USER_JOINED,
+    UPDATE_SEND_USER_TO_LOGIN,
+    PREV_SONG,
+    NEXT_SONG
   }
 
   @OnWebSocketConnect
@@ -347,17 +375,24 @@ public class PartyWebsocket {
             // what is actually being played
             if ((!oldSongId.equals(newSongIdPlaying)
                 && !realNextSong.getId().equals(newSongIdPlaying))) {
-              // If there is a mismatch, play the new index of the playlist.
-              System.out.println(
-                  "**********************WENT TO NEXT SONG and out of sync?***********************");
-              // System.out.println("Playing playlist at index " + newIndex);
-              // party.playPlaylist(newIndex);
-              // curr = party.getSongBeingCurrentlyPlayed();
-              // // while (!curr.getSong().equals(
-              // // party.getPlaylist().getSongs().get(newIndex).getSong())) {
-              // // }
-              // System.out
-              // .println("new song being played" + curr.getSong().getTitle());
+              Request currRequestPlaying = Request.of(newSongIdPlaying);
+              int indexOfCurrSongPlaying = playlistSongs
+                  .indexOf(currRequestPlaying);
+              assert indexOfCurrSongPlaying != -1 : "This should never get here because the SpotifyOutOfSyncException should be thrown";
+              if (indexOfCurrSongPlaying > newIndex) {
+                // If there is a mismatch, play the new index of the playlist.
+                System.out.println(
+                    "**********************WENT TO NEXT SONG and out of sync?***********************");
+                System.out.println("Playing playlist at index " + newIndex);
+                party.playPlaylist(newIndex);
+                curr = party.getSongBeingCurrentlyPlayed();
+                // while (!curr.getSong().equals(
+                // party.getPlaylist().getSongs().get(newIndex).getSong())) {
+                // }
+                System.out.println(
+                    "new song being played" + curr.getSong().getTitle());
+              }
+
             }
           }
         }
@@ -369,9 +404,9 @@ public class PartyWebsocket {
         // We then correct this by playing the next index in the playlist.
         System.out.println("Trying to sync playlist because of exception");
         int index = payload.get("index").getAsInt();
-        Set<Request> playlistSongs = party.getPlaylist().getSetOfSongs();
+        Set<Request> playlistSongsSet = party.getPlaylist().getSetOfSongs();
         int newIndex = 0;
-        if (index + 1 < playlistSongs.size()) {
+        if (index + 1 < playlistSongsSet.size()) {
           newIndex = index + 1;
         }
         party.playPlaylist(newIndex);
@@ -426,7 +461,6 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
-   *
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -447,7 +481,6 @@ public class PartyWebsocket {
   /**
    * Sends the updatemessage to everyone in the party except the sender. Sends
    * the sender the senderUpdateMessage
-   *
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
