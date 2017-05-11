@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -15,6 +16,7 @@ import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -30,9 +32,9 @@ import edu.brown.cs.am209hhe2lbenzonmsicat.sesh.SpotifyUserApiException;
 @WebSocket
 public class PartyWebsocket {
   private static final Gson GSON = new Gson();
-  private static final Multimap<Integer, Session> partyIdToSessions = HashMultimap
-      .create();
-  private static final Map<Session, Integer> sessionToPartyId = new HashMap<>();
+  private static final Multimap<Integer, Session> partyIdToSessions = Multimaps
+      .synchronizedSetMultimap(HashMultimap.create());
+  private static final Map<Session, Integer> sessionToPartyId = new ConcurrentHashMap<>();
 
   private static enum TRANSFER_TYPE {
     REQUEST_TO_PLAYLIST,
@@ -368,32 +370,39 @@ public class PartyWebsocket {
           } // if the playlist hasn't looped around and there are still more
             // songs to be played
           else if (index + 1 < party.getPlaylist().getSetOfSongs().size()) {
-            List<Request> playlistSongs = party.getPlaylist().getSongs();
-            // Set the new index to be the old index plus one
-            int newIndex = index + 1;
-            Request realNextSong = playlistSongs.get(newIndex);
+
             // Check if there was a song change and if what should be playing is
             // what is actually being played
-            if ((!oldSongId.equals(newSongIdPlaying)
-                && !realNextSong.getId().equals(newSongIdPlaying))) {
-              Request currRequestPlaying = Request.of(newSongIdPlaying);
-              int indexOfCurrSongPlaying = playlistSongs
-                  .indexOf(currRequestPlaying);
-              assert indexOfCurrSongPlaying != -1 : "This should never get here because the SpotifyOutOfSyncException should be thrown";
-              if (indexOfCurrSongPlaying > newIndex) {
-                // If there is a mismatch, play the new index of the playlist.
+            if ((!oldSongId.equals(newSongIdPlaying))) {
+              System.out.println(
+                  "**********************WENT TO A DIFFERENT SONG NATURALLY***********************");
+
+              List<Request> playlistSongs = party.getPlaylist().getSongs();
+              // Set the new index to be the old index plus one
+              int newIndex = index + 1;
+              Request realNextSong = playlistSongs.get(newIndex);
+              if (!realNextSong.getId().equals(newSongIdPlaying)) {
                 System.out.println(
-                    "**********************WENT TO NEXT SONG and out of sync?***********************");
-                System.out.println("Playing playlist at index " + newIndex);
-                party.playPlaylist(newIndex);
-                curr = party.getSongBeingCurrentlyPlayed();
-                while (!curr.getSong().equals(
-                    party.getPlaylist().getSongs().get(newIndex).getSong())) {
-                  TimeUnit.MILLISECONDS.sleep(100);
+                    "**********************THE NEW SONG IS NOT THE NEXT SONG***********************");
+                Request currRequestPlaying = Request.of(newSongIdPlaying);
+                int indexOfCurrSongPlaying = playlistSongs
+                    .indexOf(currRequestPlaying);
+                assert indexOfCurrSongPlaying != -1 : "This should never get here because the SpotifyOutOfSyncException should be thrown";
+                if (indexOfCurrSongPlaying > newIndex) {
+                  // If there is a mismatch, play the new index of the playlist.
+                  System.out.println(
+                      "**********************THE NEW SONG PLAYING HAS A HIGHGHER INDEX THAN WHAT SHOULD BE PLAYING NEXT and out of sync?***********************");
+                  System.out.println("Playing playlist at index " + newIndex);
+                  party.playPlaylist(newIndex);
                   curr = party.getSongBeingCurrentlyPlayed();
+                  while (!curr.getSong().equals(
+                      party.getPlaylist().getSongs().get(newIndex).getSong())) {
+                    TimeUnit.MILLISECONDS.sleep(100);
+                    curr = party.getSongBeingCurrentlyPlayed();
+                  }
+                  System.out.println(
+                      "new song being played" + curr.getSong().getTitle());
                 }
-                System.out.println(
-                    "new song being played" + curr.getSong().getTitle());
               }
 
             }
