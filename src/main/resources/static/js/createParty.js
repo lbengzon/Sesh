@@ -325,6 +325,8 @@ $(document).ready(() => {
     setInterval(constantlyUpdateCurrentSong, 500);
 
     function constantlyUpdateCurrentSong(){
+        console.log("constantUpdateLocked", constantUpdateLocked);
+        console.log("hasSentCheckForNewCurrSong", hasSentCheckForNewCurrSong);
         if(!constantUpdateLocked && !hasSentCheckForNewCurrSong){
             updatePartyCurrentSong(partyId, userId);
             hasSentCheckForNewCurrSong = true;
