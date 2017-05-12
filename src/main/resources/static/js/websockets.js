@@ -39,7 +39,6 @@ let favObjs;
 
 let constantUpdateLocked = false;
 let votedId;
-let changedTrackManual = false;
 
 function hoverOn(x) {
   x.className = 'selected';
@@ -57,11 +56,10 @@ function setupWebsockets() {
   const $player = $("#playback");
   let requestId;
   // TODO Create the WebSocket connection and assign it to `conn`
-<<<<<<< HEAD
+
   conn = new WebSocket("ws://localhost:4567/update");
-=======
-  conn = new WebSocket("wss://sesh.cloud/update");
->>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
+  //conn = new WebSocket("wss://sesh.cloud/update");
+
 
   conn.onclose = function(){
     setTimeout(setupWebsockets, 1000)
@@ -186,6 +184,7 @@ function setupWebsockets() {
           //console.log("UNLOCKED")
           updatePlayer(data);
           constantUpdateLocked = false;
+          hasSentCheckForNewCurrSong = false;
           break;
         case MESSAGE_TYPE.UPDATE_GUESTS_END_PARTY:
           alert("The host has ended the party.");
@@ -214,6 +213,7 @@ function setupWebsockets() {
         alert("Someone has already requested this song!");
       }
       console.log("SERVER SIDE WEBSOCKET ERROR MESSAGE: " + data.message);
+      hasSentCheckForNewCurrSong = false;
     }
     
   };

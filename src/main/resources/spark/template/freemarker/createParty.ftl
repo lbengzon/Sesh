@@ -8,6 +8,7 @@
 	let timePassed;
 	const isHost = true;
 	let justRefreshed = true;
+	let hasSentCheckForNewCurrSong = false;
 </script>
 <script src="/js/createParty.js"></script>
 <script>
@@ -16,11 +17,7 @@
 	console.log("user id: " + userId);
 	console.log("party id: " + partyId);
 </script>
-<<<<<<< HEAD
-
-=======
 <h2 class="seshName"> ${partyName} </h2>
->>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 <div id="musicPlayer">
 	<div id="songDataDiv">
 		<div id="albumArtDiv"><img id="songArt" height="168" width="168"></div>
@@ -55,13 +52,8 @@
 </div>
 
 <div id="titles">
-<<<<<<< HEAD
-<h2 class="titles">Queue | ${partyName} </h2>
-<h2 class="titles">Requests | ${partyName} </h2>
-=======
 <h2 class="titles">Queue </h2>
 <h2 class="titles">Requests</h2>
->>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 </div>
 
 <div class="list-wrapper">

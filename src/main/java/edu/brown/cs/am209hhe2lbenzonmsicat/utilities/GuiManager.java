@@ -375,12 +375,6 @@ public class GuiManager {
       Map<String, Object> variables = ImmutableMap.of("partyId", "",
           "partyName", partyName, "userId", userId);
 
-      // // Coordinate coord = new Coordinate(Double.valueOf(lat),
-      // // Double.valueOf(lon));
-      // Coordinate coord = new Coordinate(41.8240, 71.4128);
-      // Map<String, Object> variables = ImmutableMap.of("partyId", "",
-      // "partyName", partyName, "userId", userId);
-      // System.out.println("going into try");
       try {
         User host = User.of(userId);
         System.out.println("got the user");

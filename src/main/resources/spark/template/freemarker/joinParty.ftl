@@ -12,22 +12,8 @@
 	userId = "${userId}";
 	partyId = "${partyId}";
 </script>
-<<<<<<< HEAD
-<!-- <div id="musicPlayer">
-	<div id="musicTitles">
-		<h4 id="songTitle"></h4>
-		<h4 id="artistName"></h4>
-		<h4 id="albumTitle"></h4>
-	</div>
-	<img id="songArt" height="168" width="168">
-	<button id="playButton" class="playerButton" type="button">Play</button>
-	<button id="pauseButton" class="playerButton" type="button" style="display: none">Pause</button>
-	<progress id="progressbar" style="width:60%"></progress>
-</div> -->
-=======
 
 <h2 class="seshName"> ${partyName} </h2>
->>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 <div id="musicPlayer">
 	<div id="songDataDiv">
 		<div id="albumArtDiv"><img id="songArt" height="168" width="168"></div>

@@ -18,7 +18,7 @@ public final class Constants {
       + "884d08d83cdff368";
   public static final String REDIRECT_URL = "http://localhost:"
       + "4567/spotifycallback";
-  public static final String REDIRECT_URL_ONLINE = "http://35.185.92.16/spotifycallback";
+
   // public static final String REDIRECT_URL_ONLINE =
   // "https://sesh.cloud/spotifycallback";
 

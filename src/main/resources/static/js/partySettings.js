@@ -1,9 +1,4 @@
 let pos;
-<<<<<<< HEAD
-=======
-// let global_lat = 41.8240;
-// let global_lon = 71.4128;
->>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 let global_lat = null;
 let global_lon = null;
 
@@ -137,16 +132,6 @@ function hoverOff(x) {
 function getLoc(position) {
 	global_lat = position.coords.latitude, 
 	global_lon = position.coords.longitude;
-<<<<<<< HEAD
-=======
-	//MAKE SURE TO DELETE
-	//==================================================================
-
-
-	// global_lat = 41.8240;
-	// global_lon = 71.4128;
-	// ==================================================================
->>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
 	$("#lat").val(global_lat);
 	$("#lon").val(global_lon);
 }

@@ -325,8 +325,11 @@ $(document).ready(() => {
     setInterval(constantlyUpdateCurrentSong, 500);
 
     function constantlyUpdateCurrentSong(){
-        if(!constantUpdateLocked){
+        console.log("constantUpdateLocked", constantUpdateLocked);
+        console.log("hasSentCheckForNewCurrSong", hasSentCheckForNewCurrSong);
+        if(!constantUpdateLocked && !hasSentCheckForNewCurrSong){
             updatePartyCurrentSong(partyId, userId);
+            hasSentCheckForNewCurrSong = true;
         }
     }
 
@@ -421,13 +424,9 @@ $(document).ready(() => {
     $tabContentFavorites.hide();
 
     $endButton.click(function() {
-<<<<<<< HEAD
+
         var v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
         var deleteBool;
-=======
-        let v = confirm("Would you like to keep this Sesh as a Spotify playlist?");
-        let deleteBool;
->>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6
         if (v === true) {
             deleteBool = false;
         } else {
