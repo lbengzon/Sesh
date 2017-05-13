@@ -482,6 +482,13 @@ input#accessCode {
 	font-size: 97%;
 }
 
+.spotifyBrowsingThumbnail{
+	height:30px;
+	background: none;
+	border: none;
+	float:left;
+}
+
 .sortable-placeholder {
 	border: 1px dashed #969696;
 	background: #dbdbdb;
@@ -887,7 +894,9 @@ ul.favoritesList {
 	text-align: center;
 }
 
-
+.spotifyBrowserInListLabel {
+	margin: 2%;
+}
 
 
 

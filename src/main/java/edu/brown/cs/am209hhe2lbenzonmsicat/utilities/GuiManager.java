@@ -94,7 +94,8 @@ public class GuiManager {
       }
       Map<String, Object> variables = ImmutableMap.of("title", "Login",
           "authURL", comm.createAuthorizeURL(), "message", message);
-      return new ModelAndView(variables, "login.ftl");
+      // return new ModelAndView(variables, "login.ftl");
+      return new ModelAndView(variables, "browsetest.ftl");
     }
   }
 
