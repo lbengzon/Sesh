@@ -1,56 +1,41 @@
 <!DOCTYPE html>
+<html lang="en">
+
 <head>
+
     <meta charset="utf-8">
-    <title>${title}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- In real-world webapps, css is usually minified and
-       concatenated. Here, separate normalize from our code, and
-       avoid minification for clarity. -->
-    <link rel="stylesheet" href="../css/normalize.css">
-    <link rel="stylesheet" href="../css/sesh.css">
+    <title>${title}</title>
 
-<!--     // <script src="../js/jquery-2.1.1.js"></script> -->
-<!--     // <script src="../js/jquery-ui.js"></script> -->
- <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="../js/websockets.js"></script>
-    <script src="../js/notify.js"></script>
-    <script src-"../js/smoothscroll.js"></script>
+    <!-- Bootstrap Core CSS -->
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
 
-    <!-- inline CSS to make scrollbars prettier -->
-    <style media="screen" type="text/css">
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="../lib/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../lib/simple-line-icons/css/simple-line-icons.css">
+    <link rel="stylesheet" href="../lib/device-mockups/device-mockups.min.css">
 
-        ::-webkit-scrollbar-track {
-            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-            -webkit-border-radius: 10px;
-            border-radius: 10px;
-        }
+    <!-- Theme CSS -->
+    <link href="../css/new-age.css" rel="stylesheet">
 
-        ::-webkit-scrollbar-thumb {
-            -webkit-border-radius: 10px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-        }
 
-        ::-webkit-scrollbar-thumb:window-inactive {
-            background: rgba(0, 0, 0, 0.5);
-        }
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-    </style>
 </head>
-<body>
-<div id="header">
-	<h1>sesh</h1>
-</div>
+
+<body id="page-top">
 ${content}
 </body>
-<!-- See http://html5boilerplate.com/ for a good place to start
-     dealing with real world issues like old browsers.  -->
+
 </html>
