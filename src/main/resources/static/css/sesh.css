@@ -484,6 +484,7 @@ input#accessCode {
 
 .spotifyBrowsingThumbnail{
 	height:30px;
+	width:30px;
 	background: none;
 	border: none;
 	float:left;
