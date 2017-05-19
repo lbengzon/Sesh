@@ -1,8 +1,8 @@
 class Page {
-	constructor(pageType, uri, index, itemsBeingDisplayed){
+	constructor(pageType, uri, scrollTop, itemsBeingDisplayed){
 			this.pageType = pageType;
 			this.uri = uri;
-			this.index = index;
+			this.scrollTop = scrollTop;
 			this.itemsBeingDisplayed = itemsBeingDisplayed;
 	}
 	
@@ -30,6 +30,8 @@ $(document).ready(() => {
 	let playlistTracksLimit = 50;
 	let artistsAlbumsLimit = 20;
 	let savedTracksLimit = 50;
+
+	let scrollAutoloadOffset = 20;
 
 	let hasNext = true;
 	let offset = 0;
@@ -61,7 +63,7 @@ $(document).ready(() => {
 
 
 
-	spotifyApi.setAccessToken('BQAC7UwpT6LFweyBp9AACS_3EcZRD7oFmmsvXZfjvsEnz_mGKhhi1ydZUZsFIjZd_uD8nbqZLeoKTKimSOxeW-B8StrxAdcXF7FB-UYXkp5FFgxK-DtYqrFAY5SwcDzGTBzJ9xJ_CBhFPWWc_a-qBqYg-PnEWipFoVwqr-mDHF8s5UMaYzDjh-wmwj608QqYPRElzWpb01JjM2FUvoEBZIO3XK6RoBuXpzLymgil98cQf7uaaRppcNnH2tHQN8bSr2IWXGmRGD8_00w7NmSIo1IchmMEKS9xyOA1EcNwKkpCZcR5EdS5zCa3aN4dNkoi8-5BIOIGYm2MeD5km5ahBMvAGA');
+	spotifyApi.setAccessToken('BQCVIRpvPqNIKN64UZC_2lYT1fomnMjzqIENNeCH5iW7BKqhx6Wtwf_b1xIBtuuILPTrXcKpl3a4bhKmTyF5Dn3Femjc-qecfimuaHFXQrSm6kYzCo82bhPc2bl62h6umyCqBkKhqcDzjlrsNTkRN--t13wvAmXxH_e19atX6Hk8uWhk0bJtF_pjhAzTAi1M2hqa05emWBJ7gQUG_bJVvXk0K91DcJ9ZcufhvfAveF7knUS1wrvNMkZtTNwyuB6_OeoY2l2fkkgVn-vi7ie0RKvfdhBp7z5tjHhig5TDKQA1Oy10DBxO-cwAZJ3irpK24BgkKz-c-2X2MLg_y5CeDxkI-Q');
 	createHomePage();
 	hideOrShowBackButton()
 	bindBackButtonOnClick();
@@ -93,18 +95,15 @@ $(document).ready(() => {
 	function clearBrowser(){
 		$browser.empty();
 		itemsBeingDisplayed = [];
-		console.log("CLEAR");
 		uriDisplayedSet = new Set();
 		allTracks = [];
 	}
 
 	function fetchAppendPlaylists(){
-		removeLoadButton();
 		spotifyApi.getUserPlaylists({limit: playlistLimit, offset: offset, fields: ['uri', 'images', 'name']}, appendPlaylist);
 	}
 
 	function fetchAppendPlaylistTracks(){
-		removeLoadButton();
 		let matches = currentUri.match(playlistUriRegex);
 	    let userId = matches[1];
 	    let playlistId = matches[2];
@@ -112,14 +111,12 @@ $(document).ready(() => {
 	}
 
 	function fetchAppendAlbumTracks(){
-		removeLoadButton();
 		let matches = currentUri.match(albumUriRegex);
 		let albumId = matches[1];
 		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}, appendTracks);
 	}
 
 	function fetchAppendSavedTracks(){
-		removeLoadButton();
 		spotifyApi.getMySavedTracks({limit: savedTracksLimit, offset: offset}, appendSavedTracks);
 	}
 
@@ -163,7 +160,6 @@ $(document).ready(() => {
 	}
 
 	function appendTrackIfSaved(data, albumTrackIdsUnique, trackMap){
-		removeLoadButton();
 
 		for(let i in data){
 			let isSaved = data[i];
@@ -173,55 +169,52 @@ $(document).ready(() => {
 				appendToBrowser(newTrackListItem(trackId, track.name))
 			}
 		}
-		addLoadButton();
 		bindListElementsOnClick();
+		loadIfListHasNotOverflown();
 	}
 
 
 
 	function fetchAppendAlbums(){
-		removeLoadButton();
 		spotifyApi.getMySavedTracks({limit: albumsLimit, offset: offset}, appendAlbum);
 	}
 
 	function fetchAppendArtists(){
-		removeLoadButton();
 		spotifyApi.getMySavedTracks({limit: artistsLimit, offset: offset}, appendArtist);
 	}
 
-	function addLoadButton(){
+	function loadIfListHasNotOverflown(){
+		let browserScrollWindow = $("#browseScroll")[0];
+
+		if(browserScrollWindow.scrollHeight < browserScrollWindow.clientHeight){
+			loadMoreItems();
+		}
+	}
+
+	let loadMoreItems = debounce(function(){
 		if(hasNext){
-			appendToBrowser('<button type=\"button\" id=\"loadButton\">Load More</button>');
-			$("#loadButton").on('click', loadMoreItems);
+			switch(currentPageType){
+				case pages.PLAYLISTS:
+					fetchAppendPlaylists();
+					break;
+				case pages.ALBUMS:
+					fetchAppendAlbums();
+					break;
+				case pages.ARTISTS:
+					fetchAppendArtists();
+					break;
+				case pages.SINGLE_ARTIST:
+					fetchAppendArtistTracks();
+					break;
+				case pages.SINGLE_ALBUM:
+					fetchAppendAlbumTracks();
+				case pages.SINGLE_PLAYLIST:
+					fetchAppendPlaylistTracks();
+				case pages.SONGS:
+					fetchAppendSavedTracks();
+			}
 		}
-	}
-
-	function removeLoadButton(){
-		$("#loadButton").remove();
-	}
-
-	function loadMoreItems(){
-		switch(currentPageType){
-			case pages.PLAYLISTS:
-				fetchAppendPlaylists();
-				break;
-			case pages.ALBUMS:
-				fetchAppendAlbums();
-				break;
-			case pages.ARTISTS:
-				fetchAppendArtists();
-				break;
-			case pages.SINGLE_ARTIST:
-				fetchAppendArtistTracks();
-				break;
-			case pages.SINGLE_ALBUM:
-				fetchAppendAlbumTracks();
-			case pages.SINGLE_PLAYLIST:
-				fetchAppendPlaylistTracks();
-			case pages.SONGS:
-				fetchAppendSavedTracks();
-		}
-	}
+	}, 250);
 
 
 	function appendItems(err, data, itemToAppendType){
@@ -280,8 +273,8 @@ $(document).ready(() => {
             	spotifyApi.getArtists(artistIdsToFetchThumbnailOf, {fields: ['uri', 'images', 'name']}, addThumbnails);
             }
 		}
-		addLoadButton();
 		bindListElementsOnClick()
+		loadIfListHasNotOverflown();
 	}
 
 	//This is for when you dont have the thumbnails and you add that after you display the list.
@@ -291,12 +284,9 @@ $(document).ready(() => {
 			let artist = artists[i];
 			let uri = artist.uri;
 			let $listElement  = $(document.getElementById(uri));
-			console.log("itemsBeingDisplayed", itemsBeingDisplayed);
 
 			if(artist.images[0] != undefined){
 				let index = itemsBeingDisplayed.indexOf($listElement[0].outerHTML);
-				console.log("index", index);
-				console.log("listElement ", $listElement[0].outerHTML);
 				let image = artist.images[0].url;
 				let thumbnail = $listElement.children('img');
 				thumbnail.attr('src', image);
@@ -319,7 +309,6 @@ $(document).ready(() => {
 
 	function appendTracks(err, data){
 		appendItems(err, data, itemType.TRACK);
-
 	}
 
 	function appendSavedTracks(err, data){
@@ -338,10 +327,9 @@ $(document).ready(() => {
 	}
 
 	function bindScrollLoading(){
-
 		$("#browseScroll").on('scroll', function() {
 	        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-	            //alert('end reached');
+	            loadMoreItems();
 	        }
 	    });
 	}
@@ -353,7 +341,7 @@ $(document).ready(() => {
 			clearBrowser();
 			let newPageType = newPage.pageType;
 			let newUri = newPage.uri;
-			let index = newPage.index;
+			let scrollTop = newPage.scrollTop;
 			let itemsToDisplay = newPage.itemsBeingDisplayed;
 			currentPageType = newPageType;
 			uri = newUri;
@@ -363,6 +351,7 @@ $(document).ready(() => {
             }
             bindListElementsOnClick();
             hideOrShowBackButton();
+            $("#browseScroll").scrollTop(scrollTop);
 		}
 	}
 
@@ -376,12 +365,13 @@ $(document).ready(() => {
 	}
 
 	function listElementClickHandler(data){
-
 		hasNext = true;
 		offset = 0;
 		let item = data.currentTarget;
+		let scrollTop = $("#browseScroll").scrollTop();
+		console.log($browser[0].innerHTML);
 		let id = item.id;
-		let prevPage = new Page(currentPageType, currentUri, getListOffset(), itemsBeingDisplayed);
+		let prevPage = new Page(currentPageType, currentUri, scrollTop, itemsBeingDisplayed);
 		prevPageStack.push(prevPage);
 		clearBrowser();
 
@@ -422,17 +412,10 @@ $(document).ready(() => {
 		hideOrShowBackButton();
 	}
 
-	function populateWithAlbumView(albumId){
-		
-	}
-
-	function getListOffset(){
-		return 0;
-	}
-
 	function populateRecentlyPlayedContext(err, data){
 		if (err) console.error(err);
 		else {
+			console.log(data);
 			let items = data.items;
 			for (let i in items) {
                 let context = items[i].context;
@@ -445,7 +428,6 @@ $(document).ready(() => {
             }
             addRecentlyPlayedUriToList();
 		}
-
 	}
 
 	function addRecentlyPlayedUriToList(){
@@ -471,12 +453,24 @@ $(document).ready(() => {
 					.then(onRecentlyPlayedContextReturn, function(err) {
 						console.error(err);
 					});
+	    	}else if(artistUriRegex.test(uri)){
+	    		//if the item is an artist
+	    		let matches = uri.match(artistUriRegex);
+	        	let artistId = matches[1];
+	        	//fetch the uri, images, and name of the album and append it to the list.
+	        	spotifyApi.getArtist(artistId, {fields: ['uri', 'images', 'name']})
+					.then(onRecentlyPlayedContextReturn, function(err) {
+						console.error(err);
+					});
 	    	}
 		}
 	}
 
 	function onRecentlyPlayedContextReturn(data){
-		let image = data.images[0].url;
+		let image = "nosource";
+		if(data.images !== null && data.images != undefined){
+			image = data.images[0].url;
+		}
 		let name = data.name;
 		let uri = data.uri;
 		appendToBrowser(newThumbnailItem(uri, name, image));
@@ -523,5 +517,20 @@ $(document).ready(() => {
                     + "</div>"
                     + "</li>"; 
 	}
+
+	function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
 });
 
