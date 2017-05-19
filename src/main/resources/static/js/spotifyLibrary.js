@@ -62,7 +62,7 @@ $(document).ready(() => {
 
 
 
-	spotifyApi.setAccessToken('BQCVIRpvPqNIKN64UZC_2lYT1fomnMjzqIENNeCH5iW7BKqhx6Wtwf_b1xIBtuuILPTrXcKpl3a4bhKmTyF5Dn3Femjc-qecfimuaHFXQrSm6kYzCo82bhPc2bl62h6umyCqBkKhqcDzjlrsNTkRN--t13wvAmXxH_e19atX6Hk8uWhk0bJtF_pjhAzTAi1M2hqa05emWBJ7gQUG_bJVvXk0K91DcJ9ZcufhvfAveF7knUS1wrvNMkZtTNwyuB6_OeoY2l2fkkgVn-vi7ie0RKvfdhBp7z5tjHhig5TDKQA1Oy10DBxO-cwAZJ3irpK24BgkKz-c-2X2MLg_y5CeDxkI-Q');
+	spotifyApi.setAccessToken('BQDPLS3frFaep3HZimI38L5NXwje9Dt51uZMsHXqFbgCAKReXgvixFW4WK2I4Cdcg29nich320fL5xdpuffp0V_8JPazmiFmFCx77MHaZE99ySiTzDU-bqUJ3JYDfrLxK5RA0zzB1vN6V75oTub2TptIgaErLvDuGJGG66yilCAbutHE12pP2obPNeQ7qiM6n4G0JqJUMQNa2ZzpWLzSQyRLGqE9Vz8LWSGdodbGZiOC77lwLJ28CPz8QJWCE56SdNMNppToFSeFnB4Aozc527Mu5ixQSXb5Sb7y2tOGIMFm8L6dmELB4_GGPFjmPwiuzKOGQ6sz5uV4M5Vg3_Rt4h1ayA');
 	createHomePage();
 	hideOrShowBackButton()
 	bindBackButtonOnClick();
@@ -96,10 +96,12 @@ $(document).ready(() => {
 		allTracks = [];
 	}
 
+	//fetches more playlists if there are any and appends it to the list
 	function fetchAppendPlaylists(){
 		spotifyApi.getUserPlaylists({limit: playlistLimit, offset: offset, fields: ['uri', 'images', 'name']}, appendPlaylist);
 	}
 
+	//fetches more playlists tracks if there are any and appends it to the list
 	function fetchAppendPlaylistTracks(){
 		let matches = currentUri.match(playlistUriRegex);
 	    let userId = matches[1];
@@ -107,12 +109,14 @@ $(document).ready(() => {
 	    spotifyApi.getPlaylistTracks(userId, playlistId, {limit: playlistTracksLimit, offset: offset}, appendSavedTracks);
 	}
 
+	//fetches more album tracks if there are any and appends it to the list
 	function fetchAppendAlbumTracks(){
 		let matches = currentUri.match(albumUriRegex);
 		let albumId = matches[1];
 		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}, appendTracks);
 	}
 
+	//fetches more saved tracks if there are any and appends it to the list
 	function fetchAppendSavedTracks(){
 		spotifyApi.getMySavedTracks({limit: savedTracksLimit, offset: offset}, appendSavedTracks);
 	}
@@ -156,8 +160,10 @@ $(document).ready(() => {
 			});	
 	}
 
+	//Given the data returned from the containsMySavedTracks api call (array of booleans of whether
+	//or not the album track id is saved), and the 
+	//album track ids, add the tracks that are saved by the user.
 	function appendTrackIfSaved(data, albumTrackIdsUnique, trackMap){
-
 		for(let i in data){
 			let isSaved = data[i];
 			if(isSaved){
@@ -171,15 +177,17 @@ $(document).ready(() => {
 	}
 
 
-
+	//fetches more saved albums if there are any and appends it to the list
 	function fetchAppendAlbums(){
 		spotifyApi.getMySavedTracks({limit: albumsLimit, offset: offset}, appendAlbum);
 	}
 
+	//fetches more saved artists if there are any and appends it to the list
 	function fetchAppendArtists(){
 		spotifyApi.getMySavedTracks({limit: artistsLimit, offset: offset}, appendArtist);
 	}
 
+	//Will call loadMoreItems in an attempt to populate the list with more items if the items have not filled the browser window yet.
 	function loadIfListHasNotOverflown(){
 		let browserScrollWindow = $("#browseScroll")[0];
 
@@ -188,6 +196,9 @@ $(document).ready(() => {
 		}
 	}
 
+	//Loads more items (depending on the current page type) into the browser if there are any.
+	//Also is debounced so that the function cannot be called to often so that we dont get too many requests error 
+	//from the spotify api.
 	let loadMoreItems = debounce(function(){
 		if(hasNext){
 			switch(currentPageType){
@@ -213,7 +224,10 @@ $(document).ready(() => {
 		}
 	}, 250);
 
-
+	//Takes in the data returned from the api request and 
+	//adds the items (either tracks/albums/playlists/artists depending on the itemToAppendType) to the browser.
+	//Also updates the hasNext, and offset variables for paging. It then rebinds the list elements on click.
+	//Add calls loadIfListHasNotOverflown
 	function appendItems(err, data, itemToAppendType){
 		if (err) console.error(err);
 		else {
@@ -281,7 +295,6 @@ $(document).ready(() => {
 			let artist = artists[i];
 			let uri = artist.uri;
 			let $listElement  = $(document.getElementById(uri));
-
 			if(artist.images[0] != undefined){
 				let image = artist.images[0].url;
 				let thumbnail = $listElement.children('img');
@@ -312,15 +325,18 @@ $(document).ready(() => {
     	appendTracks(err, data);
 	}
 
+	//first unbinds all the click handlers for the list item then rebinds it.
 	function bindListElementsOnClick(){
 		$("#browse li").off('click', listElementClickHandler);
 		$("#browse li").on('click', listElementClickHandler);
 	}
 
+	//Binds the back button click handler.
 	function bindBackButtonOnClick(){
 		$("#back").on('click', backButtonClickHandler);
 	}
 
+	//Attaches a handler to when your scrolling and you have reached the bottom of the list.
 	function bindScrollLoading(){
 		$("#browseScroll").on('scroll', function() {
 	        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
@@ -329,9 +345,10 @@ $(document).ready(() => {
 	    });
 	}
 
+	//This is called when you click the back button.
+	//Gets the previous page from the stack, and makes the appropriate changes.
 	function backButtonClickHandler(data){
 		let newPage = prevPageStack.pop();
-
 		if(newPage !== undefined || newPage !== null){
 			clearBrowser();
 			let newPageType = newPage.pageType;
@@ -346,9 +363,11 @@ $(document).ready(() => {
             bindListElementsOnClick();
             hideOrShowBackButton();
             $("#browseScroll").scrollTop(scrollTop);
+            $("#browse li").removeClass("selected");
 		}
 	}
 
+	//Hides or shows the back button depending on whether there is a page in the previous stack.
 	function hideOrShowBackButton(){
 		let $backButton = $("#back");
 		if(prevPageStack.length === 0){
@@ -358,6 +377,9 @@ $(document).ready(() => {
 		}
 	}
 
+	//The handler for when an item on the browser list is clicked.
+	//It saves the current page and adds it to the prev page stack.
+	//Then depending on the id of the element, performs some action.
 	function listElementClickHandler(data){
 		hasNext = true;
 		offset = 0;
@@ -406,10 +428,12 @@ $(document).ready(() => {
 		hideOrShowBackButton();
 	}
 
+	//This is the callback for the get recently played tracks 
+	//For each of the tracks, it checks if there is a context and if there is it appends it to the
+	//recentlyplayeduri list. Then calls addRecentlyPlayedUriToList.
 	function populateRecentlyPlayedContext(err, data){
 		if (err) console.error(err);
 		else {
-			console.log(data);
 			let items = data.items;
 			for (let i in items) {
                 let context = items[i].context;
@@ -424,6 +448,8 @@ $(document).ready(() => {
 		}
 	}
 
+	//For each of the recentlyplayeduri's 
+	//fetch the corresponding full context (playlist/albums/artists) and add it to the browser list.
 	function addRecentlyPlayedUriToList(){
 		recentlyPlayedUriCount = recentlyPlayedUri.length;
 		for(let i in recentlyPlayedUri){
@@ -460,6 +486,8 @@ $(document).ready(() => {
 		}
 	}
 
+	//When the full context has returned, add it to the browser list. Remove it from the list of uri's, and if that 
+	//leaves the recentlyPlayedUri empty (meaning all the full contexts have returned), then rebind the list elements.
 	function onRecentlyPlayedContextReturn(data){
 		let image = "nosource";
 		if(data.images !== null && data.images != undefined){
@@ -473,16 +501,6 @@ $(document).ready(() => {
 			bindListElementsOnClick();
 		}
 	}
-
-	// function newPlaylistItem(uri, title, imageSource){
-	// 	return "<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
- //                    + "id=\"" + uri + "\">"
- //                    + "<img class=\"spotifyBrowsingThumbnail\" src=\"" + imageSource + "\"></img>"
- //                    + "<div id=\"songtitle\">" + title 
- //                    //end of song title div
- //                    + "</div>"
- //                    + "</li>"; 
-	// }
 
 	function newThumbnailItem(uri, title, imageSource){
 		return "<li onmouseover=\"hoverOn(this)\" onmouseout=\"hoverOff(this)\" "
