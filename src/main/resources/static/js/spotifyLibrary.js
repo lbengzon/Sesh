@@ -55,7 +55,6 @@ $(document).ready(() => {
 	let currentPageType;
 	let currentUri = null;
 	let prevPageStack = [];
-	let itemsBeingDisplayed = [];
 	let recentlyPlayedUriCount;
 	let uriDisplayedSet = new Set();
 	let trackMap = new Map();
@@ -89,12 +88,10 @@ $(document).ready(() => {
 	function appendToBrowser(item){
 		let element = $(item);
 		$browser.append(element);
-		itemsBeingDisplayed.push(element[0].outerHTML);
 	}
 
 	function clearBrowser(){
 		$browser.empty();
-		itemsBeingDisplayed = [];
 		uriDisplayedSet = new Set();
 		allTracks = [];
 	}
@@ -286,11 +283,9 @@ $(document).ready(() => {
 			let $listElement  = $(document.getElementById(uri));
 
 			if(artist.images[0] != undefined){
-				let index = itemsBeingDisplayed.indexOf($listElement[0].outerHTML);
 				let image = artist.images[0].url;
 				let thumbnail = $listElement.children('img');
 				thumbnail.attr('src', image);
-				itemsBeingDisplayed[index] = $(document.getElementById(uri))[0];
 			}
 		}
 	}
@@ -344,11 +339,10 @@ $(document).ready(() => {
 			let scrollTop = newPage.scrollTop;
 			let itemsToDisplay = newPage.itemsBeingDisplayed;
 			currentPageType = newPageType;
-			uri = newUri;
-			for (let i in itemsToDisplay) {
-                let item = itemsToDisplay[i];
-                appendToBrowser(item);
-            }
+			currentUri = newUri;
+
+            appendToBrowser(itemsToDisplay);
+
             bindListElementsOnClick();
             hideOrShowBackButton();
             $("#browseScroll").scrollTop(scrollTop);
@@ -369,7 +363,7 @@ $(document).ready(() => {
 		offset = 0;
 		let item = data.currentTarget;
 		let scrollTop = $("#browseScroll").scrollTop();
-		console.log($browser[0].innerHTML);
+		let itemsBeingDisplayed = $browser[0].innerHTML;
 		let id = item.id;
 		let prevPage = new Page(currentPageType, currentUri, scrollTop, itemsBeingDisplayed);
 		prevPageStack.push(prevPage);
