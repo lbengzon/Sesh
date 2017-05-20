@@ -18,6 +18,7 @@ class Page {
 $(document).ready(() => {
 	let $browser = $("#browse");
 	let $browserHeader = $("#browserHeader");
+	let $searchBar = $("#spotifySearch");
 	let spotifyApi = new SpotifyWebApi();
 	let playlistUriRegex = new RegExp('spotify:user:([^:]+):playlist:([0-9A-Za-z]{22})');
 	let albumUriRegex = new RegExp('spotify:album:([0-9A-Za-z]{22})');
@@ -25,40 +26,40 @@ $(document).ready(() => {
 	let trackRegex = new RegExp('([0-9A-Za-z]{22})');
 
 
-	let recentlyPlayedUri = [];
-	let recentlyPlayedLimit = 50;
-	let playlistLimit = 5;
-	let albumsLimit = 50;
-	let artistsLimit = 50;
-	let albumTracksLimit = 50;
-	let playlistTracksLimit = 50;
-	let artistsAlbumsLimit = 20;
-	let savedTracksLimit = 50;
+	const recentlyPlayedLimit = 50;
+	const playlistLimit = 5;
+	const albumsLimit = 50;
+	const artistsLimit = 50;
+	const albumTracksLimit = 50;
+	const playlistTracksLimit = 50;
+	const artistsAlbumsLimit = 20;
+	const savedTracksLimit = 50;
 
-	let scrollAutoloadOffset = 20;
+	const scrollAutoloadOffset = 20;
 
 	let hasNext = true;
 	let offset = 0;
 	let pages = {
 		HOME: 'home',
-		PLAYLISTS: 'playlists',
-		SONGS: 'songs',
-		ARTISTS: 'artists',
-		ALBUMS: 'albums',
-		SINGLE_PLAYLIST: 'single_playlist',
-		SINGLE_ARTIST: 'single_artist',
-		SINGLE_ALBUM: 'single_album'
+		SAVED_PLAYLISTS: 'playlists',
+		SAVED_SONGS: 'songs',
+		SAVED_ARTISTS: 'artists',
+		SAVED_ALBUMS: 'albums',
+		SAVED_SINGLE_PLAYLIST: 'single_playlist',
+		SAVED_SINGLE_ARTIST: 'single_artist',//displays the songs by the artists that were saved
+		SAVED_SINGLE_ALBUM: 'single_album' //displays the songs in the albums that were saved
 				};
 
 	let itemType = {
 		PLAYLIST: 'playlist',
-		ALBUM: 'album',
-		ARTIST: 'artist',
+		SAVED_ALBUM: 'saved_album',
+		SAVED_ARTIST: 'saved_artist',
 		TRACK: 'track'
 				};
 	let currentPageType;
 	let currentUri = null;
 	let prevPageStack = [];
+	let recentlyPlayedUri = [];
 	let recentlyPlayedUriCount;
 	let uriDisplayedSet = new Set();
 	let trackMap = new Map();
@@ -66,27 +67,46 @@ $(document).ready(() => {
 
 
 
-	spotifyApi.setAccessToken('BQDrv69AKvU9-o6NaNEKN5bxGay7X-DIDpgRTldOyUg-4DMiJlRpBNG9WIVDhLygw6GbHxngSlGoH_umDf-WPU8zpvtLGsKt-F3DX_Chtt1pKAkiASWdPDTbv2kkCbvHltyNpAhiB_yfh0Ex5AoEl84leykQH1_kAksIvFvKrSymkkWtEJ7cOpzgSDSWQaCnUDDrGz8Jp1R0Mk2y17x-aJ2fbn4iOvdrQTzY0LAiEoMqxR6BKL-83sUoTz_rWrf7YdX1BS7vmuFCbffui3vNarYcllAmJUufvvKe1Ti19lydY7Lyphz0-oHuHIZAJ0b5Si_PZp9RJ8RW1tBCSqMPyPIN-Q');
+	setAccessToken('BQDUZaJTriijvhQkzDl8l-EpHCUEV038XoTFvK16JNUITLzn-AGbDXKGUkUxCiuCYSKB93miNyghSt8r9R3XDQH8YvRxuC-KLfmifP034n1jKjt2CueIuWQCFVaKBn4gqEGpqd4nWlqXlD9vWW1t9GnXIrHSYMw97Sn8BeC-6yQZ78SGspQhFLsCKnfKlyDCsqLcDlgarTmMhEWKJMSYV4WPCP4hq1MG75aFsPgdlRV1c0L7Eo6sIFHb_2tVFpB4RUZVVRwBxIQw8FqKO8V70ysTxEATJOEWaYG6KtpfUdj5GHi7ab0bxf_HK3rqCS-sAt5VjDT8fl-yE_ROCirdgA6lHA');
 	createHomePage();
-	hideOrShowBackButton()
-	bindBackButtonOnClick();
-	bindScrollLoading();
+	//createSearchPage();
+	setUpBindsAndButtons();
 
+	function setAccessToken(token){
+		spotifyApi.setAccessToken(token);
+	}
+
+	function setUpBindsAndButtons(){
+		hideOrShowBackButton()
+		bindBackButtonOnClick();
+		bindScrollLoading();
+	}
 
 	//==============================================FUNCTIONS======================================================
+	function createSearchPage(){
+		showSearchBar();
+	}
 
 	function createHomePage(){
+		hideSearchBar();
 		currengPage = pages.HOME;
+		hasNext = false;
 		clearBrowser();
 		appendToBrowser(newListItem("playlists", "Playlists"));
 		appendToBrowser(newListItem("songs", "Songs"));
 		appendToBrowser(newListItem("albums", "Albums"));
 		appendToBrowser(newListItem("artists", "Artists"));
 		appendToBrowser('<h4 class=\"spotifyBrowserInListLabel\">Recently Played</h4>')
-
 		spotifyApi.getMyRecentlyPlayedTracks({limit: recentlyPlayedLimit}, populateRecentlyPlayedContext);
 		bindListElementsOnClick();
+	}
 
+	function hideSearchBar(){
+		$searchBar.hide();
+	}
+
+	function showSearchBar(){
+		$searchBar.show();
 	}
 
 	function appendToBrowser(item){
@@ -94,10 +114,22 @@ $(document).ready(() => {
 		$browser.append(element);
 	}
 
+	//Emptys the browser, clears the uri set.
 	function clearBrowser(){
 		$browser.empty();
 		uriDisplayedSet = new Set();
-		allTracks = [];
+		trackMap = new Map();
+	}
+
+
+	//fetches more saved albums if there are any and appends it to the list
+	function fetchAppendSavedAlbums(){
+		spotifyApi.getMySavedTracks({limit: albumsLimit, offset: offset}, appendAlbum);
+	}
+
+	//fetches more saved artists if there are any and appends it to the list
+	function fetchAppendSavedArtists(){
+		spotifyApi.getMySavedTracks({limit: artistsLimit, offset: offset}, appendArtist);
 	}
 
 	//fetches more playlists if there are any and appends it to the list
@@ -114,10 +146,22 @@ $(document).ready(() => {
 	}
 
 	//fetches more album tracks if there are any and appends it to the list
-	function fetchAppendAlbumTracks(){
+	function fetchAppendSavedAlbumTracks(){
 		let matches = currentUri.match(albumUriRegex);
 		let albumId = matches[1];
-		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}, appendTracks);
+		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}, function(err, data){
+			setOffsetHasNext(data);
+			let tracks = data.items;
+			let trackIds = [];
+			for(let i in tracks){
+				let track = tracks[i];
+				trackMap.set(track.id, track);
+				trackIds.push(track.id);
+			}
+			if(trackIds.length !== 0){
+				appendTracksIfSaved(trackIds, trackMap);
+			}
+		});
 	}
 
 	//fetches more saved tracks if there are any and appends it to the list
@@ -126,17 +170,12 @@ $(document).ready(() => {
 	}
 
 	//ALSO TRY TO FIX THIS FUNCTION!!!! GROSSSSSSSSSSS
-	function fetchAppendArtistTracks(){
+	function fetchAppendSavedArtistTracks(){
 		let matches = currentUri.match(artistUriRegex);
 		let artistId = matches[1];
 		spotifyApi.getArtistAlbums(artistId, {limit: artistsAlbumsLimit, offset: offset, album_type: ['album', 'single']})
 			.then(function(data) {
-				if(data.next === null || data.next === undefined){
-					hasNext = false;
-				} else{
-					hasNext = true;
-					offset = data.offset + data.limit;
-				}
+				setOffsetHasNext(data);
 				return data.items.map(function(a) { return a.id; });
 			})
 			.then(function(albums) {
@@ -156,12 +195,27 @@ $(document).ready(() => {
 						}
 					}
 					if(albumTrackIdsUnique.length !== 0){
-						spotifyApi.containsMySavedTracks(albumTrackIdsUnique).then(function(data) {
-							appendTrackIfSaved(data, albumTrackIdsUnique, trackMap);
-						})
+						appendTracksIfSaved(albumTrackIdsUnique, trackMap);
 					}
 				}
 			});	
+	}
+
+	//Sets the has next and offset instance variables from the passed in data returned from the api request.
+	function setOffsetHasNext(data){
+		if(data.next === null || data.next === undefined){
+			hasNext = false;
+		} else{
+			hasNext = true;
+			offset = data.offset + data.limit;
+		}
+	}
+
+	//Given the track ids and the track map, will append the tracks that are saved by the user to the browser list.
+	function appendTracksIfSaved(trackIdsUnique, trackMap){
+		spotifyApi.containsMySavedTracks(trackIdsUnique).then(function(data) {
+			appendTrackIfSaved(data, trackIdsUnique, trackMap);
+		})
 	}
 
 	//Given the data returned from the containsMySavedTracks api call (array of booleans of whether
@@ -181,15 +235,6 @@ $(document).ready(() => {
 	}
 
 
-	//fetches more saved albums if there are any and appends it to the list
-	function fetchAppendAlbums(){
-		spotifyApi.getMySavedTracks({limit: albumsLimit, offset: offset}, appendAlbum);
-	}
-
-	//fetches more saved artists if there are any and appends it to the list
-	function fetchAppendArtists(){
-		spotifyApi.getMySavedTracks({limit: artistsLimit, offset: offset}, appendArtist);
-	}
 
 	//Loads more items (depending on the current page type) into the browser if there are any.
 	//Also is debounced so that the function cannot be called to often so that we dont get too many requests error 
@@ -197,23 +242,23 @@ $(document).ready(() => {
 	let loadMoreItems = debounce(function(){
 		if(hasNext){
 			switch(currentPageType){
-				case pages.PLAYLISTS:
+				case pages.SAVED_PLAYLISTS:
 					fetchAppendPlaylists();
 					break;
-				case pages.ALBUMS:
-					fetchAppendAlbums();
+				case pages.SAVED_ALBUMS:
+					fetchAppendSavedAlbums();
 					break;
-				case pages.ARTISTS:
-					fetchAppendArtists();
+				case pages.SAVED_ARTISTS:
+					fetchAppendSavedArtists();
 					break;
-				case pages.SINGLE_ARTIST:
-					fetchAppendArtistTracks();
+				case pages.SAVED_SINGLE_ARTIST:
+					fetchAppendSavedArtistTracks();
 					break;
-				case pages.SINGLE_ALBUM:
-					fetchAppendAlbumTracks();
-				case pages.SINGLE_PLAYLIST:
+				case pages.SAVED_SINGLE_ALBUM:
+					fetchAppendSavedAlbumTracks();
+				case pages.SAVED_SINGLE_PLAYLIST:
 					fetchAppendPlaylistTracks();
-				case pages.SONGS:
+				case pages.SAVED_SONGS:
 					fetchAppendSavedTracks();
 			}
 		}
@@ -228,12 +273,7 @@ $(document).ready(() => {
 		else {
 			let artistIdsToFetchThumbnailOf = [];
 			let items = data.items;
-			if(data.next === null || data.next === undefined){
-				hasNext = false;
-			} else{
-				hasNext = true;
-				offset = data.offset + data.limit;
-			}
+			setOffsetHasNext(data)
 			for (let i in items) {
 				let p = null;
 				
@@ -241,13 +281,13 @@ $(document).ready(() => {
 					case itemType.PLAYLIST:
 						p = items[i];
 						break;
-					case itemType.ALBUM:
+					case itemType.SAVED_ALBUM:
 						p = items[i].track.album;
 						if(uriDisplayedSet.has(p.uri)){
 							continue;
 						}
 						break;
-					case itemType.ARTIST:
+					case itemType.SAVED_ARTIST:
 						p = items[i].track.artists[0];
 						if(uriDisplayedSet.has(p.uri)){
 							continue;
@@ -266,7 +306,7 @@ $(document).ready(() => {
 				let image = "nosource";
 				if(p.images !== null && p.images != undefined){
 					image = p.images[0].url;
-				} else if(itemToAppendType === itemType.ARTIST){
+				} else if(itemToAppendType === itemType.SAVED_ARTIST){
 					let matches = uri.match(artistUriRegex);
 					let artistId = matches[1];
 					artistIdsToFetchThumbnailOf.push(artistId);
@@ -303,11 +343,11 @@ $(document).ready(() => {
 	}
 
 	function appendAlbum(err, data){
-		appendItems(err, data, itemType.ALBUM);
+		appendItems(err, data, itemType.SAVED_ALBUM);
 	}
 
 	function appendArtist(err, data){
-		appendItems(err, data, itemType.ARTIST);
+		appendItems(err, data, itemType.SAVED_ARTIST);
 	}
 
 	function appendTracks(err, data){
@@ -399,38 +439,37 @@ $(document).ready(() => {
 
 		//Switch depending on the id of the element that was clicked
 		if(albumUriRegex.test(id)){
-			currentPageType = pages.SINGLE_ALBUM;
+			currentPageType = pages.SAVED_SINGLE_ALBUM;
 			currentUri = id;
 			setBrowserHeader($(this).text());
-			fetchAppendAlbumTracks();
+			fetchAppendSavedAlbumTracks();
 		}else if(playlistUriRegex.test(id)){
-			currentPageType = pages.SINGLE_PLAYLIST;
+			currentPageType = pages.SAVED_SINGLE_PLAYLIST;
 			currentUri = id;
 			setBrowserHeader($(this).text());
 			fetchAppendPlaylistTracks();
 		} else if(artistUriRegex.test(id)){
-			currentPageType = pages.SINGLE_ARTIST;
+			currentPageType = pages.SAVED_SINGLE_ARTIST;
 			currentUri = id;
-			console.log(data);
 			setBrowserHeader($(this).text());
-			fetchAppendArtistTracks();
+			fetchAppendSavedArtistTracks();
 		}else if(id === 'playlists'){
-			currentPageType = pages.PLAYLISTS;
+			currentPageType = pages.SAVED_PLAYLISTS;
 			currentUri = null;
 			setBrowserHeader("PLAYLISTS");
 			fetchAppendPlaylists();
 		} else if(id === 'albums'){
-			currentPageType = pages.ALBUMS;
+			currentPageType = pages.SAVED_ALBUMS;
 			currentUri = null;
 			setBrowserHeader("ALBUMS");
-			fetchAppendAlbums();
+			fetchAppendSavedAlbums();
 		} else if(id === 'artists'){
-			currentPageType = pages.ARTISTS;
+			currentPageType = pages.SAVED_ARTISTS;
 			currentUri = null;
 			setBrowserHeader("ARTISTS");
-			fetchAppendArtists();
+			fetchAppendSavedArtists();
 		} else if(id === 'songs'){
-			currentPageType = pages.SONGS;
+			currentPageType = pages.SAVED_SONGS;
 			currentUri = null;
 			setBrowserHeader("SONGS");
 			fetchAppendSavedTracks();
@@ -506,6 +545,8 @@ $(document).ready(() => {
 		}
 	}
 
+
+
 	//When the full context has returned, add it to the browser list. Remove it from the list of uri's, and if that 
 	//leaves the recentlyPlayedUri empty (meaning all the full contexts have returned), then rebind the list elements.
 	function onRecentlyPlayedContextReturn(data){
@@ -520,6 +561,10 @@ $(document).ready(() => {
 		if(recentlyPlayedUriCount == 0){
 			bindListElementsOnClick();
 		}
+	}
+
+	function apiErrorHandler(err){
+
 	}
 
 	function newThumbnailItem(uri, title, imageSource){
