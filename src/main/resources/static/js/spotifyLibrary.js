@@ -67,7 +67,7 @@ $(document).ready(() => {
 
 
 
-	setAccessToken('BQDUZaJTriijvhQkzDl8l-EpHCUEV038XoTFvK16JNUITLzn-AGbDXKGUkUxCiuCYSKB93miNyghSt8r9R3XDQH8YvRxuC-KLfmifP034n1jKjt2CueIuWQCFVaKBn4gqEGpqd4nWlqXlD9vWW1t9GnXIrHSYMw97Sn8BeC-6yQZ78SGspQhFLsCKnfKlyDCsqLcDlgarTmMhEWKJMSYV4WPCP4hq1MG75aFsPgdlRV1c0L7Eo6sIFHb_2tVFpB4RUZVVRwBxIQw8FqKO8V70ysTxEATJOEWaYG6KtpfUdj5GHi7ab0bxf_HK3rqCS-sAt5VjDT8fl-yE_ROCirdgA6lHA');
+	setAccessToken('BQBodCIGiebAjy5_fa2uuDLwAc6GMUSyrvjXeRG1rk1VHW5pK4UCg_q4DHuQ-8e7lCce-yf91jR5NFN6WdRDfeWiNTOCzaTGU7-xRjHdmXR-R9nnlzLXqSV5-WPsnmxzALkdOMVXW_gf4UL91_vRc5VR3bTHYqnFYHz3G0hNm6ICfv4JvCHES1ehh5kOP3L_K4kK6EErTg11dM0Bywxo41bc0Fu2_NmUZHMRAhqwiHRJOAvoNno22NEingub-M9dRDqlSNeKoNQHL_TUx0eqzvADPMDla0wCWru5msghayVSGd8MihIEG0M3tFfwVQuMbnyJhdTfHJOkuy-olLEnpylupg');
 	createHomePage();
 	//createSearchPage();
 	setUpBindsAndButtons();
@@ -97,7 +97,7 @@ $(document).ready(() => {
 		appendToBrowser(newListItem("albums", "Albums"));
 		appendToBrowser(newListItem("artists", "Artists"));
 		appendToBrowser('<h4 class=\"spotifyBrowserInListLabel\">Recently Played</h4>')
-		spotifyApi.getMyRecentlyPlayedTracks({limit: recentlyPlayedLimit}, populateRecentlyPlayedContext);
+		spotifyApi.getMyRecentlyPlayedTracks({limit: recentlyPlayedLimit}).then(populateRecentlyPlayedContext, apiErrorHandler);
 		bindListElementsOnClick();
 	}
 
@@ -124,17 +124,17 @@ $(document).ready(() => {
 
 	//fetches more saved albums if there are any and appends it to the list
 	function fetchAppendSavedAlbums(){
-		spotifyApi.getMySavedTracks({limit: albumsLimit, offset: offset}, appendAlbum);
+		spotifyApi.getMySavedTracks({limit: albumsLimit, offset: offset}).then(appendAlbum, apiErrorHandler);
 	}
 
 	//fetches more saved artists if there are any and appends it to the list
 	function fetchAppendSavedArtists(){
-		spotifyApi.getMySavedTracks({limit: artistsLimit, offset: offset}, appendArtist);
+		spotifyApi.getMySavedTracks({limit: artistsLimit, offset: offset}).then(appendArtist, apiErrorHandler);
 	}
 
 	//fetches more playlists if there are any and appends it to the list
 	function fetchAppendPlaylists(){
-		spotifyApi.getUserPlaylists({limit: playlistLimit, offset: offset, fields: ['uri', 'images', 'name']}, appendPlaylist);
+		spotifyApi.getUserPlaylists({limit: playlistLimit, offset: offset, fields: ['uri', 'images', 'name']}).then(appendPlaylist, apiErrorHandler);
 	}
 
 	//fetches more playlists tracks if there are any and appends it to the list
@@ -142,14 +142,14 @@ $(document).ready(() => {
 		let matches = currentUri.match(playlistUriRegex);
 	    let userId = matches[1];
 	    let playlistId = matches[2];
-	    spotifyApi.getPlaylistTracks(userId, playlistId, {limit: playlistTracksLimit, offset: offset}, appendSavedTracks);
+	    spotifyApi.getPlaylistTracks(userId, playlistId, {limit: playlistTracksLimit, offset: offset}).then(appendSavedTracks, apiErrorHandler);
 	}
 
 	//fetches more album tracks if there are any and appends it to the list
 	function fetchAppendSavedAlbumTracks(){
 		let matches = currentUri.match(albumUriRegex);
 		let albumId = matches[1];
-		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}, function(err, data){
+		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}).then(function(data){
 			setOffsetHasNext(data);
 			let tracks = data.items;
 			let trackIds = [];
@@ -161,12 +161,12 @@ $(document).ready(() => {
 			if(trackIds.length !== 0){
 				appendTracksIfSaved(trackIds, trackMap);
 			}
-		});
+		}, apiErrorHandler);
 	}
 
 	//fetches more saved tracks if there are any and appends it to the list
 	function fetchAppendSavedTracks(){
-		spotifyApi.getMySavedTracks({limit: savedTracksLimit, offset: offset}, appendSavedTracks);
+		spotifyApi.getMySavedTracks({limit: savedTracksLimit, offset: offset}).then(appendSavedTracks, apiErrorHandler);
 	}
 
 	//ALSO TRY TO FIX THIS FUNCTION!!!! GROSSSSSSSSSSS
@@ -177,10 +177,10 @@ $(document).ready(() => {
 			.then(function(data) {
 				setOffsetHasNext(data);
 				return data.items.map(function(a) { return a.id; });
-			})
+			}, apiErrorHandler)
 			.then(function(albums) {
 				return spotifyApi.getAlbums(albums);
-			}).then(function(data) {
+			}, apiErrorHandler).then(function(data) {
 				
 				let albums = data.albums;
 				for(let i in albums){
@@ -198,7 +198,7 @@ $(document).ready(() => {
 						appendTracksIfSaved(albumTrackIdsUnique, trackMap);
 					}
 				}
-			});	
+			}, apiErrorHandler);	
 	}
 
 	//Sets the has next and offset instance variables from the passed in data returned from the api request.
@@ -215,7 +215,7 @@ $(document).ready(() => {
 	function appendTracksIfSaved(trackIdsUnique, trackMap){
 		spotifyApi.containsMySavedTracks(trackIdsUnique).then(function(data) {
 			appendTrackIfSaved(data, trackIdsUnique, trackMap);
-		})
+		}, apiErrorHandler)
 	}
 
 	//Given the data returned from the containsMySavedTracks api call (array of booleans of whether
@@ -256,10 +256,13 @@ $(document).ready(() => {
 					break;
 				case pages.SAVED_SINGLE_ALBUM:
 					fetchAppendSavedAlbumTracks();
+					break;
 				case pages.SAVED_SINGLE_PLAYLIST:
 					fetchAppendPlaylistTracks();
+					break;
 				case pages.SAVED_SONGS:
 					fetchAppendSavedTracks();
+					break;
 			}
 		}
 	}, 250);
@@ -268,63 +271,63 @@ $(document).ready(() => {
 	//adds the items (either tracks/albums/playlists/artists depending on the itemToAppendType) to the browser.
 	//Also updates the hasNext, and offset variables for paging. It then rebinds the list elements on click.
 	//Add calls loadIfListHasNotOverflown
-	function appendItems(err, data, itemToAppendType){
-		if (err) console.error(err);
-		else {
-			let artistIdsToFetchThumbnailOf = [];
-			let items = data.items;
-			setOffsetHasNext(data)
-			for (let i in items) {
-				let p = null;
-				
-				switch(itemToAppendType){
-					case itemType.PLAYLIST:
-						p = items[i];
-						break;
-					case itemType.SAVED_ALBUM:
-						p = items[i].track.album;
-						if(uriDisplayedSet.has(p.uri)){
-							continue;
-						}
-						break;
-					case itemType.SAVED_ARTIST:
-						p = items[i].track.artists[0];
-						if(uriDisplayedSet.has(p.uri)){
-							continue;
-						}
-						break;
-					case itemType.TRACK:
-						p = items[i];
-						appendToBrowser(newTrackListItem(p.uri, p.name));
+	function appendItems(data, itemToAppendType){
+		let artistIdsToFetchThumbnailOf = [];
+		let items = data.items;
+		setOffsetHasNext(data)
+		for (let i in items) {
+			let p = null;
+			
+			switch(itemToAppendType){
+				case itemType.PLAYLIST:
+					p = items[i];
+					break;
+				case itemType.SAVED_ALBUM:
+					p = items[i].track.album;
+					if(uriDisplayedSet.has(p.uri)){
 						continue;
-						break;
-				}
-				//you should clean this up. SO GROSS!!!!
+					}
+					break;
+				case itemType.SAVED_ARTIST:
+					p = items[i].track.artists[0];
+					if(uriDisplayedSet.has(p.uri)){
+						continue;
+					}
+					break;
+				case itemType.TRACK:
+					p = items[i];
+					if(p === null){
+						continue;
+					}
+					appendToBrowser(newTrackListItem(p.uri, p.name));
+					continue;
+					break;
+			}
+			//you should clean this up. SO GROSS!!!!
 
-				let name = p.name;
-				let uri = p.uri;
-				let image = "nosource";
-				if(p.images !== null && p.images != undefined){
-					image = p.images[0].url;
-				} else if(itemToAppendType === itemType.SAVED_ARTIST){
-					let matches = uri.match(artistUriRegex);
-					let artistId = matches[1];
-					artistIdsToFetchThumbnailOf.push(artistId);
-				} 
-				appendToBrowser(newThumbnailItem(uri, name, image));
-				uriDisplayedSet.add(uri);
+			let name = p.name;
+			let uri = p.uri;
+			let image = "nosource";
+			if(p.images !== null && p.images != undefined){
+				image = p.images[0].url;
+			} else if(itemToAppendType === itemType.SAVED_ARTIST){
+				let matches = uri.match(artistUriRegex);
+				let artistId = matches[1];
+				artistIdsToFetchThumbnailOf.push(artistId);
+			} 
+			appendToBrowser(newThumbnailItem(uri, name, image));
+			uriDisplayedSet.add(uri);
 
-            }
-            if(artistIdsToFetchThumbnailOf.length !== 0){
-            	spotifyApi.getArtists(artistIdsToFetchThumbnailOf, {fields: ['uri', 'images', 'name']}, addThumbnails);
-            }
-		}
+        }
+        if(artistIdsToFetchThumbnailOf.length !== 0){
+        	spotifyApi.getArtists(artistIdsToFetchThumbnailOf, {fields: ['uri', 'images', 'name']}).then(addThumbnails, apiErrorHandler);
+        }
 		bindListElementsOnClick()
 		loadMoreItemsIfBottomOfList();
 	}
 
 	//This is for when you dont have the thumbnails and you add that after you display the list.
-	function addThumbnails(err, data){
+	function addThumbnails(data){
 		let artists = data.artists;
 		for(let i in artists){
 			let artist = artists[i];
@@ -338,26 +341,26 @@ $(document).ready(() => {
 		}
 	}
 
-	function appendPlaylist(err, data){
-		appendItems(err, data, itemType.PLAYLIST);
+	function appendPlaylist(data){
+		appendItems(data, itemType.PLAYLIST);
 	}
 
-	function appendAlbum(err, data){
-		appendItems(err, data, itemType.SAVED_ALBUM);
+	function appendAlbum(data){
+		appendItems(data, itemType.SAVED_ALBUM);
 	}
 
-	function appendArtist(err, data){
-		appendItems(err, data, itemType.SAVED_ARTIST);
+	function appendArtist(data){
+		appendItems(data, itemType.SAVED_ARTIST);
 	}
 
-	function appendTracks(err, data){
-		appendItems(err, data, itemType.TRACK);
+	function appendTracks(data){
+		appendItems(data, itemType.TRACK);
 	}
 
-	function appendSavedTracks(err, data){
+	function appendSavedTracks(data){
     	let items = data.items.map(function(a) { return a.track; });
     	data.items = items;
-    	appendTracks(err, data);
+    	appendTracks(data);
 	}
 
 	//first unbinds all the click handlers for the list item then rebinds it.
@@ -490,21 +493,18 @@ $(document).ready(() => {
 	//This is the callback for the get recently played tracks 
 	//For each of the tracks, it checks if there is a context and if there is it appends it to the
 	//recentlyplayeduri list. Then calls addRecentlyPlayedUriToList.
-	function populateRecentlyPlayedContext(err, data){
-		if (err) console.error(err);
-		else {
-			let items = data.items;
-			for (let i in items) {
-                let context = items[i].context;
-                if(context != undefined){
-                	let uri = context.uri;
-                	if(recentlyPlayedUri.indexOf(uri) == -1){
-                		recentlyPlayedUri.push(uri);
-                	}
-                }
+	function populateRecentlyPlayedContext(data){
+		let items = data.items;
+		for (let i in items) {
+            let context = items[i].context;
+            if(context != undefined){
+            	let uri = context.uri;
+            	if(recentlyPlayedUri.indexOf(uri) == -1){
+            		recentlyPlayedUri.push(uri);
+            	}
             }
-            addRecentlyPlayedUriToList();
-		}
+        }
+        addRecentlyPlayedUriToList();
 	}
 
 	//For each of the recentlyplayeduri's 
@@ -520,27 +520,21 @@ $(document).ready(() => {
 	        	let playlistId = matches[2];
 	        	//Fetch the name, uri, and images of the playlist and append it to the list.
 	        	spotifyApi.getPlaylist(userId, playlistId, {fields: ['uri', 'images', 'name']})
-					.then(onRecentlyPlayedContextReturn, function(err) {
-						console.error(err);
-					});
+					.then(onRecentlyPlayedContextReturn, apiErrorHandler);
 	    	} else if(albumUriRegex.test(uri)){
 	    		//if the item is an album
 	    		let matches = uri.match(albumUriRegex);
 	        	let albumId = matches[1];
 	        	//fetch the uri, images, and name of the album and append it to the list.
 	        	spotifyApi.getAlbum(albumId, {fields: ['uri', 'images', 'name']})
-					.then(onRecentlyPlayedContextReturn, function(err) {
-						console.error(err);
-					});
+					.then(onRecentlyPlayedContextReturn, apiErrorHandler);
 	    	}else if(artistUriRegex.test(uri)){
 	    		//if the item is an artist
 	    		let matches = uri.match(artistUriRegex);
 	        	let artistId = matches[1];
 	        	//fetch the uri, images, and name of the album and append it to the list.
 	        	spotifyApi.getArtist(artistId, {fields: ['uri', 'images', 'name']})
-					.then(onRecentlyPlayedContextReturn, function(err) {
-						console.error(err);
-					});
+					.then(onRecentlyPlayedContextReturn, apiErrorHandler);
 	    	}
 		}
 	}
@@ -564,7 +558,7 @@ $(document).ready(() => {
 	}
 
 	function apiErrorHandler(err){
-
+		if (err) console.error(err);
 	}
 
 	function newThumbnailItem(uri, title, imageSource){
