@@ -852,6 +852,11 @@ ul.favoritesList {
 	display: inline-flex;
 }
 
+#browserHeader {
+	color: black;
+	margin: 10px;
+}
+
 .favHeaderButtons {
 	background-color: #72d8d0;
 	font-family: 'Source Sans Pro', sans-serif;

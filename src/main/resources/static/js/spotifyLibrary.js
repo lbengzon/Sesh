@@ -1,9 +1,12 @@
 class Page {
-	constructor(pageType, uri, scrollTop, itemsBeingDisplayed){
+	constructor(pageType, uri, scrollTop, itemsBeingDisplayed, browserHeader, offset, hasNext){
 			this.pageType = pageType;
 			this.uri = uri;
 			this.scrollTop = scrollTop;
 			this.itemsBeingDisplayed = itemsBeingDisplayed;
+			this.browserHeader = browserHeader;
+			this.offset = offset;
+			this.hasNext = hasNext;
 	}
 	
 	toString(){
@@ -14,6 +17,7 @@ class Page {
 
 $(document).ready(() => {
 	let $browser = $("#browse");
+	let $browserHeader = $("#browserHeader");
 	let spotifyApi = new SpotifyWebApi();
 	let playlistUriRegex = new RegExp('spotify:user:([^:]+):playlist:([0-9A-Za-z]{22})');
 	let albumUriRegex = new RegExp('spotify:album:([0-9A-Za-z]{22})');
@@ -62,7 +66,7 @@ $(document).ready(() => {
 
 
 
-	spotifyApi.setAccessToken('BQDPLS3frFaep3HZimI38L5NXwje9Dt51uZMsHXqFbgCAKReXgvixFW4WK2I4Cdcg29nich320fL5xdpuffp0V_8JPazmiFmFCx77MHaZE99ySiTzDU-bqUJ3JYDfrLxK5RA0zzB1vN6V75oTub2TptIgaErLvDuGJGG66yilCAbutHE12pP2obPNeQ7qiM6n4G0JqJUMQNa2ZzpWLzSQyRLGqE9Vz8LWSGdodbGZiOC77lwLJ28CPz8QJWCE56SdNMNppToFSeFnB4Aozc527Mu5ixQSXb5Sb7y2tOGIMFm8L6dmELB4_GGPFjmPwiuzKOGQ6sz5uV4M5Vg3_Rt4h1ayA');
+	spotifyApi.setAccessToken('BQDrv69AKvU9-o6NaNEKN5bxGay7X-DIDpgRTldOyUg-4DMiJlRpBNG9WIVDhLygw6GbHxngSlGoH_umDf-WPU8zpvtLGsKt-F3DX_Chtt1pKAkiASWdPDTbv2kkCbvHltyNpAhiB_yfh0Ex5AoEl84leykQH1_kAksIvFvKrSymkkWtEJ7cOpzgSDSWQaCnUDDrGz8Jp1R0Mk2y17x-aJ2fbn4iOvdrQTzY0LAiEoMqxR6BKL-83sUoTz_rWrf7YdX1BS7vmuFCbffui3vNarYcllAmJUufvvKe1Ti19lydY7Lyphz0-oHuHIZAJ0b5Si_PZp9RJ8RW1tBCSqMPyPIN-Q');
 	createHomePage();
 	hideOrShowBackButton()
 	bindBackButtonOnClick();
@@ -173,7 +177,7 @@ $(document).ready(() => {
 			}
 		}
 		bindListElementsOnClick();
-		loadIfListHasNotOverflown();
+		loadMoreItemsIfBottomOfList();
 	}
 
 
@@ -185,15 +189,6 @@ $(document).ready(() => {
 	//fetches more saved artists if there are any and appends it to the list
 	function fetchAppendArtists(){
 		spotifyApi.getMySavedTracks({limit: artistsLimit, offset: offset}, appendArtist);
-	}
-
-	//Will call loadMoreItems in an attempt to populate the list with more items if the items have not filled the browser window yet.
-	function loadIfListHasNotOverflown(){
-		let browserScrollWindow = $("#browseScroll")[0];
-
-		if(browserScrollWindow.scrollHeight < browserScrollWindow.clientHeight){
-			loadMoreItems();
-		}
 	}
 
 	//Loads more items (depending on the current page type) into the browser if there are any.
@@ -285,7 +280,7 @@ $(document).ready(() => {
             }
 		}
 		bindListElementsOnClick()
-		loadIfListHasNotOverflown();
+		loadMoreItemsIfBottomOfList();
 	}
 
 	//This is for when you dont have the thumbnails and you add that after you display the list.
@@ -339,10 +334,15 @@ $(document).ready(() => {
 	//Attaches a handler to when your scrolling and you have reached the bottom of the list.
 	function bindScrollLoading(){
 		$("#browseScroll").on('scroll', function() {
-	        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-	            loadMoreItems();
-	        }
+	        loadMoreItemsIfBottomOfList();
 	    });
+	}
+
+	//Checks to see where in the browser list you are and calls load more items if your are at the bottom of the list;
+	function loadMoreItemsIfBottomOfList(){
+		if($("#browseScroll").scrollTop() + $("#browseScroll").innerHeight() >= $("#browseScroll")[0].scrollHeight) {
+	        loadMoreItems();
+	    }
 	}
 
 	//This is called when you click the back button.
@@ -355,11 +355,13 @@ $(document).ready(() => {
 			let newUri = newPage.uri;
 			let scrollTop = newPage.scrollTop;
 			let itemsToDisplay = newPage.itemsBeingDisplayed;
+			let newBrowserHeader = newPage.browserHeader;
 			currentPageType = newPageType;
 			currentUri = newUri;
-
+			hasNext = newPage.hasNext;
+			offset = newPage.offset;
+			setBrowserHeader(newBrowserHeader);
             appendToBrowser(itemsToDisplay);
-
             bindListElementsOnClick();
             hideOrShowBackButton();
             $("#browseScroll").scrollTop(scrollTop);
@@ -381,43 +383,56 @@ $(document).ready(() => {
 	//It saves the current page and adds it to the prev page stack.
 	//Then depending on the id of the element, performs some action.
 	function listElementClickHandler(data){
-		hasNext = true;
-		offset = 0;
+		//creates the page to be pushed to the prev stack
 		let item = data.currentTarget;
 		let scrollTop = $("#browseScroll").scrollTop();
 		let itemsBeingDisplayed = $browser[0].innerHTML;
 		let id = item.id;
-		let prevPage = new Page(currentPageType, currentUri, scrollTop, itemsBeingDisplayed);
+		let oldBrowserHeader = $browserHeader.text();
+		let prevPage = new Page(currentPageType, currentUri, scrollTop, itemsBeingDisplayed, oldBrowserHeader, offset, hasNext);
 		prevPageStack.push(prevPage);
-		clearBrowser();
 
+		//reset necessary variables
+		clearBrowser();
+		hasNext = true;
+		offset = 0;
+
+		//Switch depending on the id of the element that was clicked
 		if(albumUriRegex.test(id)){
 			currentPageType = pages.SINGLE_ALBUM;
 			currentUri = id;
+			setBrowserHeader($(this).text());
 			fetchAppendAlbumTracks();
 		}else if(playlistUriRegex.test(id)){
 			currentPageType = pages.SINGLE_PLAYLIST;
 			currentUri = id;
+			setBrowserHeader($(this).text());
 			fetchAppendPlaylistTracks();
 		} else if(artistUriRegex.test(id)){
 			currentPageType = pages.SINGLE_ARTIST;
 			currentUri = id;
+			console.log(data);
+			setBrowserHeader($(this).text());
 			fetchAppendArtistTracks();
 		}else if(id === 'playlists'){
 			currentPageType = pages.PLAYLISTS;
 			currentUri = null;
+			setBrowserHeader("PLAYLISTS");
 			fetchAppendPlaylists();
 		} else if(id === 'albums'){
 			currentPageType = pages.ALBUMS;
 			currentUri = null;
+			setBrowserHeader("ALBUMS");
 			fetchAppendAlbums();
 		} else if(id === 'artists'){
 			currentPageType = pages.ARTISTS;
 			currentUri = null;
+			setBrowserHeader("ARTISTS");
 			fetchAppendArtists();
 		} else if(id === 'songs'){
 			currentPageType = pages.SONGS;
 			currentUri = null;
+			setBrowserHeader("SONGS");
 			fetchAppendSavedTracks();
 		} else if(trackRegex.test(id)){
 			console.log("==============YOU JUST CLICKED A TRACK=================");
@@ -426,6 +441,11 @@ $(document).ready(() => {
 			console.log("this id didn't fit what we expected: ", id);
 		}
 		hideOrShowBackButton();
+	}
+
+	//Sets the header of the browser
+	function setBrowserHeader(newHeader){
+		$browserHeader.text(newHeader);
 	}
 
 	//This is the callback for the get recently played tracks 

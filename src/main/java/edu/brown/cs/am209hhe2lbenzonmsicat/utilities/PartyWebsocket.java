@@ -98,6 +98,12 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Is called whenever a message is received.
+   * @param session
+   * @param message
+   * @throws IOException
+   */
   @OnWebSocketMessage
   public void message(Session session, String message) throws IOException {
     try {
@@ -111,6 +117,7 @@ public class PartyWebsocket {
       int partyId = payload.get("partyId").getAsInt();
       Party party = Party.of(partyId);
       User user = User.of(userId);
+      // Do something different based on the message type.
       switch (messageType) {
         case SET_PARTY_ID:
           sendUpdateEntireParty(partyId, user, session,
@@ -185,6 +192,12 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Sends the redirect to login message to the session passed in.
+   * @param session
+   *          The session to send the login message to.
+   * @throws IOException
+   */
   private void sendRedirectLoginUpdate(Session session) throws IOException {
     JsonObject updateMessage = new JsonObject();
     updateMessage.addProperty("type",
@@ -193,6 +206,21 @@ public class PartyWebsocket {
     session.getRemote().sendString(updateMessage.toString());
   }
 
+  /**
+   * Ends the party. Then sends the end party message to all guests.
+   * @param payload
+   *          The payload received from the websocket message.
+   * @param user
+   *          The user who sent the websocket message (should be the host).
+   * @param party
+   *          The party to end.
+   * @param session
+   *          The session that sent the end party request(should be the host's
+   *          session)
+   * @param messageType
+   *          The message type that was recieved
+   * @throws IOException
+   */
   private void endPartyUpdateGuests(JsonObject payload, User user, Party party,
       Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
@@ -221,6 +249,22 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Resumes the the song being played. Then updates the parties current song by
+   * sending a websocket message to the host/user who sent the original message
+   * to the backend.
+   * @param payload
+   *          The payload recieved from the front end.
+   * @param user
+   *          The user who sent the message.
+   * @param party
+   *          The party which the user is party of
+   * @param session
+   *          The session that sent the message
+   * @param messageType
+   *          The message type of the message received.
+   * @throws IOException
+   */
   private void resumeSong(JsonObject payload, User user, Party party,
       Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
@@ -240,6 +284,21 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Seeks to a time in a song. Then updates the parties current song by sending
+   * a message to the host/user who requested the seek.
+   * @param payload
+   *          The payload recieved from the front end.
+   * @param user
+   *          The user who sent the message.
+   * @param party
+   *          The party which the user is party of
+   * @param session
+   *          The session that sent the message
+   * @param messageType
+   *          The message type of the message received.
+   * @throws IOException
+   */
   private void seekSong(JsonObject payload, User user, Party party,
       Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
@@ -259,6 +318,22 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Pauses the song. Then updates the parties current song by sending a
+   * websocket message to the host/user who sent the original message to the
+   * backend.
+   * @param payload
+   *          The payload recieved from the front end.
+   * @param user
+   *          The user who sent the message.
+   * @param party
+   *          The party which the user is party of
+   * @param session
+   *          The session that sent the message
+   * @param messageType
+   *          The message type of the message received.
+   * @throws IOException
+   */
   private void pauseSongAndUpdate(JsonObject payload, User user, Party party,
       Session session, MESSAGE_TYPE messageType) throws IOException {
     try {
@@ -275,6 +350,22 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Plays a at an index song. Then updates the parties current song by sending
+   * a websocket message to the host/user who sent the original message to the
+   * backend.
+   * @param payload
+   *          The payload recieved from the front end.
+   * @param user
+   *          The user who sent the message.
+   * @param party
+   *          The party which the user is party of
+   * @param session
+   *          The session that sent the message
+   * @param messageType
+   *          The message type of the message received.
+   * @throws IOException
+   */
   private void playPlaylistAndUpdate(JsonObject payload, User user, Party party,
       Session session, MESSAGE_TYPE messageType, boolean fixSync)
       throws IOException {
@@ -302,6 +393,25 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Checks whether the current song playing is in sync with what should be
+   * playing. It is when the songs in the playlist are not playing in the
+   * correct order. This can be caused when the spotify queue wasn't updated
+   * when you rearrange/remove/add a new song right after the current song being
+   * played, and the current song moved on to the next song. It then tries to
+   * correct this by playing the correct song and returns the new song being
+   * played.
+   * @param curr
+   *          The song being currently played
+   * @param party
+   *          The party in question
+   * @param payload
+   *          The payload received from the front end
+   * @return The correct song that should be playing.
+   * @throws SpotifyUserApiException
+   * @throws SpotifyOutOfSyncException
+   * @throws InterruptedException
+   */
   private CurrentSongPlaying checkSync(CurrentSongPlaying curr, Party party,
       JsonObject payload) throws SpotifyUserApiException,
       SpotifyOutOfSyncException, InterruptedException {
@@ -393,6 +503,24 @@ public class PartyWebsocket {
     return curr;
   }
 
+  /**
+   * Checks to see if there is total desynchronization and tries to fix it. This
+   * happens if all of a sudden there is a total desynchronization. Happens when
+   * the song being played isnt in the playlist. Can happen when you remove a
+   * song fron the playlist and it doesnt update the spotify queue then it moves
+   * on the song that you just removed. Also happens if you had songs queued up
+   * on spotify before even starting the sesh. Or if you try to play a different
+   * song directly from spotify.
+   * @param curr
+   *          The current song playing.
+   * @param party
+   *          The party in question.
+   * @param payload
+   *          The payload of the message received.
+   * @return The correct song being played.
+   * @throws SpotifyUserApiException
+   * @throws InterruptedException
+   */
   private CurrentSongPlaying syncAfterTotalDesynchornization(
       CurrentSongPlaying curr, Party party, JsonObject payload)
       throws SpotifyUserApiException, InterruptedException {
@@ -423,6 +551,24 @@ public class PartyWebsocket {
     return curr;
   }
 
+  /**
+   * This is called when the host of the party sends the request to get the
+   * current song being played. Returns the current song being played. Also
+   * sends websocket messages to the host and guests to let them know the
+   * current song status.
+   * @param payload
+   *          The payload of the message received.
+   * @param party
+   *          The party in question
+   * @param sender
+   *          The session that sent the request (the host's session);
+   * @param messageType
+   *          The type of the message that was received.
+   * @param checkSync
+   *          Whether it should check if the playlist is out of sync or not.
+   * @throws IOException
+   * @throws InterruptedException
+   */
   private void updatePartiesCurrentSong(JsonObject payload, Party party,
       Session sender, MESSAGE_TYPE messageType, boolean checkSync)
       throws IOException, InterruptedException {
@@ -487,10 +633,7 @@ public class PartyWebsocket {
   }
 
   /**
-   * Sends the updatemessage to everyone in the party except the sender. Sends
-   * <<<<<<< HEAD the sender the senderUpdateMessage <<<<<<< HEAD =======
-   * >>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6 ======= the sender the
-   * senderUpdateMessage >>>>>>> 5a8c93eb13915e5e9cc5cc3e0db0e7281415ce3c
+   * Sends the updatemessage to everyone in the party except the sender.
    * @param sender
    * @param updateMessage
    * @param senderUpdateMessage
@@ -509,13 +652,13 @@ public class PartyWebsocket {
   }
 
   /**
-   * Sends the updatemessage to everyone in the party except the sender. Sends
-   * <<<<<<< HEAD the sender the senderUpdateMessage <<<<<<< HEAD =======
-   * >>>>>>> ef01fde1ed2349bed9aabe20a2c8bc52e58350c6 ======= the sender the
-   * senderUpdateMessage >>>>>>> 5a8c93eb13915e5e9cc5cc3e0db0e7281415ce3c
+   * Sends the updatemessage to everyone in the party except the sender.
    * @param sender
+   *          The session that sent the message.
    * @param updateMessage
+   *          The message to send to everyone in the party besides the sender.
    * @param senderUpdateMessage
+   *          The message to send to the sender.
    * @param partyId
    * @throws IOException
    */
@@ -528,6 +671,15 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Reorders the playlist and sends the new order everyone in the party.
+   * @param payload
+   * @param user
+   * @param party
+   * @param session
+   * @param messageType
+   * @throws IOException
+   */
   private void sendReorderPlaylistTrackUpdate(JsonObject payload, User user,
       Party party, Session session, MESSAGE_TYPE messageType)
       throws IOException {
@@ -558,6 +710,16 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Is called when you first get to the party page. Sends all the information
+   * needed to display things about the party such as the favorites, queue,
+   * playlist, etc. Also sends a new user joined notification to everyone.
+   * @param partyId
+   * @param user
+   * @param session
+   * @param messageType
+   * @throws IOException
+   */
   private void sendUpdateEntireParty(int partyId, User user, Session session,
       MESSAGE_TYPE messageType) throws IOException {
     JsonObject updatePayload = new JsonObject();
@@ -598,6 +760,17 @@ public class PartyWebsocket {
     session.getRemote().sendString(updateMessage.toString());
   }
 
+  /**
+   * Adds a song directly to the playlist (skipping the request stage). Used by
+   * the host. Then sends the new request that was added to the playlist to
+   * everyone.
+   * @param payload
+   * @param user
+   * @param party
+   * @param session
+   * @param messageType
+   * @throws IOException
+   */
   private void sendAddSongDirectlyToPlaylistUpdate(JsonObject payload,
       User user, Party party, Session session, MESSAGE_TYPE messageType)
       throws IOException {
@@ -639,6 +812,16 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Adds a new song request. Then sends a message to everyone in the party
+   * about the new request.
+   * @param payload
+   * @param user
+   * @param party
+   * @param session
+   * @param messageType
+   * @throws IOException
+   */
   private void sendAddRequestUpdate(JsonObject payload, User user, Party party,
       Session session, MESSAGE_TYPE messageType) throws IOException {
     String songId = payload.get("songId").getAsString();
@@ -665,6 +848,17 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Votes on a request then sends a message to everyone in the party about the
+   * vote.
+   * @param payload
+   * @param user
+   * @param party
+   * @param session
+   * @param voteType
+   * @param messageType
+   * @throws IOException
+   */
   private void sendVoteRequestUpdate(JsonObject payload, User user, Party party,
       Session session, Request.VoteType voteType, MESSAGE_TYPE messageType)
       throws IOException {
@@ -707,6 +901,18 @@ public class PartyWebsocket {
     }
   }
 
+  /**
+   * Transfers either from playlist to requests or vice versa depending on
+   * transferType. Then sends a message to everyone in the party to notify them
+   * about the transfer.
+   * @param payload
+   * @param user
+   * @param party
+   * @param session
+   * @param transferType
+   * @param messageType
+   * @throws IOException
+   */
   private void sendAfterRequestTransferUpdate(JsonObject payload, User user,
       Party party, Session session, TRANSFER_TYPE transferType,
       MESSAGE_TYPE messageType) throws IOException {
