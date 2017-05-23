@@ -21,8 +21,12 @@ $(document).ready(() => {
 	let $searchBar = $("#spotifySearch");
 	let spotifyApi = new SpotifyWebApi();
 	let playlistUriRegex = new RegExp('spotify:user:([^:]+):playlist:([0-9A-Za-z]{22})');
-	let albumUriRegex = new RegExp('spotify:album:([0-9A-Za-z]{22})');
-	let artistUriRegex = new RegExp('spotify:artist:([0-9A-Za-z]{22})');
+	let savedAlbumUriRegex = new RegExp('saved:spotify:album:([0-9A-Za-z]{22})');
+	let savedArtistUriRegex = new RegExp('saved:spotify:artist:([0-9A-Za-z]{22})');
+	let fullAlbumUriRegex = new RegExp('full:spotify:album:([0-9A-Za-z]{22})');
+	let fullArtistUriRegex = new RegExp('full:spotify:artist:([0-9A-Za-z]{22})');
+
+
 	let trackRegex = new RegExp('([0-9A-Za-z]{22})');
 
 
@@ -34,8 +38,10 @@ $(document).ready(() => {
 	const playlistTracksLimit = 50;
 	const artistsAlbumsLimit = 20;
 	const savedTracksLimit = 50;
+	const searchDebounceWait = 1000;
 
 	const scrollAutoloadOffset = 20;
+	const searchLimit = 4;
 
 	let hasNext = true;
 	let offset = 0;
@@ -47,14 +53,21 @@ $(document).ready(() => {
 		SAVED_ALBUMS: 'albums',
 		SAVED_SINGLE_PLAYLIST: 'single_playlist',
 		SAVED_SINGLE_ARTIST: 'single_artist',//displays the songs by the artists that were saved
-		SAVED_SINGLE_ALBUM: 'single_album' //displays the songs in the albums that were saved
+		SAVED_SINGLE_ALBUM: 'single_album', //displays the songs in the albums that were saved
+		FULL_SINGLE_ARTIST: 'full_single_artist',
+		FULL_SINGLE_ALBUM: 'full_single_album',
+		FULL_ALBUMS_SEARCH: 'full_albums_search',
+		FULL_ARTISTS_SEARCH: 'full_artists_search',
+		SEARCH: 'search'
 				};
 
 	let itemType = {
 		PLAYLIST: 'playlist',
 		SAVED_ALBUM: 'saved_album',
 		SAVED_ARTIST: 'saved_artist',
-		TRACK: 'track'
+		TRACK: 'track',
+		FULL_ARTIST: 'full_artist',
+		FULL_ALBUM: 'full_album'
 				};
 	let currentPageType;
 	let currentUri = null;
@@ -67,36 +80,40 @@ $(document).ready(() => {
 
 
 
-	setAccessToken('BQBodCIGiebAjy5_fa2uuDLwAc6GMUSyrvjXeRG1rk1VHW5pK4UCg_q4DHuQ-8e7lCce-yf91jR5NFN6WdRDfeWiNTOCzaTGU7-xRjHdmXR-R9nnlzLXqSV5-WPsnmxzALkdOMVXW_gf4UL91_vRc5VR3bTHYqnFYHz3G0hNm6ICfv4JvCHES1ehh5kOP3L_K4kK6EErTg11dM0Bywxo41bc0Fu2_NmUZHMRAhqwiHRJOAvoNno22NEingub-M9dRDqlSNeKoNQHL_TUx0eqzvADPMDla0wCWru5msghayVSGd8MihIEG0M3tFfwVQuMbnyJhdTfHJOkuy-olLEnpylupg');
-	createHomePage();
-	//createSearchPage();
+	setAccessToken('BQAZGy1h7R9V0UMgG1HX1UaTN7VjDCoubykA2kgmkXNubWROw2XMZFREnAx-ZY0OH8TKR-pn1X0GMQUT6K8BH-yvHfs6_JF4w5Iw0TrwzOUZZF4jqNqPYLdfVr2eX6kkXGv6gmVB2cHTOukV6EQZdnj-ejBKLqm9h9C-TTdBt29M_U_uxvALRZ-6WVimYgKXtoo1v0Rya3ogWv0rmoe5VBcpzyI8oRW5941qhEXtqPTKbcped0RcxdwEAs7-P_AqD4B22OK63q5HblSodRkHekLReEiQtbV2W5GA4IPeKlKszzU_yUnKdifa9WlfrqmYKT6T9BCQ8vD4Ifj4DzbaEH6hoA');
+	//createHomePage();
+	createSearchPage();
 	setUpBindsAndButtons();
+
+	//==============================================FUNCTIONS======================================================
 
 	function setAccessToken(token){
 		spotifyApi.setAccessToken(token);
 	}
 
 	function setUpBindsAndButtons(){
-		hideOrShowBackButton()
+		hideOrShowBackButton();
 		bindBackButtonOnClick();
 		bindScrollLoading();
+		bindSearchingOnKeyUp();
 	}
 
-	//==============================================FUNCTIONS======================================================
 	function createSearchPage(){
+		currentPage = pages.SEARCH;
+		hasNext = false;
 		showSearchBar();
 	}
 
 	function createHomePage(){
 		hideSearchBar();
-		currengPage = pages.HOME;
+		currentPage = pages.HOME;
 		hasNext = false;
 		clearBrowser();
 		appendToBrowser(newListItem("playlists", "Playlists"));
 		appendToBrowser(newListItem("songs", "Songs"));
 		appendToBrowser(newListItem("albums", "Albums"));
 		appendToBrowser(newListItem("artists", "Artists"));
-		appendToBrowser('<h4 class=\"spotifyBrowserInListLabel\">Recently Played</h4>')
+		appendToBrowser(newHeaderSeparator("Recently Played"));
 		spotifyApi.getMyRecentlyPlayedTracks({limit: recentlyPlayedLimit}).then(populateRecentlyPlayedContext, apiErrorHandler);
 		bindListElementsOnClick();
 	}
@@ -121,6 +138,23 @@ $(document).ready(() => {
 		trackMap = new Map();
 	}
 
+	//Fetches the search results from the search string passed in from the api and repopulates the search page appropriately.
+	let fetchPopulateSearchResults = debounce(function(searchString){
+		console.log(searchString);
+		spotifyApi.search(searchString, ['track', 'artist', 'album', 'playlist'], {limit: searchLimit}).then(populateSearchResults, apiErrorHandler);
+	}, searchDebounceWait);
+
+	function fetchAppendFullAlbumTracks(){
+		let matches = currentUri.match(fullAlbumUriRegex);
+		let albumId = matches[1];
+		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}).then(function(data){
+			appendItems(data, itemType.TRACK);
+		});
+	}
+
+	function fetchPopulateFullArtist(){
+
+	}
 
 	//fetches more saved albums if there are any and appends it to the list
 	function fetchAppendSavedAlbums(){
@@ -147,7 +181,7 @@ $(document).ready(() => {
 
 	//fetches more album tracks if there are any and appends it to the list
 	function fetchAppendSavedAlbumTracks(){
-		let matches = currentUri.match(albumUriRegex);
+		let matches = currentUri.match(savedAlbumUriRegex);
 		let albumId = matches[1];
 		spotifyApi.getAlbumTracks(albumId, {limit: albumTracksLimit, offset: offset}).then(function(data){
 			setOffsetHasNext(data);
@@ -171,7 +205,7 @@ $(document).ready(() => {
 
 	//ALSO TRY TO FIX THIS FUNCTION!!!! GROSSSSSSSSSSS
 	function fetchAppendSavedArtistTracks(){
-		let matches = currentUri.match(artistUriRegex);
+		let matches = currentUri.match(savedArtistUriRegex);
 		let artistId = matches[1];
 		spotifyApi.getArtistAlbums(artistId, {limit: artistsAlbumsLimit, offset: offset, album_type: ['album', 'single']})
 			.then(function(data) {
@@ -271,13 +305,14 @@ $(document).ready(() => {
 	//adds the items (either tracks/albums/playlists/artists depending on the itemToAppendType) to the browser.
 	//Also updates the hasNext, and offset variables for paging. It then rebinds the list elements on click.
 	//Add calls loadIfListHasNotOverflown
+	//The data should have the fields 
 	function appendItems(data, itemToAppendType){
 		let artistIdsToFetchThumbnailOf = [];
 		let items = data.items;
 		setOffsetHasNext(data)
 		for (let i in items) {
 			let p = null;
-			
+			let uri = "";
 			switch(itemToAppendType){
 				case itemType.PLAYLIST:
 					p = items[i];
@@ -287,12 +322,20 @@ $(document).ready(() => {
 					if(uriDisplayedSet.has(p.uri)){
 						continue;
 					}
+					uri = "saved:";
 					break;
 				case itemType.SAVED_ARTIST:
 					p = items[i].track.artists[0];
 					if(uriDisplayedSet.has(p.uri)){
 						continue;
 					}
+					uri = "saved:";
+					break;
+				case itemType.FULL_ARTIST:
+				case itemType.FULL_ALBUM:
+					p = items[i];
+					uri = "full:";
+					console.log(p);
 					break;
 				case itemType.TRACK:
 					p = items[i];
@@ -306,17 +349,18 @@ $(document).ready(() => {
 			//you should clean this up. SO GROSS!!!!
 
 			let name = p.name;
-			let uri = p.uri;
+			uri = uri + p.uri;
 			let image = "nosource";
-			if(p.images !== null && p.images != undefined){
+			if(p.images !== null && p.images != undefined && p.images.length !== 0){
 				image = p.images[0].url;
 			} else if(itemToAppendType === itemType.SAVED_ARTIST){
-				let matches = uri.match(artistUriRegex);
+				let matches = uri.match(savedArtistUriRegex);
 				let artistId = matches[1];
+
 				artistIdsToFetchThumbnailOf.push(artistId);
 			} 
 			appendToBrowser(newThumbnailItem(uri, name, image));
-			uriDisplayedSet.add(uri);
+			uriDisplayedSet.add(p.uri);
 
         }
         if(artistIdsToFetchThumbnailOf.length !== 0){
@@ -331,7 +375,7 @@ $(document).ready(() => {
 		let artists = data.artists;
 		for(let i in artists){
 			let artist = artists[i];
-			let uri = artist.uri;
+			let uri = "saved:" + artist.uri;
 			let $listElement  = $(document.getElementById(uri));
 			if(artist.images[0] != undefined){
 				let image = artist.images[0].url;
@@ -363,6 +407,19 @@ $(document).ready(() => {
     	appendTracks(data);
 	}
 
+	function populateSearchResults(data){
+		console.log(data);
+		appendToBrowser(newHeaderSeparator('Songs'));
+		appendItems(data.tracks, itemType.TRACK);
+		appendToBrowser(newHeaderSeparator('Artists'));
+		appendItems(data.artists, itemType.FULL_ARTIST);
+		appendToBrowser(newHeaderSeparator('Albums'));
+		appendItems(data.albums, itemType.FULL_ALBUM);
+		appendToBrowser(newHeaderSeparator('Playlists'));
+		appendItems(data.playlists, itemType.PLAYLIST);
+
+	}
+
 	//first unbinds all the click handlers for the list item then rebinds it.
 	function bindListElementsOnClick(){
 		$("#browse li").off('click', listElementClickHandler);
@@ -386,6 +443,15 @@ $(document).ready(() => {
 		if($("#browseScroll").scrollTop() + $("#browseScroll").innerHeight() >= $("#browseScroll")[0].scrollHeight) {
 	        loadMoreItems();
 	    }
+	}
+
+	//Binds the the fetchPopulateSearchResults (with debouncing) function to the keyup event of the search bar.
+	function bindSearchingOnKeyUp(){
+		$searchBar.on('keyup', function(data) {
+			console.log(data);
+			let searchQuery = $searchBar.val();
+	        fetchPopulateSearchResults(searchQuery);
+	    });
 	}
 
 	//This is called when you click the back button.
@@ -441,7 +507,7 @@ $(document).ready(() => {
 		offset = 0;
 
 		//Switch depending on the id of the element that was clicked
-		if(albumUriRegex.test(id)){
+		if(savedAlbumUriRegex.test(id)){
 			currentPageType = pages.SAVED_SINGLE_ALBUM;
 			currentUri = id;
 			setBrowserHeader($(this).text());
@@ -451,12 +517,22 @@ $(document).ready(() => {
 			currentUri = id;
 			setBrowserHeader($(this).text());
 			fetchAppendPlaylistTracks();
-		} else if(artistUriRegex.test(id)){
+		} else if(savedArtistUriRegex.test(id)){
 			currentPageType = pages.SAVED_SINGLE_ARTIST;
 			currentUri = id;
 			setBrowserHeader($(this).text());
 			fetchAppendSavedArtistTracks();
-		}else if(id === 'playlists'){
+		} else if(fullArtistUriRegex.test(id)){
+			currentPageType = pages.FULL_SINGLE_ARTIST;
+			currentUri = id;
+			setBrowserHeader($(this).text());
+			fetchPopulateFullArtist();
+		} else if(fullAlbumUriRegex.test(id)){
+			currentPageType = pages.FULL_SINGLE_ALBUM;
+			currentUri = id;
+			setBrowserHeader($(this).text());
+			fetchAppendFullAlbumTracks();
+		} else if(id === 'playlists'){
 			currentPageType = pages.SAVED_PLAYLISTS;
 			currentUri = null;
 			setBrowserHeader("PLAYLISTS");
@@ -477,7 +553,7 @@ $(document).ready(() => {
 			setBrowserHeader("SONGS");
 			fetchAppendSavedTracks();
 		} else if(trackRegex.test(id)){
-			console.log("==============YOU JUST CLICKED A TRACK=================");
+			console.log("==============YOU JUST CLICKED A TRACK WITH ID=================", id);
 			
 		} else{
 			console.log("this id didn't fit what we expected: ", id);
@@ -521,16 +597,16 @@ $(document).ready(() => {
 	        	//Fetch the name, uri, and images of the playlist and append it to the list.
 	        	spotifyApi.getPlaylist(userId, playlistId, {fields: ['uri', 'images', 'name']})
 					.then(onRecentlyPlayedContextReturn, apiErrorHandler);
-	    	} else if(albumUriRegex.test(uri)){
+	    	} else if(savedAlbumUriRegex.test(uri)){
 	    		//if the item is an album
-	    		let matches = uri.match(albumUriRegex);
+	    		let matches = uri.match(savedAlbumUriRegex);
 	        	let albumId = matches[1];
 	        	//fetch the uri, images, and name of the album and append it to the list.
 	        	spotifyApi.getAlbum(albumId, {fields: ['uri', 'images', 'name']})
 					.then(onRecentlyPlayedContextReturn, apiErrorHandler);
-	    	}else if(artistUriRegex.test(uri)){
+	    	}else if(savedArtistUriRegex.test(uri)){
 	    		//if the item is an artist
-	    		let matches = uri.match(artistUriRegex);
+	    		let matches = uri.match(savedArtistUriRegex);
 	        	let artistId = matches[1];
 	        	//fetch the uri, images, and name of the album and append it to the list.
 	        	spotifyApi.getArtist(artistId, {fields: ['uri', 'images', 'name']})
@@ -550,6 +626,9 @@ $(document).ready(() => {
 		}
 		let name = data.name;
 		let uri = data.uri;
+		if(savedAlbumUriRegex.test(uri) || savedArtistUriRegex.test(uri)){
+    		uri = "saved:" + uri;
+    	}
 		appendToBrowser(newThumbnailItem(uri, name, image));
 		recentlyPlayedUriCount--;
 		if(recentlyPlayedUriCount == 0){
@@ -587,6 +666,10 @@ $(document).ready(() => {
                     //end of song title div
                     + "</div>"
                     + "</li>"; 
+	}
+
+	function newHeaderSeparator(label){
+		return "<h4 class=\"spotifyBrowserInListLabel\">"+label+"</h4>";
 	}
 
 	function debounce(func, wait, immediate) {
