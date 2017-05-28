@@ -37,28 +37,44 @@ $(document).ready(() => {
 	const albumTracksLimit = 50;
 	const playlistTracksLimit = 50;
 	const artistsAlbumsLimit = 20;
+	const fullArtistsAlbumsLimit = 4;
 	const savedTracksLimit = 50;
 	const searchDebounceWait = 1000;
+	const topTracksLimit = 5;
+	const seeAllSearchResultsLimit = 50;
 
 	const scrollAutoloadOffset = 20;
 	const searchLimit = 4;
+	//the button ids for the "see all list elements"
+	const seeAll = {
+		SEARCH_SONGS: 'search_songs',
+		SEARCH_ARTISTS: 'search_artists',
+		SEARCH_ALBUMS: 'search_albums',
+		SEARCH_PLAYLISTS: 'search_playlists',
+		ARTISTS_ALBUMS: 'artists_albums',
+		ARTISTS_SINGLES: 'artists_singles'
+	};
 
 	let hasNext = true;
 	let offset = 0;
 	let pages = {
 		HOME: 'home',
-		SAVED_PLAYLISTS: 'playlists',
-		SAVED_SONGS: 'songs',
-		SAVED_ARTISTS: 'artists',
-		SAVED_ALBUMS: 'albums',
+		SAVED_PLAYLISTS: 'playlists', //users saved playlists
+		SAVED_SONGS: 'songs', //users saved songs
+		SAVED_ARTISTS: 'artists',//users saved artists
+		SAVED_ALBUMS: 'albums',//users saved albums
 		SAVED_SINGLE_PLAYLIST: 'single_playlist',
 		SAVED_SINGLE_ARTIST: 'single_artist',//displays the songs by the artists that were saved
 		SAVED_SINGLE_ALBUM: 'single_album', //displays the songs in the albums that were saved
-		FULL_SINGLE_ARTIST: 'full_single_artist',
-		FULL_SINGLE_ALBUM: 'full_single_album',
-		FULL_ALBUMS_SEARCH: 'full_albums_search',
-		FULL_ARTISTS_SEARCH: 'full_artists_search',
-		SEARCH: 'search'
+		FULL_SINGLE_ARTIST: 'full_single_artist',//the page that displays the full artist (e.g. when searched)
+		FULL_SINGLE_ALBUM: 'full_single_album', //the page that displays the full album (e.g. when searched)
+		SEARCH: 'search', //the search page right after you type in a query
+		SEARCH_SONGS: 'search_songs', //after you click see all songs after a search
+		SEARCH_ARTISTS: 'search_artists', //after you click see all artists after a search
+		SEARCH_ALBUMS: 'search_albums',//after you click see all albums after a search
+		SEARCH_PLAYLISTS: 'search_playlists', //after you click see all playlists after a search
+		ARTISTS_ALBUMS: 'artists_albums',//the page that displays all of an artist's albums
+		ARTISTS_SINGLES: 'artists_singles' //the page that displays all of an artists's singles
 				};
 
 	let itemType = {
@@ -76,11 +92,12 @@ $(document).ready(() => {
 	let recentlyPlayedUriCount;
 	let uriDisplayedSet = new Set();
 	let trackMap = new Map();
+	let currentSearchQuery = '';
 
 
 
 
-	setAccessToken('BQAZGy1h7R9V0UMgG1HX1UaTN7VjDCoubykA2kgmkXNubWROw2XMZFREnAx-ZY0OH8TKR-pn1X0GMQUT6K8BH-yvHfs6_JF4w5Iw0TrwzOUZZF4jqNqPYLdfVr2eX6kkXGv6gmVB2cHTOukV6EQZdnj-ejBKLqm9h9C-TTdBt29M_U_uxvALRZ-6WVimYgKXtoo1v0Rya3ogWv0rmoe5VBcpzyI8oRW5941qhEXtqPTKbcped0RcxdwEAs7-P_AqD4B22OK63q5HblSodRkHekLReEiQtbV2W5GA4IPeKlKszzU_yUnKdifa9WlfrqmYKT6T9BCQ8vD4Ifj4DzbaEH6hoA');
+	setAccessToken('BQDt8ko8mKC9optIyCp5AbaeSkCw2-IxOEoQLrH-4zW02rUkJ-ZRK_JmsQWB_Yt0Kau-vLrEfJKPFZLWzpzr2VSUb7CgITP-g4FigagRXpHxV3IZG6ALKy5qqcOFGXCDC1DLSXs78vRE_NBq-VM49IK4lcVTKsJk23AhLbT3vLntdskABC2FZwrXOLM9NfXMvriqHy9DCyOjsJ9IAn1XPr_FYaZmebz1nEa96j-Fkh7JPBYEgW8WFccPUjLnikZrfqIwFPsWVOrEAACxG9YSAC0YLnUFSOckx2nhItcPWcvW3wvMfpH2cFPTjOrkefrYJxyDFH8ydISfC0VQcQvFdMElEw');
 	//createHomePage();
 	createSearchPage();
 	setUpBindsAndButtons();
@@ -99,14 +116,14 @@ $(document).ready(() => {
 	}
 
 	function createSearchPage(){
-		currentPage = pages.SEARCH;
+		currentPageType = pages.SEARCH;
 		hasNext = false;
 		showSearchBar();
 	}
 
 	function createHomePage(){
 		hideSearchBar();
-		currentPage = pages.HOME;
+		currentPageType = pages.HOME;
 		hasNext = false;
 		clearBrowser();
 		appendToBrowser(newListItem("playlists", "Playlists"));
@@ -137,13 +154,61 @@ $(document).ready(() => {
 		uriDisplayedSet = new Set();
 		trackMap = new Map();
 	}
+	
+	//Fetches an artists albums and appends them to the browser
+	function fetchAppendArtistsAlbums(){
+		let matches = currentUri.match(fullArtistUriRegex);
+		let artistId = matches[1];
+		spotifyApi.getArtistAlbums(artistId, {album_type: ['album'], limit: albumsLimit, offset: offset, market: 'US'}).then(function(data){
+			appendItems(data, itemType.FULL_ALBUM);
+		})
+	}
+
+	//Fetches an artists singles and appends them to the browser
+	function fetchAppendArtistsSingles(){
+		let matches = currentUri.match(fullArtistUriRegex);
+		let artistId = matches[1];
+		spotifyApi.getArtistAlbums(artistId, {album_type: ['single'], limit: albumsLimit, offset: offset, market: 'US'}).then(function(data){
+			appendItems(data, itemType.FULL_ALBUM);
+		})
+	}
 
 	//Fetches the search results from the search string passed in from the api and repopulates the search page appropriately.
 	let fetchPopulateSearchResults = debounce(function(searchString){
-		console.log(searchString);
+		clearBrowser();
+		currentSearchQuery = searchString;
 		spotifyApi.search(searchString, ['track', 'artist', 'album', 'playlist'], {limit: searchLimit}).then(populateSearchResults, apiErrorHandler);
 	}, searchDebounceWait);
 
+	//fetches and appends the song search results after the "see all songs" button in the search page is clicked
+	function fetchAppendSongSearchResults(){
+		spotifyApi.search(currentSearchQuery, ['track'], {limit: seeAllSearchResultsLimit, offset: offset}).then(function(data){
+			appendItems(data.tracks, itemType.TRACK);
+		})
+	}
+
+	//fetches and appends the artist search results after the "see all artists "button in the search page is clicked
+	function fetchAppendArtistSearchResults(){
+		spotifyApi.search(currentSearchQuery, ['artist'], {limit: seeAllSearchResultsLimit, offset: offset}).then(function(data){
+			appendItems(data.artists, itemType.FULL_ARTIST);
+		})
+	}
+
+	//fetches and appends the album search results after the "see all albums" button in the search page is clicked
+	function fetchAppendAlbumSearchResults(){
+		spotifyApi.search(currentSearchQuery, ['album'], {limit: seeAllSearchResultsLimit, offset: offset}).then(function(data){
+			appendItems(data.albums, itemType.FULL_ALBUM);
+		})
+	}
+
+	//fetches and appends the playlist search results after the "see all playlists" button in the search page is clicked
+	function fetchAppendPlaylistSearchResults(){
+		spotifyApi.search(currentSearchQuery, ['playlist'], {limit: seeAllSearchResultsLimit, offset: offset}).then(function(data){
+			appendItems(data.playlists, itemType.PLAYLIST);
+		})
+	}
+
+	//Fetches all the tracks in an album and appends it to the browser.
 	function fetchAppendFullAlbumTracks(){
 		let matches = currentUri.match(fullAlbumUriRegex);
 		let albumId = matches[1];
@@ -152,9 +217,34 @@ $(document).ready(() => {
 		});
 	}
 
+	//Populates the full artist page (e.g when you search and click on an artist)
 	function fetchPopulateFullArtist(){
+		let matches = currentUri.match(fullArtistUriRegex);
+		let artistId = matches[1];
+		spotifyApi.getArtistTopTracks(artistId, "US", {limit: topTracksLimit}).then(function(topTracksData){
+			spotifyApi.getArtistAlbums(artistId, {album_type: ['album'], limit: fullArtistsAlbumsLimit, market: 'US'}).then(function(albumsData){
+				spotifyApi.getArtistAlbums(artistId, {album_type: ['single'], limit: fullArtistsAlbumsLimit, market: 'US'}).then(function(singlesData){
+					if(topTracksData.tracks.length > 5){
+						topTracksData.items = topTracksData.tracks.slice(0,5);
+					} else{
+						topTracksData.items = topTracksData.tracks;
+					}
 
+					appendToBrowser(newHeaderSeparator("Top Tracks"))
+					appendItems(topTracksData, itemType.TRACK);
+					appendToBrowser(newHeaderSeparator("Albums"))
+					appendItems(albumsData, itemType.FULL_ALBUM);
+					appendToBrowser(newListItem(seeAll.ARTISTS_ALBUMS, "See all albums"));
+					appendToBrowser(newHeaderSeparator("Singles"))
+					appendItems(singlesData, itemType.FULL_ALBUM);
+					appendToBrowser(newListItem(seeAll.ARTISTS_SINGLES, "See all singles"));
+					bindListElementsOnClick()
+
+				});
+			}, apiErrorHandler);
+		}, apiErrorHandler);
 	}
+
 
 	//fetches more saved albums if there are any and appends it to the list
 	function fetchAppendSavedAlbums(){
@@ -297,6 +387,24 @@ $(document).ready(() => {
 				case pages.SAVED_SONGS:
 					fetchAppendSavedTracks();
 					break;
+				case pages.SEARCH_SONGS:
+					fetchAppendSongSearchResults();
+					break;
+				case pages.SEARCH_ARTISTS:
+					fetchAppendArtistSearchResults();
+					break;
+				case pages.SEARCH_ALBUMS:
+					fetchAppendAlbumSearchResults();
+					break;
+				case pages.SEARCH_PLAYLISTS:
+					fetchAppendPlaylistSearchResults();
+					break;
+				case pages.ARTISTS_ALBUMS:
+					fetchAppendArtistsAlbums();
+					break;
+				case pages.ARTISTS_SINGLES:
+					fetchAppendArtistsSingles();
+					break;
 			}
 		}
 	}, 250);
@@ -335,7 +443,6 @@ $(document).ready(() => {
 				case itemType.FULL_ALBUM:
 					p = items[i];
 					uri = "full:";
-					console.log(p);
 					break;
 				case itemType.TRACK:
 					p = items[i];
@@ -407,17 +514,21 @@ $(document).ready(() => {
     	appendTracks(data);
 	}
 
+	//Is called when the search results are returned from the api. Populates the page with the songs, artists, albums, and playlists search results.
 	function populateSearchResults(data){
-		console.log(data);
 		appendToBrowser(newHeaderSeparator('Songs'));
 		appendItems(data.tracks, itemType.TRACK);
+		appendToBrowser(newListItem(seeAll.SEARCH_SONGS, "See all songs"));
 		appendToBrowser(newHeaderSeparator('Artists'));
 		appendItems(data.artists, itemType.FULL_ARTIST);
+		appendToBrowser(newListItem(seeAll.SEARCH_ARTISTS, "See all artists"));
 		appendToBrowser(newHeaderSeparator('Albums'));
 		appendItems(data.albums, itemType.FULL_ALBUM);
+		appendToBrowser(newListItem(seeAll.SEARCH_ALBUMS, "See all albums"));
 		appendToBrowser(newHeaderSeparator('Playlists'));
 		appendItems(data.playlists, itemType.PLAYLIST);
-
+		appendToBrowser(newListItem(seeAll.SEARCH_PLAYLISTS, "See all playlists"));
+		bindListElementsOnClick()
 	}
 
 	//first unbinds all the click handlers for the list item then rebinds it.
@@ -448,7 +559,6 @@ $(document).ready(() => {
 	//Binds the the fetchPopulateSearchResults (with debouncing) function to the keyup event of the search bar.
 	function bindSearchingOnKeyUp(){
 		$searchBar.on('keyup', function(data) {
-			console.log(data);
 			let searchQuery = $searchBar.val();
 	        fetchPopulateSearchResults(searchQuery);
 	    });
@@ -475,6 +585,7 @@ $(document).ready(() => {
             hideOrShowBackButton();
             $("#browseScroll").scrollTop(scrollTop);
             $("#browse li").removeClass("selected");
+            hideOrShowSearchBar()
 		}
 	}
 
@@ -486,6 +597,15 @@ $(document).ready(() => {
 		}else{
 			$backButton.show();
 		}
+	}
+
+	//Hides or shows the search bar depending on whether current page is the search page.
+	function hideOrShowSearchBar(){
+		if(currentPageType === pages.SEARCH){
+        	showSearchBar();
+        } else{
+        	hideSearchBar();
+        }
 	}
 
 	//The handler for when an item on the browser list is clicked.
@@ -552,14 +672,47 @@ $(document).ready(() => {
 			currentUri = null;
 			setBrowserHeader("SONGS");
 			fetchAppendSavedTracks();
+		} else if(id === seeAll.SEARCH_SONGS){
+			currentPageType = pages.SEARCH_SONGS;
+			currentUri = null;
+			setBrowserHeader("\""+currentSearchQuery+"\" in songs");
+			fetchAppendSongSearchResults();
+		} else if(id === seeAll.SEARCH_ARTISTS){
+			currentPageType = pages.SEARCH_ARTISTS;
+			currentUri = null;
+			setBrowserHeader("\""+currentSearchQuery+"\" in artists");
+			fetchAppendArtistSearchResults();
+		} else if(id === seeAll.SEARCH_ALBUMS){
+			currentPageType = pages.SEARCH_ALBUMS;
+			currentUri = null;
+			setBrowserHeader("\""+currentSearchQuery+"\" in albums");
+			fetchAppendAlbumSearchResults();
+		} else if(id === seeAll.SEARCH_PLAYLISTS){
+			currentPageType = pages.SEARCH_PLAYLISTS;
+			currentUri = null;
+			setBrowserHeader("\""+currentSearchQuery+"\" in playlists");
+			fetchAppendPlaylistSearchResults();
+		} else if(id === seeAll.ARTISTS_ALBUMS){
+			currentPageType = pages.ARTISTS_ALBUMS;
+			//dont change current uri cause we needs it to be the same
+			setBrowserHeader("Albums");
+			fetchAppendArtistsAlbums();
+		} else if(id === seeAll.ARTISTS_SINGLES){
+			currentPageType = pages.ARTISTS_SINGLES;
+			//dont change current uri cause we needs it to be the same
+			setBrowserHeader("Singles");
+			fetchAppendArtistsSingles();
 		} else if(trackRegex.test(id)){
+			//this else if statement should always be last!
 			console.log("==============YOU JUST CLICKED A TRACK WITH ID=================", id);
 			
 		} else{
 			console.log("this id didn't fit what we expected: ", id);
 		}
 		hideOrShowBackButton();
+		hideOrShowSearchBar();
 	}
+
 
 	//Sets the header of the browser
 	function setBrowserHeader(newHeader){
